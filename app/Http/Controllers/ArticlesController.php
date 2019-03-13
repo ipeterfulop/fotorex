@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\Dataproviders\ArticleDataprovider;
 use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
 {
     public function index($page = 1)
     {
-        $articles = Article::getArticlesForPublicIndex($page);
+        $dataproviderResult = ArticleDataprovider::getPublishedArticles($page, request()->get('search', ''));
 
         return view('public.articles.index', [
-            'articles' => $articles
+            'dataproviderResult' => $dataproviderResult
         ]);
     }
 

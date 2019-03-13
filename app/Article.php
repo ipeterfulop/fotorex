@@ -12,8 +12,6 @@ class Article extends Model
     const SUBJECT_SLUG = 'article';
     const SLUG_BASE = '/cikk/';
 
-    const ITEMS_PER_INDEX_PAGE = 10;
-
     protected $fillable = [
         'slug',
         'title',
@@ -69,15 +67,5 @@ class Article extends Model
         $result[] = new TextVueCRUDIndexfilter(['title', 'summary', 'content'], 'Keresés...', '');
 
         return $result;
-    }
-
-    public static function getArticlesForPublicIndex($page = 1)
-    {
-        return self::where('published_at', '!=', null)
-            ->where('published_at', '<=', now()->format('Y-m-d H:i:s'))
-            ->orderBy('published_at', 'desc')
-            ->skip(($page - 1) * self::ITEMS_PER_INDEX_PAGE)
-            ->take(self::ITEMS_PER_INDEX_PAGE)
-            ->get();
     }
 }
