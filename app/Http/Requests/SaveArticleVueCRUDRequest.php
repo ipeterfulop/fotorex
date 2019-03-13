@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Formdatabuilders\ArticleVueCRUDFormdatabuilder;
 use App\Article;
 use Datalytix\VueCRUD\Requests\VueCRUDRequestBase;
+use Illuminate\Support\Carbon;
 
 class SaveArticleVueCRUDRequest extends VueCRUDRequestBase
 {
@@ -25,7 +26,7 @@ class SaveArticleVueCRUDRequest extends VueCRUDRequestBase
         // a very basic create/update method, you should probably replace it
         // with something customized
         if ($subject == null) {
-            $subject = Article::create($this-getDataset());
+            $subject = Article::create($this->getDataset());
         } else {
             $subject->update($this->getDataset());
         }
@@ -35,8 +36,15 @@ class SaveArticleVueCRUDRequest extends VueCRUDRequestBase
 
     public function getDataset()
     {
-        $result = $this->getBaseDatasetFromRequest(Article::class);
-        // this is very basic, and will probably not suffice except for very simple models
+        $result = [
+            'title' => $this->input('title'),
+            'content' => $this->input('content'),
+            'summary' => $this->input('summary'),
+            'index_image' => $this->input('index_image'),
+            'published_at' => Carbon::parse($this->input('published_at')),
+            'slug' => $this->input('slug'),
+        ];
+
         return $result;
     }
 }

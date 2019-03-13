@@ -13,11 +13,11 @@ const mix = require('laravel-mix');
 
 mix.js([
     'resources/js/mintontheme.js',
-], 'public/js/app.js')
+], 'public/js/minton.js')
     .scripts([
-        "resources/vendor/minton/js/jquery.min.js",
+        //"resources/vendor/minton/js/jquery.min.js",
         "resources/vendor/minton/js/popper.min.js",
-        "resources/vendor/minton/js/bootstrap.min.js",
+        //"resources/vendor/minton/js/bootstrap.min.js",
         "resources/vendor/minton/js/detect.js",
         "resources/vendor/minton/js/fastclick.js",
         "resources/vendor/minton/js/jquery.slimscroll.js",
@@ -41,7 +41,7 @@ mix.js([
         "resources/vendor/minton/js/pages/jquery.dashboard.js",
         "resources/vendor/minton/js/jquery.core.js",
         "resources/vendor/minton/js/jquery.app.js",
-    ], 'public/js/vendor.js')
+    ], 'public/js/minton-vendor.js')
     .scripts([
         'resources/vendor/minton/js/plugins/datatables/jquery.dataTables.min.js',
         'resources/vendor/minton/js/plugins/datatables/dataTables.bootstrap4.min.js',
@@ -57,4 +57,4 @@ mix.js([
         'resources/vendor/minton/js/plugins/datatables/responsive.bootstrap4.min.js',
         'resources/vendor/minton/js/plugins/datatables/dataTables.select.min.js',
     ], 'public/js/datatables.js')
-    .sass('resources/sass/mintontheme.scss', 'public/css/app.css');
+    .sass('resources/sass/mintontheme.scss', 'public/css/minton.css');

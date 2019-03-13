@@ -10,14 +10,17 @@ class Article extends Model
 {
     use VueCRUDManageable;
     const SUBJECT_SLUG = 'article';
-    const SLUG_BASE = '/cikkek/';
+    const SLUG_BASE = '/cikk/';
+
+    const ITEMS_PER_INDEX_PAGE = 10;
 
     protected $fillable = [
         'slug',
         'title',
         'summary',
         'content',
-        'published_at'
+        'published_at',
+        'index_image'
     ];
 
     protected $dates = [
@@ -25,6 +28,16 @@ class Article extends Model
         'updated_at',
         'published_at'
     ];
+
+    public static function findBySlug($slug, $abortWith404IfNotFound = true)
+    {
+        $result = self::where('slug', '=', $slug)->first();
+        if (($result === null) && ($abortWith404IfNotFound)) {
+            abort(404);
+        }
+
+        return $result;
+    }
 
     public function getUrlAttribute()
     {
@@ -56,5 +69,15 @@ class Article extends Model
         $result[] = new TextVueCRUDIndexfilter(['title', 'summary', 'content'], 'Keresés...', '');
 
         return $result;
+    }
+
+    public static function getArticlesForPublicIndex($page = 1)
+    {
+        return self::where('published_at', '!=', null)
+            ->where('published_at', '<=', now()->format('Y-m-d H:i:s'))
+            ->orderBy('published_at', 'desc')
+            ->skip(($page - 1) * self::ITEMS_PER_INDEX_PAGE)
+            ->take(self::ITEMS_PER_INDEX_PAGE)
+            ->get();
     }
 }

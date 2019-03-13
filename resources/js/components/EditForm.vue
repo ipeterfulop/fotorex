@@ -22,12 +22,12 @@
                            type="password"
                     >
                     <number-field v-if="data.kind == 'numberfield'"
-                          editable="true"
-                          input-class="form-control col-12"
-                          show-currency-label="true"
-                          container-class="col-12"
-                          v-model="subjectData[fieldname].value"
-                          v-bind="JSON.parse(data.props)"
+                                  editable="true"
+                                  input-class="form-control col-12"
+                                  show-currency-label="true"
+                                  container-class="col-12"
+                                  v-model="subjectData[fieldname].value"
+                                  v-bind="JSON.parse(data.props)"
                     ></number-field>
 
                     <textarea v-if="data.kind == 'text' && data.type == 'simple'"
@@ -37,7 +37,7 @@
                     <div v-if="data.kind == 'text' && data.type == 'richtext-trix'" v-bind:class="data.class" style="min-height:250px">
                         <trix-wrapper v-model="subjectData[fieldname].value"
                                       v-bind:fieldname="fieldname"
-
+                                      v-bind:ajax-operations-url="ajaxOperationsUrl"
                         ></trix-wrapper>
                     </div>
                     <select v-if="data.kind == 'select' && (data.type == null || data.type == 'yesno' || data.type == 'custom')"
@@ -58,16 +58,17 @@
                                 v-model="subjectData[fieldname].value"
                     ></datepicker>
                     <image-picker v-if="data.kind == 'imagepicker'"
-                                v-bind="JSON.parse(data.props)"
-                                v-model="subjectData[fieldname].value"
+                                  v-bind="JSON.parse(data.props)"
+                                  v-model="subjectData[fieldname].value"
+                                  v-bind:upload-url="ajaxOperationsUrl"
                     ></image-picker>
                     <span v-if="data.kind == 'radio'">
                         <p v-for="valuesetvalue, valuesetitem in data.valuesetSorted">
                             <input
-                                type="radio"
-                                v-model="subjectData[fieldname].value"
-                                :id="fieldname+'_'+valuesetvalue"
-                                :value="valuesetvalue">
+                                    type="radio"
+                                    v-model="subjectData[fieldname].value"
+                                    :id="fieldname+'_'+valuesetvalue"
+                                    :value="valuesetvalue">
                             <label :for="fieldname+'_'+valuesetvalue" v-html="valuesetitem">
                             </label>
                         </p>
@@ -114,8 +115,19 @@
 </template>
 
 <script>
+    import {translateMixin} from './mixins/translateMixin.js'
     export default {
-        props: ['dataUrl', 'saveUrl', 'successCallback', 'formTitle', 'redirectToResponseOnSuccess', 'redirectToOnCancel'],
+        mixins: [translateMixin],
+        props: {
+            dataUrl: {type: String},
+            saveUrl: {type: String},
+            ajaxOperationsUrl: {type: String, default: ''},
+            successCallback: {type: String},
+            formTitle: {type: String},
+            redirectToResponseOnSuccess: {type: String},
+            redirectToOnCancel: {type: String}
+
+        },
         data: function() {
             return {
                 subjectData: {},
@@ -149,6 +161,12 @@
         },
         methods: {
             translate: function(string) {
+                if ((typeof(window.laravelLocale) != 'undefined')
+                    && (typeof(window.laravelLocales[window.laravelLocale]) != 'undefined')) {
+                    if (typeof(window.laravelLocales[window.laravelLocale][string]) != 'undefined') {
+                        return window.laravelLocales[window.laravelLocale][string];
+                    }
+                }
                 if (typeof(this.$root.translate) != 'undefined') {
                     return this.$root.translate(string);
                 }

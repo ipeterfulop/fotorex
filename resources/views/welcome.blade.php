@@ -1,4 +1,4 @@
-@extends('layouts.minton.app')
+@extends('layouts.unishop.app')
 @section('content')
     welcome
 @endsection

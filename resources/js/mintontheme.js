@@ -74,6 +74,20 @@ window.Vue = require('vue');
 const files = require.context('./components', true, /\.vue$/i)
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+
+/**
+ * Attempting to load language files from Laravel
+ * for every local beside 'en' the second line should be repeated
+ *
+*/
+
+window.laravelLocales = {}
+try {
+    window.laravelLocales['hu'] = require('../lang/hu.json')
+} catch (e) {}
+
+
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

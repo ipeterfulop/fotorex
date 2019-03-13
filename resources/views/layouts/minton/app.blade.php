@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    @php($cacheBuster = config('app.bustCacheForFrontendAssets', false) ? '?ver='.str_random(8) : '')
+    @php($cacheBuster = config('app.bustCacheForFrontendAssets', false) ? '?ver='.\Illuminate\Support\Str::random(8) : '')
 
-    <link href="{{ asset('css/admin.css') }}{{ $cacheBuster }}" rel="stylesheet">
+    <link href="{{ asset('css/minton.css') }}{{ $cacheBuster }}" rel="stylesheet">
 
     <title>{{ config('app.title', 'Laravel') }}</title>
 
@@ -15,9 +15,11 @@
 </head>
 <body class="fixed-left">
 <div id="wrapper" class="">
-    @include('layouts.minton.topbar')
-    @include('layouts.minton.left-side-menu')
-    <div class="content-page">
+    @if(!isset($skipMenus))
+        @include('layouts.minton.topbar')
+        @include('layouts.minton.left-side-menu')
+    @endif
+    <div class="content-page" @if(isset($skipMenus) && ($skipMenus)) style="margin-left: 10px" @endif>
         <div id="app" role="main" class="content">
             <div id="content" class="container-fluid">
                 @if(!isset($skipTitlePart))

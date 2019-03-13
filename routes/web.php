@@ -25,4 +25,5 @@ Route::prefix('admin')->middleware('auth')->group(function() {
 
 });
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/cikkek/{page?}', 'ArticlesController@index')->name('articles_index');
+Route::get(\App\Article::SLUG_BASE.'{slug}', 'ArticlesController@show')->name('articles_index');

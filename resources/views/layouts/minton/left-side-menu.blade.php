@@ -2,7 +2,11 @@
     <div class="sidebar-inner slimscrollleft">
         <!--- Divider -->
         <div id="sidebar-menu">
-            @include('vendor.menu.list')
+            <ul>
+                <!--<li class="menu-title"></li>-->
+                <!--<li><a href="#">Link</a></li>-->
+            </ul>
+
         </div>
     </div>
 </div>

@@ -25,7 +25,7 @@ class SaveUserVueCRUDRequest extends VueCRUDRequestBase
         // a very basic create/update method, you should probably replace it
         // with something customized
         if ($subject == null) {
-            $subject = User::create($this-getDataset());
+            $subject = User::create($this->getDataset());
         } else {
             $subject->update($this->getDataset());
         }

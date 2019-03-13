@@ -6,6 +6,7 @@ namespace App\Formdatabuilders;
 
 use App\Article;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\DateTimepickerVueCRUDFormfield;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\ImagePickerVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichtextTrixVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\TextVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\VueCRUDFormdatabuilder;
@@ -32,9 +33,17 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setLabel('Cím')
             ->setProperty('title')
             ->setContainerClass('col-12');
+        $result['summary'] = (new RichtextTrixVueCRUDFormfield())->setMandatory(true)
+            ->setLabel('Tartalom')
+            ->setProperty('content')
+            ->setContainerClass('col-12');
         $result['content'] = (new RichtextTrixVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Tartalom')
             ->setProperty('content')
+            ->setContainerClass('col-12');
+        $result['index_image'] = (new ImagePickerVueCRUDFormfield())
+            ->setLabel('Indexkép')
+            ->setProperty('index_image')
             ->setContainerClass('col-12');
 
         return collect($result);

@@ -16,7 +16,8 @@
         "datalytix/utilities": "dev-master",
         "datalytix/vuecrud": "dev-master",
         "datalytix/menu": "dev-master",
-        "datalytix/mintontheme": "dev-master"
+        "datalytix/mintontheme": "dev-master",
+        "datalytix/unishoptheme": "dev-master"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
@@ -80,6 +81,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/ipeterfulop/mintontheme.package"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/ipeterfulop/unishoptheme.package"
         },
         {
             "type": "vcs",
