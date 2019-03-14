@@ -27,7 +27,7 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setProperty('slug')
             ->addSourceFieldName('title')
             ->setContainerClass('col-6')
-            ->setRules(['unique:articles', 'regex:/^[A-Za-z\-\_]*$/miu'])
+            ->setRules(['unique:articles', 'regex:/^[A-Za-z0-9\-\_]*$/miu'])
             ->setMessages([
                 'unique' => 'Ez az URL már foglalt',
                 'regex' => 'Az URL csak ékezet nélküli betűket, számokat, kötőjelet és alávonást tartalmazhat'
@@ -41,8 +41,8 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setProperty('title')
             ->setContainerClass('col-12');
         $result['summary'] = (new RichtextTrixVueCRUDFormfield())->setMandatory(true)
-            ->setLabel('Tartalom')
-            ->setProperty('content')
+            ->setLabel('Összefoglaló')
+            ->setProperty('summary')
             ->setContainerClass('col-12');
         $result['content'] = (new RichtextTrixVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Tartalom')

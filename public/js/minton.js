@@ -2203,6 +2203,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_mixins_translateMixin_js__WEBPACK_IMPORTED_MODULE_0__["translateMixin"]],
@@ -2338,8 +2340,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     slugify: function slugify(string) {
       //credit to https://medium.com/@mhagemann/the-ultimate-way-to-slugify-a-url-string-in-javascript-b8e4a0d849e1
-      var a = 'àáäâãåăæçèéëêǵḧìíïîḿńǹñòóöôőœṕŕßśșțùúüûǘűẃẍÿź·/_,:;';
-      var b = 'aaaaaaaaceeeeghiiiimnnnooooooprssstuuuuuuwxyz------';
+      var a = 'àáäâãåăæçèéëêǵḧìíïîḿńǹñòóöôœṕŕßśșțùúüûǘẃẍÿź·/_,:;';
+      var b = 'aaaaaaaaceeeeghiiiimnnnoooooprssstuuuuuwxyz------';
       var p = new RegExp(a.split('').join('|'), 'g');
       return string.toString().toLowerCase().replace(/\s+/g, '-') // Replace spaces with -
       .replace(p, function (c) {
@@ -2418,6 +2420,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_fileUploadMixin_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mixins/fileUploadMixin.js */ "./resources/js/components/mixins/fileUploadMixin.js");
+//
+//
 //
 //
 //
@@ -3000,6 +3004,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_mixins_fileUploadMixin_js__WEBPACK_IMPORTED_MODULE_0__["fileUploadMixin"]],
@@ -3074,8 +3080,6 @@ __webpack_require__.r(__webpack_exports__);
     if (this.value == '') {
       this.valueInitialized = true;
     }
-
-    this.$refs[this.fieldname + '-editor'].editor.loadHTML(this.value);
   },
   methods: {
     updateValue: function updateValue() {
@@ -3120,6 +3124,9 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.valueInitialized = true;
+    },
+    fieldname: function fieldname() {
+      this.$refs[this.fieldname + '-editor'].editor.loadHTML(this.value);
     }
   }
 });
@@ -7602,7 +7609,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.image-picker-input-container > label > .input-group > .form-control {\n    outline-width: 1px !important;\n    outline-color: black !important;\n}\n.image-picker-preview-container > img {\n    height:6em;\n    max-height:6em;\n}\n", ""]);
+exports.push([module.i, "\n.image-picker-input-container {\n    display:flex;\n    justify-content: flex-start;\n}\n.image-picker-input-container > label > .input-group > .form-control {\n    outline-width: 1px !important;\n    outline-color: black !important;\n}\n.image-picker-preview-container > img {\n    height:6em;\n    max-height:6em;\n}\n.image-picker-browse-button:hover {\n    font-weight: bold;\n}\n", ""]);
 
 // exports
 
@@ -7640,7 +7647,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.trix-wrapper-container {\n    min-height:210px;\n    height: 100%\n}\n.trix-wrapper-custom-buttons-container {\n    height: 2.2em;\n}\n.trix-wrapper-button-group {\n    display: flex;\n    margin-bottom: 10px;\n    border: 1px solid #bbb;\n    border-top-color: #ccc;\n    border-bottom-color: #888;\n    border-radius: 3px;\n    height: 1.6em;\n}\n.trix-wrapper-custom-buttons-container > .trix-wrapper-button-group > button {\n    position: relative;\n    float: left;\n    color: rgba(0, 0, 0, 0.6);\n    font-size: 0.75em;\n    font-weight: 600;\n    white-space: nowrap;\n    padding: 0 0.5em;\n    margin: 0;\n    outline: none;\n    border: none;\n    border-bottom: 1px solid #ddd;\n    border-radius: 0;\n    background: transparent;\n}\n\n", ""]);
+exports.push([module.i, "\n.trix-wrapper-container {\n    min-height:310px;\n    height: 100%\n}\n.trix-wrapper-custom-buttons-container {\n    height: 2.2em;\n}\n.trix-wrapper-button-group {\n    display: flex;\n    margin-bottom: 10px;\n    border: 1px solid #bbb;\n    border-top-color: #ccc;\n    border-bottom-color: #888;\n    border-radius: 3px;\n    height: 1.6em;\n}\n.trix-wrapper-custom-buttons-container > .trix-wrapper-button-group > button {\n    position: relative;\n    float: left;\n    color: rgba(0, 0, 0, 0.6);\n    font-size: 0.75em;\n    font-weight: 600;\n    white-space: nowrap;\n    padding: 0 0.5em;\n    margin: 0;\n    outline: none;\n    border: none;\n    border-bottom: 1px solid #ddd;\n    border-radius: 0;\n    background: transparent;\n}\n\n", ""]);
 
 // exports
 
@@ -39297,7 +39304,15 @@ var render = function() {
               _vm._l(_vm.subjectData, function(data, fieldname) {
                 return _c(
                   "div",
-                  { class: data.containerClass },
+                  {
+                    class: data.containerClass,
+                    style: {
+                      height:
+                        typeof data.customOptions["cssHeight"] == "undefined"
+                          ? "auto"
+                          : data.customOptions["cssHeight"]
+                    }
+                  },
                   [
                     _c("label", [
                       _vm._v(
@@ -39497,7 +39512,10 @@ var render = function() {
                           "div",
                           {
                             class: data.class,
-                            staticStyle: { "min-height": "250px" }
+                            staticStyle: {
+                              "min-height": "90%",
+                              "max-height": "90%"
+                            }
                           },
                           [
                             _c("trix-wrapper", {
@@ -39923,19 +39941,24 @@ var render = function() {
     },
     [
       _c("div", { staticClass: "image-picker-input-container" }, [
-        _c("label", { attrs: { for: "selected-file" } }, [
-          _vm._v(_vm._s(_vm.formElementLabel) + "\n            "),
-          _c("input", {
-            staticStyle: { height: "0px", width: "0px", opacity: "0" },
-            attrs: {
-              id: "selected-file",
-              type: "file",
-              accept: "image/jpeg,image/png"
-            },
-            on: { change: _vm.fileSelected }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "input-group" }, [
+        _c(
+          "label",
+          {
+            staticStyle: { display: "flex", "max-width": "80%" },
+            attrs: { for: "selected-file" }
+          },
+          [
+            _vm._v(_vm._s(_vm.formElementLabel) + "\n            "),
+            _c("input", {
+              staticStyle: { height: "0px", width: "0px", opacity: "0" },
+              attrs: {
+                id: "selected-file",
+                type: "file",
+                accept: "image/jpeg,image/png"
+              },
+              on: { change: _vm.fileSelected }
+            }),
+            _vm._v(" "),
             _c("input", {
               directives: [
                 {
@@ -39958,31 +39981,44 @@ var render = function() {
               }
             }),
             _vm._v(" "),
-            _vm._m(0)
-          ])
-        ])
+            _c(
+              "span",
+              { staticClass: "input-group-text image-picker-browse-button" },
+              [_vm._v("...")]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _vm.value != "" && _vm.value != null
+          ? _c(
+              "span",
+              {
+                staticClass: "input-group-text image-picker-browse-button",
+                staticStyle: { "margin-bottom": ".5rem", cursor: "pointer" },
+                on: {
+                  click: function($event) {
+                    if ($event.target !== $event.currentTarget) {
+                      return null
+                    }
+                    _vm.$emit("input", "")
+                    _vm.selectedFileLabel = ""
+                  }
+                }
+              },
+              [_vm._v("X")]
+            )
+          : _vm._e()
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "image-picker-preview-container" }, [
-        _vm.value != "" ? _c("img", { attrs: { src: _vm.value } }) : _vm._e()
+        _vm.value != "" && _vm.value != null
+          ? _c("img", { attrs: { src: _vm.value } })
+          : _vm._e()
       ])
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-append" }, [
-      _c(
-        "span",
-        { staticClass: "input-group-text image-picker-browse-button" },
-        [_vm._v("...")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -40600,14 +40636,20 @@ var render = function() {
             value: _vm.viewMode == "normal",
             expression: "viewMode == 'normal'"
           }
-        ]
+        ],
+        staticStyle: { height: "85%" },
+        attrs: { id: _vm.fieldname + "-richtext-trixeditor-container" }
       },
       [
         _c("trix-editor", {
           ref: _vm.fieldname + "-editor",
           staticClass: "editform-richtext-editor",
-          staticStyle: { "min-height": "200px" },
-          attrs: { input: _vm.fieldname + "-richtext" }
+          staticStyle: { "min-height": "300px", height: "100%" },
+          attrs: {
+            input: _vm.fieldname + "-richtext",
+            id: _vm.fieldname + "-richtext-trixeditor",
+            "trix-id": _vm.fieldname + "-richtext-trixeditor"
+          }
         })
       ],
       1
@@ -40623,7 +40665,8 @@ var render = function() {
             value: _vm.viewMode == "code",
             expression: "viewMode == 'code'"
           }
-        ]
+        ],
+        staticStyle: { height: "85%" }
       },
       [
         _c("textarea", {
