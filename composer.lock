@@ -124,12 +124,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:ipeterfulop/unishoptheme.package.git",
-                "reference": "1f1c4adb211412f8598aa726200a67f89dc4a333"
+                "reference": "583ae7b11a40296ed07da0eb44c3258d5e140d1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ipeterfulop/unishoptheme.package/zipball/1f1c4adb211412f8598aa726200a67f89dc4a333",
-                "reference": "1f1c4adb211412f8598aa726200a67f89dc4a333",
+                "url": "https://api.github.com/repos/ipeterfulop/unishoptheme.package/zipball/583ae7b11a40296ed07da0eb44c3258d5e140d1e",
+                "reference": "583ae7b11a40296ed07da0eb44c3258d5e140d1e",
                 "shasum": ""
             },
             "type": "library",
@@ -155,7 +155,7 @@
                 "source": "https://github.com/ipeterfulop/unishoptheme.package/tree/master",
                 "issues": "https://github.com/ipeterfulop/unishoptheme.package/issues"
             },
-            "time": "2019-03-13T14:40:55+00:00"
+            "time": "2019-03-14T12:39:00+00:00"
         },
         {
             "name": "datalytix/utilities",
@@ -196,12 +196,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:ipeterfulop/vuecrud.package.git",
-                "reference": "7722e0a13d36d1ddddcb1734d7e04a0e6c196919"
+                "reference": "1730950e9bc4caf964c9318e2bccaa4fde3eec53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ipeterfulop/vuecrud.package/zipball/7722e0a13d36d1ddddcb1734d7e04a0e6c196919",
-                "reference": "7722e0a13d36d1ddddcb1734d7e04a0e6c196919",
+                "url": "https://api.github.com/repos/ipeterfulop/vuecrud.package/zipball/1730950e9bc4caf964c9318e2bccaa4fde3eec53",
+                "reference": "1730950e9bc4caf964c9318e2bccaa4fde3eec53",
                 "shasum": ""
             },
             "require": {
@@ -231,7 +231,7 @@
                 "source": "https://github.com/ipeterfulop/vuecrud.package/tree/master",
                 "issues": "https://github.com/ipeterfulop/vuecrud.package/issues"
             },
-            "time": "2019-03-13T14:25:58+00:00"
+            "time": "2019-03-14T13:32:29+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",

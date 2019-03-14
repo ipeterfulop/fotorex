@@ -72,7 +72,7 @@ class Article extends Model
     public static function getVueCRUDIndexFilters()
     {
         $result = [];
-        $result[] = new TextVueCRUDIndexfilter(['title', 'summary', 'content'], 'Keresés...', '');
+        $result['search'] = new TextVueCRUDIndexfilter(['title', 'summary', 'content'], 'Keresés...', '');
 
         return $result;
     }

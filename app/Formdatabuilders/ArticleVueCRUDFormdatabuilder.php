@@ -8,6 +8,7 @@ use App\Article;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\DateTimepickerVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\ImagePickerVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichtextTrixVueCRUDFormfield;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\SlugVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\TextVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\VueCRUDFormdatabuilder;
 
@@ -21,10 +22,16 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
     protected static function getFields()
     {
         $result = [];
-        $result['slug'] = (new TextVueCRUDFormfield())->setMandatory(true)
+        $result['slug'] = (new SlugVueCRUDFormfield())->setMandatory(true)
             ->setLabel('URL')
             ->setProperty('slug')
-            ->setContainerClass('col-6');
+            ->addSourceFieldName('title')
+            ->setContainerClass('col-6')
+            ->setRules(['unique:articles', 'regex:/^[A-Za-z\-\_]*$/miu'])
+            ->setMessages([
+                'unique' => 'Ez az URL már foglalt',
+                'regex' => 'Az URL csak ékezet nélküli betűket, számokat, kötőjelet és alávonást tartalmazhat'
+            ]);
         $result['published_at'] = (new DateTimepickerVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Publikálás dátuma')
             ->setProperty('published_at')

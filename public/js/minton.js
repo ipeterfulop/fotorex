@@ -2195,6 +2195,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_mixins_translateMixin_js__WEBPACK_IMPORTED_MODULE_0__["translateMixin"]],
@@ -2327,6 +2335,25 @@ __webpack_require__.r(__webpack_exports__);
       if (typeof this.redirectToOnCancel != 'undefined') {
         window.location.href = this.redirectToOnCancel;
       }
+    },
+    slugify: function slugify(string) {
+      //credit to https://medium.com/@mhagemann/the-ultimate-way-to-slugify-a-url-string-in-javascript-b8e4a0d849e1
+      var a = 'àáäâãåăæçèéëêǵḧìíïîḿńǹñòóöôőœṕŕßśșțùúüûǘűẃẍÿź·/_,:;';
+      var b = 'aaaaaaaaceeeeghiiiimnnnooooooprssstuuuuuuwxyz------';
+      var p = new RegExp(a.split('').join('|'), 'g');
+      return string.toString().toLowerCase().replace(/\s+/g, '-') // Replace spaces with -
+      .replace(p, function (c) {
+        return b.charAt(a.indexOf(c));
+      }) // Replace special characters
+      .replace(/&/g, '-and-') // Replace & with ‘and’
+      .replace(/[^\w\-]+/g, '') // Remove all non-word characters
+      .replace(/\-\-+/g, '-') // Replace multiple - with single -
+      .replace(/^-+/, '') // Trim - from start of text
+      .replace(/-+$/, ''); // Trim - from end of text
+    },
+    generateSlug: function generateSlug(field, fieldname) {
+      var sourceText = this.subjectData[field].value;
+      this.subjectData[fieldname].value = this.slugify(sourceText);
     }
   },
   watch: {
@@ -39323,6 +39350,61 @@ var render = function() {
                             }
                           }
                         })
+                      : _vm._e(),
+                    _vm._v(" "),
+                    data.kind == "slug"
+                      ? _c("div", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.subjectData[fieldname].value,
+                                expression: "subjectData[fieldname].value"
+                              }
+                            ],
+                            class: data.class,
+                            staticStyle: {
+                              "padding-right": "1.5em",
+                              display: "inline-block",
+                              width: "90%"
+                            },
+                            domProps: {
+                              value: _vm.subjectData[fieldname].value
+                            },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.subjectData[fieldname],
+                                  "value",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticStyle: {
+                                "margin-left": "-1.5em",
+                                cursor: "pointer"
+                              },
+                              on: {
+                                click: function($event) {
+                                  return _vm.generateSlug(
+                                    data.customOptions["source"],
+                                    fieldname
+                                  )
+                                }
+                              }
+                            },
+                            [_vm._v("↺")]
+                          )
+                        ])
                       : _vm._e(),
                     _vm._v(" "),
                     data.kind == "input" && data.type == "password"
