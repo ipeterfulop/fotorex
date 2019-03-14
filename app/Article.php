@@ -27,9 +27,17 @@ class Article extends Model
         'published_at'
     ];
 
+    public function oldarticleslugs()
+    {
+        return $this->hasMany(Oldarticleslug::class);
+    }
+
     public static function findBySlug($slug, $abortWith404IfNotFound = true)
     {
         $result = self::where('slug', '=', $slug)->first();
+        if ($result == null) {
+            $result = optional(Oldarticleslug::with('article')->where('slug', '=', $slug)->first())->article;
+        }
         if (($result === null) && ($abortWith404IfNotFound)) {
             abort(404);
         }

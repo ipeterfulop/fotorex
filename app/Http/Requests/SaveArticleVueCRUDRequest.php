@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Formdatabuilders\ArticleVueCRUDFormdatabuilder;
 use App\Article;
+use App\Oldarticleslug;
 use Datalytix\VueCRUD\Requests\VueCRUDRequestBase;
 use Illuminate\Support\Carbon;
 
@@ -28,6 +29,7 @@ class SaveArticleVueCRUDRequest extends VueCRUDRequestBase
         if ($subject == null) {
             $subject = Article::create($this->getDataset());
         } else {
+            $this->storeSlugIfChanged($subject);
             $subject->update($this->getDataset());
         }
 
@@ -46,5 +48,15 @@ class SaveArticleVueCRUDRequest extends VueCRUDRequestBase
         ];
 
         return $result;
+    }
+
+    protected function storeSlugIfChanged($article)
+    {
+        if ($this->input('slug') != $article->slug) {
+            Oldarticleslug::updateOrCreate([
+                'slug' => $article->slug,
+                'article_id' => $article->id
+            ]);
+        }
     }
 }
