@@ -8,22 +8,23 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ArticleDataprovider
 {
-    const ITEMS_PER_INDEX_PAGE = 10;
+    const ITEMS_PER_INDEX_PAGE = 12;
 
-    public static function getPublishedArticles($page, $filterText = '')
+    public static function getPublishedArticles($page, $sortingOption, $filterText = '')
     {
-        $query = self::getPublishedArticlesQuery($filterText);
+        $query = self::getPublishedArticlesQuery($sortingOption, $filterText);
         $result = new DataproviderResult();
         $result->totalCount = $query->count();
         $result->results = self::addPaginationToQuery($query, $page)->get();
         $result->itemsPerPage = self::ITEMS_PER_INDEX_PAGE;
         $result->currentPage = $page;
         $result->indexRouteName = 'articles_index';
+        $result->sortingOption = $sortingOption;
 
         return $result;
     }
 
-    protected static function getPublishedArticlesQuery($filterText)
+    protected static function getPublishedArticlesQuery($sortingOption, $filterText)
     {
         return Article::where('published_at', '!=', null)
             ->where('published_at', '<=', now()->format('Y-m-d H:i:s'))
@@ -34,7 +35,12 @@ class ArticleDataprovider
                         ->orWhere('summary', 'like', '%'.$filterText.'%');
                 });
             })
-            ->orderBy('published_at', 'desc');
+            ->when($sortingOption == 'latest', function($query) {
+                return $query->orderBy('published_at', 'desc');
+            })
+            ->when($sortingOption == 'popular', function($query) {
+                return $query->orderBy('published_at', 'asc');
+            });
     }
 
     protected static function addPaginationToQuery(Builder $query, $page = 1)

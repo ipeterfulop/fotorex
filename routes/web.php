@@ -25,5 +25,6 @@ Route::prefix('admin')->middleware('auth')->group(function() {
 
 });
 
-Route::get('/cikkek/{page?}', 'ArticlesController@index')->name('articles_index');
+Route::get('/cikkek', 'ArticlesController@redirectToLatest')->name('articles_redirect_to_latest');
+Route::get('/cikkek/{sortingOption}/{page?}', 'ArticlesController@index')->name('articles_index');
 Route::get(\App\Article::SLUG_BASE.'{slug}', 'ArticlesController@show')->name('article_details');

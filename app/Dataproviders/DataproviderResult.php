@@ -20,6 +20,7 @@ class DataproviderResult
     public $itemsPerPage;
     public $currentPage;
     public $indexRouteName;
+    public $sortingOption;
 
     public function getPageCount()
     {
@@ -79,35 +80,35 @@ class DataproviderResult
 
     public function firstPageUrl()
     {
-        return !$this->isAtFirstPage()
-            ? route($this->indexRouteName, ['page' => 1])
+        return ! $this->isAtFirstPage()
+            ? route($this->indexRouteName, ['sortingOption' => $this->sortingOption, 'page' => 1])
             : null;
     }
 
     public function lastPageUrl()
     {
-        return !$this->isAtLastPage()
-            ? route($this->indexRouteName, ['page' => $this->getPageCount()])
+        return ! $this->isAtLastPage()
+            ? route($this->indexRouteName, ['sortingOption' => $this->sortingOption, 'page' => $this->getPageCount()])
             : null;
     }
 
     public function previousPageUrl()
     {
-        return !$this->isAtFirstPage()
-            ? route($this->indexRouteName, ['page' => $this->currentPage - 1])
+        return ! $this->isAtFirstPage()
+            ? route($this->indexRouteName, ['sortingOption' => $this->sortingOption, 'page' => $this->currentPage - 1])
             : null;
     }
 
     public function nextPageUrl()
     {
-        return !$this->isAtLastPage()
-            ? route($this->indexRouteName, ['page' => $this->currentPage + 1])
+        return ! $this->isAtLastPage()
+            ? route($this->indexRouteName, ['sortingOption' => $this->sortingOption, 'page' => $this->currentPage + 1])
             : null;
     }
 
     public function pageUrl($page)
     {
-        return route($this->indexRouteName, ['page' => $page]);
+        return route($this->indexRouteName, ['sortingOption' => $this->sortingOption, 'page' => $page]);
     }
 
 }
