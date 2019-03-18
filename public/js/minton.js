@@ -2079,6 +2079,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_translateMixin_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mixins/translateMixin.js */ "./resources/js/components/mixins/translateMixin.js");
+/* harmony import */ var _mixins_spinner_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mixins/spinner.js */ "./resources/js/components/mixins/spinner.js");
+//
 //
 //
 //
@@ -2206,8 +2208,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_translateMixin_js__WEBPACK_IMPORTED_MODULE_0__["translateMixin"]],
+  mixins: [_mixins_translateMixin_js__WEBPACK_IMPORTED_MODULE_0__["translateMixin"], _mixins_spinner_js__WEBPACK_IMPORTED_MODULE_1__["spinner"]],
   props: {
     dataUrl: {
       type: String
@@ -2340,8 +2343,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     slugify: function slugify(string) {
       //credit to https://medium.com/@mhagemann/the-ultimate-way-to-slugify-a-url-string-in-javascript-b8e4a0d849e1
-      var a = 'àáäâãåăæçèéëêǵḧìíïîḿńǹñòóöôœṕŕßśșțùúüûǘẃẍÿź·/_,:;';
-      var b = 'aaaaaaaaceeeeghiiiimnnnoooooprssstuuuuuwxyz------';
+      var a = 'àáäâãåăæçèéëêǵḧìíïîḿńǹñòőóöôœṕŕßśșțùúüűûǘẃẍÿź·/_,:;';
+      var b = 'aaaaaaaaceeeeghiiiimnnnooooooprssstuuuuuuwxyz------';
       var p = new RegExp(a.split('').join('|'), 'g');
       return string.toString().toLowerCase().replace(/\s+/g, '-') // Replace spaces with -
       .replace(p, function (c) {
@@ -2523,6 +2526,21 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_translateMixin_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mixins/translateMixin.js */ "./resources/js/components/mixins/translateMixin.js");
+/* harmony import */ var _mixins_spinner_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mixins/spinner.js */ "./resources/js/components/mixins/spinner.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2689,8 +2707,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_translateMixin_js__WEBPACK_IMPORTED_MODULE_0__["translateMixin"]],
+  mixins: [_mixins_translateMixin_js__WEBPACK_IMPORTED_MODULE_0__["translateMixin"], _mixins_spinner_js__WEBPACK_IMPORTED_MODULE_1__["spinner"]],
   props: {
     indexUrl: {
       type: String,
@@ -2779,6 +2798,9 @@ __webpack_require__.r(__webpack_exports__);
       mode: 'loading',
       elements: {},
       columns: {},
+      sortingColumns: {},
+      currentSortingColumn: null,
+      currentSortingDirection: 'asc',
       fields: {},
       model: {},
       filters: {},
@@ -2791,7 +2813,8 @@ __webpack_require__.r(__webpack_exports__);
       fetchTimeout: -1,
       watches: {},
       currentPage: 1,
-      counts: {}
+      counts: {},
+      disablePageWatch: false
     };
   },
   mounted: function mounted() {
@@ -2815,9 +2838,34 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return this.translate('Results') + '&nbsp;(' + this.counts.filtered + ')';
+    },
+    sortingChevron: function sortingChevron() {
+      return this.currentSortingDirection == 'asc' ? '⬆' : '⬇';
     }
   },
   methods: {
+    columnIsSorting: function columnIsSorting(columnField) {
+      return typeof this.sortingColumns[columnField] != 'undefined';
+    },
+    setSorting: function setSorting(field) {
+      if (this.columnIsSorting(field)) {
+        if (this.currentSortingColumn == field) {
+          if (this.currentSortingDirection == 'asc') {
+            this.currentSortingDirection = 'desc';
+          } else {
+            this.currentSortingDirection = 'asc';
+          }
+        } else {
+          this.currentSortingColumn = field;
+          this.currentSortingDirection = 'asc';
+        }
+
+        this.disablePageWatch = true;
+        this.currentPage = 1;
+        this.disablePageWatch = false;
+        this.fetchElements(true);
+      }
+    },
     showButton: function showButton(button) {
       return this.buttons.hasOwnProperty(button) && (this.userIsAdmin || !this.buttons[button]['adminNeeded']);
     },
@@ -2836,7 +2884,9 @@ __webpack_require__.r(__webpack_exports__);
       var result = {
         token: Math.random().toString(36),
         page: this.currentPage,
-        items_per_page: this.itemsPerPage
+        items_per_page: this.itemsPerPage,
+        sorting_field: this.sortingColumns[this.currentSortingColumn],
+        sorting_direction: this.currentSortingDirection
       };
 
       for (var filterName in this.filters) {
@@ -2869,6 +2919,17 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
+    findSortingColumnKey: function findSortingColumnKey(column) {
+      for (var i in this.sortingColumns) {
+        if (this.sortingColumns.hasOwnProperty(i)) {
+          if (this.sortingColumns[i] == column) {
+            return i;
+          }
+        }
+      }
+
+      return null;
+    },
     fetchElements: function fetchElements(onlyElements) {
       var _this2 = this;
 
@@ -2885,6 +2946,9 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         _this2.elements = response.data.elements;
         _this2.counts = response.data.counts;
+        _this2.sortingColumns = response.data.sortingColumns;
+        _this2.currentSortingColumn = _this2.findSortingColumnKey(response.data.sortingField);
+        _this2.currentSortingDirection = response.data.sortingDirection;
 
         if (!onlyElements) {
           _this2.columns = response.data.columns;
@@ -2952,11 +3016,15 @@ __webpack_require__.r(__webpack_exports__);
           Vue.set(this.filters[filter], 'value', this.filters[filter].default);
         }
       }
+
+      this.fetchElements(true);
     }
   },
   watch: {
     currentPage: function currentPage() {
-      this.fetchElements(true);
+      if (!this.disablePageWatch) {
+        this.fetchElements(true);
+      }
     }
   }
 });
@@ -2973,6 +3041,10 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_fileUploadMixin_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mixins/fileUploadMixin.js */ "./resources/js/components/mixins/fileUploadMixin.js");
+/* harmony import */ var _mixins_spinner_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mixins/spinner.js */ "./resources/js/components/mixins/spinner.js");
+//
+//
+//
 //
 //
 //
@@ -3007,8 +3079,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_fileUploadMixin_js__WEBPACK_IMPORTED_MODULE_0__["fileUploadMixin"]],
+  mixins: [_mixins_fileUploadMixin_js__WEBPACK_IMPORTED_MODULE_0__["fileUploadMixin"], _mixins_spinner_js__WEBPACK_IMPORTED_MODULE_1__["spinner"]],
   props: {
     fieldname: {
       type: String
@@ -3036,7 +3109,8 @@ __webpack_require__.r(__webpack_exports__);
       valueInitialized: false,
       viewMode: 'normal',
       codeValue: '',
-      updatingCodeValue: false
+      updatingCodeValue: false,
+      trixReady: false
     };
   },
   computed: {
@@ -3053,33 +3127,41 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
+    this.$refs[this.fieldname + '-content'].value = this.value;
     this.latestValue = this.value;
     this.codeValue = this.value;
-    var csstag = document.createElement('link');
-    csstag.setAttribute('href', this.trixCSSUrl);
-    csstag.setAttribute('rel', 'stylesheet');
-    var scripttag = document.createElement('script');
-    scripttag.setAttribute('src', this.trixJSUrl);
-    document.head.appendChild(csstag);
-    document.head.appendChild(scripttag);
-    window.trixIntervals = [];
+
+    if (typeof window.trixInitialized == 'undefined') {
+      window.trixInitialized = true;
+      var csstag = document.createElement('link');
+      csstag.setAttribute('href', this.trixCSSUrl);
+      csstag.setAttribute('rel', 'stylesheet');
+      var scripttag = document.createElement('script');
+      scripttag.setAttribute('src', this.trixJSUrl);
+      document.head.appendChild(csstag);
+      document.head.appendChild(scripttag);
+      window.trixIntervals = [];
+    }
+
     window.trixIntervals[this.fieldname] = window.setInterval(this.updateValue, 1000);
 
     if (this.ajaxOperationsUrl != '') {
       window.addEventListener("trix-attachment-add", function (event) {
-        _this.uploadAttachment(event);
+        if (event.srcElement.id == _this.fieldname + '-richtext-trixeditor') {
+          _this.uploadAttachment(event);
+        }
       });
       window.addEventListener("trix-attachment-remove", function (event) {
-        _this.removeAttachment(event);
+        if (event.srcElement.id == _this.fieldname + '-richtext-trixeditor') {
+          _this.removeAttachment(event);
+        }
       });
     }
 
     ;
-    this.$refs[this.fieldname + '-content'].value = this.value;
-
-    if (this.value == '') {
-      this.valueInitialized = true;
-    }
+    window.setTimeout(function () {
+      _this.trixReady = true;
+    }, 1000);
   },
   methods: {
     updateValue: function updateValue() {
@@ -3111,22 +3193,25 @@ __webpack_require__.r(__webpack_exports__);
         event.attachment.setAttributes({
           url: response.data.url
         });
-      });
+      }, function (error) {});
     },
     removeAttachment: function removeAttachment(event) {
-      this.removeUploadedPublicFile(this.ajaxOperationsUrl, event.attachment.getAttribute('url'), "trixRemoveAttachment");
+      this.removeUploadedPublicFile(this.ajaxOperationsUrl, event.attachment.getAttribute('url'), "trixRemoveAttachment").then(function (response) {}, function (error) {});
     }
   },
   watch: {
     value: function value() {
-      if (!this.valueInitialized) {
-        this.$refs[this.fieldname + '-editor'].editor.loadHTML(this.value);
+      if (typeof this.$refs[this.fieldname + '-editor'] != 'undefined') {
+        if (!this.valueInitialized) {
+          this.$refs[this.fieldname + '-editor'].editor.loadHTML(this.value);
+          this.valueInitialized = true;
+        }
       }
-
-      this.valueInitialized = true;
     },
     fieldname: function fieldname() {
-      this.$refs[this.fieldname + '-editor'].editor.loadHTML(this.value);
+      if (typeof this.$refs[this.fieldname + '-editor'] != 'undefined') {
+        this.$refs[this.fieldname + '-editor'].editor.loadHTML(this.value);
+      }
     }
   }
 });
@@ -7628,7 +7713,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.full-width-div {\n    width: 100%\n}\n", ""]);
+exports.push([module.i, "\n.full-width-div {\n    width: 100%\n}\n.sorting-column {\n    white-space: nowrap;\n    cursor:pointer\n}\n", ""]);
 
 // exports
 
@@ -39408,6 +39493,7 @@ var render = function() {
                                 "margin-left": "-1.5em",
                                 cursor: "pointer"
                               },
+                              attrs: { title: _vm.translate("Generate slug") },
                               on: {
                                 click: function($event) {
                                   return _vm.generateSlug(
@@ -39831,15 +39917,16 @@ var render = function() {
         _c(
           "button",
           {
-            staticClass: "btn btn-lg btn-primary btn-block",
+            staticClass: "btn btn-lg btn-outline-primary btn-block",
             attrs: { type: "button" },
             on: { click: _vm.submitForm }
           },
           [
             _vm.loading
-              ? _c("span", { staticClass: "button-loading-indicator" }, [
-                  _c("img", { attrs: { src: "/img/button-loader.gif" } })
-                ])
+              ? _c("span", {
+                  staticClass: "button-loading-indicator",
+                  domProps: { innerHTML: _vm._s(_vm.spinnerSrc) }
+                })
               : _vm._e(),
             _vm._v(" "),
             _c("span", [_vm._v(_vm._s(_vm.translate("Mentés")))])
@@ -39851,7 +39938,7 @@ var render = function() {
         _c(
           "button",
           {
-            staticClass: "btn btn-lg btn-default btn-block",
+            staticClass: "btn btn-lg btn-outline-secondary btn-block",
             attrs: { type: "button" },
             on: { click: _vm.cancelEditing }
           },
@@ -40044,7 +40131,7 @@ var render = function() {
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-12" }, [
         _vm.mode == "loading"
-          ? _c("div", [_vm._v(_vm._s(_vm.translate("Loading")) + "...")])
+          ? _c("div", { domProps: { innerHTML: _vm._s(_vm.spinnerSrc) } })
           : _vm._e(),
         _vm._v(" "),
         _vm.mode == "list"
@@ -40059,7 +40146,7 @@ var render = function() {
                   _c(
                     "button",
                     {
-                      staticClass: "btn btn-primary float-right",
+                      staticClass: "btn btn-outline-primary float-right",
                       on: { click: _vm.createElement }
                     },
                     [_vm._v(_vm._s(_vm.translate("New")) + "...")]
@@ -40329,9 +40416,47 @@ var render = function() {
                             columnName,
                             columnField
                           ) {
-                            return _c("th", {
-                              domProps: { innerHTML: _vm._s(columnName) }
-                            })
+                            return _c(
+                              "th",
+                              {
+                                class: {
+                                  "sorting-column": _vm.columnIsSorting(
+                                    columnField
+                                  )
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.setSorting(columnField)
+                                  }
+                                }
+                              },
+                              [
+                                _c("span", {
+                                  domProps: { innerHTML: _vm._s(columnName) }
+                                }),
+                                _vm._v(" "),
+                                _vm.columnIsSorting(columnField)
+                                  ? _c("span", {
+                                      staticStyle: { "margin-left": "3px" },
+                                      style: {
+                                        color:
+                                          _vm.currentSortingColumn ==
+                                          columnField
+                                            ? "black"
+                                            : "darkgrey"
+                                      },
+                                      domProps: {
+                                        innerHTML: _vm._s(
+                                          _vm.currentSortingColumn ==
+                                            columnField
+                                            ? _vm.sortingChevron
+                                            : "⇵"
+                                        )
+                                      }
+                                    })
+                                  : _vm._e()
+                              ]
+                            )
                           }),
                           _vm._v(" "),
                           _vm.allowOperations == "true"
@@ -40488,13 +40613,32 @@ var render = function() {
         _vm.mode == "edit"
           ? _c("div", [
               _c("div", { staticClass: "portlet full-width-div" }, [
-                _c("div", { staticClass: "portlet-heading bg-primary" }, [
-                  _vm._v(
-                    "\n                        " +
-                      _vm._s(_vm.translate("Edit element")) +
-                      "\n                    "
-                  )
-                ]),
+                _c(
+                  "div",
+                  {
+                    staticClass: "portlet-heading bg-primary",
+                    staticStyle: {
+                      display: "flex",
+                      "justify-content": "space-between",
+                      "align-items": "baseline"
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(_vm.translate("Edit element")) +
+                        "\n                        "
+                    ),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-outline-secondary",
+                        on: { click: _vm.fetchElements }
+                      },
+                      [_vm._v("X")]
+                    )
+                  ]
+                ),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -40602,96 +40746,117 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "trix-wrapper-container" }, [
-    _c("input", {
-      ref: _vm.fieldname + "-content",
-      attrs: { id: _vm.fieldname + "-richtext", type: "hidden" }
-    }),
-    _vm._v(" "),
-    _c("div", { staticClass: "trix-wrapper-custom-buttons-container" }, [
-      _c(
-        "span",
-        {
-          staticClass: "trix-wrapper-button-group",
-          staticStyle: { width: "4em" }
-        },
-        [
-          _c("button", {
-            staticClass: "trix-button",
-            attrs: { type: "button" },
-            domProps: { innerHTML: _vm._s(_vm.viewModeLabel) },
-            on: { click: _vm.toggleViewMode }
-          })
-        ]
-      )
-    ]),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.viewMode == "normal",
-            expression: "viewMode == 'normal'"
-          }
-        ],
-        staticStyle: { height: "85%" },
-        attrs: { id: _vm.fieldname + "-richtext-trixeditor-container" }
-      },
-      [
-        _c("trix-editor", {
-          ref: _vm.fieldname + "-editor",
-          staticClass: "editform-richtext-editor",
-          staticStyle: { "min-height": "300px", height: "100%" },
-          attrs: {
-            input: _vm.fieldname + "-richtext",
-            id: _vm.fieldname + "-richtext-trixeditor",
-            "trix-id": _vm.fieldname + "-richtext-trixeditor"
-          }
-        })
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.viewMode == "code",
-            expression: "viewMode == 'code'"
-          }
-        ],
-        staticStyle: { height: "85%" }
-      },
-      [
-        _c("textarea", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.codeValue,
-              expression: "codeValue"
-            }
-          ],
-          staticStyle: { width: "100%", height: "100%", "min-height": "210px" },
-          domProps: { value: _vm.codeValue },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.codeValue = $event.target.value
-            }
-          }
-        })
-      ]
-    )
-  ])
+  return _c(
+    "div",
+    { staticClass: "trix-wrapper-container" },
+    [
+      _c("input", {
+        ref: _vm.fieldname + "-content",
+        attrs: { id: _vm.fieldname + "-richtext", type: "hidden" }
+      }),
+      _vm._v(" "),
+      !_vm.trixReady
+        ? _c("div", { domProps: { innerHTML: _vm._s(_vm.spinnerSrc) } })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.trixReady
+        ? [
+            _c(
+              "div",
+              { staticClass: "trix-wrapper-custom-buttons-container" },
+              [
+                _c(
+                  "span",
+                  {
+                    staticClass: "trix-wrapper-button-group",
+                    staticStyle: { width: "4em" }
+                  },
+                  [
+                    _c("button", {
+                      staticClass: "trix-button",
+                      attrs: { type: "button" },
+                      domProps: { innerHTML: _vm._s(_vm.viewModeLabel) },
+                      on: { click: _vm.toggleViewMode }
+                    })
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.viewMode == "normal",
+                    expression: "viewMode == 'normal'"
+                  }
+                ],
+                staticStyle: { height: "85%" },
+                attrs: { id: _vm.fieldname + "-richtext-trixeditor-container" }
+              },
+              [
+                _c("trix-editor", {
+                  ref: _vm.fieldname + "-editor",
+                  staticClass: "editform-richtext-editor",
+                  staticStyle: { "min-height": "300px", height: "100%" },
+                  attrs: {
+                    input: _vm.fieldname + "-richtext",
+                    id: _vm.fieldname + "-richtext-trixeditor",
+                    "trix-id": _vm.fieldname + "-richtext-trixeditor"
+                  }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.viewMode == "code",
+                    expression: "viewMode == 'code'"
+                  }
+                ],
+                staticStyle: { height: "85%" }
+              },
+              [
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.codeValue,
+                      expression: "codeValue"
+                    }
+                  ],
+                  staticStyle: {
+                    width: "100%",
+                    height: "100%",
+                    "min-height": "210px"
+                  },
+                  domProps: { value: _vm.codeValue },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.codeValue = $event.target.value
+                    }
+                  }
+                })
+              ]
+            )
+          ]
+        : _vm._e()
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -53373,6 +53538,28 @@ var fileUploadMixin = {
         });
       });
     }
+  }
+};
+
+/***/ }),
+
+/***/ "./resources/js/components/mixins/spinner.js":
+/*!***************************************************!*\
+  !*** ./resources/js/components/mixins/spinner.js ***!
+  \***************************************************/
+/*! exports provided: spinner */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "spinner", function() { return spinner; });
+//many thanks to James Doyle:
+// https://codepen.io/james2doyle/pen/LrBqE
+var spinner = {
+  data: function data() {
+    return {
+      spinnerSrc: '<img style="max-height: 1em" alt="" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPgo8c3ZnIHdpZHRoPSI0MHB4IiBoZWlnaHQ9IjQwcHgiIHZpZXdCb3g9IjAgMCA0MCA0MCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWw6c3BhY2U9InByZXNlcnZlIiBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjEuNDE0MjE7IiB4PSIwcHgiIHk9IjBweCI+CiAgICA8ZGVmcz4KICAgICAgICA8c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWwogICAgICAgICAgICBALXdlYmtpdC1rZXlmcmFtZXMgc3BpbiB7CiAgICAgICAgICAgICAgZnJvbSB7CiAgICAgICAgICAgICAgICAtd2Via2l0LXRyYW5zZm9ybTogcm90YXRlKDBkZWcpCiAgICAgICAgICAgICAgfQogICAgICAgICAgICAgIHRvIHsKICAgICAgICAgICAgICAgIC13ZWJraXQtdHJhbnNmb3JtOiByb3RhdGUoLTM1OWRlZykKICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICAgICAgQGtleWZyYW1lcyBzcGluIHsKICAgICAgICAgICAgICBmcm9tIHsKICAgICAgICAgICAgICAgIHRyYW5zZm9ybTogcm90YXRlKDBkZWcpCiAgICAgICAgICAgICAgfQogICAgICAgICAgICAgIHRvIHsKICAgICAgICAgICAgICAgIHRyYW5zZm9ybTogcm90YXRlKC0zNTlkZWcpCiAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgICAgIHN2ZyB7CiAgICAgICAgICAgICAgICAtd2Via2l0LXRyYW5zZm9ybS1vcmlnaW46IDUwJSA1MCU7CiAgICAgICAgICAgICAgICAtd2Via2l0LWFuaW1hdGlvbjogc3BpbiAxLjVzIGxpbmVhciBpbmZpbml0ZTsKICAgICAgICAgICAgICAgIC13ZWJraXQtYmFja2ZhY2UtdmlzaWJpbGl0eTogaGlkZGVuOwogICAgICAgICAgICAgICAgYW5pbWF0aW9uOiBzcGluIDEuNXMgbGluZWFyIGluZmluaXRlOwogICAgICAgICAgICB9CiAgICAgICAgXV0+PC9zdHlsZT4KICAgIDwvZGVmcz4KICAgIDxnIGlkPSJvdXRlciI+CiAgICAgICAgPGc+CiAgICAgICAgICAgIDxwYXRoIGQ9Ik0yMCwwQzIyLjIwNTgsMCAyMy45OTM5LDEuNzg4MTMgMjMuOTkzOSwzLjk5MzlDMjMuOTkzOSw2LjE5OTY4IDIyLjIwNTgsNy45ODc4MSAyMCw3Ljk4NzgxQzE3Ljc5NDIsNy45ODc4MSAxNi4wMDYxLDYuMTk5NjggMTYuMDA2MSwzLjk5MzlDMTYuMDA2MSwxLjc4ODEzIDE3Ljc5NDIsMCAyMCwwWiIgc3R5bGU9ImZpbGw6YmxhY2s7Ii8+CiAgICAgICAgPC9nPgogICAgICAgIDxnPgogICAgICAgICAgICA8cGF0aCBkPSJNNS44NTc4Niw1Ljg1Nzg2QzcuNDE3NTgsNC4yOTgxNSA5Ljk0NjM4LDQuMjk4MTUgMTEuNTA2MSw1Ljg1Nzg2QzEzLjA2NTgsNy40MTc1OCAxMy4wNjU4LDkuOTQ2MzggMTEuNTA2MSwxMS41MDYxQzkuOTQ2MzgsMTMuMDY1OCA3LjQxNzU4LDEzLjA2NTggNS44NTc4NiwxMS41MDYxQzQuMjk4MTUsOS45NDYzOCA0LjI5ODE1LDcuNDE3NTggNS44NTc4Niw1Ljg1Nzg2WiIgc3R5bGU9ImZpbGw6cmdiKDIxMCwyMTAsMjEwKTsiLz4KICAgICAgICA8L2c+CiAgICAgICAgPGc+CiAgICAgICAgICAgIDxwYXRoIGQ9Ik0yMCwzMi4wMTIyQzIyLjIwNTgsMzIuMDEyMiAyMy45OTM5LDMzLjgwMDMgMjMuOTkzOSwzNi4wMDYxQzIzLjk5MzksMzguMjExOSAyMi4yMDU4LDQwIDIwLDQwQzE3Ljc5NDIsNDAgMTYuMDA2MSwzOC4yMTE5IDE2LjAwNjEsMzYuMDA2MUMxNi4wMDYxLDMzLjgwMDMgMTcuNzk0MiwzMi4wMTIyIDIwLDMyLjAxMjJaIiBzdHlsZT0iZmlsbDpyZ2IoMTMwLDEzMCwxMzApOyIvPgogICAgICAgIDwvZz4KICAgICAgICA8Zz4KICAgICAgICAgICAgPHBhdGggZD0iTTI4LjQ5MzksMjguNDkzOUMzMC4wNTM2LDI2LjkzNDIgMzIuNTgyNCwyNi45MzQyIDM0LjE0MjEsMjguNDkzOUMzNS43MDE5LDMwLjA1MzYgMzUuNzAxOSwzMi41ODI0IDM0LjE0MjEsMzQuMTQyMUMzMi41ODI0LDM1LjcwMTkgMzAuMDUzNiwzNS43MDE5IDI4LjQ5MzksMzQuMTQyMUMyNi45MzQyLDMyLjU4MjQgMjYuOTM0MiwzMC4wNTM2IDI4LjQ5MzksMjguNDkzOVoiIHN0eWxlPSJmaWxsOnJnYigxMDEsMTAxLDEwMSk7Ii8+CiAgICAgICAgPC9nPgogICAgICAgIDxnPgogICAgICAgICAgICA8cGF0aCBkPSJNMy45OTM5LDE2LjAwNjFDNi4xOTk2OCwxNi4wMDYxIDcuOTg3ODEsMTcuNzk0MiA3Ljk4NzgxLDIwQzcuOTg3ODEsMjIuMjA1OCA2LjE5OTY4LDIzLjk5MzkgMy45OTM5LDIzLjk5MzlDMS43ODgxMywyMy45OTM5IDAsMjIuMjA1OCAwLDIwQzAsMTcuNzk0MiAxLjc4ODEzLDE2LjAwNjEgMy45OTM5LDE2LjAwNjFaIiBzdHlsZT0iZmlsbDpyZ2IoMTg3LDE4NywxODcpOyIvPgogICAgICAgIDwvZz4KICAgICAgICA8Zz4KICAgICAgICAgICAgPHBhdGggZD0iTTUuODU3ODYsMjguNDkzOUM3LjQxNzU4LDI2LjkzNDIgOS45NDYzOCwyNi45MzQyIDExLjUwNjEsMjguNDkzOUMxMy4wNjU4LDMwLjA1MzYgMTMuMDY1OCwzMi41ODI0IDExLjUwNjEsMzQuMTQyMUM5Ljk0NjM4LDM1LjcwMTkgNy40MTc1OCwzNS43MDE5IDUuODU3ODYsMzQuMTQyMUM0LjI5ODE1LDMyLjU4MjQgNC4yOTgxNSwzMC4wNTM2IDUuODU3ODYsMjguNDkzOVoiIHN0eWxlPSJmaWxsOnJnYigxNjQsMTY0LDE2NCk7Ii8+CiAgICAgICAgPC9nPgogICAgICAgIDxnPgogICAgICAgICAgICA8cGF0aCBkPSJNMzYuMDA2MSwxNi4wMDYxQzM4LjIxMTksMTYuMDA2MSA0MCwxNy43OTQyIDQwLDIwQzQwLDIyLjIwNTggMzguMjExOSwyMy45OTM5IDM2LjAwNjEsMjMuOTkzOUMzMy44MDAzLDIzLjk5MzkgMzIuMDEyMiwyMi4yMDU4IDMyLjAxMjIsMjBDMzIuMDEyMiwxNy43OTQyIDMzLjgwMDMsMTYuMDA2MSAzNi4wMDYxLDE2LjAwNjFaIiBzdHlsZT0iZmlsbDpyZ2IoNzQsNzQsNzQpOyIvPgogICAgICAgIDwvZz4KICAgICAgICA8Zz4KICAgICAgICAgICAgPHBhdGggZD0iTTI4LjQ5MzksNS44NTc4NkMzMC4wNTM2LDQuMjk4MTUgMzIuNTgyNCw0LjI5ODE1IDM0LjE0MjEsNS44NTc4NkMzNS43MDE5LDcuNDE3NTggMzUuNzAxOSw5Ljk0NjM4IDM0LjE0MjEsMTEuNTA2MUMzMi41ODI0LDEzLjA2NTggMzAuMDUzNiwxMy4wNjU4IDI4LjQ5MzksMTEuNTA2MUMyNi45MzQyLDkuOTQ2MzggMjYuOTM0Miw3LjQxNzU4IDI4LjQ5MzksNS44NTc4NloiIHN0eWxlPSJmaWxsOnJnYig1MCw1MCw1MCk7Ii8+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4K" />'
+    };
   }
 };
 

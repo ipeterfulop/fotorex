@@ -2,12 +2,12 @@
     <div class="container-fluid model-manager-container">
         <div class="row">
             <div class="col-12">
-                <div v-if="mode == 'loading'">{{ translate('Loading') }}...</div>
+                <div v-if="mode == 'loading'" v-html="spinnerSrc"></div>
                 <div v-if="mode == 'list'" class="row">
                     <div class="col-12"
                          style="margin-bottom: 5px"
                     >
-                        <button class="btn btn-primary float-right" v-on:click="createElement">{{ translate('New') }}...</button>
+                        <button class="btn btn-outline-primary float-right" v-on:click="createElement">{{ translate('New') }}...</button>
                     </div>
                     <div v-if="JSON.stringify(filters) != '{}'" class="portlet full-width-div model-manager-filter-container">
                         <div class="portlet-heading  bg-inverse d-flex justify-content-between">
@@ -71,7 +71,16 @@
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th v-for="columnName, columnField in columns" v-html="columnName"></th>
+                                    <th v-for="columnName, columnField in columns"
+                                        v-bind:class="{'sorting-column': columnIsSorting(columnField)}"
+                                        v-on:click="setSorting(columnField)">
+                                        <span v-html="columnName"></span>
+                                        <span style="margin-left: 3px"
+                                              v-if="columnIsSorting(columnField)"
+                                              v-bind:style="{color: currentSortingColumn == columnField ? 'black': 'darkgrey'}"
+                                              v-html="currentSortingColumn == columnField ? sortingChevron : '⇵'"
+                                        ></span>
+                                    </th>
                                     <th v-if="allowOperations == 'true'">{{ translate('Operations') }}</th>
                                 </tr>
                                 </thead>
@@ -126,8 +135,13 @@
                 </div>
                 <div  v-if="mode == 'edit'">
                     <div class="portlet full-width-div">
-                        <div class="portlet-heading bg-primary">
+                        <div class="portlet-heading bg-primary"
+                             style="display:flex; justify-content: space-between; align-items: baseline"
+                        >
                             {{ translate('Edit element') }}
+                            <button v-on:click="fetchElements"
+                                    class="btn btn-outline-secondary"
+                            >X</button>
                         </div>
                         <div class="portlet-body">
                             <edit-form
@@ -165,8 +179,9 @@
 
 <script>
     import {translateMixin} from './mixins/translateMixin.js'
+    import {spinner} from './mixins/spinner.js'
     export default {
-        mixins: [translateMixin],
+        mixins: [translateMixin, spinner],
         props: {
             indexUrl: {type: String, required: true},
             detailsUrl: {type: String, required: true},
@@ -213,6 +228,9 @@
                 mode: 'loading',
                 elements: {},
                 columns: {},
+                sortingColumns: {},
+                currentSortingColumn: null,
+                currentSortingDirection: 'asc',
                 fields: {},
                 model: {},
                 filters: {},
@@ -226,6 +244,7 @@
                 watches: {},
                 currentPage: 1,
                 counts: {},
+                disablePageWatch: false,
             }
         },
         mounted() {
@@ -248,9 +267,35 @@
                 }
 
                 return this.translate('Results')+'&nbsp;('+this.counts.filtered+')';
+            },
+            sortingChevron: function() {
+                return this.currentSortingDirection == 'asc'
+                    ? '⬆'
+                    : '⬇';
             }
         },
         methods: {
+            columnIsSorting: function(columnField) {
+                return typeof(this.sortingColumns[columnField]) != 'undefined';
+            },
+            setSorting: function(field) {
+                if (this.columnIsSorting(field)) {
+                    if (this.currentSortingColumn == field) {
+                        if (this.currentSortingDirection == 'asc') {
+                            this.currentSortingDirection = 'desc'
+                        } else {
+                            this.currentSortingDirection = 'asc';
+                        }
+                    } else {
+                        this.currentSortingColumn = field;
+                        this.currentSortingDirection = 'asc';
+                    }
+                    this.disablePageWatch = true;
+                    this.currentPage = 1;
+                    this.disablePageWatch = false;
+                    this.fetchElements(true);
+                }
+            },
             showButton: function(button) {
                 return this.buttons.hasOwnProperty(button)
                     && (this.userIsAdmin || !this.buttons[button]['adminNeeded']);
@@ -270,6 +315,8 @@
                     token: Math.random().toString(36),
                     page: this.currentPage,
                     items_per_page: this.itemsPerPage,
+                    sorting_field: this.sortingColumns[this.currentSortingColumn],
+                    sorting_direction: this.currentSortingDirection
                 };
                 for (var filterName in this.filters) {
                     if (this.filters.hasOwnProperty(filterName)) {
@@ -296,7 +343,17 @@
                             }, {deep: true});
                     }
                 }
+            },
+            findSortingColumnKey: function(column) {
+                for (var i in this.sortingColumns) {
+                    if (this.sortingColumns.hasOwnProperty(i)) {
+                        if (this.sortingColumns[i] == column) {
+                            return i;
+                        }
+                    }
+                }
 
+                return null;
             },
             fetchElements: function(onlyElements) {
                 if (typeof(onlyElements) == 'undefined') {
@@ -309,6 +366,9 @@
                     .then((response) => {
                         this.elements = response.data.elements;
                         this.counts = response.data.counts;
+                        this.sortingColumns = response.data.sortingColumns;
+                        this.currentSortingColumn = this.findSortingColumnKey(response.data.sortingField);
+                        this.currentSortingDirection = response.data.sortingDirection;
                         if (!onlyElements) {
                             this.columns = response.data.columns;
                             if (JSON.stringify(this.filters) == '{}') {
@@ -370,11 +430,14 @@
                         Vue.set(this.filters[filter], 'value', this.filters[filter].default);
                     }
                 }
+                this.fetchElements(true)
             }
         },
         watch: {
             currentPage: function() {
-                this.fetchElements(true);
+                if (!this.disablePageWatch) {
+                    this.fetchElements(true);
+                }
             }
         }
     }
@@ -382,5 +445,9 @@
 <style>
     .full-width-div {
         width: 100%
+    }
+    .sorting-column {
+        white-space: nowrap;
+        cursor:pointer
     }
 </style>

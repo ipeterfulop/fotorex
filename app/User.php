@@ -62,4 +62,12 @@ class User extends Authenticatable
         // TODO: Implement getVueCRUDIndexFilters() method.
         return [];
     }
+
+    public static function getVueCRUDSortingIndexColumns()
+    {
+        return [
+            'name' => 'name',
+            'email' => 'email'
+        ];
+    }
 }

@@ -27,6 +27,11 @@ class Article extends Model
         'published_at'
     ];
 
+    protected $appends = [
+        'url',
+        'published_at_label'
+    ];
+
     public function oldarticleslugs()
     {
         return $this->hasMany(Oldarticleslug::class);
@@ -50,14 +55,21 @@ class Article extends Model
         return url(self::SLUG_BASE.$this->slug);
     }
 
+    public function getPublishedAtLabelAttribute()
+    {
+        return $this->published_at->format('Y-m-d H:i:s');
+    }
+
     public static function getVueCRUDIndexColumns()
     {
         return [
             'title' => 'Cím',
             'url' => 'URL',
             'summary' => 'Összefoglaló',
+            'published_at_label' => 'Publikálva'
         ];
     }
+
 
     public function getVueCRUDDetailsFields()
     {
@@ -75,5 +87,14 @@ class Article extends Model
         $result['search'] = new TextVueCRUDIndexfilter(['title', 'summary', 'content'], 'Keresés...', '');
 
         return $result;
+    }
+
+    public static function getVueCRUDSortingIndexColumns()
+    {
+        return [
+            'title' => 'title',
+            'url' => 'slug',
+            'published_at_label' => 'published_at'
+        ];
     }
 }

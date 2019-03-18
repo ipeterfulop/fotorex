@@ -14,10 +14,11 @@ class MenuitemsSeeder extends \Datalytix\Menu\Seeds\MenuitemsSeederBase
                  'parent_id' => null, // we can have this element be a child of a parent; the id is the key in $dataset
                  'url' => null, // we can either use direct url-s, or route names
                  'routename' => 'vuecrud_user_index',
-                 'iconclass' => 'mdi mdi-user', // if not null, a <span with this class will be rendered before the label
+                 'iconclass' => 'mdi mdi-account', // if not null, a <span with this class will be rendered before the label
                  'custom_view_name' => null, // optional blade template name if needed
                  'user_gate' => null, // if set, the item is only rendered if the current user passes a can: check
-                 'menuitemtype_id' => 2 //one of the constants in Menuitem; the item can either be a group name or a menu item
+                 'menuitemtype_id' => 2, //one of the constants in Menuitem; the item can either be a group name or a menu item
+                 'tag' => 'admin'
             ],
             2 => [
                  'position' => ++$position,
@@ -28,7 +29,8 @@ class MenuitemsSeeder extends \Datalytix\Menu\Seeds\MenuitemsSeederBase
                  'iconclass' => 'mdi mdi-file-document', // if not null, a <span with this class will be rendered before the label
                  'custom_view_name' => null, // optional blade template name if needed
                  'user_gate' => null, // if set, the item is only rendered if the current user passes a can: check
-                 'menuitemtype_id' => 2 //one of the constants in Menuitem; the item can either be a group name or a menu item
+                 'menuitemtype_id' => 2, //one of the constants in Menuitem; the item can either be a group name or a menu item
+                'tag' => 'admin'
             ],
         ];
 
