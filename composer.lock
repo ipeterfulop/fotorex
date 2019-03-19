@@ -45,12 +45,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:ipeterfulop/menu.package.git",
-                "reference": "c77a1a4beaa53343e0f011f67b8f3a7267ad934f"
+                "reference": "81284a7905a6a2294bf487e2e1bcec8aec30d88f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ipeterfulop/menu.package/zipball/c77a1a4beaa53343e0f011f67b8f3a7267ad934f",
-                "reference": "c77a1a4beaa53343e0f011f67b8f3a7267ad934f",
+                "url": "https://api.github.com/repos/ipeterfulop/menu.package/zipball/81284a7905a6a2294bf487e2e1bcec8aec30d88f",
+                "reference": "81284a7905a6a2294bf487e2e1bcec8aec30d88f",
                 "shasum": ""
             },
             "type": "library",
@@ -77,7 +77,7 @@
                 "source": "https://github.com/ipeterfulop/menu.package/tree/master",
                 "issues": "https://github.com/ipeterfulop/menu.package/issues"
             },
-            "time": "2019-03-18T14:44:06+00:00"
+            "time": "2019-03-18T17:59:16+00:00"
         },
         {
             "name": "datalytix/mintontheme",
@@ -196,12 +196,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:ipeterfulop/vuecrud.package.git",
-                "reference": "41aeed06d6168da498fed143df22450f23d503a7"
+                "reference": "a2497a00962a188e42279e8902c17befc53d8229"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ipeterfulop/vuecrud.package/zipball/41aeed06d6168da498fed143df22450f23d503a7",
-                "reference": "41aeed06d6168da498fed143df22450f23d503a7",
+                "url": "https://api.github.com/repos/ipeterfulop/vuecrud.package/zipball/a2497a00962a188e42279e8902c17befc53d8229",
+                "reference": "a2497a00962a188e42279e8902c17befc53d8229",
                 "shasum": ""
             },
             "require": {
@@ -231,7 +231,7 @@
                 "source": "https://github.com/ipeterfulop/vuecrud.package/tree/master",
                 "issues": "https://github.com/ipeterfulop/vuecrud.package/issues"
             },
-            "time": "2019-03-18T16:43:43+00:00"
+            "time": "2019-03-19T14:38:54+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -683,16 +683,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.8.4",
+            "version": "v5.8.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "d651f8bd25c6baf7ae4913bc51f02849fad4e925"
+                "reference": "791992e20efdf043ac3c2d989025d48d648821de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/d651f8bd25c6baf7ae4913bc51f02849fad4e925",
-                "reference": "d651f8bd25c6baf7ae4913bc51f02849fad4e925",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/791992e20efdf043ac3c2d989025d48d648821de",
+                "reference": "791992e20efdf043ac3c2d989025d48d648821de",
                 "shasum": ""
             },
             "require": {
@@ -826,7 +826,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2019-03-12T13:33:14+00:00"
+            "time": "2019-03-19T14:20:36+00:00"
         },
         {
             "name": "laravel/tinker",

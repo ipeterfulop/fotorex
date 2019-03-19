@@ -22,8 +22,12 @@ Route::prefix('admin')->middleware('auth')->group(function() {
 
     \App\User::setVueCRUDRoutes();
     \App\Article::setVueCRUDRoutes();
+    \App\Contactmessage::setVueCRUDRoutes();
 
 });
+
+Route::view('/kapcsolat', 'public.contactmessages.index')->name('contactmessage_index');
+Route::post('/kapcsolat', 'ContactmessagesController@submit')->name('contactmessage_submit');
 
 Route::get('/cikkek', 'ArticlesController@redirectToLatest')->name('articles_redirect_to_latest');
 Route::get('/cikkek/{sortingOption}/{page?}', 'ArticlesController@index')->name('articles_index');

@@ -2706,6 +2706,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2765,18 +2779,15 @@ __webpack_require__.r(__webpack_exports__);
         return {
           details: {
             class: 'btn btn-primary btn-block',
-            html: 'Részletek',
-            adminNeeded: false
+            html: 'Részletek'
           },
           edit: {
             class: 'btn btn-info btn-block',
-            html: 'Szerkesztés',
-            adminNeeded: true
+            html: 'Szerkesztés'
           },
           delete: {
             class: 'btn btn-danger btn-block',
-            html: 'Törlés',
-            adminNeeded: true
+            html: 'Törlés'
           }
         };
       }
@@ -2814,7 +2825,8 @@ __webpack_require__.r(__webpack_exports__);
       watches: {},
       currentPage: 1,
       counts: {},
-      disablePageWatch: false
+      disablePageWatch: false,
+      activeCustomComponent: {}
     };
   },
   mounted: function mounted() {
@@ -2841,6 +2853,17 @@ __webpack_require__.r(__webpack_exports__);
     },
     sortingChevron: function sortingChevron() {
       return this.currentSortingDirection == 'asc' ? '⬆' : '⬇';
+    },
+    customComponentButtons: function customComponentButtons() {
+      var result = {};
+
+      for (var i in this.buttons) {
+        if (this.buttons.hasOwnProperty(i) && typeof this.buttons[i].componentName != 'undefined') {
+          result[i] = this.buttons[i];
+        }
+      }
+
+      return result;
     }
   },
   methods: {
@@ -2867,7 +2890,11 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     showButton: function showButton(button) {
-      return this.buttons.hasOwnProperty(button) && (this.userIsAdmin || !this.buttons[button]['adminNeeded']);
+      return this.buttons.hasOwnProperty(button);
+    },
+    activateCustomComponent: function activateCustomComponent(key) {
+      this.activeCustomComponent = this.customComponentButtons[key];
+      this.mode = 'custom-component';
     },
     getFilterTimeoutByType: function getFilterTimeoutByType(type) {
       if (type == 'datepicker') {
@@ -3031,6 +3058,130 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrixTableEditor.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TrixTableEditor.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    value: {
+      type: Array,
+      default: function _default() {
+        return [['']];
+      }
+    }
+  },
+  data: function data() {
+    return {
+      table: [['']],
+      currentRow: 0,
+      currentColumn: 0
+    };
+  },
+  mounted: function mounted() {
+    this.table = this.value;
+  },
+  methods: {
+    cellClass: function cellClass(rowIndex, columnIndex) {
+      if (rowIndex == this.currentRow && columnIndex == this.currentColumn) {
+        return 'trix-table-editor-td';
+      }
+
+      if (rowIndex == this.currentRow) {
+        return 'trix-table-editor-td trix-table-editor-horizontal-crosshair';
+      }
+
+      if (columnIndex == this.currentColumn) {
+        return 'trix-table-editor-td trix-table-editor-vertical-crosshair';
+      }
+
+      return 'trix-table-editor-td';
+    },
+    setCellValue: function setCellValue(payload, rowIndex, columnIndex) {
+      console.log({
+        r: rowIndex,
+        c: columnIndex,
+        p: payload
+      });
+      Vue.set(this.table[rowIndex], columnIndex, payload);
+    },
+    addRow: function addRow() {
+      var newRow = [];
+
+      for (var i = 0; i < this.table[0].length; i++) {
+        newRow.push('');
+      }
+
+      this.table.splice(this.currentRow + 1, 0, newRow);
+      this.emitChange();
+    },
+    addColumn: function addColumn() {
+      for (var i = 0; i < this.table.length; i++) {
+        this.table[i].splice(this.currentColumn + 1, 0, '');
+      }
+
+      this.emitChange();
+    },
+    deleteRow: function deleteRow() {
+      if (this.table.length > 1) {
+        this.table.splice(this.currentRow, 1);
+        this.emitChange();
+      }
+    },
+    deleteColumn: function deleteColumn() {
+      if (this.table[0].length > 1) {
+        for (var i = 0; i < this.table.length; i++) {
+          this.table[i].splice(this.currentColumn, 1);
+        }
+
+        this.emitChange();
+      }
+    },
+    emitChange: function emitChange() {
+      this.$emit('input', this.table);
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrixWrapper.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TrixWrapper.vue?vue&type=script&lang=js& ***!
@@ -3042,6 +3193,25 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_fileUploadMixin_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mixins/fileUploadMixin.js */ "./resources/js/components/mixins/fileUploadMixin.js");
 /* harmony import */ var _mixins_spinner_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mixins/spinner.js */ "./resources/js/components/mixins/spinner.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3110,7 +3280,8 @@ __webpack_require__.r(__webpack_exports__);
       viewMode: 'normal',
       codeValue: '',
       updatingCodeValue: false,
-      trixReady: false
+      trixReady: false,
+      showPopup: false
     };
   },
   computed: {
@@ -3197,7 +3368,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     removeAttachment: function removeAttachment(event) {
       this.removeUploadedPublicFile(this.ajaxOperationsUrl, event.attachment.getAttribute('url'), "trixRemoveAttachment").then(function (response) {}, function (error) {});
-    }
+    },
+    insertTable: function insertTable() {},
+    editTable: function editTable() {}
   },
   watch: {
     value: function value() {
@@ -7720,6 +7893,25 @@ exports.push([module.i, "\n.full-width-div {\n    width: 100%\n}\n.sorting-colum
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrixTableEditor.vue?vue&type=style&index=0&lang=css&":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--8-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--8-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TrixTableEditor.vue?vue&type=style&index=0&lang=css& ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.trix-table-editor-container {\n    display: flex;\n    flex-direction: column;\n}\n.trix-table-editor-buttons-row {\n    display: flex;\n    flex-direction: row;\n}\n.trix-table-editor-table td {\n    height: 2em;\n    //min-width: 10em;\n    opacity: 1;\n}\n.trix-table-editor-inactive-cell {\n    opacity: .6;\n}\n.trix-table-editor-td {\n    border: 2px solid lightgrey;\n}\n.trix-table-editor-horizontal-crosshair {\n    border-top: 2px solid black !important;\n    border-bottom: 2px solid black !important;\n}\n.trix-table-editor-vertical-crosshair {\n    border-left: 2px solid black !important;\n    border-right: 2px solid black !important;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrixWrapper.vue?vue&type=style&index=0&lang=css&":
 /*!*****************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--8-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--8-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TrixWrapper.vue?vue&type=style&index=0&lang=css& ***!
@@ -7732,7 +7924,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.trix-wrapper-container {\n    min-height:310px;\n    height: 100%\n}\n.trix-wrapper-custom-buttons-container {\n    height: 2.2em;\n}\n.trix-wrapper-button-group {\n    display: flex;\n    margin-bottom: 10px;\n    border: 1px solid #bbb;\n    border-top-color: #ccc;\n    border-bottom-color: #888;\n    border-radius: 3px;\n    height: 1.6em;\n}\n.trix-wrapper-custom-buttons-container > .trix-wrapper-button-group > button {\n    position: relative;\n    float: left;\n    color: rgba(0, 0, 0, 0.6);\n    font-size: 0.75em;\n    font-weight: 600;\n    white-space: nowrap;\n    padding: 0 0.5em;\n    margin: 0;\n    outline: none;\n    border: none;\n    border-bottom: 1px solid #ddd;\n    border-radius: 0;\n    background: transparent;\n}\n\n", ""]);
+exports.push([module.i, "\n.trix-wrapper-container {\n    min-height:310px;\n    height: 100%;\n    max-width: 100%;\n}\n.trix-wrapper-custom-buttons-container {\n    height: 2.2em;\n    display: flex;\n    justify-content: space-between;\n}\n.trix-wrapper-button-group {\n    display: flex;\n    margin-bottom: 10px;\n    border: 1px solid #bbb;\n    border-top-color: #ccc;\n    border-bottom-color: #888;\n    border-radius: 3px;\n    height: 1.6em;\n}\n.trix-wrapper-custom-buttons-container > .trix-wrapper-button-group > button {\n    position: relative;\n    float: left;\n    color: rgba(0, 0, 0, 0.6);\n    font-size: 0.75em;\n    font-weight: 600;\n    white-space: nowrap;\n    padding: 0 0.5em;\n    margin: 0;\n    outline: none;\n    border: none;\n    border-bottom: 1px solid #ddd;\n    border-radius: 0;\n    background: transparent;\n}\n.trix-wrapper-modal-overlay {\n    z-index:1000;\n    width: 100%;\n    height: 100%;\n    position: fixed;\n    left: 0px;\n    top: 0px;\n    background-color: rgba(192,192,192,.5);\n}\n.trix-wrapper-modal {\n    width: 85%;\n    max-width: 85%;\n    min-width: 85%;\n    height: 80vh;\n    max-height: 80vh;\n    min-height: 80vh;\n    left: 7%;\n    top: 10vh;\n    padding: 1em;\n    background-color: white;\n    box-shadow: 5px 5px darkgrey;\n    position:absolute;\n    display: flex;\n    flex-direction: column;\n}\n\n", ""]);
 
 // exports
 
@@ -38423,6 +38615,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrixTableEditor.vue?vue&type=style&index=0&lang=css&":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--8-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--8-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TrixTableEditor.vue?vue&type=style&index=0&lang=css& ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--8-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--8-2!../../../node_modules/vue-loader/lib??vue-loader-options!./TrixTableEditor.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrixTableEditor.vue?vue&type=style&index=0&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrixWrapper.vue?vue&type=style&index=0&lang=css&":
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--8-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--8-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TrixWrapper.vue?vue&type=style&index=0&lang=css& ***!
@@ -40487,62 +40709,88 @@ var render = function() {
                             }),
                             _vm._v(" "),
                             _vm.allowOperations == "true"
-                              ? _c("td", [
-                                  _vm.showButton("details")
-                                    ? _c("button", {
-                                        class: _vm.buttons["details"]["class"],
+                              ? _c(
+                                  "td",
+                                  [
+                                    _vm.showButton("details")
+                                      ? _c("button", {
+                                          class:
+                                            _vm.buttons["details"]["class"],
+                                          domProps: {
+                                            innerHTML: _vm._s(
+                                              _vm.buttons["details"]["html"]
+                                            )
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.showDetails(
+                                                element[_vm.idProperty]
+                                              )
+                                            }
+                                          }
+                                        })
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _vm.showButton("edit")
+                                      ? _c("button", {
+                                          class: _vm.buttons["edit"]["class"],
+                                          domProps: {
+                                            innerHTML: _vm._s(
+                                              _vm.buttons["edit"]["html"]
+                                            )
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.editElement(
+                                                element[_vm.idProperty]
+                                              )
+                                            }
+                                          }
+                                        })
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _vm.showButton("delete")
+                                      ? _c("button", {
+                                          class: _vm.buttons["delete"]["class"],
+                                          domProps: {
+                                            innerHTML: _vm._s(
+                                              _vm.buttons["delete"]["html"]
+                                            )
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.confirmElementDeletion(
+                                                element[_vm.idProperty],
+                                                element[_vm.nameProperty]
+                                              )
+                                            }
+                                          }
+                                        })
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _vm._l(_vm.customComponentButtons, function(
+                                      customComponentButton,
+                                      customComponentButtonKey
+                                    ) {
+                                      return _c("button", {
+                                        class: customComponentButton["class"],
                                         domProps: {
                                           innerHTML: _vm._s(
-                                            _vm.buttons["details"]["html"]
+                                            customComponentButton["html"]
                                           )
                                         },
                                         on: {
                                           click: function($event) {
-                                            return _vm.showDetails(
-                                              element[_vm.idProperty]
+                                            return _vm.activateCustomComponent(
+                                              customComponentButtonKey
                                             )
                                           }
                                         }
                                       })
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _vm.showButton("edit")
-                                    ? _c("button", {
-                                        class: _vm.buttons["edit"]["class"],
-                                        domProps: {
-                                          innerHTML: _vm._s(
-                                            _vm.buttons["edit"]["html"]
-                                          )
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.editElement(
-                                              element[_vm.idProperty]
-                                            )
-                                          }
-                                        }
-                                      })
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _vm.showButton("delete")
-                                    ? _c("button", {
-                                        class: _vm.buttons["delete"]["class"],
-                                        domProps: {
-                                          innerHTML: _vm._s(
-                                            _vm.buttons["delete"]["html"]
-                                          )
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.confirmElementDeletion(
-                                              element[_vm.idProperty],
-                                              element[_vm.nameProperty]
-                                            )
-                                          }
-                                        }
-                                      })
-                                    : _vm._e()
-                                ])
+                                    })
+                                  ],
+                                  2
+                                )
                               : _vm._e()
                           ],
                           2
@@ -40719,9 +40967,136 @@ var render = function() {
                 )
               ])
             ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.mode == "custom-component"
+          ? _c(
+              "div",
+              [
+                _c(
+                  _vm.activeCustomComponent.componentName,
+                  _vm._b(
+                    {
+                      tag: "component",
+                      on: {
+                        "submit-success": _vm.fetchElements,
+                        "component-canceled": _vm.fetchElements
+                      }
+                    },
+                    "component",
+                    _vm.activeCustomComponent.props,
+                    false
+                  )
+                )
+              ],
+              1
+            )
           : _vm._e()
       ])
     ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrixTableEditor.vue?vue&type=template&id=9bd4bc5a&":
+/*!******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TrixTableEditor.vue?vue&type=template&id=9bd4bc5a& ***!
+  \******************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "trix-table-editor-container" }, [
+    _c("div", { staticClass: "trix-table-editor-buttons-row" }, [
+      _c("button", { on: { click: _vm.addRow } }, [_vm._v("Új sor")]),
+      _vm._v(" "),
+      _c("button", { on: { click: _vm.deleteRow } }, [_vm._v("Sor törlése")]),
+      _vm._v(" "),
+      _c("button", { on: { click: _vm.addColumn } }, [_vm._v("Új oszlop")]),
+      _vm._v(" "),
+      _c("button", { on: { click: _vm.deleteColumn } }, [
+        _vm._v("Oszlop törlése")
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "table",
+      {
+        staticClass: "trix-table-editor-table",
+        staticStyle: { width: "100%", border: "1px solid darkgrey" }
+      },
+      _vm._l(_vm.table, function(row, rowIndex) {
+        return _c(
+          "tr",
+          _vm._l(row, function(column, columnIndex) {
+            return _c(
+              "td",
+              {
+                class: _vm.cellClass(rowIndex, columnIndex),
+                style: { width: 100 / row.length + "%" },
+                attrs: {
+                  "data-row-index": rowIndex,
+                  "data-column-index": columnIndex
+                },
+                on: {
+                  click: function($event) {
+                    _vm.currentRow = rowIndex
+                    _vm.currentColumn = columnIndex
+                  }
+                }
+              },
+              [
+                _vm.currentRow != rowIndex || _vm.currentColumn != columnIndex
+                  ? _c("div", {
+                      staticClass: "trix-table-editor-inactive-cell",
+                      domProps: { innerHTML: _vm._s(column) }
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("trix-wrapper", {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value:
+                        _vm.currentRow == rowIndex &&
+                        _vm.currentColumn == columnIndex,
+                      expression:
+                        "currentRow == rowIndex && currentColumn == columnIndex"
+                    }
+                  ],
+                  attrs: {
+                    fieldname:
+                      "table-" + _vm.currentRow + "-" + _vm.currentColumn,
+                    value: _vm.table[rowIndex][columnIndex]
+                  },
+                  on: {
+                    input: function($event) {
+                      return _vm.setCellValue($event, rowIndex, columnIndex)
+                    }
+                  }
+                })
+              ],
+              1
+            )
+          }),
+          0
+        )
+      }),
+      0
+    )
   ])
 }
 var staticRenderFns = []
@@ -40746,117 +41121,191 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "trix-wrapper-container" },
-    [
-      _c("input", {
-        ref: _vm.fieldname + "-content",
-        attrs: { id: _vm.fieldname + "-richtext", type: "hidden" }
-      }),
-      _vm._v(" "),
-      !_vm.trixReady
-        ? _c("div", { domProps: { innerHTML: _vm._s(_vm.spinnerSrc) } })
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.trixReady
-        ? [
-            _c(
-              "div",
-              { staticClass: "trix-wrapper-custom-buttons-container" },
-              [
-                _c(
-                  "span",
-                  {
-                    staticClass: "trix-wrapper-button-group",
-                    staticStyle: { width: "4em" }
-                  },
-                  [
-                    _c("button", {
-                      staticClass: "trix-button",
-                      attrs: { type: "button" },
-                      domProps: { innerHTML: _vm._s(_vm.viewModeLabel) },
-                      on: { click: _vm.toggleViewMode }
-                    })
-                  ]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.viewMode == "normal",
-                    expression: "viewMode == 'normal'"
-                  }
-                ],
-                staticStyle: { height: "85%" },
-                attrs: { id: _vm.fieldname + "-richtext-trixeditor-container" }
-              },
-              [
-                _c("trix-editor", {
-                  ref: _vm.fieldname + "-editor",
-                  staticClass: "editform-richtext-editor",
-                  staticStyle: { "min-height": "300px", height: "100%" },
-                  attrs: {
-                    input: _vm.fieldname + "-richtext",
-                    id: _vm.fieldname + "-richtext-trixeditor",
-                    "trix-id": _vm.fieldname + "-richtext-trixeditor"
-                  }
-                })
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.viewMode == "code",
-                    expression: "viewMode == 'code'"
-                  }
-                ],
-                staticStyle: { height: "85%" }
-              },
-              [
-                _c("textarea", {
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "trix-wrapper-container" },
+      [
+        _c("input", {
+          ref: _vm.fieldname + "-content",
+          attrs: { id: _vm.fieldname + "-richtext", type: "hidden" }
+        }),
+        _vm._v(" "),
+        !_vm.trixReady
+          ? _c("div", { domProps: { innerHTML: _vm._s(_vm.spinnerSrc) } })
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.trixReady
+          ? [
+              _c(
+                "div",
+                { staticClass: "trix-wrapper-custom-buttons-container" },
+                [
+                  _c(
+                    "span",
+                    {
+                      staticClass: "trix-wrapper-button-group",
+                      staticStyle: { width: "4em" }
+                    },
+                    [
+                      _c("button", {
+                        staticClass: "trix-button",
+                        attrs: { type: "button" },
+                        domProps: { innerHTML: _vm._s(_vm.viewModeLabel) },
+                        on: { click: _vm.toggleViewMode }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.viewMode == "normal",
+                          expression: "viewMode == 'normal'"
+                        }
+                      ],
+                      staticClass: "trix-wrapper-button-group",
+                      staticStyle: { width: "8em" }
+                    },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "trix-button",
+                          attrs: { type: "button" },
+                          on: { click: _vm.insertTable }
+                        },
+                        [_vm._v("Táblázat beszúrása")]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.viewMode == "normal",
+                          expression: "viewMode == 'normal'"
+                        }
+                      ],
+                      staticClass: "trix-wrapper-button-group",
+                      staticStyle: { width: "10em" }
+                    },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "trix-button",
+                          attrs: { type: "button" },
+                          on: { click: _vm.editTable }
+                        },
+                        [_vm._v("Táblázat szerkesztése")]
+                      )
+                    ]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
                   directives: [
                     {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.codeValue,
-                      expression: "codeValue"
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.viewMode == "normal",
+                      expression: "viewMode == 'normal'"
                     }
                   ],
-                  staticStyle: {
-                    width: "100%",
-                    height: "100%",
-                    "min-height": "210px"
-                  },
-                  domProps: { value: _vm.codeValue },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.codeValue = $event.target.value
-                    }
+                  staticStyle: { height: "85%" },
+                  attrs: {
+                    id: _vm.fieldname + "-richtext-trixeditor-container"
                   }
-                })
-              ]
-            )
-          ]
-        : _vm._e()
-    ],
-    2
-  )
+                },
+                [
+                  _c("trix-editor", {
+                    ref: _vm.fieldname + "-editor",
+                    staticClass: "editform-richtext-editor",
+                    staticStyle: { "min-height": "300px", height: "100%" },
+                    attrs: {
+                      input: _vm.fieldname + "-richtext",
+                      id: _vm.fieldname + "-richtext-trixeditor",
+                      "trix-id": _vm.fieldname + "-richtext-trixeditor"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.viewMode == "code",
+                      expression: "viewMode == 'code'"
+                    }
+                  ],
+                  staticStyle: { height: "85%" }
+                },
+                [
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.codeValue,
+                        expression: "codeValue"
+                      }
+                    ],
+                    staticStyle: {
+                      width: "100%",
+                      height: "100%",
+                      "min-height": "210px"
+                    },
+                    domProps: { value: _vm.codeValue },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.codeValue = $event.target.value
+                      }
+                    }
+                  })
+                ]
+              )
+            ]
+          : _vm._e()
+      ],
+      2
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.showPopup,
+            expression: "showPopup"
+          }
+        ],
+        staticClass: "trix-wrapper-modal-overlay"
+      },
+      [_c("div", { staticClass: "trix-wrapper-modal" })]
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -52982,6 +53431,7 @@ var map = {
 	"./ExampleComponent.vue": "./resources/js/components/ExampleComponent.vue",
 	"./ImagePicker.vue": "./resources/js/components/ImagePicker.vue",
 	"./ModelManager.vue": "./resources/js/components/ModelManager.vue",
+	"./TrixTableEditor.vue": "./resources/js/components/TrixTableEditor.vue",
 	"./TrixWrapper.vue": "./resources/js/components/TrixWrapper.vue"
 };
 
@@ -53401,6 +53851,93 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ModelManager_vue_vue_type_template_id_65112e2f___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ModelManager_vue_vue_type_template_id_65112e2f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/TrixTableEditor.vue":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/TrixTableEditor.vue ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TrixTableEditor_vue_vue_type_template_id_9bd4bc5a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TrixTableEditor.vue?vue&type=template&id=9bd4bc5a& */ "./resources/js/components/TrixTableEditor.vue?vue&type=template&id=9bd4bc5a&");
+/* harmony import */ var _TrixTableEditor_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TrixTableEditor.vue?vue&type=script&lang=js& */ "./resources/js/components/TrixTableEditor.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _TrixTableEditor_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TrixTableEditor.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/TrixTableEditor.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _TrixTableEditor_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _TrixTableEditor_vue_vue_type_template_id_9bd4bc5a___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _TrixTableEditor_vue_vue_type_template_id_9bd4bc5a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/TrixTableEditor.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/TrixTableEditor.vue?vue&type=script&lang=js&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/TrixTableEditor.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TrixTableEditor_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./TrixTableEditor.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrixTableEditor.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TrixTableEditor_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/TrixTableEditor.vue?vue&type=style&index=0&lang=css&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/TrixTableEditor.vue?vue&type=style&index=0&lang=css& ***!
+  \**************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_8_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TrixTableEditor_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--8-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--8-2!../../../node_modules/vue-loader/lib??vue-loader-options!./TrixTableEditor.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrixTableEditor.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_8_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TrixTableEditor_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_8_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TrixTableEditor_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_8_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TrixTableEditor_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_8_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TrixTableEditor_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_8_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TrixTableEditor_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/TrixTableEditor.vue?vue&type=template&id=9bd4bc5a&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/TrixTableEditor.vue?vue&type=template&id=9bd4bc5a& ***!
+  \************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TrixTableEditor_vue_vue_type_template_id_9bd4bc5a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./TrixTableEditor.vue?vue&type=template&id=9bd4bc5a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrixTableEditor.vue?vue&type=template&id=9bd4bc5a&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TrixTableEditor_vue_vue_type_template_id_9bd4bc5a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TrixTableEditor_vue_vue_type_template_id_9bd4bc5a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
