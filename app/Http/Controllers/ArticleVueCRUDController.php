@@ -42,4 +42,13 @@ class ArticleVueCRUDController extends VueCRUDControllerBase implements ICRUDCon
         return $provider->getElementsAndCounts();
     }
 
+    protected function renderPreview()
+    {
+        $article = new Article();
+        $article->title = 'Előnézet';
+        $article->published_at = now();
+        $article->content = request()->get('content');
+
+        return view('public.articles.show', ['article' => $article, 'backUrl' => '#']);
+    }
 }

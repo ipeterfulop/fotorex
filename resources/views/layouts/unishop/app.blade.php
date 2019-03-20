@@ -30,7 +30,9 @@
 @include('layouts.unishop.header')
 <section id="main-section">
     <!-- Page Content-->
-    @yield('content')
+    <div class="container padding-bottom-2x padding-top-2x">
+        @yield('content')
+    </div>
 </section>
 @include('layouts.unishop.footer')
 <!-- Back To Top Button--><a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>

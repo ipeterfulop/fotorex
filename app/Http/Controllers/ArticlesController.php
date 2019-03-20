@@ -16,8 +16,8 @@ class ArticlesController extends Controller
             request()->get('search', '')
         );
         $sortingOptions = [
-            route('articles_index', ['sortingOption' => 'popular']) => ['label' => 'Legnépszerűbb elöl', 'sortingOption' => 'popular'],
-            route('articles_index', ['sortingOption' => 'latest']) => ['label' => 'Legújabb elöl', 'sortingOption' => 'latest'],
+            route('articles_index', ['sortingOption' => 'nepszeru']) => ['label' => 'Legnépszerűbb elöl', 'sortingOption' => 'nepszeru'],
+            route('articles_index', ['sortingOption' => 'friss']) => ['label' => 'Legújabb elöl', 'sortingOption' => 'friss'],
         ];
         return view('layouts.paginated-data-view', [
             'dataproviderResult' => $dataproviderResult,

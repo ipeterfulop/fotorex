@@ -5,11 +5,14 @@ namespace App\Formdatabuilders;
 
 
 use App\Article;
+use App\Articlecategory;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\DateTimepickerVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\ImagePickerVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichtextTrixVueCRUDFormfield;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\SelectVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\SlugVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\TextVueCRUDFormfield;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\YesNoSelectVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\VueCRUDFormdatabuilder;
 
 class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
@@ -22,6 +25,11 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
     protected static function getFields()
     {
         $result = [];
+        $result['articlecategory_id'] = (new SelectVueCRUDFormfield())
+            ->setLabel('Kategória')
+            ->setAddChooseMessage(false)
+            ->setValuesetClass(Articlecategory::class)
+            ->setDefault(0);
         $result['slug'] = (new SlugVueCRUDFormfield())->setMandatory(true)
             ->setLabel('URL')
             ->setProperty('slug')
@@ -39,14 +47,28 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
         $result['title'] = (new TextVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Cím')
             ->setProperty('title')
-            ->setContainerClass('col-12');
+            ->setContainerClass('col-10');
+        $result['is_published'] = (new YesNoSelectVueCRUDFormfield())->setMandatory(true)
+            ->setLabel('Publikus')
+            ->setProperty('is_published')
+            ->setDefault(0)
+            ->setContainerClass('col-2');
+
         $result['summary'] = (new RichtextTrixVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Összefoglaló')
             ->setProperty('summary')
+            ->setProps([
+                'allowTableOperations' => 'false',
+                'allowPreview' => 'false',
+            ])
             ->setContainerClass('col-12');
         $result['content'] = (new RichtextTrixVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Tartalom')
             ->setProperty('content')
+            ->setProps([
+                'allowTableOperations' => 'true',
+                'allowPreview' => 'true',
+            ])
             ->setContainerClass('col-12');
         $result['index_image'] = (new ImagePickerVueCRUDFormfield())
             ->setLabel('Indexkép')

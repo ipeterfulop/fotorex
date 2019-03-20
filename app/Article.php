@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Datalytix\VueCRUD\Indexfilters\SelectVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Indexfilters\TextVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Traits\VueCRUDManageable;
 use Illuminate\Database\Eloquent\Model;
@@ -18,7 +19,10 @@ class Article extends Model
         'summary',
         'content',
         'published_at',
-        'index_image'
+        'index_image',
+        'articlecategory_id',
+        'position',
+        'is_published'
     ];
 
     protected $dates = [
@@ -84,7 +88,9 @@ class Article extends Model
     public static function getVueCRUDIndexFilters()
     {
         $result = [];
-        $result['search'] = new TextVueCRUDIndexfilter(['title', 'summary', 'content'], 'Keresés...', '');
+        $result[SelectVueCRUDIndexfilter::buildPropertyName('articlecategory_id')] = new SelectVueCRUDIndexfilter('articlecategory_id', 'Kategória', -1, -1);
+        $result[SelectVueCRUDIndexfilter::buildPropertyName('articlecategory_id')]->setValueSet([-1 => 'Mind'] + Articlecategory::getKeyValueCollection()->all());
+        $result[TextVueCRUDIndexfilter::buildPropertyName(['title', 'summary', 'content'])] = new TextVueCRUDIndexfilter(['title', 'summary', 'content'], 'Keresés...', '');
 
         return $result;
     }

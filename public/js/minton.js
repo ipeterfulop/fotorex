@@ -2206,7 +2206,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2343,8 +2342,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     slugify: function slugify(string) {
       //credit to https://medium.com/@mhagemann/the-ultimate-way-to-slugify-a-url-string-in-javascript-b8e4a0d849e1
-      var a = 'àáäâãåăæçèéëêǵḧìíïîḿńǹñòőóöôœṕŕßśșțùúüűûǘẃẍÿź·/_,:;';
-      var b = 'aaaaaaaaceeeeghiiiimnnnooooooprssstuuuuuuwxyz------';
+      var a = 'àáäâãåăæçèéëêǵḧìíïîḿńǹñòóöôœṕŕßśșțùúüûǘẃẍÿź·/_,:;';
+      var b = 'aaaaaaaaceeeeghiiiimnnnoooooprssstuuuuuwxyz------';
       var p = new RegExp(a.split('').join('|'), 'g');
       return string.toString().toLowerCase().replace(/\s+/g, '-') // Replace spaces with -
       .replace(p, function (c) {
@@ -2527,6 +2526,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_translateMixin_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mixins/translateMixin.js */ "./resources/js/components/mixins/translateMixin.js");
 /* harmony import */ var _mixins_spinner_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mixins/spinner.js */ "./resources/js/components/mixins/spinner.js");
+//
 //
 //
 //
@@ -2966,6 +2966,8 @@ __webpack_require__.r(__webpack_exports__);
 
       if (!onlyElements) {
         this.mode = 'loading';
+      } else {
+        this.mode = 'elements-loading';
       }
 
       window.axios.get(this.indexUrl, {
@@ -3099,6 +3101,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
@@ -3119,19 +3127,34 @@ __webpack_require__.r(__webpack_exports__);
     this.table = this.value;
   },
   methods: {
+    convertTableToTrixAttachment: function convertTableToTrixAttachment() {
+      var content = '<table>';
+
+      for (var rowIndex = 0; rowIndex < this.table.length; rowIndex++) {
+        content = content + '<tr>';
+
+        for (var columnIndex = 0; columnIndex < this.table[rowIndex].length; columnIndex++) {
+          content = content + '<td>' + this.table[rowIndex][columnIndex] + '</td>';
+        }
+
+        content = content + '</tr>';
+      }
+
+      content = content + '<table>';
+      return new Trix.Attachment({
+        content: content
+      });
+    },
     cellClass: function cellClass(rowIndex, columnIndex) {
-      if (rowIndex == this.currentRow && columnIndex == this.currentColumn) {
-        return 'trix-table-editor-td';
-      }
-
-      if (rowIndex == this.currentRow) {
-        return 'trix-table-editor-td trix-table-editor-horizontal-crosshair';
-      }
-
-      if (columnIndex == this.currentColumn) {
-        return 'trix-table-editor-td trix-table-editor-vertical-crosshair';
-      }
-
+      //                if ((rowIndex == this.currentRow) && (columnIndex == this.currentColumn)) {
+      //                    return 'trix-table-editor-td';
+      //                }
+      //                if (rowIndex == this.currentRow) {
+      //                    return 'trix-table-editor-td trix-table-editor-horizontal-crosshair';
+      //                }
+      //                if (columnIndex == this.currentColumn) {
+      //                    return 'trix-table-editor-td trix-table-editor-vertical-crosshair';
+      //                }
       return 'trix-table-editor-td';
     },
     setCellValue: function setCellValue(payload, rowIndex, columnIndex) {
@@ -3150,19 +3173,15 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.table.splice(this.currentRow + 1, 0, newRow);
-      this.emitChange();
     },
     addColumn: function addColumn() {
       for (var i = 0; i < this.table.length; i++) {
         this.table[i].splice(this.currentColumn + 1, 0, '');
       }
-
-      this.emitChange();
     },
     deleteRow: function deleteRow() {
       if (this.table.length > 1) {
         this.table.splice(this.currentRow, 1);
-        this.emitChange();
       }
     },
     deleteColumn: function deleteColumn() {
@@ -3170,12 +3189,11 @@ __webpack_require__.r(__webpack_exports__);
         for (var i = 0; i < this.table.length; i++) {
           this.table[i].splice(this.currentColumn, 1);
         }
-
-        this.emitChange();
       }
     },
-    emitChange: function emitChange() {
-      this.$emit('input', this.table);
+    saveTable: function saveTable() {
+      this.$emit('input', this.convertTableToTrixAttachment());
+      this.$emit('editing-finished');
     }
   }
 });
@@ -3193,6 +3211,16 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_fileUploadMixin_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mixins/fileUploadMixin.js */ "./resources/js/components/mixins/fileUploadMixin.js");
 /* harmony import */ var _mixins_spinner_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mixins/spinner.js */ "./resources/js/components/mixins/spinner.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3271,6 +3299,14 @@ __webpack_require__.r(__webpack_exports__);
     ajaxOperationsUrl: {
       type: String,
       default: ''
+    },
+    allowPreview: {
+      type: String,
+      default: 'false'
+    },
+    allowTableOperations: {
+      type: String,
+      default: 'true'
     }
   },
   data: function data() {
@@ -3281,7 +3317,10 @@ __webpack_require__.r(__webpack_exports__);
       codeValue: '',
       updatingCodeValue: false,
       trixReady: false,
-      showPopup: false
+      showPopup: false,
+      popupMode: '',
+      currentTable: [['']],
+      currentSelection: []
     };
   },
   computed: {
@@ -3333,8 +3372,25 @@ __webpack_require__.r(__webpack_exports__);
     window.setTimeout(function () {
       _this.trixReady = true;
     }, 1000);
+
+    if (this.value = '') {
+      this.valueInitialized = true;
+    }
   },
   methods: {
+    openPreview: function openPreview() {
+      window.axios.post(this.ajaxOperationsUrl, {
+        action: 'trixGeneratePreview',
+        fieldName: this.fieldname,
+        content: this.$refs[this.fieldname + '-content'].value
+      }).then(function (response) {
+        var features = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes";
+        var previewWindow = window.open('', '_blank', features);
+        var doc = previewWindow.document.open();
+        doc.write(response.data);
+        doc.close;
+      });
+    },
     updateValue: function updateValue() {
       if (typeof this.$refs[this.fieldname + '-content'] == 'undefined') {
         window.clearInterval(window.trixIntervals[this.fieldname]);
@@ -3369,8 +3425,46 @@ __webpack_require__.r(__webpack_exports__);
     removeAttachment: function removeAttachment(event) {
       this.removeUploadedPublicFile(this.ajaxOperationsUrl, event.attachment.getAttribute('url'), "trixRemoveAttachment").then(function (response) {}, function (error) {});
     },
-    insertTable: function insertTable() {},
-    editTable: function editTable() {}
+    insertTable: function insertTable() {
+      this.currentTable = [['']];
+      this.popupMode = 'table';
+      this.showPopup = true;
+    },
+    editTable: function editTable() {
+      if (this.$refs[this.fieldname + '-editor'].editor.composition.editingAttachment != null) {
+        this.currentTable = this.parseTableStringToTabledata(this.$refs[this.fieldname + '-editor'].editor.composition.editingAttachment.getAttribute('content'));
+        this.popupMode = 'table';
+        this.showPopup = true;
+      }
+    },
+    saveAttachment: function saveAttachment(attachment) {
+      var editor = this.$refs[this.fieldname + '-editor'].editor;
+
+      if (editor.composition.editingAttachment != null) {
+        this.currentSelection = editor.getSelectedRange();
+        editor.deleteInDirection("backward");
+      }
+
+      editor.insertAttachment(attachment);
+    },
+    parseTableStringToTabledata: function parseTableStringToTabledata(tableString) {
+      var result = [];
+      var tempString = tableString.replace('<table>', '').replace('</table>', '');
+      var rows = tempString.split('</tr><tr>');
+
+      for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+        var newRow = [];
+        var columns = rows[rowIndex].replace('<tr>', '').replace('</tr>', '').split('</td><td>');
+
+        for (var columnIndex = 0; columnIndex < columns.length; columnIndex++) {
+          newRow.push(columns[columnIndex].replace('<td>', '').replace('</td>', ''));
+        }
+
+        result.push(newRow);
+      }
+
+      return result;
+    }
   },
   watch: {
     value: function value() {
@@ -7905,7 +7999,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.trix-table-editor-container {\n    display: flex;\n    flex-direction: column;\n}\n.trix-table-editor-buttons-row {\n    display: flex;\n    flex-direction: row;\n}\n.trix-table-editor-table td {\n    height: 2em;\n    //min-width: 10em;\n    opacity: 1;\n}\n.trix-table-editor-inactive-cell {\n    opacity: .6;\n}\n.trix-table-editor-td {\n    border: 2px solid lightgrey;\n}\n.trix-table-editor-horizontal-crosshair {\n    border-top: 2px solid black !important;\n    border-bottom: 2px solid black !important;\n}\n.trix-table-editor-vertical-crosshair {\n    border-left: 2px solid black !important;\n    border-right: 2px solid black !important;\n}\n", ""]);
+exports.push([module.i, "\n.trix-table-editor-container {\n    display: flex;\n    flex-direction: column;\n}\n.trix-table-editor-buttons-row {\n    display: flex;\n    flex-direction: row;\n}\n.trix-table-editor-buttons-row > button {\n    position: relative;\n    float: left;\n    color: rgba(0, 0, 0, 0.6);\n    font-size: 0.75em;\n    font-weight: 600;\n    white-space: nowrap;\n    padding: 0 0.5em;\n    margin: 0;\n    margin-bottom: 10px;\n    outline: none;\n    border: none;\n    border-bottom: 1px solid #888;\n    border-radius: 0;\n    background: white;\n    border: 1px solid #bbb;\n    border-top-color: #ccc;\n    border-radius: 3px;\n    height: 1.6em;\n}\n.trix-table-editor-table td {\n    height: 2em;\n//min-width: 10em;\n    opacity: 1;\n}\n.trix-table-editor-inactive-cell {\n    opacity: .6;\n}\n.trix-table-editor-td {\n    border: 2px solid lightgrey;\n}\n.trix-table-editor-horizontal-crosshair {\n    border-top: 2px solid black !important;\n    border-bottom: 2px solid black !important;\n}\n.trix-table-editor-vertical-crosshair {\n    border-left: 2px solid black !important;\n    border-right: 2px solid black !important;\n}\n", ""]);
 
 // exports
 
@@ -39580,9 +39674,14 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid vue-editform-container" }, [
     !_vm.loaded
-      ? _c("div", [
-          _c("h4", [_vm._v(_vm._s(_vm.translate("Betöltés")) + "...")])
-        ])
+      ? _c("div", {
+          staticStyle: {
+            width: "100%",
+            display: "flex",
+            "justify-content": "center"
+          },
+          domProps: { innerHTML: _vm._s(_vm.spinnerSrc) }
+        })
       : _vm._e(),
     _vm._v(" "),
     _vm.loaded && typeof (_vm.formTitle != "undefined")
@@ -39715,7 +39814,6 @@ var render = function() {
                                 "margin-left": "-1.5em",
                                 cursor: "pointer"
                               },
-                              attrs: { title: _vm.translate("Generate slug") },
                               on: {
                                 click: function($event) {
                                   return _vm.generateSlug(
@@ -39821,28 +39919,37 @@ var render = function() {
                           {
                             class: data.class,
                             staticStyle: {
-                              "min-height": "90%",
-                              "max-height": "90%"
+                              "min-height": "95%",
+                              height: "95%",
+                              "margin-bottom": "2em"
                             }
                           },
                           [
-                            _c("trix-wrapper", {
-                              attrs: {
-                                fieldname: fieldname,
-                                "ajax-operations-url": _vm.ajaxOperationsUrl
-                              },
-                              model: {
-                                value: _vm.subjectData[fieldname].value,
-                                callback: function($$v) {
-                                  _vm.$set(
-                                    _vm.subjectData[fieldname],
-                                    "value",
-                                    $$v
-                                  )
+                            _c(
+                              "trix-wrapper",
+                              _vm._b(
+                                {
+                                  attrs: {
+                                    fieldname: fieldname,
+                                    "ajax-operations-url": _vm.ajaxOperationsUrl
+                                  },
+                                  model: {
+                                    value: _vm.subjectData[fieldname].value,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.subjectData[fieldname],
+                                        "value",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "subjectData[fieldname].value"
+                                  }
                                 },
-                                expression: "subjectData[fieldname].value"
-                              }
-                            })
+                                "trix-wrapper",
+                                JSON.parse(data.props),
+                                false
+                              )
+                            )
                           ],
                           1
                         )
@@ -40139,16 +40246,15 @@ var render = function() {
         _c(
           "button",
           {
-            staticClass: "btn btn-lg btn-outline-primary btn-block",
+            staticClass: "btn btn-lg btn-primary btn-block",
             attrs: { type: "button" },
             on: { click: _vm.submitForm }
           },
           [
             _vm.loading
-              ? _c("span", {
-                  staticClass: "button-loading-indicator",
-                  domProps: { innerHTML: _vm._s(_vm.spinnerSrc) }
-                })
+              ? _c("span", { staticClass: "button-loading-indicator" }, [
+                  _c("img", { attrs: { src: "/img/button-loader.gif" } })
+                ])
               : _vm._e(),
             _vm._v(" "),
             _c("span", [_vm._v(_vm._s(_vm.translate("Mentés")))])
@@ -40160,7 +40266,7 @@ var render = function() {
         _c(
           "button",
           {
-            staticClass: "btn btn-lg btn-outline-secondary btn-block",
+            staticClass: "btn btn-lg btn-default btn-block",
             attrs: { type: "button" },
             on: { click: _vm.cancelEditing }
           },
@@ -40353,10 +40459,17 @@ var render = function() {
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-12" }, [
         _vm.mode == "loading"
-          ? _c("div", { domProps: { innerHTML: _vm._s(_vm.spinnerSrc) } })
+          ? _c("div", {
+              staticStyle: {
+                width: "100%",
+                display: "flex",
+                "justify-content": "center"
+              },
+              domProps: { innerHTML: _vm._s(_vm.spinnerSrc) }
+            })
           : _vm._e(),
         _vm._v(" "),
-        _vm.mode == "list"
+        _vm.mode == "list" || _vm.mode == "elements-loading"
           ? _c("div", { staticClass: "row" }, [
               _c(
                 "div",
@@ -40508,13 +40621,12 @@ var render = function() {
                                       }
                                     },
                                     _vm._l(filterData["valueset"], function(
-                                      name,
-                                      id
+                                      data
                                     ) {
                                       return _c("option", {
                                         domProps: {
-                                          value: id,
-                                          innerHTML: _vm._s(name)
+                                          value: data.value,
+                                          innerHTML: _vm._s(data.label)
                                         }
                                       })
                                     }),
@@ -40629,176 +40741,212 @@ var render = function() {
                 ),
                 _vm._v(" "),
                 _c("div", { staticClass: "portlet-body" }, [
-                  _c("table", { staticClass: "table table-striped" }, [
-                    _c("thead", [
-                      _c(
-                        "tr",
-                        [
-                          _vm._l(_vm.columns, function(
-                            columnName,
-                            columnField
-                          ) {
-                            return _c(
-                              "th",
-                              {
-                                class: {
-                                  "sorting-column": _vm.columnIsSorting(
-                                    columnField
-                                  )
-                                },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.setSorting(columnField)
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", {
-                                  domProps: { innerHTML: _vm._s(columnName) }
-                                }),
-                                _vm._v(" "),
-                                _vm.columnIsSorting(columnField)
-                                  ? _c("span", {
-                                      staticStyle: { "margin-left": "3px" },
-                                      style: {
-                                        color:
-                                          _vm.currentSortingColumn ==
-                                          columnField
-                                            ? "black"
-                                            : "darkgrey"
-                                      },
-                                      domProps: {
-                                        innerHTML: _vm._s(
-                                          _vm.currentSortingColumn ==
-                                            columnField
-                                            ? _vm.sortingChevron
-                                            : "⇵"
-                                        )
-                                      }
-                                    })
-                                  : _vm._e()
-                              ]
-                            )
-                          }),
-                          _vm._v(" "),
-                          _vm.allowOperations == "true"
-                            ? _c("th", [
-                                _vm._v(_vm._s(_vm.translate("Operations")))
-                              ])
-                            : _vm._e()
-                        ],
-                        2
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "tbody",
-                      _vm._l(_vm.elements, function(element) {
-                        return _c(
+                  _c("div", {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.mode == "elements-loading",
+                        expression: "mode == 'elements-loading'"
+                      }
+                    ],
+                    staticStyle: {
+                      width: "100%",
+                      display: "flex",
+                      "justify-content": "center"
+                    },
+                    domProps: { innerHTML: _vm._s(_vm.spinnerSrc) }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "table",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.mode != "elements-loading",
+                          expression: "mode != 'elements-loading'"
+                        }
+                      ],
+                      staticClass: "table table-striped"
+                    },
+                    [
+                      _c("thead", [
+                        _c(
                           "tr",
                           [
                             _vm._l(_vm.columns, function(
                               columnName,
                               columnField
                             ) {
-                              return _c("td", {
-                                domProps: {
-                                  innerHTML: _vm._s(element[columnField])
-                                }
-                              })
+                              return _c(
+                                "th",
+                                {
+                                  class: {
+                                    "sorting-column": _vm.columnIsSorting(
+                                      columnField
+                                    )
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.setSorting(columnField)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("span", {
+                                    domProps: { innerHTML: _vm._s(columnName) }
+                                  }),
+                                  _vm._v(" "),
+                                  _vm.columnIsSorting(columnField)
+                                    ? _c("span", {
+                                        staticStyle: { "margin-left": "3px" },
+                                        style: {
+                                          color:
+                                            _vm.currentSortingColumn ==
+                                            columnField
+                                              ? "black"
+                                              : "darkgrey"
+                                        },
+                                        domProps: {
+                                          innerHTML: _vm._s(
+                                            _vm.currentSortingColumn ==
+                                              columnField
+                                              ? _vm.sortingChevron
+                                              : "⇵"
+                                          )
+                                        }
+                                      })
+                                    : _vm._e()
+                                ]
+                              )
                             }),
                             _vm._v(" "),
                             _vm.allowOperations == "true"
-                              ? _c(
-                                  "td",
-                                  [
-                                    _vm.showButton("details")
-                                      ? _c("button", {
-                                          class:
-                                            _vm.buttons["details"]["class"],
-                                          domProps: {
-                                            innerHTML: _vm._s(
-                                              _vm.buttons["details"]["html"]
-                                            )
-                                          },
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.showDetails(
-                                                element[_vm.idProperty]
-                                              )
-                                            }
-                                          }
-                                        })
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _vm.showButton("edit")
-                                      ? _c("button", {
-                                          class: _vm.buttons["edit"]["class"],
-                                          domProps: {
-                                            innerHTML: _vm._s(
-                                              _vm.buttons["edit"]["html"]
-                                            )
-                                          },
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.editElement(
-                                                element[_vm.idProperty]
-                                              )
-                                            }
-                                          }
-                                        })
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _vm.showButton("delete")
-                                      ? _c("button", {
-                                          class: _vm.buttons["delete"]["class"],
-                                          domProps: {
-                                            innerHTML: _vm._s(
-                                              _vm.buttons["delete"]["html"]
-                                            )
-                                          },
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.confirmElementDeletion(
-                                                element[_vm.idProperty],
-                                                element[_vm.nameProperty]
-                                              )
-                                            }
-                                          }
-                                        })
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _vm._l(_vm.customComponentButtons, function(
-                                      customComponentButton,
-                                      customComponentButtonKey
-                                    ) {
-                                      return _c("button", {
-                                        class: customComponentButton["class"],
-                                        domProps: {
-                                          innerHTML: _vm._s(
-                                            customComponentButton["html"]
-                                          )
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.activateCustomComponent(
-                                              customComponentButtonKey
-                                            )
-                                          }
-                                        }
-                                      })
-                                    })
-                                  ],
-                                  2
-                                )
+                              ? _c("th", [
+                                  _vm._v(_vm._s(_vm.translate("Operations")))
+                                ])
                               : _vm._e()
                           ],
                           2
                         )
-                      }),
-                      0
-                    )
-                  ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "tbody",
+                        _vm._l(_vm.elements, function(element) {
+                          return _c(
+                            "tr",
+                            [
+                              _vm._l(_vm.columns, function(
+                                columnName,
+                                columnField
+                              ) {
+                                return _c("td", {
+                                  domProps: {
+                                    innerHTML: _vm._s(element[columnField])
+                                  }
+                                })
+                              }),
+                              _vm._v(" "),
+                              _vm.allowOperations == "true"
+                                ? _c(
+                                    "td",
+                                    [
+                                      _vm.showButton("details")
+                                        ? _c("button", {
+                                            class:
+                                              _vm.buttons["details"]["class"],
+                                            domProps: {
+                                              innerHTML: _vm._s(
+                                                _vm.buttons["details"]["html"]
+                                              )
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.showDetails(
+                                                  element[_vm.idProperty]
+                                                )
+                                              }
+                                            }
+                                          })
+                                        : _vm._e(),
+                                      _vm._v(" "),
+                                      _vm.showButton("edit")
+                                        ? _c("button", {
+                                            class: _vm.buttons["edit"]["class"],
+                                            domProps: {
+                                              innerHTML: _vm._s(
+                                                _vm.buttons["edit"]["html"]
+                                              )
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.editElement(
+                                                  element[_vm.idProperty]
+                                                )
+                                              }
+                                            }
+                                          })
+                                        : _vm._e(),
+                                      _vm._v(" "),
+                                      _vm.showButton("delete")
+                                        ? _c("button", {
+                                            class:
+                                              _vm.buttons["delete"]["class"],
+                                            domProps: {
+                                              innerHTML: _vm._s(
+                                                _vm.buttons["delete"]["html"]
+                                              )
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.confirmElementDeletion(
+                                                  element[_vm.idProperty],
+                                                  element[_vm.nameProperty]
+                                                )
+                                              }
+                                            }
+                                          })
+                                        : _vm._e(),
+                                      _vm._v(" "),
+                                      _vm._l(
+                                        _vm.customComponentButtons,
+                                        function(
+                                          customComponentButton,
+                                          customComponentButtonKey
+                                        ) {
+                                          return _c("button", {
+                                            class:
+                                              customComponentButton["class"],
+                                            domProps: {
+                                              innerHTML: _vm._s(
+                                                customComponentButton["html"]
+                                              )
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.activateCustomComponent(
+                                                  customComponentButtonKey
+                                                )
+                                              }
+                                            }
+                                          })
+                                        }
+                                      )
+                                    ],
+                                    2
+                                  )
+                                : _vm._e()
+                            ],
+                            2
+                          )
+                        }),
+                        0
+                      )
+                    ]
+                  )
                 ])
               ])
             ])
@@ -41020,15 +41168,50 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "trix-table-editor-container" }, [
     _c("div", { staticClass: "trix-table-editor-buttons-row" }, [
-      _c("button", { on: { click: _vm.addRow } }, [_vm._v("Új sor")]),
+      _c("button", { attrs: { type: "button" }, on: { click: _vm.addRow } }, [
+        _vm._v("Új sor")
+      ]),
       _vm._v(" "),
-      _c("button", { on: { click: _vm.deleteRow } }, [_vm._v("Sor törlése")]),
+      _c(
+        "button",
+        { attrs: { type: "button" }, on: { click: _vm.deleteRow } },
+        [_vm._v("Sor törlése")]
+      ),
       _vm._v(" "),
-      _c("button", { on: { click: _vm.addColumn } }, [_vm._v("Új oszlop")]),
+      _c(
+        "button",
+        { attrs: { type: "button" }, on: { click: _vm.addColumn } },
+        [_vm._v("Új oszlop")]
+      ),
       _vm._v(" "),
-      _c("button", { on: { click: _vm.deleteColumn } }, [
-        _vm._v("Oszlop törlése")
-      ])
+      _c(
+        "button",
+        { attrs: { type: "button" }, on: { click: _vm.deleteColumn } },
+        [_vm._v("Oszlop törlése")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticStyle: { "margin-left": "auto" },
+          attrs: { type: "button" },
+          on: { click: _vm.saveTable }
+        },
+        [_vm._v("Mentés és bezárás")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              return _vm.$emit("cancel")
+            }
+          }
+        },
+        [_vm._v("Mégsem")]
+      )
     ]),
     _vm._v(" "),
     _c(
@@ -41058,12 +41241,21 @@ var render = function() {
                 }
               },
               [
-                _vm.currentRow != rowIndex || _vm.currentColumn != columnIndex
-                  ? _c("div", {
-                      staticClass: "trix-table-editor-inactive-cell",
-                      domProps: { innerHTML: _vm._s(column) }
-                    })
-                  : _vm._e(),
+                _c("div", {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value:
+                        _vm.currentRow != rowIndex ||
+                        _vm.currentColumn != columnIndex,
+                      expression:
+                        "currentRow != rowIndex || currentColumn != columnIndex"
+                    }
+                  ],
+                  staticClass: "trix-table-editor-inactive-cell",
+                  domProps: { innerHTML: _vm._s(column) }
+                }),
                 _vm._v(" "),
                 _c("trix-wrapper", {
                   directives: [
@@ -41078,14 +41270,16 @@ var render = function() {
                     }
                   ],
                   attrs: {
-                    fieldname:
-                      "table-" + _vm.currentRow + "-" + _vm.currentColumn,
-                    value: _vm.table[rowIndex][columnIndex]
+                    fieldname: "table-" + rowIndex + "-" + columnIndex,
+                    "allow-table-operations": "false",
+                    "allow-preview": "false"
                   },
-                  on: {
-                    input: function($event) {
-                      return _vm.setCellValue($event, rowIndex, columnIndex)
-                    }
+                  model: {
+                    value: _vm.table[rowIndex][columnIndex],
+                    callback: function($$v) {
+                      _vm.$set(_vm.table[rowIndex], columnIndex, $$v)
+                    },
+                    expression: "table[rowIndex][columnIndex]"
                   }
                 })
               ],
@@ -41121,7 +41315,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticStyle: { height: "100%", "min-height": "100%" } }, [
     _c(
       "div",
       { staticClass: "trix-wrapper-container" },
@@ -41164,8 +41358,11 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
-                          value: _vm.viewMode == "normal",
-                          expression: "viewMode == 'normal'"
+                          value:
+                            _vm.viewMode == "normal" &&
+                            _vm.allowTableOperations == "true",
+                          expression:
+                            "viewMode == 'normal' && allowTableOperations == 'true'"
                         }
                       ],
                       staticClass: "trix-wrapper-button-group",
@@ -41191,8 +41388,11 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
-                          value: _vm.viewMode == "normal",
-                          expression: "viewMode == 'normal'"
+                          value:
+                            _vm.viewMode == "normal" &&
+                            _vm.allowTableOperations == "true",
+                          expression:
+                            "viewMode == 'normal' && allowTableOperations == 'true'"
                         }
                       ],
                       staticClass: "trix-wrapper-button-group",
@@ -41207,6 +41407,36 @@ var render = function() {
                           on: { click: _vm.editTable }
                         },
                         [_vm._v("Táblázat szerkesztése")]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value:
+                            _vm.viewMode == "normal" &&
+                            _vm.allowPreview == "true",
+                          expression:
+                            "viewMode == 'normal' && allowPreview == 'true'"
+                        }
+                      ],
+                      staticClass: "trix-wrapper-button-group",
+                      staticStyle: { width: "10em" }
+                    },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "trix-button",
+                          attrs: { type: "button" },
+                          on: { click: _vm.openPreview }
+                        },
+                        [_vm._v("Előnézet")]
                       )
                     ]
                   )
@@ -41290,21 +41520,31 @@ var render = function() {
       2
     ),
     _vm._v(" "),
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.showPopup,
-            expression: "showPopup"
-          }
-        ],
-        staticClass: "trix-wrapper-modal-overlay"
-      },
-      [_c("div", { staticClass: "trix-wrapper-modal" })]
-    )
+    _vm.showPopup && _vm.allowTableOperations == "true"
+      ? _c("div", { staticClass: "trix-wrapper-modal-overlay" }, [
+          _c(
+            "div",
+            { staticClass: "trix-wrapper-modal" },
+            [
+              _vm.popupMode == "table"
+                ? _c("trix-table-editor", {
+                    attrs: { value: _vm.currentTable },
+                    on: {
+                      input: function($event) {
+                        _vm.saveAttachment($event)
+                        _vm.showPopup = false
+                      },
+                      cancel: function($event) {
+                        _vm.showPopup = false
+                      }
+                    }
+                  })
+                : _vm._e()
+            ],
+            1
+          )
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = []
@@ -54235,10 +54475,10 @@ var app = new Vue({
 /*!********************************!*\
   !*** ./resources/lang/hu.json ***!
   \********************************/
-/*! exports provided: New, Operations, Filters, Results, Please select:, Are you sure you want to delete this element, Yes, Cancel, Back to the list, Reset, Details, Edit, Delete, We have found some errors, Please verify the data provided, Close, Element, E-Mail Address, Name, Login, Logout, Password, Password (again), Remember Me, Forgot Your Password?, My account, Subscribe, Account information, Account details, A confirmation email was sent to the email address provided. Please use the link in it to confirm your registration., Login failed, Please confirm your account by clicking the link received via email during registration before logging in, Resend confirmation email, Your registration has not been confirmed yet. Please check your email messages for the confirmation link, or have a new one sent to you by providing an email address and clicking the button below, Confirm your registration, Invalid email address., This address does not exist in our records., Please confirm your registration by clicking this link:, The confirmation link has been sent. Please check your inbox and follow the instructions., These credentials do not match our records., default */
+/*! exports provided: New, Operations, Filters, Results, Please select:, Are you sure you want to delete this element, Yes, Cancel, Back to the list, Reset, Details, Edit, Delete, We have found some errors, Please verify the data provided, Close, Element, Edit element, E-Mail Address, Name, Login, Logout, Password, Password (again), Remember Me, Forgot Your Password?, My account, Subscribe, Account information, Account details, A confirmation email was sent to the email address provided. Please use the link in it to confirm your registration., Login failed, Please confirm your account by clicking the link received via email during registration before logging in, Resend confirmation email, Your registration has not been confirmed yet. Please check your email messages for the confirmation link, or have a new one sent to you by providing an email address and clicking the button below, Confirm your registration, Invalid email address., This address does not exist in our records., Please confirm your registration by clicking this link:, The confirmation link has been sent. Please check your inbox and follow the instructions., These credentials do not match our records., default */
 /***/ (function(module) {
 
-module.exports = {"New":"Új","Operations":"Műveletek","Filters":"Szűrők","Results":"Találatok","Please select:":"Válasszon:","Are you sure you want to delete this element":"Biztosan törli ezt az elemet","Yes":"Igen","Cancel":"Mégsem","Back to the list":"Vissza a listához","Reset":"Alaphelyzet","Details":"Részletek","Edit":"Szerkesztés","Delete":"Törlés","We have found some errors":"Hiba történt","Please verify the data provided":"Kérjük ellenőrizze a megadott adatokat","Close":"Bezár","Element":"Elem","E-Mail Address":"E-mailcím","Name":"Név","Login":"Bejelentkezés","Logout":"Kijelentkezés","Password":"Jelszó","Password (again)":"Jelszó (újra)","Remember Me":"Bejelentkezve maradok","Forgot Your Password?":"Elfelejtett jelszó","My account":"Saját fiók","Subscribe":"Feliratkozás","Account information":"Adatok","Account details":"Fiók részletei","A confirmation email was sent to the email address provided. Please use the link in it to confirm your registration.":"A regisztráció véglegesítéséhez kérjük használja a linket, amit az ezzel a fiókkal társított e-mailcímre küldtünk.","Login failed":"A bejelentkezés nem sikerült","Please confirm your account by clicking the link received via email during registration before logging in":"Kérjük erősítse meg regisztrációját a regisztráció során e-mailben kapott linkre kattintva, hogy bejelentkezhessen","Resend confirmation email":"Megerősítő e-mail újraküldése","Your registration has not been confirmed yet. Please check your email messages for the confirmation link, or have a new one sent to you by providing an email address and clicking the button below":"Még nem erősítette meg regisztrációját. Kattintson a levélben kapott linkre, vagy igényeljen újat az alábbi űrlapon.","Confirm your registration":"Erősítse meg regisztrációját","Invalid email address.":"Érvénytelen e-mailcím.","This address does not exist in our records.":"Ez az e-mailcím nem található a rendszerünkben.","Please confirm your registration by clicking this link:":"Kérjük erősítse meg regisztrációját az alábbi linkre kattintva:","The confirmation link has been sent. Please check your inbox and follow the instructions.":"A megerősítő linket elküldtük az e-mail címére, kérjük kövesse a levélben lévő kérésünket!","These credentials do not match our records.":"Ezek az adatok nem találhatók a rendszerben"};
+module.exports = {"New":"Új","Operations":"Műveletek","Filters":"Szűrők","Results":"Találatok","Please select:":"Válasszon:","Are you sure you want to delete this element":"Biztosan törli ezt az elemet","Yes":"Igen","Cancel":"Mégsem","Back to the list":"Vissza a listához","Reset":"Alaphelyzet","Details":"Részletek","Edit":"Szerkesztés","Delete":"Törlés","We have found some errors":"Hiba történt","Please verify the data provided":"Kérjük ellenőrizze a megadott adatokat","Close":"Bezár","Element":"Elem","Edit element":"Elem szerkesztése","E-Mail Address":"E-mailcím","Name":"Név","Login":"Bejelentkezés","Logout":"Kijelentkezés","Password":"Jelszó","Password (again)":"Jelszó (újra)","Remember Me":"Bejelentkezve maradok","Forgot Your Password?":"Elfelejtett jelszó","My account":"Saját fiók","Subscribe":"Feliratkozás","Account information":"Adatok","Account details":"Fiók részletei","A confirmation email was sent to the email address provided. Please use the link in it to confirm your registration.":"A regisztráció véglegesítéséhez kérjük használja a linket, amit az ezzel a fiókkal társított e-mailcímre küldtünk.","Login failed":"A bejelentkezés nem sikerült","Please confirm your account by clicking the link received via email during registration before logging in":"Kérjük erősítse meg regisztrációját a regisztráció során e-mailben kapott linkre kattintva, hogy bejelentkezhessen","Resend confirmation email":"Megerősítő e-mail újraküldése","Your registration has not been confirmed yet. Please check your email messages for the confirmation link, or have a new one sent to you by providing an email address and clicking the button below":"Még nem erősítette meg regisztrációját. Kattintson a levélben kapott linkre, vagy igényeljen újat az alábbi űrlapon.","Confirm your registration":"Erősítse meg regisztrációját","Invalid email address.":"Érvénytelen e-mailcím.","This address does not exist in our records.":"Ez az e-mailcím nem található a rendszerünkben.","Please confirm your registration by clicking this link:":"Kérjük erősítse meg regisztrációját az alábbi linkre kattintva:","The confirmation link has been sent. Please check your inbox and follow the instructions.":"A megerősítő linket elküldtük az e-mail címére, kérjük kövesse a levélben lévő kérésünket!","These credentials do not match our records.":"Ezek az adatok nem találhatók a rendszerben"};
 
 /***/ }),
 

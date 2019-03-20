@@ -8,7 +8,7 @@
         <!-- Logo-->
         <div class="site-branding d-flex">
             <a class="site-logo align-self-center" href="/">
-                <img src="img/logo/logo.png" alt="{{ config('app.name') }}">
+                <img src="/img/logo/logo.png" alt="{{ config('app.name') }}">
             </a>
         </div>
         <!-- Mobile Menu-->

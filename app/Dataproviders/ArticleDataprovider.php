@@ -28,6 +28,7 @@ class ArticleDataprovider
     {
         return Article::where('published_at', '!=', null)
             ->where('published_at', '<=', now()->format('Y-m-d H:i:s'))
+            ->where('is_published', '=', 1)
             ->when($filterText != '', function($query) use ($filterText) {
                 return $query->where(function($query) use ($filterText) {
                     return $query->where('title', 'like', '%'.$filterText.'%')
@@ -35,10 +36,10 @@ class ArticleDataprovider
                         ->orWhere('summary', 'like', '%'.$filterText.'%');
                 });
             })
-            ->when($sortingOption == 'latest', function($query) {
+            ->when($sortingOption == 'friss', function($query) {
                 return $query->orderBy('published_at', 'desc');
             })
-            ->when($sortingOption == 'popular', function($query) {
+            ->when($sortingOption == 'nepszeru', function($query) {
                 return $query->orderBy('published_at', 'asc');
             });
     }
