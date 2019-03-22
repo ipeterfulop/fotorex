@@ -21,6 +21,7 @@ class DataproviderResult
     public $currentPage;
     public $indexRouteName;
     public $sortingOption;
+    public $routingOptions = [];
 
     public function getPageCount()
     {
@@ -81,34 +82,34 @@ class DataproviderResult
     public function firstPageUrl()
     {
         return ! $this->isAtFirstPage()
-            ? route($this->indexRouteName, ['sortingOption' => $this->sortingOption, 'page' => 1])
+            ? route($this->indexRouteName, array_merge($this->routingOptions, ['sortingOption' => $this->sortingOption, 'page' => 1]))
             : null;
     }
 
     public function lastPageUrl()
     {
         return ! $this->isAtLastPage()
-            ? route($this->indexRouteName, ['sortingOption' => $this->sortingOption, 'page' => $this->getPageCount()])
+            ? route($this->indexRouteName, array_merge($this->routingOptions, ['sortingOption' => $this->sortingOption, 'page' => $this->getPageCount()]))
             : null;
     }
 
     public function previousPageUrl()
     {
         return ! $this->isAtFirstPage()
-            ? route($this->indexRouteName, ['sortingOption' => $this->sortingOption, 'page' => $this->currentPage - 1])
+            ? route($this->indexRouteName, array_merge($this->routingOptions, ['sortingOption' => $this->sortingOption, 'page' => $this->currentPage - 1]))
             : null;
     }
 
     public function nextPageUrl()
     {
         return ! $this->isAtLastPage()
-            ? route($this->indexRouteName, ['sortingOption' => $this->sortingOption, 'page' => $this->currentPage + 1])
+            ? route($this->indexRouteName, array_merge($this->routingOptions, ['sortingOption' => $this->sortingOption, 'page' => $this->currentPage + 1]))
             : null;
     }
 
     public function pageUrl($page)
     {
-        return route($this->indexRouteName, ['sortingOption' => $this->sortingOption, 'page' => $page]);
+        return route($this->indexRouteName, array_merge($this->routingOptions, ['sortingOption' => $this->sortingOption, 'page' => $page]));
     }
 
 }

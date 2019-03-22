@@ -124,12 +124,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:ipeterfulop/unishoptheme.package.git",
-                "reference": "c49a0f2628e3a53ddee37f1f3f57fe7156f349e5"
+                "reference": "8f238aa7e50aeb833f48c4acfb22ad500675c310"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ipeterfulop/unishoptheme.package/zipball/c49a0f2628e3a53ddee37f1f3f57fe7156f349e5",
-                "reference": "c49a0f2628e3a53ddee37f1f3f57fe7156f349e5",
+                "url": "https://api.github.com/repos/ipeterfulop/unishoptheme.package/zipball/8f238aa7e50aeb833f48c4acfb22ad500675c310",
+                "reference": "8f238aa7e50aeb833f48c4acfb22ad500675c310",
                 "shasum": ""
             },
             "type": "library",
@@ -155,7 +155,7 @@
                 "source": "https://github.com/ipeterfulop/unishoptheme.package/tree/master",
                 "issues": "https://github.com/ipeterfulop/unishoptheme.package/issues"
             },
-            "time": "2019-03-22T15:12:44+00:00"
+            "time": "2019-03-22T16:35:28+00:00"
         },
         {
             "name": "datalytix/utilities",

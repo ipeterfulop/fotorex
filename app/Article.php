@@ -12,7 +12,11 @@ class Article extends Model
 {
     use VueCRUDManageable, hasPosition;
     const SUBJECT_SLUG = 'article';
-    const SLUG_BASE = '/cikk/';
+    const SLUG_BASE = 'cikk';
+
+    const SORTING_OPTION_LATEST = 'friss';
+    const SORTING_OPTION_POPULAR = 'nepszeru';
+
 
     protected $fillable = [
         'slug',
@@ -69,8 +73,8 @@ class Article extends Model
         if ($slugBase == null) {
             $slugBase = self::SLUG_BASE;
         }
-        
-        return url($slugBase.$this->slug);
+
+        return url('/'.$slugBase.'/'.$this->slug);
     }
 
     public function getPublishedAtLabelAttribute()
@@ -127,5 +131,26 @@ class Article extends Model
     public static function getRestrictingFields()
     {
         return ['articlecategory_id'];
+    }
+
+    public static function getSortingOptionsArray()
+    {
+        return [
+            self::SORTING_OPTION_LATEST,
+            self::SORTING_OPTION_POPULAR
+        ];
+    }
+
+    public static function validateSortingOption($option, $abortWith404IfNotFound = true)
+    {
+        if (array_search($option, self::getSortingOptionsArray()) !== false) {
+            return true;
+        }
+        if ($abortWith404IfNotFound) {
+            abort(404);
+        }
+
+        return false;
+
     }
 }

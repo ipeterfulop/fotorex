@@ -29,9 +29,6 @@ Route::prefix('admin')->middleware('auth')->group(function() {
 Route::view('/kapcsolat', 'public.contactmessages.index')->name('contactmessage_index');
 Route::post('/kapcsolat', 'ContactmessagesController@submit')->name('contactmessage_submit');
 
-Route::get('/cikkek', 'ArticlesController@redirectToLatest')->name('articles_redirect_to_latest');
-Route::get('/cikkek/{sortingOption}/{page?}', 'ArticlesController@index')->name('articles_index');
-Route::get(\App\Article::SLUG_BASE.'{slug}', 'ArticlesController@show')->name('article_details');
-foreach (\App\Articlecategory::getAvailableCustomSlugBases() as $customSlugBasis) {
-    Route::get($customSlugBasis.'{slug}', 'ArticlesController@show');
-}
+Route::get('/{categorySlug}', 'ArticlesController@redirectToLatest')->name('articles_redirect_to_latest');
+Route::get('/{categorySlug}/minden/{sortingOption}/{page?}', 'ArticlesController@index')->name('articles_index');
+Route::get('/{categorySlug}/{slug}', 'ArticlesController@show')->name('article_details');

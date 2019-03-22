@@ -18,28 +18,28 @@ class ArticlecategoriesSeeder extends Seeder
                 'position' => $position++,
                 'show_in_main_menu' => 1,
                 'name' => 'Hírek',
-                'custom_slug_base' => '/hirek/'
+                'custom_slug_base' => 'hirek'
             ],
             [
                 'id' => $position,
                 'position' => $position++,
                 'show_in_main_menu' => 1,
                 'name' => 'Cégünkről',
-                'custom_slug_base' => '/cegunkrol/'
+                'custom_slug_base' => 'cegunkrol'
             ],
             [
                 'id' => $position,
                 'position' => $position++,
                 'show_in_main_menu' => 1,
                 'name' => 'Szolgáltatások',
-                'custom_slug_base' => '/szolgaltatasok/'
+                'custom_slug_base' => 'szolgaltatasok'
             ],
             [
                 'id' => $position,
                 'position' => $position++,
                 'show_in_main_menu' => 1,
                 'name' => 'Megoldások',
-                'custom_slug_base' => '/megoldasok/'
+                'custom_slug_base' => 'megoldasok'
             ],
         ];
         foreach ($dataset as $row) {

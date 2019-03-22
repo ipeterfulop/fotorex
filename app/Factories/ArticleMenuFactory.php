@@ -7,7 +7,7 @@ class ArticleMenuFactory
     {
         $categories = \App\Articlecategory::where('show_in_main_menu', '=', 1)
             ->orderBy('position', 'asc')
-            ->with(['articles'])
+            ->with(['publishedarticles'])
             ->get();
 
         return $categories;

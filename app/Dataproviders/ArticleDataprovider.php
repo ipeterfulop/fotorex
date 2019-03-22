@@ -4,15 +4,16 @@ namespace App\Dataproviders;
 
 
 use App\Article;
+use App\Articlecategory;
 use Illuminate\Database\Eloquent\Builder;
 
 class ArticleDataprovider
 {
     const ITEMS_PER_INDEX_PAGE = 12;
 
-    public static function getPublishedArticles($page, $sortingOption, $filterText = '')
+    public static function getPublishedArticles($categorySlug, $page, $sortingOption, $filterText = '')
     {
-        $query = self::getPublishedArticlesQuery($sortingOption, $filterText);
+        $query = self::getPublishedArticlesQuery($categorySlug, $sortingOption, $filterText);
         $result = new DataproviderResult();
         $result->totalCount = $query->count();
         $result->results = self::addPaginationToQuery($query, $page)->get();
@@ -20,14 +21,17 @@ class ArticleDataprovider
         $result->currentPage = $page;
         $result->indexRouteName = 'articles_index';
         $result->sortingOption = $sortingOption;
+        $result->routingOptions = ['categorySlug' => $categorySlug];
 
         return $result;
     }
 
-    protected static function getPublishedArticlesQuery($sortingOption, $filterText)
+    protected static function getPublishedArticlesQuery($categorySlug, $sortingOption, $filterText)
     {
+        $category = Articlecategory::findBySlug($categorySlug, true);
         return Article::where('published_at', '!=', null)
             ->where('published_at', '<=', now()->format('Y-m-d H:i:s'))
+            ->where('articlecategory_id', '=', $category->id)
             ->where('is_published', '=', 1)
             ->when($filterText != '', function($query) use ($filterText) {
                 return $query->where(function($query) use ($filterText) {
@@ -36,11 +40,11 @@ class ArticleDataprovider
                         ->orWhere('summary', 'like', '%'.$filterText.'%');
                 });
             })
-            ->when($sortingOption == 'friss', function($query) {
+            ->when($sortingOption == Article::SORTING_OPTION_LATEST, function($query) {
                 return $query->orderBy('published_at', 'desc');
             })
-            ->when($sortingOption == 'nepszeru', function($query) {
-                return $query->orderBy('published_at', 'asc');
+            ->when($sortingOption == Article::SORTING_OPTION_POPULAR, function($query) {
+                return $query->orderBy('position', 'asc');
             });
     }
 
