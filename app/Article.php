@@ -37,6 +37,11 @@ class Article extends Model
         'published_at_label'
     ];
 
+    public function articlecategory()
+    {
+        return $this->belongsTo(Articlecategory::class);
+    }
+
     public function oldarticleslugs()
     {
         return $this->hasMany(Oldarticleslug::class);
@@ -57,7 +62,15 @@ class Article extends Model
 
     public function getUrlAttribute()
     {
-        return url(self::SLUG_BASE.$this->slug);
+        $slugBase = null;
+        if ($this->articlecategory_id != null) {
+            $slugBase = $this->articlecategory->custom_slug_base;
+        }
+        if ($slugBase == null) {
+            $slugBase = self::SLUG_BASE;
+        }
+        
+        return url($slugBase.$this->slug);
     }
 
     public function getPublishedAtLabelAttribute()

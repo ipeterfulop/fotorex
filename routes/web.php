@@ -32,3 +32,6 @@ Route::post('/kapcsolat', 'ContactmessagesController@submit')->name('contactmess
 Route::get('/cikkek', 'ArticlesController@redirectToLatest')->name('articles_redirect_to_latest');
 Route::get('/cikkek/{sortingOption}/{page?}', 'ArticlesController@index')->name('articles_index');
 Route::get(\App\Article::SLUG_BASE.'{slug}', 'ArticlesController@show')->name('article_details');
+foreach (\App\Articlecategory::getAvailableCustomSlugBases() as $customSlugBasis) {
+    Route::get($customSlugBasis.'{slug}', 'ArticlesController@show');
+}

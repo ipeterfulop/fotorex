@@ -9,7 +9,13 @@ class Articlecategory extends Model
 {
     use canBeTurnedIntoKeyValueCollection;
 
-    protected $fillable = ['id', 'name', 'position', 'show_in_main_menu'];
+    protected $fillable = [
+        'id',
+        'name',
+        'position',
+        'show_in_main_menu',
+        'custom_slug_base'
+    ];
 
     public function articles()
     {
@@ -21,5 +27,14 @@ class Articlecategory extends Model
         $newResult = [0 => 'Nem adott'];
 
         return collect($newResult + $keyValueCollection->all());
+    }
+
+    public static function getAvailableCustomSlugBases()
+    {
+        return self::setEagerLoads([])
+            ->select('custom_slug_base')
+            ->distinct()
+            ->get()
+            ->pluck('custom_slug_base');
     }
 }
