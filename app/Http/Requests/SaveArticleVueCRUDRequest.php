@@ -27,16 +27,16 @@ class SaveArticleVueCRUDRequest extends VueCRUDRequestBase
         // a very basic create/update method, you should probably replace it
         // with something customized
         if ($subject == null) {
-            $subject = Article::create($this->getDataset());
+            $subject = Article::create($this->getDataset($subject));
         } else {
             $this->storeSlugIfChanged($subject);
-            $subject->update($this->getDataset());
+            $subject->update($this->getDataset($subject));
         }
 
         return $subject;
     }
 
-    public function getDataset()
+    public function getDataset($subject)
     {
         $result = [
             'title' => $this->input('title'),
@@ -48,7 +48,7 @@ class SaveArticleVueCRUDRequest extends VueCRUDRequestBase
             'articlecategory_id' => intval($this->input('articlecategory_id')) > 0 ? $this->input('articlecategory_id') : null,
             'slug' => $this->input('slug'),
         ];
-        return $result;
+        return $this->addPositionToDatasetIfNecessary($subject, Article::class, $result);
     }
 
     protected function storeSlugIfChanged($article)

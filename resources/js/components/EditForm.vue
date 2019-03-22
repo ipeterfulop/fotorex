@@ -94,6 +94,18 @@
                             </label>
                         </p>
                     </span>
+                    <select v-if="data.kind == 'multiselect'"
+                            style="height: 200px; min-height: 200px"
+                            class="form-control"
+                            v-bind:class="data.class"
+                            multiple="multiple"
+                            v-model="subjectData[fieldname].value"
+                    >
+                        <option v-for="valuesetvalue, valuesetitem in data.valuesetSorted"
+                                v-bind:value="valuesetvalue" v-html="valuesetitem"
+                        ></option>
+                    </select>
+
                 </div>
             </div>
         </form>
@@ -240,8 +252,8 @@
             },
             slugify: function(string) {
                 //credit to https://medium.com/@mhagemann/the-ultimate-way-to-slugify-a-url-string-in-javascript-b8e4a0d849e1
-                const a = 'àáäâãåăæçèéëêǵḧìíïîḿńǹñòóöôœṕŕßśșțùúüûǘẃẍÿź·/_,:;'
-                const b = 'aaaaaaaaceeeeghiiiimnnnoooooprssstuuuuuwxyz------'
+                const a = 'àáäâãåăæçèéëêǵḧìíïîḿńǹñòóöôőœṕŕßśșțùúüûǘűẃẍÿź·/_,:;'
+                const b = 'aaaaaaaaceeeeghiiiimnnnooooooprssstuuuuuuwxyz------'
                 const p = new RegExp(a.split('').join('|'), 'g')
                 return string.toString().toLowerCase()
                     .replace(/\s+/g, '-') // Replace spaces with -

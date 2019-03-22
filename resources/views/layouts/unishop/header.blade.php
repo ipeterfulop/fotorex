@@ -1,6 +1,5 @@
 @push('menu-content')
-    <li>Menu 1</li>
-    <li>Menu 2</li>
+    @includeIf('layouts.unishop.customizable.menu')
 @endpush
 <header class="site-header navbar-sticky">
     <!-- Topbar-->

@@ -11,21 +11,30 @@ class ArticlecategoriesSeeder extends Seeder
      */
     public function run()
     {
+        $position = 1;
         $dataset = [
             [
-                'id' => 1,
+                'id' => $position,
+                'position' => $position++,
+                'show_in_main_menu' => 1,
                 'name' => 'Hírek'
             ],
             [
-                'id' => 2,
+                'id' => $position,
+                'position' => $position++,
+                'show_in_main_menu' => 1,
                 'name' => 'Cégünkről'
             ],
             [
-                'id' => 3,
+                'id' => $position,
+                'position' => $position++,
+                'show_in_main_menu' => 1,
                 'name' => 'Szolgáltatások'
             ],
             [
-                'id' => 4,
+                'id' => $position,
+                'position' => $position++,
+                'show_in_main_menu' => 1,
                 'name' => 'Megoldások'
             ],
         ];

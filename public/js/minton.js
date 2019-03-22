@@ -2206,6 +2206,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2342,8 +2354,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     slugify: function slugify(string) {
       //credit to https://medium.com/@mhagemann/the-ultimate-way-to-slugify-a-url-string-in-javascript-b8e4a0d849e1
-      var a = 'àáäâãåăæçèéëêǵḧìíïîḿńǹñòóöôœṕŕßśșțùúüûǘẃẍÿź·/_,:;';
-      var b = 'aaaaaaaaceeeeghiiiimnnnoooooprssstuuuuuwxyz------';
+      var a = 'àáäâãåăæçèéëêǵḧìíïîḿńǹñòóöôőœṕŕßśșțùúüûǘűẃẍÿź·/_,:;';
+      var b = 'aaaaaaaaceeeeghiiiimnnnooooooprssstuuuuuuwxyz------';
       var p = new RegExp(a.split('').join('|'), 'g');
       return string.toString().toLowerCase().replace(/\s+/g, '-') // Replace spaces with -
       .replace(p, function (c) {
@@ -2720,6 +2732,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2773,25 +2795,22 @@ __webpack_require__.r(__webpack_exports__);
       type: Number,
       default: 20
     },
-    buttons: {
-      type: Object,
-      default: function _default() {
-        return {
-          details: {
-            class: 'btn btn-primary btn-block',
-            html: 'Részletek'
-          },
-          edit: {
-            class: 'btn btn-info btn-block',
-            html: 'Szerkesztés'
-          },
-          delete: {
-            class: 'btn btn-danger btn-block',
-            html: 'Törlés'
-          }
-        };
-      }
-    },
+    //            buttons: {type:Object, default: function() {
+    //                return {
+    //                    details: {
+    //                        class: 'btn btn-primary btn-block',
+    //                        html: 'Részletek',
+    //                    },
+    //                    edit: {
+    //                        class: 'btn btn-info btn-block',
+    //                        html: 'Szerkesztés',
+    //                    },
+    //                    delete: {
+    //                        class: 'btn btn-danger btn-block',
+    //                        html: 'Törlés',
+    //                    },
+    //                }
+    //            }},
     iconClasses: {
       type: Object,
       default: function _default() {
@@ -2826,7 +2845,10 @@ __webpack_require__.r(__webpack_exports__);
       currentPage: 1,
       counts: {},
       disablePageWatch: false,
-      activeCustomComponent: {}
+      activeCustomComponent: {},
+      positionedView: false,
+      buttons: {},
+      elementTableClass: ''
     };
   },
   mounted: function mounted() {
@@ -2957,17 +2979,23 @@ __webpack_require__.r(__webpack_exports__);
 
       return null;
     },
-    fetchElements: function fetchElements(onlyElements) {
+    fetchElements: function fetchElements(onlyElements, suppressLoading) {
       var _this2 = this;
 
       if (typeof onlyElements == 'undefined') {
         onlyElements = false;
       }
 
-      if (!onlyElements) {
-        this.mode = 'loading';
-      } else {
-        this.mode = 'elements-loading';
+      if (typeof suppressLoading == 'undefined') {
+        suppressLoading = false;
+      }
+
+      if (!suppressLoading) {
+        if (!onlyElements) {
+          this.mode = 'loading';
+        } else {
+          this.mode = 'elements-loading';
+        }
       }
 
       window.axios.get(this.indexUrl, {
@@ -2978,6 +3006,11 @@ __webpack_require__.r(__webpack_exports__);
         _this2.sortingColumns = response.data.sortingColumns;
         _this2.currentSortingColumn = _this2.findSortingColumnKey(response.data.sortingField);
         _this2.currentSortingDirection = response.data.sortingDirection;
+        _this2.buttons = response.data.buttons;
+
+        if (_this2.positionedView != response.data.positionedView) {
+          _this2.columns = response.data.columns;
+        }
 
         if (!onlyElements) {
           _this2.columns = response.data.columns;
@@ -2988,6 +3021,7 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         _this2.mode = 'list';
+        _this2.positionedView = response.data.positionedView;
       });
     },
     showDetails: function showDetails(elementId) {
@@ -3047,6 +3081,38 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.fetchElements(true);
+    },
+    moveElementUp: function moveElementUp(id) {
+      var _this5 = this;
+
+      this.elementTableClass = 'element-table-muted';
+      window.axios.post(this.ajaxOperationsUrl, {
+        id: id,
+        action: 'move',
+        direction: -1
+      }).then(function (response) {
+        _this5.fetchElements(true, true);
+
+        _this5.elementTableClass = '';
+      }).catch(function (error) {
+        _this5.elementTableClass = '';
+      });
+    },
+    moveElementDown: function moveElementDown(id) {
+      var _this6 = this;
+
+      this.elementTableClass = 'element-table-muted';
+      window.axios.post(this.ajaxOperationsUrl, {
+        id: id,
+        action: 'move',
+        direction: 1
+      }).then(function (response) {
+        _this6.fetchElements(true, true);
+
+        _this6.elementTableClass = '';
+      }).catch(function (error) {
+        _this6.elementTableClass = '';
+      });
     }
   },
   watch: {
@@ -7980,7 +8046,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.full-width-div {\n    width: 100%\n}\n.sorting-column {\n    white-space: nowrap;\n    cursor:pointer\n}\n", ""]);
+exports.push([module.i, "\n.full-width-div {\n    width: 100%\n}\n.sorting-column {\n    white-space: nowrap;\n    cursor:pointer\n}\n.element-table-muted {\n    opacity: .7;\n}\n", ""]);
 
 // exports
 
@@ -40217,6 +40283,60 @@ var render = function() {
                           }),
                           0
                         )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    data.kind == "multiselect"
+                      ? _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.subjectData[fieldname].value,
+                                expression: "subjectData[fieldname].value"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            class: data.class,
+                            staticStyle: {
+                              height: "200px",
+                              "min-height": "200px"
+                            },
+                            attrs: { multiple: "multiple" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.subjectData[fieldname],
+                                  "value",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
+                          },
+                          _vm._l(data.valuesetSorted, function(
+                            valuesetvalue,
+                            valuesetitem
+                          ) {
+                            return _c("option", {
+                              domProps: {
+                                value: valuesetvalue,
+                                innerHTML: _vm._s(valuesetitem)
+                              }
+                            })
+                          }),
+                          0
+                        )
                       : _vm._e()
                   ],
                   1
@@ -40769,7 +40889,8 @@ var render = function() {
                           expression: "mode != 'elements-loading'"
                         }
                       ],
-                      staticClass: "table table-striped"
+                      staticClass: "table table-striped",
+                      class: _vm.elementTableClass
                     },
                     [
                       _c("thead", [
@@ -40835,7 +40956,7 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "tbody",
-                        _vm._l(_vm.elements, function(element) {
+                        _vm._l(_vm.elements, function(element, elementIndex) {
                           return _c(
                             "tr",
                             [
@@ -40858,6 +40979,7 @@ var render = function() {
                                         ? _c("button", {
                                             class:
                                               _vm.buttons["details"]["class"],
+                                            attrs: { type: "button" },
                                             domProps: {
                                               innerHTML: _vm._s(
                                                 _vm.buttons["details"]["html"]
@@ -40876,6 +40998,7 @@ var render = function() {
                                       _vm.showButton("edit")
                                         ? _c("button", {
                                             class: _vm.buttons["edit"]["class"],
+                                            attrs: { type: "button" },
                                             domProps: {
                                               innerHTML: _vm._s(
                                                 _vm.buttons["edit"]["html"]
@@ -40895,6 +41018,7 @@ var render = function() {
                                         ? _c("button", {
                                             class:
                                               _vm.buttons["delete"]["class"],
+                                            attrs: { type: "button" },
                                             domProps: {
                                               innerHTML: _vm._s(
                                                 _vm.buttons["delete"]["html"]
@@ -40911,6 +41035,48 @@ var render = function() {
                                           })
                                         : _vm._e(),
                                       _vm._v(" "),
+                                      _vm.showButton("moveUp") &&
+                                      elementIndex > 0
+                                        ? _c("button", {
+                                            class:
+                                              _vm.buttons["moveUp"]["class"],
+                                            attrs: { type: "button" },
+                                            domProps: {
+                                              innerHTML: _vm._s(
+                                                _vm.buttons["moveUp"]["html"]
+                                              )
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.moveElementUp(
+                                                  element[_vm.idProperty]
+                                                )
+                                              }
+                                            }
+                                          })
+                                        : _vm._e(),
+                                      _vm._v(" "),
+                                      _vm.showButton("moveDown") &&
+                                      elementIndex < _vm.elements.length - 1
+                                        ? _c("button", {
+                                            class:
+                                              _vm.buttons["moveDown"]["class"],
+                                            attrs: { type: "button" },
+                                            domProps: {
+                                              innerHTML: _vm._s(
+                                                _vm.buttons["moveDown"]["html"]
+                                              )
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.moveElementDown(
+                                                  element[_vm.idProperty]
+                                                )
+                                              }
+                                            }
+                                          })
+                                        : _vm._e(),
+                                      _vm._v(" "),
                                       _vm._l(
                                         _vm.customComponentButtons,
                                         function(
@@ -40920,6 +41086,7 @@ var render = function() {
                                           return _c("button", {
                                             class:
                                               customComponentButton["class"],
+                                            attrs: { type: "button" },
                                             domProps: {
                                               innerHTML: _vm._s(
                                                 customComponentButton["html"]
@@ -40960,6 +41127,7 @@ var render = function() {
                     "button",
                     {
                       staticClass: "btn btn-info float-right",
+                      attrs: { type: "button" },
                       on: { click: _vm.fetchElements }
                     },
                     [_vm._v(_vm._s(_vm.translate("Back to the list")))]

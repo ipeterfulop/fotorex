@@ -9,7 +9,12 @@ class Articlecategory extends Model
 {
     use canBeTurnedIntoKeyValueCollection;
 
-    protected $fillable = ['id', 'name'];
+    protected $fillable = ['id', 'name', 'position', 'show_in_main_menu'];
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class)->orderBy('position', 'asc');
+    }
 
     public static function postProcessKeyValueCollection($keyValueCollection)
     {

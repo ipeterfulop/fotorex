@@ -4,12 +4,13 @@ namespace App;
 
 use Datalytix\VueCRUD\Indexfilters\SelectVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Indexfilters\TextVueCRUDIndexfilter;
+use Datalytix\VueCRUD\Traits\hasPosition;
 use Datalytix\VueCRUD\Traits\VueCRUDManageable;
 use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    use VueCRUDManageable;
+    use VueCRUDManageable, hasPosition;
     const SUBJECT_SLUG = 'article';
     const SLUG_BASE = '/cikk/';
 
@@ -102,5 +103,16 @@ class Article extends Model
             'url' => 'slug',
             'published_at_label' => 'published_at'
         ];
+    }
+
+    /**
+     * @return array
+     * this function returns a list of fields that are used as restrictions when changing position
+     * for example if it returns ['role_id'], every non-static positioning function will
+     * only look for elements with the same role_id as the subject
+     */
+    public static function getRestrictingFields()
+    {
+        return ['articlecategory_id'];
     }
 }
