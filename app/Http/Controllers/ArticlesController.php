@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Article;
 use App\Articlecategory;
 use App\Dataproviders\ArticleDataprovider;
+use App\Oldarticleslug;
 use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
@@ -35,8 +36,16 @@ class ArticlesController extends Controller
     {
         $category = Articlecategory::findBySlug($categorySlug);
 
-        $article = Article::findBySlug($slug);
-
+        $article = Article::findBySlug($slug, false, false);
+        if ($article == null) {
+            $article = optional(Oldarticleslug::with('article')->where('slug', '=', $slug)->first())->article;
+            if ($article != null) {
+                return redirect(route('article_details', ['categorySlug' => $categorySlug, 'slug' => $article->slug]));
+            }
+        }
+        if ($article->articlecategory_id != $category->id) {
+            abort(404);
+        }
         return view('public.articles.show', [
             'article' => $article,
             'backUrl' => request()->server('HTTP_REFERER')

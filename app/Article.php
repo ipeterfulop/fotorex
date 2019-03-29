@@ -51,10 +51,10 @@ class Article extends Model
         return $this->hasMany(Oldarticleslug::class);
     }
 
-    public static function findBySlug($slug, $abortWith404IfNotFound = true)
+    public static function findBySlug($slug, $abortWith404IfNotFound = true, $checkOldSlugs = true)
     {
         $result = self::where('slug', '=', $slug)->first();
-        if ($result == null) {
+        if (($result == null) && ($checkOldSlugs)) {
             $result = optional(Oldarticleslug::with('article')->where('slug', '=', $slug)->first())->article;
         }
         if (($result === null) && ($abortWith404IfNotFound)) {
