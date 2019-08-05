@@ -48,14 +48,17 @@ class Article extends Model
 
     public function oldarticleslugs()
     {
-        return $this->hasMany(Oldarticleslug::class);
+        return $this->hasMany(Oldslug::class);
     }
 
     public static function findBySlug($slug, $abortWith404IfNotFound = true, $checkOldSlugs = true)
     {
         $result = self::where('slug', '=', $slug)->first();
         if (($result == null) && ($checkOldSlugs)) {
-            $result = optional(Oldarticleslug::with('article')->where('slug', '=', $slug)->first())->article;
+            $resultRedirect = Oldslug::where('slug', '=', $slug)->first();
+            if ($resultRedirect != null) {
+                $result = Article::find($resultRedirect->redirect_to);
+            }
         }
         if (($result === null) && ($abortWith404IfNotFound)) {
             abort(404);

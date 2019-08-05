@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Oldarticleslug extends Model
+class Oldslug extends Model
 {
-    protected $fillable = ['slug', 'article_id'];
+    protected $fillable = ['slug', 'redirect_to'];
 
     public function article()
     {

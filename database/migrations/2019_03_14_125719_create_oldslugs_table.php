@@ -13,14 +13,11 @@ class CreateOldslugsTable extends Migration
      */
     public function up()
     {
-        Schema::create('oldarticleslugs', function (Blueprint $table) {
+        Schema::create('oldslugs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('slug');
-            $table->unsignedBigInteger('article_id');
+            $table->text('redirect_to');
             $table->timestamps();
-        });
-        Schema::table('oldarticleslugs', function (Blueprint $table) {
-            $table->foreign('article_id')->references('id')->on('articles');
         });
 
     }

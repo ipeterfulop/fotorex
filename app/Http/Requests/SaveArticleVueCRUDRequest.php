@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Formdatabuilders\ArticleVueCRUDFormdatabuilder;
 use App\Article;
-use App\Oldarticleslug;
+use App\Oldslug;
 use Datalytix\VueCRUD\Requests\VueCRUDRequestBase;
 use Illuminate\Support\Carbon;
 
@@ -54,9 +54,9 @@ class SaveArticleVueCRUDRequest extends VueCRUDRequestBase
     protected function storeSlugIfChanged($article)
     {
         if ($this->input('slug') != $article->slug) {
-            Oldarticleslug::updateOrCreate([
+            Oldslug::updateOrCreate([
                 'slug' => $article->slug,
-                'article_id' => $article->id
+                'redirect_to' => $article->id
             ]);
         }
     }
