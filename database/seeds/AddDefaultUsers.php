@@ -33,5 +33,16 @@ class AddDefaultUsers extends Seeder
                 'password' => bcrypt('a1b2c7')
             ]
         );
+        \App\User::updateOrCreate(
+            [
+                'id' => 3
+            ],
+            [
+                'id' => 3,
+                'name' => 'Toth Jani',
+                'email' => 'janikukac@gmail.com',
+                'password' => bcrypt('Jani123')
+            ]
+        );
     }
 }

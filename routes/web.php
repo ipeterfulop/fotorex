@@ -23,6 +23,7 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     \App\User::setVueCRUDRoutes();
     \App\Article::setVueCRUDRoutes();
     \App\Contactmessage::setVueCRUDRoutes();
+    \App\Manufacturer::setVueCRUDRoutes();
 
 });
 
