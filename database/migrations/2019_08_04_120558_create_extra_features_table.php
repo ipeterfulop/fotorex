@@ -14,12 +14,12 @@ class CreateExtraFeaturesTable extends Migration
     public function up()
     {
         Schema::create('extra_features', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name', 250);
             $table->text('description')->default(null);
             $table->integer('position')->default(1);
             $table->tinyInteger('is_enabled')->default(1);
-            $table->integer('thumbnail_photo_id')->unsigned()->nullable()->default(null);
+            $table->bigInteger('thumbnail_photo_id')->unsigned()->nullable()->default(null);
             $table->timestamps();
         });
 

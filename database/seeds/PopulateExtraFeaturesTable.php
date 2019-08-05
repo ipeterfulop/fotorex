@@ -18,13 +18,13 @@ class PopulateExtraFeaturesTable extends Seeder
     private function addOrUpdateExtraFeatures()
     {
         $dsExtraFeatures = [
-            [ 'id' => 21, 'name' => 'BLI certificat', 'position' => '1', 'is_enabled' => 1, ],
-            [ 'id' => 22, 'name' => 'WiFi', 'position' => '2', 'is_enabled' => 1, ],
-            [ 'id' => 23, 'name' => 'Adobe', 'position' => '3', 'is_enabled' => 1, ],
-            [ 'id' => 24, 'name' => 'SAP', 'position' => '4', 'is_enabled' => 1, ],
-            [ 'id' => 25, 'name' => 'GoogleCloud', 'position' => '5', 'is_enabled' => 1, ],
-            [ 'id' => 26, 'name' => 'Airprint', 'position' => '6', 'is_enabled' => 1, ],
-            [ 'id' => 27, 'name' => 'OSA', 'position' => '7', 'is_enabled' => 1, ],
+            [ 'id' => 21, 'name' => 'BLI certificat', 'position' => '1', 'is_enabled' => 1, 'description' => ''],
+            [ 'id' => 22, 'name' => 'WiFi', 'position' => '2', 'is_enabled' => 1, 'description' => ''],
+            [ 'id' => 23, 'name' => 'Adobe', 'position' => '3', 'is_enabled' => 1, 'description' => ''],
+            [ 'id' => 24, 'name' => 'SAP', 'position' => '4', 'is_enabled' => 1, 'description' => ''],
+            [ 'id' => 25, 'name' => 'GoogleCloud', 'position' => '5', 'is_enabled' => 1, 'description' => ''],
+            [ 'id' => 26, 'name' => 'Airprint', 'position' => '6', 'is_enabled' => 1, 'description' => ''],
+            [ 'id' => 27, 'name' => 'OSA', 'position' => '7', 'is_enabled' => 1, 'description' => ''],
         ];
 
         $tableName = 'extra_features';

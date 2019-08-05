@@ -14,7 +14,7 @@ class CreatePhotosTable extends Migration
     public function up()
     {
         Schema::create('photos', function (Blueprint $table) {
-            $table->integer('id')->unsigned()->primary();
+            $table->bigInteger('id')->unsigned()->primary();
             $table->integer('width');
             $table->integer('height');
             $table->timestamps();
