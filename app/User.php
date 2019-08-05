@@ -12,6 +12,8 @@ class User extends Authenticatable
 {
     use Notifiable, canBeTurnedIntoKeyValueCollection, VueCRUDManageable;
     const SUBJECT_SLUG = 'user';
+    const SUBJECT_NAME = 'Felhasználó';
+    const SUBJECT_NAME_PLURAL = 'Felhasználók';
 
     /**
      * The attributes that are mass assignable.

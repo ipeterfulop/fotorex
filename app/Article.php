@@ -13,7 +13,8 @@ class Article extends Model
     use VueCRUDManageable, hasPosition;
     const SUBJECT_SLUG = 'article';
     const SLUG_BASE = 'cikk';
-
+    const SUBJECT_NAME = 'Cikk';
+    const SUBJECT_NAME_PLURAL = 'Cikkek';
     const SORTING_OPTION_LATEST = 'friss';
     const SORTING_OPTION_POPULAR = 'nepszeru';
 

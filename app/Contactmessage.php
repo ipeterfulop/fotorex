@@ -9,6 +9,8 @@ class Contactmessage extends Model
 {
     use VueCRUDManageable;
     const SUBJECT_SLUG = 'contactmessage';
+    const SUBJECT_NAME = 'Üzenet';
+    const SUBJECT_NAME_PLURAL = 'Üzenetek';
 
     protected $fillable = [
         'name',
@@ -65,6 +67,11 @@ class Contactmessage extends Model
     public static function getVueCRUDIndexFilters()
     {
         return [];
+    }
+
+    public static function shouldVueCRUDAddButtonBeDisplayed()
+    {
+        return false;
     }
 
     public static function shouldVueCRUDOperationsBeDisplayed()
