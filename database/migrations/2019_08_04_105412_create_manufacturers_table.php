@@ -26,6 +26,7 @@ class CreateManufacturersTable extends Migration
             $table->foreign('logo_photo_id')
                   ->references('id')
                   ->on('photos');
+        });
     }
 
     /**
