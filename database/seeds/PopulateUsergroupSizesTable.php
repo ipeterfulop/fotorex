@@ -24,6 +24,7 @@ class PopulateUsergroupSizesTable extends Seeder
             [ 'id' => 14, 'name' => 'Nagy munkacsoportos', 'position' => '4', 'is_enabled' => 1, ],
         ];
 
+        $tableName = 'usergroup_sizes';
         foreach ($dsUsergroupSizes as $row) {
             $itemsFound = DB::table($tableName)
                             ->where('id', $row['id'])
