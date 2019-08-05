@@ -49,7 +49,7 @@
   "Please select:": "Válasszon:",
   "Are you sure you want to delete this element": "Biztosan törli ezt az elemet",
   "Yes": "Igen",
-  "No": "Igen",
+  "No": "Nem",
   "Cancel": "Mégsem",
   "Back to the list": "Vissza a listához",
   "Reset": "Alaphelyzet",
@@ -109,5 +109,7 @@
   "Add element": "Elem hozzáadása",
   "Edit element": "Elem szerkesztése",
   "Article": "Cikk",
-  "Items/page": "elem/oldal"
+  "Items/page": "elem/oldal",
+  "enabled": "Aktív",
+  "disabled": "Inaktív"
 }

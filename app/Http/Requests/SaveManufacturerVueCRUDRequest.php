@@ -22,12 +22,12 @@ class SaveManufacturerVueCRUDRequest extends VueCRUDRequestBase
 
     public function save(Manufacturer $subject = null)
     {
-        // a very basic create/update method, you should probably replace it
-        // with something customized
+        $dataset = $this->getDataset();
+        $dataset["position"] = Manufacturer::getFirstAvailablePosition();
         if ($subject == null) {
-            $subject = Manufacturer::create($this->getDataset());
+            $subject = Manufacturer::create($dataset);
         } else {
-            $subject->update($this->getDataset());
+            $subject->update($dataset);
         }
 
         return $subject;

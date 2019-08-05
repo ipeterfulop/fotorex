@@ -2,14 +2,16 @@
 
 namespace App;
 
+use App\Traits\hasIsEnabledProperty;
 use Datalytix\VueCRUD\Indexfilters\SelectVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Indexfilters\TextVueCRUDIndexfilter;
+use Datalytix\VueCRUD\Traits\hasPosition;
 use Datalytix\VueCRUD\Traits\VueCRUDManageable;
 use Illuminate\Database\Eloquent\Model;
 
 class Manufacturer extends Model
 {
-    use VueCRUDManageable;
+    use VueCRUDManageable, hasIsEnabledProperty, hasPosition;
     const SUBJECT_SLUG = 'manufacturer';
     const SUBJECT_NAME = 'Gyártó';
     const SUBJECT_NAME_PLURAL = 'Gyártók';
@@ -37,11 +39,6 @@ class Manufacturer extends Model
             0 => 'Inaktív',
             1 => 'Aktív',
         ];
-    }
-
-    public function getIsEnabledLabel()
-    {
-        return self::getIsEnabledOptions()[$this->is_enabled];
     }
 
     public static function getVueCRUDIndexColumns()
@@ -81,4 +78,8 @@ class Manufacturer extends Model
         ];
     }
 
+    public static function getRestrictingFields()
+    {
+        return [];
+    }
 }
