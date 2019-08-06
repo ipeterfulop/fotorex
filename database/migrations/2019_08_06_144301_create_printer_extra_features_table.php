@@ -17,7 +17,6 @@ class CreatePrinterExtraFeaturesTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('printer_id')->unsigned();
             $table->bigInteger('extra_feature_id')->unsigned();
-            $table->text('html_content');
             $table->unsignedTinyInteger('is_enabled')->default(1);
             $table->timestamps();
         });
