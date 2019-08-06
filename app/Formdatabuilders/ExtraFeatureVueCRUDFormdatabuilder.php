@@ -5,18 +5,27 @@ namespace App\Formdatabuilders;
 
 
 use App\ExtraFeature;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\TextareaVueCRUDFormfield;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\TextVueCRUDFormfield;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\YesNoSelectVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\VueCRUDFormdatabuilder;
 
 class ExtraFeatureVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
 {
-    /**
-     * @return Illuminate\Support\Collection;
-     * returns a collection of VueCRUDFormfield descendants that
-     * define what the edit/create forms will contain
-     */
     protected static function getFields()
     {
-        return collect([]);
+        $result = [];
+        $result['name'] = (new TextVueCRUDFormfield())->setMandatory(true)
+            ->setLabel('Név')
+            ->setContainerClass('col-12');
+        $result['description'] = (new TextareaVueCRUDFormfield())->setMandatory(true)
+            ->setLabel('Leírás')
+            ->setContainerClass('col-12');
+        $result['is_enabled'] = (new YesNoSelectVueCRUDFormfield())->setMandatory(true)
+            ->setLabel('Aktív')
+            ->setDefault(0)
+            ->setContainerClass('col-4');
+        return collect($result);
     }
 
     public function __construct(ExtraFeature $subject = null, $defaults = [])

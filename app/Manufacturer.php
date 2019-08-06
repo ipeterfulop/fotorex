@@ -80,6 +80,6 @@ class Manufacturer extends Model
 
     public static function getRestrictingFields()
     {
-        return [];
+        return ["is_enabled" => 1];
     }
 }

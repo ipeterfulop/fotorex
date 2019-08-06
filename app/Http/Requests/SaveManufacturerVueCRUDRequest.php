@@ -10,11 +10,6 @@ class SaveManufacturerVueCRUDRequest extends VueCRUDRequestBase
 {
     const FORMDATABUILDER_CLASS = ManufacturerVueCRUDFormdatabuilder::class;
 
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         return true;

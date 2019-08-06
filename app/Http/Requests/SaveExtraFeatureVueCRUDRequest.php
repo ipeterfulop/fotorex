@@ -10,11 +10,6 @@ class SaveExtraFeatureVueCRUDRequest extends VueCRUDRequestBase
 {
     const FORMDATABUILDER_CLASS = ExtraFeatureVueCRUDFormdatabuilder::class;
 
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         return true;
@@ -22,12 +17,12 @@ class SaveExtraFeatureVueCRUDRequest extends VueCRUDRequestBase
 
     public function save(ExtraFeature $subject = null)
     {
-        // a very basic create/update method, you should probably replace it
-        // with something customized
+        $dataset = $this->getDataset();
+        $dataset["position"] = ExtraFeature::getFirstAvailablePosition();
         if ($subject == null) {
-            $subject = ExtraFeature::create($this->getDataset());
+            $subject = ExtraFeature::create($dataset);
         } else {
-            $subject->update($this->getDataset());
+            $subject->update($dataset);
         }
 
         return $subject;
