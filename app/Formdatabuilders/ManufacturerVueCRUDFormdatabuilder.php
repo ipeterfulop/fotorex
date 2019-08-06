@@ -5,6 +5,7 @@ namespace App\Formdatabuilders;
 
 
 use App\Manufacturer;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\FileCollectorVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\TextVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\YesNoSelectVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\VueCRUDFormdatabuilder;
@@ -24,6 +25,13 @@ class ManufacturerVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
         $result['url'] = (new TextVueCRUDFormfield())->setMandatory(false)
             ->setLabel('URL')
             ->setContainerClass('col-12');
+        $result[''] = (new FileCollectorVueCRUDFormfield())
+            ->setLabel('Gyártó logo')
+            ->setContainerClass('col-12')
+            ->setObjectMode()
+            ->addAcceptCondition(FileCollectorVueCRUDFormfield::ACCEPTS_PRESET_IMAGE)
+            ->addRoutes('manufacturer')
+            ->setLimit(1);
         return collect($result);
     }
 
