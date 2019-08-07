@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Formdatabuilders\ManufacturerVueCRUDFormdatabuilder;
 use App\Http\Requests\SaveManufacturerVueCRUDRequest;
 use App\Dataproviders\ManufacturerVueCRUDDataprovider;
+use App\Photo;
 use Datalytix\VueCRUD\Interfaces\ICRUDController;
 use App\Manufacturer;
 use Datalytix\VueCRUD\Controllers\VueCRUDControllerBase;
@@ -22,6 +23,12 @@ class ManufacturerVueCRUDController extends VueCRUDControllerBase implements ICR
     //
     // an app-wide default can also be set in config.vuecrud.vueCrudDefaultView
     //const CUSTOM_VIEW_PATH = 'blade.view.path'
+
+    public function processUploadedFileToObject($path)
+    {
+        $new_path = Manufacturer::moveFileToStorage($path, self::cleanRandomizationStringFromUploadFilename(basename($path)));
+        return Photo::createFromFilepath($new_path);
+    }
 
     public function store(SaveManufacturerVueCRUDRequest $request)
     {

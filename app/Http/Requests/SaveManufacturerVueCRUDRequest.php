@@ -17,13 +17,17 @@ class SaveManufacturerVueCRUDRequest extends VueCRUDRequestBase
 
     public function save(Manufacturer $subject = null)
     {
-        $dataset = $this->getDataset();
-        $dataset["position"] = Manufacturer::getFirstAvailablePosition();
-        if ($subject == null) {
-            $subject = Manufacturer::create($dataset);
-        } else {
-            $subject->update($dataset);
-        }
+        \DB::transaction(function() use (&$subject) {
+            // photo insert
+            // peldanyositasok
+            $dataset = $this->getDataset();
+            if ($subject == null) {
+                $dataset["position"] = Manufacturer::getFirstAvailablePosition();
+                $subject = Manufacturer::create($dataset);
+            } else {
+                $subject->update($dataset);
+            }
+        });
 
         return $subject;
     }
@@ -31,7 +35,13 @@ class SaveManufacturerVueCRUDRequest extends VueCRUDRequestBase
     public function getDataset()
     {
         $result = $this->getBaseDatasetFromRequest(Manufacturer::class);
-        // this is very basic, and will probably not suffice except for very simple models
+        if (count($this->input('logo')) > 0) {
+            $result['logo_photo_id'] = $this->input('logo')[0]['id'];
+        }
+        else {
+            $result['logo_photo_id'] = null;
+        }
         return $result;
     }
+
 }

@@ -5,6 +5,7 @@ namespace App\Formdatabuilders;
 
 
 use App\Manufacturer;
+use App\Photo;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\FileCollectorVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\TextVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\YesNoSelectVueCRUDFormfield;
@@ -25,7 +26,7 @@ class ManufacturerVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
         $result['url'] = (new TextVueCRUDFormfield())->setMandatory(false)
             ->setLabel('URL')
             ->setContainerClass('col-12');
-        $result[''] = (new FileCollectorVueCRUDFormfield())
+        $result['logo'] = (new FileCollectorVueCRUDFormfield())
             ->setLabel('Gyártó logo')
             ->setContainerClass('col-12')
             ->setObjectMode()
@@ -33,6 +34,16 @@ class ManufacturerVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->addRoutes('manufacturer')
             ->setLimit(1);
         return collect($result);
+    }
+
+    public function get_logo_value()
+    {
+        if ($this->subject===null || $this->subject->logo_photo_id===null) {
+            return [];
+        }
+        else {
+            return [Photo::find($this->subject->logo_photo_id)];
+        }
     }
 
     public function __construct(Manufacturer $subject = null, $defaults = [])

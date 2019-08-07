@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\hasFiles;
 use App\Traits\hasIsEnabledProperty;
 use Datalytix\VueCRUD\Indexfilters\SelectVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Indexfilters\TextVueCRUDIndexfilter;
@@ -11,16 +12,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Manufacturer extends Model
 {
-    use VueCRUDManageable, hasIsEnabledProperty, hasPosition;
+    use VueCRUDManageable, hasIsEnabledProperty, hasPosition, hasFiles;
     const SUBJECT_SLUG = 'manufacturer';
     const SUBJECT_NAME = 'Gyártó';
     const SUBJECT_NAME_PLURAL = 'Gyártók';
+    const FILE_PUBLIC_PATH = 'gyartok';
 
     protected $fillable = [
         'name',
         'position',
         'is_enabled',
         'url',
+        'logo_photo_id',
     ];
 
     protected $appends = [
