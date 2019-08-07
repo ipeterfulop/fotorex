@@ -18,13 +18,12 @@ class SaveManufacturerVueCRUDRequest extends VueCRUDRequestBase
     public function save(Manufacturer $subject = null)
     {
         \DB::transaction(function() use (&$subject) {
-            // photo insert
-            // peldanyositasok
             $dataset = $this->getDataset();
             if ($subject == null) {
                 $dataset["position"] = Manufacturer::getFirstAvailablePosition();
                 $subject = Manufacturer::create($dataset);
             } else {
+                $dataset['position'] = Manufacturer::find($subject['id'])->position;
                 $subject->update($dataset);
             }
         });

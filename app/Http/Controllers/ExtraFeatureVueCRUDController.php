@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Formdatabuilders\ExtraFeatureVueCRUDFormdatabuilder;
 use App\Http\Requests\SaveExtraFeatureVueCRUDRequest;
 use App\Dataproviders\ExtraFeatureVueCRUDDataprovider;
+use App\Photo;
 use Datalytix\VueCRUD\Interfaces\ICRUDController;
 use App\ExtraFeature;
 use Datalytix\VueCRUD\Controllers\VueCRUDControllerBase;
@@ -22,6 +23,12 @@ class ExtraFeatureVueCRUDController extends VueCRUDControllerBase implements ICR
     //
     // an app-wide default can also be set in config.vuecrud.vueCrudDefaultView
     //const CUSTOM_VIEW_PATH = 'blade.view.path'
+
+    public function processUploadedFileToObject($path)
+    {
+        $new_path = ExtraFeature::moveFileToStorage($path, self::cleanRandomizationStringFromUploadFilename(basename($path)));
+        return Photo::createFromFilepath($new_path);
+    }
 
     public function store(SaveExtraFeatureVueCRUDRequest $request)
     {

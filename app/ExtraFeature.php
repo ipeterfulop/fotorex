@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\hasFiles;
 use App\Traits\hasIsEnabledProperty;
 use Datalytix\VueCRUD\Indexfilters\SelectVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Indexfilters\TextVueCRUDIndexfilter;
@@ -11,16 +12,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class ExtraFeature extends Model
 {
-    use VueCRUDManageable, hasIsEnabledProperty, hasPosition;
+    use VueCRUDManageable, hasIsEnabledProperty, hasPosition, hasFiles;
     const SUBJECT_SLUG = 'extrafeature';
     const SUBJECT_NAME = 'Speciális funkció';
     const SUBJECT_NAME_PLURAL = 'Speciális funkciók';
+    const FILE_PUBLIC_PATH = 'specialis_funkciok';
 
     protected $fillable = [
         'name',
         'description',
         'position',
         'is_enabled',
+        'thumbnail_photo_id',
     ];
 
     protected $appends = [

@@ -17,13 +17,16 @@ class SaveExtraFeatureVueCRUDRequest extends VueCRUDRequestBase
 
     public function save(ExtraFeature $subject = null)
     {
-        $dataset = $this->getDataset();
-        $dataset["position"] = ExtraFeature::getFirstAvailablePosition();
-        if ($subject == null) {
-            $subject = ExtraFeature::create($dataset);
-        } else {
-            $subject->update($dataset);
-        }
+        \DB::transaction(function() use (&$subject) {
+            $dataset = $this->getDataset();
+            if ($subject == null) {
+                $dataset['position'] = ExtraFeature::getFirstAvailablePosition();
+                $subject = ExtraFeature::create($dataset);
+            } else {
+                $dataset['position'] = ExtraFeature::find($subject['id'])->position;
+                $subject->update($dataset);
+            }
+        });
 
         return $subject;
     }
@@ -31,7 +34,12 @@ class SaveExtraFeatureVueCRUDRequest extends VueCRUDRequestBase
     public function getDataset()
     {
         $result = $this->getBaseDatasetFromRequest(ExtraFeature::class);
-        // this is very basic, and will probably not suffice except for very simple models
+        if (count($this->input('logo')) > 0) {
+            $result['thumbnail_photo_id'] = $this->input('logo')[0]['id'];
+        }
+        else {
+            $result['thumbnail_photo_id'] = null;
+        }
         return $result;
     }
 }
