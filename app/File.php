@@ -15,20 +15,23 @@ class File extends Model
         'original_file_id'
     ];
 
-    protected $appends = ['name'];
+    protected $appends = [
+        'name',
+        'public_url',
+    ];
 
     public static function createFromFilepath($path, $original_name = null, $new_name = null)
     {
         return self::create([
             'original_filename' => ($original_name === null ? basename($path) : $original_name),
             'filename'          => ($new_name === null ? basename($path) : $new_name),
-            'path_to'           =>  dirname($path),
+            'path_to'           =>  str_ireplace(storage_path('app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR), '', dirname($path)),
         ]);
     }
 
     public function getFullPath()
     {
-        return $this->path_to.DIRECTORY_SEPARATOR.$this->filename;
+        return storage_path('app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.$this->path_to.DIRECTORY_SEPARATOR.$this->filename);
     }
 
     public function getNameAttribute()
@@ -37,6 +40,6 @@ class File extends Model
     }
 
     public function getPublicUrlAttribute() {
-        return $this->path_to.DIRECTORY_SEPARATOR.$this->filename;
+        return asset('storage/'.$this->path_to.'/'.$this->filename);
     }
 }

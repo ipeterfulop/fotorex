@@ -31,9 +31,25 @@ class Manufacturer extends Model
         'is_enabled_label',
     ];
 
+    protected $with = ['logo'];
+
+    public function logo()
+    {
+        return $this->hasOne(
+            Photo::class,
+            'id',
+            'logo_photo_id'
+        );
+    }
+
     public function getNameLabelAttribute()
     {
         return $this->name;
+    }
+
+    public function getLogoUrlAttribute()
+    {
+        return ($this->logo !== null ? $this->logo->file->public_url : '');
     }
 
     public static function getIsEnabledOptions()
