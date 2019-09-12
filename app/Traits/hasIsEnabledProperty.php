@@ -25,4 +25,13 @@ trait hasIsEnabledProperty
     {
         return $this->isEnabled() ? __('Enabled') : __('Disabled');
     }
+
+    public static function getIsEnabledOptions()
+    {
+        return [
+            0 => 'Inaktív',
+            1 => 'Aktív',
+        ];
+    }
+
 }

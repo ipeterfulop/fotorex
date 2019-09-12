@@ -4,6 +4,7 @@ namespace App;
 
 use App\Traits\hasFiles;
 use App\Traits\hasIsEnabledProperty;
+use Datalytix\KeyValue\canBeTurnedIntoKeyValueCollection;
 use Datalytix\VueCRUD\Indexfilters\SelectVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Indexfilters\TextVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Traits\hasPosition;
@@ -12,11 +13,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Manufacturer extends Model
 {
+    use canBeTurnedIntoKeyValueCollection;
     use VueCRUDManageable, hasIsEnabledProperty, hasPosition, hasFiles;
     const SUBJECT_SLUG = 'manufacturer';
     const SUBJECT_NAME = 'Gyártó';
     const SUBJECT_NAME_PLURAL = 'Gyártók';
     const FILE_PUBLIC_PATH = 'gyartok';
+    const ORDER_BY_FIELD = 'name';
 
     protected $fillable = [
         'name',
@@ -27,7 +30,6 @@ class Manufacturer extends Model
     ];
 
     protected $appends = [
-        'name_label',
         'is_enabled_label',
     ];
 
@@ -42,28 +44,15 @@ class Manufacturer extends Model
         );
     }
 
-    public function getNameLabelAttribute()
-    {
-        return $this->name;
-    }
-
     public function getLogoUrlAttribute()
     {
         return ($this->logo !== null ? $this->logo->file->public_url : '');
     }
 
-    public static function getIsEnabledOptions()
-    {
-        return [
-            0 => 'Inaktív',
-            1 => 'Aktív',
-        ];
-    }
-
     public static function getVueCRUDIndexColumns()
     {
         return [
-            'name_label' => 'Név',
+            'name' => 'Név',
             'is_enabled_label' => 'Státusz',
         ];
     }
@@ -86,7 +75,7 @@ class Manufacturer extends Model
     public static function getVueCRUDSortingIndexColumns()
     {
         return [
-            'name_label' => 'name',
+            'name' => 'name',
         ];
     }
 

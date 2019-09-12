@@ -45,4 +45,11 @@ class Photo extends Model
     {
         return $this->file->name;
     }
+
+    public static function removePhoto($photo_id)
+    {
+        $p = Photo::find($photo_id);
+        $p->delete();
+        File::removeFile($photo_id);
+    }
 }

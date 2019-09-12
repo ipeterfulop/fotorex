@@ -42,4 +42,11 @@ class File extends Model
     public function getPublicUrlAttribute() {
         return asset('storage/'.$this->path_to.'/'.$this->filename);
     }
+
+    public static function removeFile($file_id)
+    {
+        $f = File::find($file_id);
+        unlink($f->getFullPath());
+        $f->delete();
+    }
 }

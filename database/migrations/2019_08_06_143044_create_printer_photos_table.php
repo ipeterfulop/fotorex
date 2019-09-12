@@ -16,9 +16,6 @@ class CreatePrinterPhotosTable extends Migration
         Schema::create('printer_photo', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('printer_id')->unsigned();
-            $table->bigInteger('photo_id')->unsigned();
-            $table->bigInteger('printer_photo_role_id')->unsigned();
-            $table->unsignedTinyInteger('is_enabled')->default(1);
             $table->integer('position')->default(1);
             $table->timestamps();
         });
@@ -27,12 +24,6 @@ class CreatePrinterPhotosTable extends Migration
             $table->foreign('printer_id')
                   ->references('id')
                   ->on('printers');
-            $table->foreign('photo_id')
-                  ->references('id')
-                  ->on('photos');
-            $table->foreign('printer_photo_role_id')
-                  ->references('id')
-                  ->on('printer_photo_roles');
         });
     }
 

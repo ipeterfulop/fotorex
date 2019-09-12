@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\PrinterPhotoCreated;
+use App\Listeners\HandlePrinterPhotoCustomization;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
