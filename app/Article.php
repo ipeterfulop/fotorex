@@ -157,4 +157,24 @@ class Article extends Model
         return false;
 
     }
+
+    public function scopePublished($query, $date = null)
+    {
+        $date = $date ?? now();
+
+        return $query->where('published_at', '<=', $date->format('Y-m-d H:i:s'))
+            ->where('is_published', '=', 1);
+    }
+
+    public function scopeSearchText($query, $searchText)
+    {
+        if ($searchText == null) {
+            return $query;
+        }
+        return $query->where(function($query) use ($searchText) {
+            return $query->where('title', 'like', "%$searchText%")
+                ->orWhere('summary', 'like', "%$searchText%")
+                ->orWhere('content', 'like', "%$searchText%");
+        });
+    }
 }

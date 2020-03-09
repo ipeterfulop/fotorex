@@ -14,7 +14,7 @@ class AddAutoProcessToPrinterPhotoRoles extends Migration
     public function up()
     {
         Schema::table('printer_photo_roles', function (Blueprint $table) {
-            $table->tinyInteger('auto_process')->unsigned();
+            $table->tinyInteger('auto_process')->unsigned()->default(0);
         });
         \DB::table('printer_photo_roles')->insert([
             'id' => 1,

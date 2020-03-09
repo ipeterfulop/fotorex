@@ -14,7 +14,7 @@ class AddShowInMainMenuToArticlecategories extends Migration
     public function up()
     {
         Schema::table('articlecategories', function (Blueprint $table) {
-            $table->tinyInteger('show_in_main_menu');
+            $table->tinyInteger('show_in_main_menu')->default(0);
         });
     }
 
