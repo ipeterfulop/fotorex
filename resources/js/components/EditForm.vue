@@ -32,6 +32,16 @@
                                 <span class="edit-form-label-tooltip" v-if="typeof(data.helpTooltip) != 'undefined'" v-html="data.helpTooltip"></span>
                                 <span v-if="errorExists(fieldname)" class="text-danger validation-error-label-message" v-html="errors[fieldname][0]"></span>
                             </label>
+                            <div v-if="data.kind == 'color'"
+                                 style="display: flex; align-items:center; justify-content: center">
+                                <input class="form-control"
+                                       type="text"
+                                       v-bind:value="subjectData[fieldname].value">
+                                <input class="form-control" type="color"
+                                       v-model="subjectData[fieldname].value"
+                                       style="width: 3em; padding: 0px"
+                                >
+                            </div>
                             <input v-if="data.kind == 'input' && data.type != 'password'  && data.type != 'number'"
                                    v-model="subjectData[fieldname].value"
                                    v-bind:placeholder="subjectData[fieldname].placeholder"
@@ -94,6 +104,13 @@
                                               v-bind:ajax-operations-url="ajaxOperationsUrl"
                                 ></trix-wrapper>
                             </div>
+                            <div v-if="data.kind == 'text' && data.type == 'richtext-quill'" v-bind:class="data.class" style="min-height:95%; height:95%; margin-bottom: 2em">
+                                <quill-wrapper v-model="subjectData[fieldname].value"
+                                               v-bind:fieldname="fieldname"
+                                               v-bind="JSON.parse(data.props)"
+                                               v-bind:ajax-operations-url="ajaxOperationsUrl"
+                                ></quill-wrapper>
+                            </div>
                             <select v-if="data.kind == 'select' && (data.type == null || data.type == 'yesno' || data.type == 'custom')"
                                     v-model="subjectData[fieldname].value"
                                     v-bind:style="subjectData[fieldname].value == -1 ? {'color': 'lightgray'} : {}"
@@ -119,6 +136,8 @@
                                           v-model="subjectData[fieldname].value"
                                           v-bind:upload-url="ajaxOperationsUrl"
                                           v-bind:class-overrides="classOverrides"
+                                          :key="fieldname"
+                                          :fieldname="fieldname"
                             ></image-picker>
                             <span v-if="data.kind == 'radio'">
                                 <p v-for="valuesetvalue, valuesetitem in data.valuesetSorted">
@@ -183,9 +202,9 @@
                 </div>
             </div>
         </form>
-        <div class="row" v-if="false">
+        <div class="row" v-if="nonFormErrorKeys.length > 0">
             <div class="alert alert-danger col col-12"
-                 v-for="error in errors" v-html="error[0]"></div>
+                 v-for="key in nonFormErrorKeys" v-html="errors[key][0]"></div>
         </div>
         <div class="row" v-if="resultMessage != ''">
             <div class="alert col col-12"
@@ -235,11 +254,11 @@
             redirectToResponseOnSuccess: {type: String},
             redirectToOnCancel: {type: String},
             buttons: {type: Object, default: () => {
-                return {
-                    'save': {'class': 'btn-outline-primary', 'html': 'Save'},
-                    'cancel': {'class': 'btn-outline-secondary', 'html': 'Cancel'},
-                }
-            }},
+                    return {
+                        'save': {'class': 'btn-outline-primary', 'html': 'Save'},
+                        'cancel': {'class': 'btn-outline-secondary', 'html': 'Cancel'},
+                    }
+                }},
             formDisabled: {type: Boolean, default: false},
             extraUrlParameters: {type: Object, default: () => {return {}}}
         },
@@ -307,6 +326,11 @@
                 }
 
                 return result;
+            },
+            nonFormErrorKeys: function() {
+                return Object.keys(this.errors).filter((key) => {
+                    return typeof(this.subjectData[key]) == 'undefined';
+                });
             }
         },
         methods: {
@@ -490,6 +514,7 @@
                     });
             },
             cancelEditing: function() {
+                this.errors = {};
                 this.subjectData = {};
                 this.$emit('editing-canceled');
                 if (typeof(this.redirectToOnCancel) != 'undefined') {

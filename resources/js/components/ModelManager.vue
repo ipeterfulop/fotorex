@@ -1,11 +1,11 @@
 <template>
-    <div class="container-fluid model-manager-container">
-        <div class="row">
-            <div class="col-12">
+    <div class="full-width-div container-fluid" style="margin-bottom: 60px">
+        <div class="row full-width-div model-manager-container">
+            <div class="col-12 full-width-div">
                 <div v-if="mode == 'loading'" v-html="spinnerSrc" style="width:100%; display:flex; justify-content: center"></div>
                 <div v-if="JSON.stringify(mainButtons) != '{}' && (mode == 'list' || mode == 'elements-loading')" class="row">
-                    <div class="col-12 d-flex justify-content-between"
-                         style="margin-bottom: 25px; padding: 0px"
+                    <div class="full-width-div col-12"
+                         style="margin-bottom: 25px; padding: 0px; display: flex; justify-content: space-between; align-items: center"
                     >
                         <div style="font-size: 1.8em; font-weight: bold" v-if="title != ''"
                              v-html="title"
@@ -21,8 +21,9 @@
                          class="full-width-div model-manager-filter-container portlet"
                          v-bind:class="getClassOverrideOrDefaultClass('model-manager-filter-box', 'model-manager-filter-box')"
                     >
-                        <div class="bg-inverse d-flex justify-content-between portlet-heading align-items-baseline"
-                             v-bind:class="getClassOverrideOrDefaultClass('model-manager-filters-heading')"
+                        <div class="portlet-heading"
+                             style="display: flex; justify-content: space-between; align-items:baseline"
+                             v-bind:class="getClassOverrideOrDefaultClass('model-manager-filters-heading', 'bg-inverse')"
                         >
                             <div>
                                 <span v-bind:class="iconClasses.filter"></span>
@@ -33,12 +34,17 @@
                                     v-html="mainButtons['resetFilters']['html']"
                             ></button>
                         </div>
-                        <div class="portlet-body model-manager-filters-list-container">
+                        <div class="portlet-body model-manager-filters-list-container"
+                             v-on:keyup.enter="saveFilterState(); currentPage = 1; fetchMode = 'search'; fetchElements(true)"
+                             v-bind:class="getClassOverrideOrDefaultClass('model-manager-filters-body', 'model-manager-filters-body')"
+                        >
                             <tabgroup :tabs="filterTabs" v-on:tab-changed="resetFilters">
                                 <template v-for="tabFilters, index in filterTabContents"
                                           v-slot:[index]
                                 >
-                                    <div class="row d-flex model-manager-filters-list">
+                                    <div class="row model-manager-filters-list"
+                                         style="display: flex; justify-content: start"
+                                    >
                                         <div v-for="filterData, filterName in tabFilters"
                                              class="form-group m-1 model-manager-filter-block"
                                              v-bind:class="filterData['containerClass']"
@@ -72,8 +78,8 @@
                                             </component>
                                         </div>
                                     </div>
-                                    <div v-if="!autoFilter" class="row d-flex justify-content-start p-1" style="min-width: 100%">
-                                        <button class="col-3"
+                                    <div v-if="!autoFilter" class="row p-1" style="min-width: 100%; display: flex; justify-content: start">
+                                        <button style=""
                                                 v-bind:class="mainButtons['search']['class']"
                                                 v-html="mainButtons['search']['html']"
                                                 v-on:click="saveFilterState(); currentPage = 1; fetchMode = 'search'; fetchElements(true)"
@@ -85,10 +91,21 @@
                         </div>
                     </div>
                     <div class="portlet full-width-div">
-                        <div class="portlet-heading bg-primary d-flex justify-content-between">
+                        <div class="portlet-heading"
+                             style="display: flex; justify-content: space-between"
+                             v-bind:class="getClassOverrideOrDefaultClass('model-manager-main-heading', 'bg-primary')"
+                        >
                             <div class="portlet-title">
                                 <span v-bind:class="iconClasses.list"></span>
                                 <span v-html="totalLabel"></span>
+                            </div>
+                            <div>
+                                <input type="text"
+                                       class="form-control"
+                                       :placeholder="translate('Highlight')"
+                                       v-on:keyup.esc="inlineSearchText = ''"
+                                       v-model="inlineSearchText"
+                                >
                             </div>
                             <div class="model-manager-paging-controls"
                                  v-if="typeof(counts['total']) != 'undefined'"
@@ -96,18 +113,18 @@
                                 <span v-if="pageOptions.length > 1 || showAllInOnePage"
                                       style="flex-basis: 60%;"
                                 >
-                                    <label v-if="false">
-                                        <input type="checkbox" v-model="showAllInOnePage">
-                                        {{ translate('Single page') }}
-                                    </label>
                                 </span>
                                 <template v-if="JSON.stringify(counts) != '{}'">
                                     <span>{{ counts['start'] }}&nbsp;-&nbsp;{{ counts['end'] }}&nbsp;/&nbsp;{{ counts['filtered'] }}&nbsp;&nbsp;</span>
                                     <button v-bind:class="mainButtons['prevPage']['class']"
                                             v-on:click="previousPage"
                                             v-html="mainButtons['prevPage']['html']"
+                                            style="height: 2.3em; margin-right: 3px;"
                                     ></button>
-                                    <select class="form-control model-manager-page-select" v-model="currentPage">
+                                    <select class="form-control model-manager-page-select"
+                                            v-model="currentPage"
+                                            style="max-width: 5.5em; height: 2.3em; min-width: 5.5em"
+                                    >
                                         <option v-for="p in pageOptions"
                                                 v-bind:value="p"
                                                 v-html="p"
@@ -116,9 +133,11 @@
                                     <button v-bind:class="mainButtons['nextPage']['class']"
                                             v-on:click="nextPage"
                                             v-html="mainButtons['nextPage']['html']"
+                                            style="height: 2.3em; margin-left: 3px;"
                                     ></button>
-                                    <span style="margin-left: 1em">
+                                    <span style="margin-left: 1em; white-space: nowrap; display: flex; align-items: center;">
                                         <select class="form-control"
+                                                style="max-width: 5.5em; height: 2.3em; margin-right: 3px; min-width: 5.5em"
                                                 v-model="itemsPerPage">
                                             <option v-for="option in itemsPerPageOptions"
                                                     :value="option"
@@ -130,7 +149,9 @@
                                 </template>
                             </div>
                         </div>
-                        <div class="portlet-body">
+                        <div class="portlet-body"
+                             v-bind:class="getClassOverrideOrDefaultClass('model-manager-main-body', 'model-manager-main-body')"
+                        >
                             <div v-show="mode == 'elements-loading'" v-html="spinnerSrc" style="width:100%; display:flex; justify-content: center"></div>
                             <template v-show="mode != 'elements-loading'">
                                 <template v-if="showMassControls">
@@ -146,7 +167,7 @@
                                 </template>
                                 <table v-show="mode != 'elements-loading'" class="table table-striped" v-bind:class="elementTableClass">
                                     <thead>
-                                    <tr>
+                                    <tr v-bind:class="getClassOverrideOrDefaultClass('model-manager-table-head', '')">
                                         <th v-if="showMassControls">
                                                 <span v-html="'✔'"
                                                       :title="translate('Select/deselect all')"
@@ -194,46 +215,55 @@
                                                 >
                                             </label>
                                         </td>
-                                        <td v-for="columnName, columnField in columns">
+                                        <td v-for="columnName, columnField in columns"
+                                            v-bind:class="'vuecrud-'+columnField+'-td'"
+                                            v-bind:style="elementCellStyle(element, columnField)"
+                                        >
                                             <component v-if="typeof(element[columnField]) == 'string' && element[columnField].substr(0, 11) == 'component::'"
                                                        :is="JSON.parse(element[columnField].substr(11)).component"
+                                                       v-bind:subject="element"
+                                                       :key="element[idProperty]+'-'+element[columnField]"
                                                        v-bind="JSON.parse(element[columnField].substr(11)).componentProps"></component>
-                                            <span v-else v-html="element[columnField]"></span>
+                                            <span v-else
+                                                  v-html="element[columnField]"
+                                                  v-bind:class="{'highlighted-td': fieldContainsInlineSearchText(element[columnField])}"
+                                            ></span>
                                         </td>
-                                        <td v-if="allowOperations" style="white-space: nowrap">
-                                            <button type="button" v-if="showButton('details')"
+                                        <td v-if="allowOperations" style="white-space: nowrap; text-align: right" class="model-manager-operations-td">
+                                            <button type="button" v-if="showButton('details', element)"
                                                     v-bind:class="buttons['details']['class']"
                                                     v-on:click="showDetails(element[idProperty], elementIndex)"
                                                     v-html="buttons['details']['html']"
                                                     :title="buttons['details']['title'] || ''"
                                             ></button>
                                             <button type="button"
-                                                    v-if="showButton('edit') && (typeof(element['vuecrud_edit_allowed']) == 'undefined' || element['vuecrud_edit_allowed'] == true)"
+                                                    v-if="showButton('edit', element) && (typeof(element['vuecrud_edit_allowed']) == 'undefined' || element['vuecrud_edit_allowed'] == true)"
                                                     v-bind:class="buttons['edit']['class']"
                                                     v-on:click="editElement(element[idProperty], elementIndex)"
                                                     v-html="buttons['edit']['html']"
                                                     :title="buttons['edit']['title'] || ''"
                                             ></button>
                                             <button type="button"
-                                                    v-if="showButton('delete') && (typeof(element['vuecrud_delete_allowed']) == 'undefined' || element['vuecrud_delete_allowed'] == true)"
+                                                    v-if="showButton('delete', element) && (typeof(element['vuecrud_delete_allowed']) == 'undefined' || element['vuecrud_delete_allowed'] == true)"
                                                     v-bind:class="buttons['delete']['class']"
                                                     v-on:click="confirmElementDeletion(element[idProperty], element[nameProperty], elementIndex)"
                                                     v-html="buttons['delete']['html']"
                                                     :title="buttons['delete']['title'] || ''"
                                             ></button>
-                                            <button type="button" v-if="showButton('moveUp') && elementIndex > 0"
+                                            <button type="button" v-if="showButton('moveUp', element) && elementIndex > 0"
                                                     v-bind:class="buttons['moveUp']['class']"
                                                     v-on:click="moveElementUp(element[idProperty])"
                                                     v-html="buttons['moveUp']['html']"
                                                     :title="buttons['moveUp']['title'] || ''"
                                             ></button>
-                                            <button type="button" v-if="showButton('moveDown') && elementIndex < elements.length - 1"
+                                            <button type="button" v-if="showButton('moveDown', element) && elementIndex < elements.length - 1"
                                                     v-bind:class="buttons['moveDown']['class']"
                                                     v-on:click="moveElementDown(element[idProperty])"
                                                     v-html="buttons['moveDown']['html']"
                                                     :title="buttons['moveDown']['title'] || ''"
                                             ></button>
                                             <ajax-button v-for="ajaxButton, ajaxButtonKey in ajaxButtons"
+                                                         v-if="showAjaxButton(ajaxButton, element)"
                                                          v-bind:class="ajaxButton['class']"
                                                          v-bind:subject="element"
                                                          :key="element[idProperty]+'-'+ajaxButton['props']['action']"
@@ -243,13 +273,16 @@
                                                          v-on:submit-success="confirmEditSuccess($event)"
                                                          v-html="ajaxButton['html']"
                                             ></ajax-button>
-                                            <button type="button" v-for="customComponentButton, customComponentButtonKey in customComponentButtons"
+                                            <button type="button"
+                                                    v-for="customComponentButton, customComponentButtonKey in customComponentButtons"
+                                                    v-if="showCustomComponentButton(customComponentButton, element)"
                                                     v-bind:class="customComponentButton['class']"
-                                                    v-on:click="activateCustomComponent(customComponentButtonKey)"
+                                                    v-on:click="activateCustomComponent(customComponentButtonKey, elementIndex)"
                                                     v-html="customComponentButton['html']"
                                                     v-on:component-canceled="returnToList"
-                                                    v-on:submit-success="confirmEditSuccess"
+                                                    v-on:submit-success="confirmEditSuccess($event)"
                                                     :title="customComponentButton['title'] || ''"
+                                                    v-bind:subject="element"
                                             ></button>
                                         </td>
                                     </tr>
@@ -263,6 +296,12 @@
                                                          :disabled="elements.length == 0">
                                             {{ mainButtons['exportOperations']['html'] }}
                                         </dropdown-button>
+                                        <div style="margin-left: 10px">
+                                            <label>
+                                                <input type="checkbox" v-model="exportAll">
+                                                <span>{{ translate('Export all, not just search results') }}</span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </template>
                             </template>
@@ -278,27 +317,23 @@
                     </component>
                 </div>
                 <div  v-if="mode == 'details'">
-                    <div class="row">
-                        <div class="col">
-                            <button type="button" class="float-right"
-                                    v-bind:class="mainButtons['backToList']['class']"
-                                    v-on:click="mode = 'list'"
-                                    v-html="mainButtons['backToList']['html']"
-                            ></button>
-                        </div>
+                    <div class="row full-width-div">
+                        <button type="button" class="float-right"
+                                v-bind:class="mainButtons['backToList']['class']"
+                                v-on:click="mode = 'list'"
+                                v-html="mainButtons['backToList']['html']"
+                        ></button>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <dl>
-                                <template v-for="fieldName, fieldProperty in fields">
-                                    <dt v-html="fieldName"></dt>
-                                    <dd v-html="model[fieldProperty]"></dd>
-                                </template>
-                            </dl>
-                        </div>
+                    <div class="row full-width-div">
+                        <dl>
+                            <template v-for="fieldName, fieldProperty in fields">
+                                <dt v-html="fieldName"></dt>
+                                <dd v-html="model[fieldProperty]"></dd>
+                            </template>
+                        </dl>
                     </div>
-                    <div class="row">
-                        <div class="col"
+                    <div class="row full-width-div">
+                        <div class="col full-width-div"
                              v-if="model.hasOwnProperty('additional_details_rendered')"
                              v-html="model['additional_details_rendered']"
                         ></div>
@@ -306,10 +341,12 @@
                 </div>
                 <div  v-if="mode == 'edit'">
                     <div class="portlet full-width-div"
+                         v-bind:class="getClassOverrideOrDefaultClass('model-manager-edit-window', 'model-manager-edit-window')"
                          v-if="typeof(buttons['edit']['component']) == 'undefined'"
                     >
-                        <div class="portlet-heading bg-primary"
+                        <div class="portlet-heading"
                              style="display:flex; justify-content: space-between; align-items: baseline"
+                             v-bind:class="getClassOverrideOrDefaultClass('model-manager-edit-window-heading', 'bg-primary')"
                         >
                             {{ translate('Edit element') }}
                             <button v-on:click="returnToList"
@@ -341,10 +378,12 @@
                 </div>
                 <div  v-if="mode == 'create'">
                     <div class="portlet full-width-div"
+                         v-bind:class="getClassOverrideOrDefaultClass('model-manager-create-window', 'model-manager-create-window')"
                          v-if="typeof(mainButtons['add']['component']) == 'undefined'"
                     >
-                        <div class="portlet-heading bg-primary"
+                        <div class="portlet-heading"
                              style="display:flex; justify-content: space-between; align-items: baseline"
+                             v-bind:class="getClassOverrideOrDefaultClass('model-manager-create-window-heading', 'bg-primary')"
                         >
                             {{ translate('Add element') }}
                             <button v-on:click="returnToList"
@@ -376,16 +415,16 @@
                 </div>
                 <div v-if="mode == 'delete-confirmation'">
                     <div class="alert alert-danger">{{ translate('Are you sure you want to delete this element') }}? <br><span v-html="currentSubjectName"></span></div>
-                    <div class="d-flex justify-content-between">
+                    <div style="display: flex; justify-content: space-between">
                         <button type="button"
                                 v-bind:class="mainButtons['confirmDeletion']['class']"
                                 v-on:click="deleteElement"
-                                v-html="translate('Yes')"
+                                v-html="translate(mainButtons['confirmDeletion']['translationLabel'])"
                         ></button>
                         <button type="button"
                                 v-bind:class="mainButtons['cancelDeletion']['class']"
                                 v-on:click="returnToList"
-                                v-html="translate('Cancel')"
+                                v-html="translate(mainButtons['cancel']['html'])"
                         ></button>
                     </div>
                 </div>
@@ -394,6 +433,7 @@
                             v-bind:is="activeCustomComponent.componentName"
                             v-bind="activeCustomComponent.props"
                             v-bind:selected-elements="selectedElements"
+                            v-bind:subject="currentElement"
                             v-on:submit-success="closeCustomComponent"
                             v-on:component-canceled="returnToList"
                     ></component>
@@ -434,13 +474,13 @@
             nameProperty: {type: String, default: 'name'},
             idProperty: {type: String, default: 'id'},
             iconClasses: {type: Object, default: function() {
-                return {
-                    "filter": "ti-filter",
-                    "list": "ti-list",
-                    "leftArrow": "ti-angle-double-left",
-                    "rightArrow": "ti-angle-double-right"
-                }
-            }},
+                    return {
+                        "filter": "ti-filter",
+                        "list": "ti-list",
+                        "leftArrow": "ti-angle-double-left",
+                        "rightArrow": "ti-angle-double-right"
+                    }
+                }},
             subjectName: {type: String, default: () => {return this.translate('Item')}},
             useSweetAlert: {type: Boolean, default: false},
             defaultFilters: {default: () => {return {}}},
@@ -449,6 +489,7 @@
         },
         data: function() {
             return {
+                exportAll: false,
                 itemsPerPage: 20,
                 mode: 'loading',
                 elements: {},
@@ -489,6 +530,7 @@
                 fetchMode: 'list',
                 massOperationLoading: false,
                 currentElementIndex: -1,
+                inlineSearchText: '',
             }
         },
         mounted() {
@@ -629,9 +671,24 @@
                     }
                 }
                 return resultArray;
+            },
+            currentElement: function() {
+                if (typeof(this.elements[this.currentElementIndex]) != 'undefined') {
+                    return this.elements[this.currentElementIndex];
+                }
+                return null;
             }
         },
         methods: {
+            fieldContainsInlineSearchText: function(content) {
+                if (this.inlineSearchText == '') {
+                    return false;
+                }
+                let t = document.createElement('DIV');
+                t.innerHTML = content;
+                let strippedContent = t.textContent || t.innerText || content;
+                return strippedContent.toString().toLocaleLowerCase().includes(this.inlineSearchText.toLocaleLowerCase());
+            },
             returnToList: function() {
                 this.mode = 'list';
                 this.scrollCurrentElementIntoView();
@@ -654,8 +711,13 @@
 
                 return result;
             },
+            elementCellStyle: function(element, columnField) {
+                return (typeof(element['vuecrud_'+columnField+'_cellstyle']) == 'undefined')
+                    ? ''
+                    : element['vuecrud_'+columnField+'_cellstyle'];
+            },
             confirmEditSuccess: function(payload) {
-                if (typeof(payload) == 'undefined') {
+                if ((typeof(payload) == 'undefined') || (typeof(payload) == 'object')) {
                     this.successNotification(this.subjectName + ' ' + this.translate('updated successfully'));
                 } else {
                     this.successNotification(payload);
@@ -664,7 +726,7 @@
                 this.fetchElements();
             },
             confirmCreationSuccess: function(payload) {
-                if (typeof(payload) == 'undefined') {
+                if ((typeof(payload) == 'undefined') || (typeof(payload) == 'object')) {
                     this.successNotification(this.subjectName + ' ' + this.translate('created successfully'));
                 } else {
                     this.successNotification(payload);
@@ -759,10 +821,34 @@
                     this.fetchElements(true);
                 }
             },
-            showButton: function(button) {
-                return this.buttons.hasOwnProperty(button);
+            showAjaxButton: function(ajaxButton, element) {
+                if ((ajaxButton.hasOwnProperty('vuecrud_show_button'))
+                    && (typeof(element[ajaxButton['vuecrud_show_button']]) != 'undefined')) {
+                    return element[ajaxButton['vuecrud_show_button']] === true;
+                }
+                return true;
             },
-            activateCustomComponent: function(key) {
+            showCustomComponentButton: function(button, element) {
+                if ((button.hasOwnProperty('vuecrud_show_button'))
+                    && (typeof(element[button['vuecrud_show_button']]) != 'undefined')) {
+                    return element[button['vuecrud_show_button']] === true;
+                }
+                return true;
+            },
+            showButton: function(button, element) {
+                if (!this.buttons.hasOwnProperty(button)) {
+                    return false;
+                }
+                if ((this.buttons[button].hasOwnProperty('vuecrud_show_button'))
+                    && (typeof(element[this.buttons[button]['vuecrud_show_button']]) != 'undefined')) {
+                    return element[this.buttons[button]['vuecrud_show_button']] === true;
+                }
+                return true;
+            },
+            activateCustomComponent: function(key, index) {
+                if (typeof(index) != 'undefined') {
+                    this.currentElementIndex = index;
+                }
                 this.activeCustomComponent = this.customComponentButtons[key];
                 this.mode = 'custom-component';
             },
@@ -771,7 +857,7 @@
                     return 1;
                 }
                 if (type == 'text') {
-                    return 500;
+                    return 800;
                 }
 
                 return 1;
@@ -800,25 +886,29 @@
 
                 return result;
             },
+            searchElements: function() {
+                this.disablePageWatch = true;
+                this.currentPage = 1;
+                this.disablePageWatch = false;
+                this.fetchMode = 'search';
+                this.fetchElements(true);
+            },
             loadFilters: function(filters) {
                 this.filters = {...filters};
                 if (this.autoFilter) {
-                    for (var filterName in this.filters) {
+                    for (let filterName in this.filters) {
                         if (this.filters.hasOwnProperty(filterName)) {
                             this.watches[filterName] = this.$watch(
                                 'filters.'+filterName+'.value',
                                 (newValue, oldValue) => {
                                     if (newValue != oldValue) {
                                         window.clearTimeout(this.fetchTimeout);
-                                        this.fetchTimeout = window.setTimeout(() => {
-                                            this.disablePageWatch = true;
-                                            this.currentPage = 1;
-                                            this.disablePageWatch = false;
-                                            this.fetchMode = 'search';
-                                            this.fetchElements(true);
-                                        }, this.getFilterTimeoutByType(this.filters[filterName].type));
+                                        this.fetchTimeout = window.setTimeout(
+                                            this.searchElements,
+                                            this.getFilterTimeoutByType(this.filters[filterName].type)
+                                        );
                                     }
-                                }, {deep: true});
+                                }, {deep: true, immediate: true});
                         }
                     }
                 } else {
@@ -1009,12 +1099,12 @@
                 let selectedElements = this.selectedElements.length > 0
                     ? this.selectedElements
                     : this.elements.map((item) => {return item.id});
-                window.axios.post(this.ajaxOperationsUrl, {
-                    exportIds: selectedElements,
-                    action: action,
-                    sorting_field: this.sortingColumns[this.currentSortingColumn],
-                    sorting_direction: this.currentSortingDirection
-                }, {responseType: 'blob'}).then((response) => {
+                let filterData = this.exportAll ? {} : this.getFilterData();
+                filterData['exportIds'] = selectedElements;
+                filterData['action'] = action;
+                filterData['sorting_field'] = this.sortingColumns[this.currentSortingColumn];
+                filterData['sorting_direction'] = this.currentSortingDirection;
+                window.axios.post(this.ajaxOperationsUrl, filterData, {responseType: 'blob'}).then((response) => {
                     var blob = new Blob([response.data], { type: response.headers['Content-Type'] });
                     var filename = response.headers['filename'];
                     var link = document.createElement('a');
@@ -1078,25 +1168,41 @@
         position: fixed;
         bottom: 6vh;
         right: 6em;
-        min-width: 20%;
+        min-width: 0%;
+        max-width: 0%;
+        z-index: 500;
         opacity: 0;
+        padding: 0px;
         transition: opacity 300ms ease;
         display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: white;
+        box-shadow: 8px 8px rgba(6,6,6,.3);
+        height: 0px;
     }
 
     .model-manager-notification > button {
         flex-basis: 10%;
+        margin-left: 10px;
     }
     .model-manager-notification-show {
         opacity: 1;
+        height:auto;
+        padding: 1.5em;
+        max-width: 60%;
+        min-width: 20%;
     }
     .model-manager-paging-controls {
         display: flex;
         flex-basis: 60%;
-        align-items:baseline;
+        align-items:center;
         justify-content: flex-end;
     }
     .model-manager-page-select {
         width: 5em;
+    }
+    .highlighted-td {
+        background-color: yellow;
     }
 </style>

@@ -15,22 +15,18 @@
             </div>
             <div style="position:relative">
                 <input type="text" class="multi-select-input"
+                       readonly
+                       style="background-color: white"
                        v-bind:class="inputClass"
-                       ref="input"
-                       v-model="filterText"
+                       v-bind:value="selectedItemLabel"
                        :placeholder="placeholderLabel"
-                       v-bind:style="{'color': invalidItem ? 'red' : 'black'}"
+                       v-bind:style="{'color': invalidItem ? 'red' : 'black', 'background-color': disabled ? '#e9ecef' : 'white'}"
                        v-on:keyup.arrow-down="moveDropdownSelection(1)"
                        v-on:keyup.arrow-up="moveDropdownSelection(-1)"
-                       v-on:keyup.escape="resetFilterTextIfNeeded"
-                       v-on:keyup.enter="addSelectedFromDropdownOrInput"
+                       v-on:click="openDropdown = !openDropdown"
                 >
-                <span ref="clear"
-                      v-if="filterText != ''"
-                      v-on:click="clear"
-                      class="multi-select-clear-button"
-                >&#x274C;</span>
                 <span ref="caret"
+                      v-if="!disabled"
                       v-on:click="openDropdown = !openDropdown"
                       class="multi-select-dropdown-caret"
                       v-bind:class="caretClass"
@@ -40,14 +36,28 @@
         </div>
 
         <div class="multi-select-dropdown" v-show="shouldShowDropdown" ref="dropdown">
-            <div v-for="subject, index in filteredAvailableItems"
-                 :key="index"
-                 ref="index"
-                 v-html="subject.label"
-                 v-on:mouseover="dropdownSelectedIndex = index"
-                 v-bind:class="itemClass(subject, index)"
-                 :title="subject.disabledTitle"
-                 v-on:click="addItem(subject)"></div>
+            <input type="text" class="multi-select-input"
+                   v-bind:class="inputClass"
+                   ref="input"
+                   v-model="filterText"
+                   :placeholder="placeholderLabel"
+                   v-bind:style="{'color': invalidItem ? 'red' : 'black'}"
+                   v-on:keyup.arrow-down="moveDropdownSelection(1)"
+                   v-on:keyup.arrow-up="moveDropdownSelection(-1)"
+                   v-on:keyup.escape="resetFilterTextIfNeeded"
+                   v-on:keyup.enter="addSelectedFromDropdownOrInput"
+            >
+            <div class="multi-select-dropdown-list">
+                <div v-for="subject, index in filteredAvailableItems"
+                     :key="index"
+                     ref="index"
+                     v-html="subject.label"
+                     class="multi-select-available-item"
+                     v-on:mouseover="dropdownSelectedIndex = index"
+                     v-bind:class="itemClass(subject, index)"
+                     :title="subject.disabledTitle"
+                     v-on:click="addItem(subject)"></div>
+            </div>
         </div>
     </div>
 </template>
@@ -69,7 +79,10 @@
                     }
                 }},
             allowRemove: {type: Boolean, default: true},
-            respectDisabledAttribute: {type: Boolean, default: false}
+            respectDisabledAttribute: {type: Boolean, default: false},
+            undefinedValue: {type: Number, default: -1},
+            undefinedLabel: {type: String, default: ''},
+            disabled: {type: Boolean, default: false}
         },
         data: function() {
             return {
@@ -81,6 +94,19 @@
             }
         },
         computed: {
+            selectedItemLabel: function() {
+                if ((this.value == null) || ((Array.isArray(this.value)) && (this.value.length == 0))) {
+                    return '';
+                }
+                if (this.value == this.undefinedValue) {
+                    return this.undefinedLabel;
+                }
+                if (!this.multiple) {
+                    return this.valueset.filter((item) => {
+                        return item[this.idProperty].toString() == this.value.toString();
+                    })[0][this.labelProperty];
+                }
+            },
             placeholderLabel: function() {
                 if (this.valueset.length == 0) {
                     return this.labels['No options'];
@@ -107,27 +133,36 @@
                 return this.shouldShowDropdown ? 'multi-select-dropdown-caret-open' : ''
             },
             shouldShowDropdown: function() {
-                if (this.multiple) {
-                    return this.filteredAvailableItems.length > 0
-                        && (this.filterText != '' || this.openDropdown == true);
-                } else {
-                    let currentLabel = this.selectedItems.length > 0
-                        ? this.selectedItems[0]['label']
-                        : '';
-                    return this.filteredAvailableItems.length > 0
-                        && (this.filterText != currentLabel || this.openDropdown == true);
+                if(this.disabled) {
+                    return false;
                 }
+
+                return this.openDropdown == true;
+                // if (this.multiple) {
+                //     return this.filteredAvailableItems.length > 0
+                //         && (this.filterText != '' || this.openDropdown == true);
+                // } else {
+                //     let currentLabel = this.selectedItems.length > 0
+                //         ? this.selectedItems[0]['label']
+                //         : '';
+                //     return this.filteredAvailableItems.length > 0
+                //         && (this.openDropdown == true);
+                // }
             },
             filteredAvailableItems: function() {
+                let result = [];
+                if (this.undefinedLabel != '') {
+                    result.push({id: this.undefinedValue, label: this.undefinedLabel});
+                }
                 if (this.multiple) {
-                    return this.items.filter((item) => {
+                    return result.concat(this.items.filter((item) => {
                         return item.uppercaseLabel.includes(this.filterText.toUpperCase())
                             && this.selectedItemIds.indexOf(item['id']) == -1;
-                    });
+                    }));
                 } else {
-                    return this.items.filter((item) => {
+                    return result.concat(this.items.filter((item) => {
                         return item.uppercaseLabel.includes(this.filterText.toUpperCase());
-                    });
+                    }));
                 }
             },
             selectedItemIds: function() {
@@ -140,11 +175,14 @@
                 return this.selectedItems.length > 0
                     ? this.selectedItems[0]['id']
                     : null;
-            }
+            },
         },
         methods: {
             itemClass: function(item, index) {
                 let result = [];
+                if (item['id'] == this.undefinedValue) {
+                    result.push('multi-select-undefined-item');
+                }
                 if (this.dropdownSelectedIndex == index) {
                     result.push('multi-select-selected');
                 }
@@ -164,7 +202,8 @@
                     this.filterText = '';
                 } else {
                     if (this.selectedItems.length > 0) {
-                        this.filterText = this.selectedItems[0]['label'];
+                        //this.filterText = this.selectedItems[0]['label'];
+                        this.filterText = '';
                     } else {
                         this.filterText = ''
                     }
@@ -180,7 +219,8 @@
                 }
                 this.selectedItems.push(item);
                 if (!this.multiple) {
-                    this.filterText = item.label;
+                    //this.filterText = item.label;
+                    this.filterText = '';
                 }
                 this.invalidItem = false;
             },
@@ -199,6 +239,9 @@
                 }
             },
             moveDropdownSelection: function(direction) {
+                if (this.disabled) {
+                    return true;
+                }
                 if (direction < 0) {
                     if (this.dropdownSelectedIndex > 0) {
                         this.dropdownSelectedIndex--;
@@ -254,20 +297,27 @@
                 if ((this.respectDisabledAttribute) && (item.disabled)) {
                     return;
                 }
+                if(this.disabled) {
+                    return;
+                }
                 this.pushToSelectedItems(item);
                 if (this.multiple) {
                     this.filterText = '';
                 } else {
-                    this.filterText = this.selectedItems[0]['label'];
+                    //this.filterText = this.selectedItems[0]['label'];
+                    this.filterText = ''
                     this.invalidItem = false;
                 }
                 this.dropdownSelectedIndex = -1;
                 this.openDropdown = false;
                 this.$emit('input', this.emittedValue);
             },
-            removeItem: function(index) {
+            removeItem: function(index, emitInput) {
+                emitInput = typeof(emitInput) == 'undefined' ? true : emitInput;
                 this.selectedItems.splice(index, 1);
-                this.$emit('input', this.emittedValue);
+                if (emitInput) {
+                    this.$emit('input', this.emittedValue);
+                }
             },
             handleClickOutside: function(e) {
                 const el = this.$refs.dropdown;
@@ -293,7 +343,8 @@
                     }
                 }).map(item => this.transformItem(item));
                 if (!this.multiple) {
-                    this.filterText = this.selectedItems.length > 0 ? this.selectedItems[0].label : '';
+                    //this.filterText = this.selectedItems.length > 0 ? this.selectedItems[0].label : '';
+                    this.filterText = '';
                 }
             }
         },
@@ -301,32 +352,35 @@
             this.parseValue();
         },
         watch: {
-            filterText: function(value) {
-                if (this.multiple) {
-                    if (value == '') {
-                        this.dropdownSelectedIndex = -1;
-                    } else {
-                        if ((!this.allowAddingNewItem) && (this.filteredAvailableItems.length > 0)) {
-                            this.dropdownSelectedIndex = 0;
-                        }
-                    }
-                } else {
-                    let currentLabel = this.selectedItems.length > 0
-                        ? this.selectedItems[0]['label']
-                        : '';
-                    if (value != currentLabel) {
-                        if (this.filteredAvailableItems.length == 0) {
-                            this.selectedItems = [];
-                            this.$emit('input', null);
-                            this.invalidItem = true;
-                        }
-                        this.openDropdown = true;
-                    }
-                }
-            },
+            // filterText: function(value) {
+            //     if (this.multiple) {
+            //         if (value == '') {
+            //             this.dropdownSelectedIndex = -1;
+            //         } else {
+            //             if ((!this.allowAddingNewItem) && (this.filteredAvailableItems.length > 0)) {
+            //                 this.dropdownSelectedIndex = 0;
+            //             }
+            //         }
+            //     } else {
+            //         let currentLabel = this.selectedItems.length > 0
+            //             ? this.selectedItems[0]['label']
+            //             : '';
+            //         if (value != currentLabel) {
+            //             if (this.filteredAvailableItems.length == 0) {
+            //                 this.selectedItems = [];
+            //                 this.$emit('input', null);
+            //                 this.invalidItem = true;
+            //             }
+            //             this.openDropdown = true;
+            //         }
+            //     }
+            // },
             shouldShowDropdown: function() {
                 if (this.shouldShowDropdown) {
                     document.addEventListener('click', this.handleClickOutside, true);
+                    Vue.nextTick(() => {
+                        this.$refs['input'].focus();
+                    })
                 } else {
                     document.removeEventListener('click', this.handleClickOutside, true);
                 }
@@ -356,7 +410,7 @@
         display: flex;
         flex-wrap: wrap;
         font-size: .7em;
-        max-height: 5em;
+        max-height: 12em;
         overflow-y: auto;
     }
     .multi-select-input {
@@ -366,6 +420,8 @@
         border-radius: 5px;
         width: 100%;
         padding-right:40px;
+        max-height:20%;
+        margin-bottom: 5px;
     }
     .multi-select-item-span {
         padding: 4px;
@@ -390,20 +446,27 @@
     }
     .multi-select-dropdown {
         z-index: 1000;
-        width: 80%;
+        width: 100%;
+        /*max-width: 400px;*/
         padding: 5px;
-        max-height: 15em;
-        overflow-y: scroll;
+        height: 20em;
         border: 1px solid black;
         border-top: none;
         box-shadow: 5px 5px darkgrey;
         background-color: white;
         position:absolute;
+        overflow: hidden;
     }
-    .multi-select-dropdown > div {
+
+    .multi-select-dropdown-list {
+        overflow-y: scroll;
+        height: 80%;
+        width: 100%;
+    }
+    .multi-select-dropdown-list > div {
         cursor:pointer;
     }
-    .multi-select-dropdown > div.multi-select-selected {
+    .multi-select-dropdown-list > div.multi-select-selected {
         /*background-color: lightgoldenrodyellow;*/
         font-weight:bold;
     }
@@ -411,9 +474,10 @@
         cursor:pointer;
         position:absolute;
         z-index: 100;
-        right: 17px;
-        bottom: -3px;
-        font-size: 2em;
+        right: 0px;
+        padding-right:10px;
+        bottom: 10%;
+        font-size: 200%;
         transition: transform 200ms ease-in-out;
     }
     .multi-select-clear-button {
@@ -421,15 +485,28 @@
         position:absolute;
         z-index: 100;
         right: 35px;
-        bottom: -6px;
-        font-size: 2em;
+        bottom: -2px;
+        font-size: 1.6em;
+        color: red;
     }
     .multi-select-dropdown-caret-open {
         transform: rotate(-90deg);
+        transform-origin: center;
     }
     .multi-select-item-disabled {
         cursor: not-allowed !important;
         color: darkgrey;
+    }
+    .multi-select-undefined-item {
+        margin-bottom: 2px;
+        padding-bottom: 2px;
+        border-bottom: 1px solid darkgrey;
+    }
+    .multi-select-available-item {
+        line-height: normal;
+        padding-top: .7em;
+        padding-bottom: .7em;
+        border-bottom: 1px solid lightgray;
     }
 
 </style>
