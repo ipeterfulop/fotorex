@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const tailwindcss = require('tailwindcss')
 
 /*
  |--------------------------------------------------------------------------
@@ -11,6 +12,16 @@ const mix = require('laravel-mix');
  |
  */
 
+
+//public
+mix.js('resources/js/app.js', 'public/js/fotorex.js');
+mix.sass('resources/sass/app.scss', 'public/css/fotorex.css', {}, [tailwindcss('tailwind.config.js')])
+    .options({
+        processCssUrls: false
+    });
+
+
+//admin
 mix.js([
     'resources/js/mintontheme.js',
 ], 'public/js/minton.js')

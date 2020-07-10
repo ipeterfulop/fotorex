@@ -1,11 +1,4 @@
 {
-    "/js/minton.js": "/js/minton.js",
-    "/css/minton.css": "/css/minton.css",
-    "/css/unishop.css": "/css/unishop.css",
-    "/css/bootstrap.css": "/css/bootstrap.css",
-    "/js/unishop.js": "/js/unishop.js",
-    "/js/minton-vendor.js": "/js/minton-vendor.js",
-    "/js/datatables.js": "/js/datatables.js",
-    "/js/unishop-vendor.js": "/js/unishop-vendor.js",
-    "/css/vendor.css": "/css/vendor.css"
+    "/js/fotorex.js": "/js/fotorex.js",
+    "/css/fotorex.css": "/css/fotorex.css"
 }

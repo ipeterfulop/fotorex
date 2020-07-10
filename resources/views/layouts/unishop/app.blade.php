@@ -23,6 +23,15 @@
     <link id="mainStyles" rel="stylesheet" media="screen" href="/css/unishop.css">
     <!-- Modernizr-->
     <script src="/js/unishop-vendor.js"></script>
+    <style>
+        .text-f-red {
+            color: #eb5858
+        }
+        .bg-f-red {
+            background-color: #eb5858
+        }
+
+    </style>
 </head>
 <!-- Body-->
 <body>
