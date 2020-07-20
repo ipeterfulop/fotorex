@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ArticleDataprovider
 {
-    const ITEMS_PER_INDEX_PAGE = 12;
+    const ITEMS_PER_INDEX_PAGE = 2;
 
     public static function getPublishedArticles($categorySlug, $page, $sortingOption, $filterText = '')
     {
@@ -19,9 +19,10 @@ class ArticleDataprovider
         $result->results = self::addPaginationToQuery($query, $page)->get();
         $result->itemsPerPage = self::ITEMS_PER_INDEX_PAGE;
         $result->currentPage = $page;
-        $result->indexRouteName = 'articles_index';
+        $result->indexRouteName = 'list_articles';
         $result->sortingOption = $sortingOption;
         $result->routingOptions = ['categorySlug' => $categorySlug];
+        $result->pages = (int)ceil($result->totalCount / $result->itemsPerPage);
 
         return $result;
     }

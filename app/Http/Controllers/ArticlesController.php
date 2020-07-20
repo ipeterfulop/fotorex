@@ -10,25 +10,24 @@ use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
 {
-    public function index($categorySlug, $sortingOption, $page = 1)
+    public function articleList($categorySlug, $page = 1)
     {
-        $sortingOption = Article::validateSortingOption($sortingOption);
+        if (!request()->isXmlHttpRequest()) {
+            die('Majd');
+        }
+        $sortingOption = Article::validateSortingOption(request()->get('sortby', Article::SORTING_OPTION_LATEST));
         $dataproviderResult = ArticleDataprovider::getPublishedArticles(
             $categorySlug,
             $page,
             $sortingOption,
             request()->get('search', '')
         );
-        $sortingOptions = [
-            route('articles_index', ['categorySlug' => $categorySlug, 'sortingOption' => Article::SORTING_OPTION_POPULAR]) => ['label' => 'Legnépszerűbb elöl', 'sortingOption' => Article::SORTING_OPTION_POPULAR],
-            route('articles_index', ['categorySlug' => $categorySlug, 'sortingOption' => Article::SORTING_OPTION_LATEST]) => ['label' => 'Legújabb elöl', 'sortingOption' => Article::SORTING_OPTION_LATEST],
-        ];
-        return view('layouts.paginated-data-view', [
-            'dataproviderResult' => $dataproviderResult,
-            'isotopeContainerId' => 'isotope-articles-container',
-            'sortingOptions' => $sortingOptions,
-            'currentSortingOption' => $sortingOption,
-            'itemViewPath' => 'public.articles.summary-block',
+        return view('public.partials.list-or-grid-inner', [
+            'view' => 'public.partials.article-summary-block',
+            'elements' => $dataproviderResult->results,
+            'showPagination' => 'true',
+            'result' => $dataproviderResult,
+            'paginationPageFieldName' => 'page'
         ]);
     }
 

@@ -1,6 +1,6 @@
 <div class="w-full bg-fotoblue pb-8">
-    <div class="w-full max-width-container py-4 px-8 flex flex-row items-start justify-center">
-        <div class="w-1/4 flex flex-col items-start text-gray-200 text-sm mr-2">
+    <div class="w-full max-width-container py-4 px-8 flex flex-col lg:flex-row items-center lg:items-start justify-center">
+        <div class="w-full lg:w-1/4 flex flex-col items-start text-gray-200 text-sm mr-2 mb-8 lg:mb-0">
             <div class="border-t-0 border-l-0 border-r-0 border-b-2 border-fotogray w-full pl-3 mb-4 uppercase  text-xl">Megoldások</div>
             <div class="w-full py-1 pl-3 bg-transparent hover:bg-fotogray hover:text-black">Költségszámlálás</div>
             <div class="w-full py-1 pl-3 bg-transparent hover:bg-fotogray hover:text-black">Dokumentumkezelés</div>

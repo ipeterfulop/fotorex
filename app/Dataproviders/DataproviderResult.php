@@ -22,6 +22,8 @@ class DataproviderResult
     public $indexRouteName;
     public $sortingOption;
     public $routingOptions = [];
+    public $pages;
+    public $pageFieldName = 'page';
 
     public function getPageCount()
     {

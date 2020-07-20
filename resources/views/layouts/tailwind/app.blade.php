@@ -7,7 +7,7 @@
     <title>{{ config('app.name') }}</title>
     <script src="{{ asset('js/fa/all.min.js') }}"></script>
     <script src="{{ asset('js/fa/brands.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.1/dist/alpine.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.4.1/dist/alpine.js" defer></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="{{ asset('css/fotorex.css') }}" rel="stylesheet">

@@ -21,7 +21,7 @@
 @screen md {
 }
 .slider-slide {
-    @apply block text-center pt-2 text-xl text-white;
+    @apply flex text-center pt-2 text-xl text-white;
     transition: margin 1200ms ease;
 }
 @screen md {

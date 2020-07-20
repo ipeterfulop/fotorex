@@ -29,11 +29,11 @@
     <div class="flex w-full"
          x-bind:class="containerClass"
     >
-            @foreach($elements as $element)
+        @foreach($elements as $element)
             <div class="fotorex-list-item">
                 @include($view, ['element' => $element])
             </div>
-            @endforeach
+        @endforeach
     </div>
 
 </div>

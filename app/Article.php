@@ -140,14 +140,14 @@ class Article extends Model
     public static function getSortingOptionsArray()
     {
         return [
-            self::SORTING_OPTION_LATEST,
-            self::SORTING_OPTION_POPULAR
+            self::SORTING_OPTION_LATEST => 'Legfrissebb elöl',
+            self::SORTING_OPTION_POPULAR => 'Legnépszerűbb elöl'
         ];
     }
 
     public static function validateSortingOption($option, $abortWith404IfNotFound = true)
     {
-        if (array_search($option, self::getSortingOptionsArray()) !== false) {
+        if (array_key_exists($option, self::getSortingOptionsArray())) {
             return true;
         }
         if ($abortWith404IfNotFound) {
