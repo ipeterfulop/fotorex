@@ -6,3 +6,14 @@
 .max-width-container {
     max-width: 1196px;
 }
+
+.hover-red-link {
+    @apply cursor-pointer transition transition-colors ease-in-out duration-200;
+}
+.hover-red-link:hover {
+    @apply bg-fotored;
+}
+select,
+input {
+    @apply p-2 shadow-sm border border-gray-100 bg-gray-200;
+}

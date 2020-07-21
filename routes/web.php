@@ -32,4 +32,7 @@ Route::prefix('admin')->middleware('auth')->group(function() {
 Route::view('/kapcsolat', 'public.contactmessages.index')->name('contactmessage_index');
 Route::post('/kapcsolat', 'ContactmessagesController@submit')->name('contactmessage_submit');
 
-Route::get('/{categorySlug}/{page?}', 'ArticlesController@articleList')->name('list_articles');
+Route::get('/kereses', 'SearchController@search')->name('search_all');
+
+
+Route::get('/{categorySlug}', 'ArticlesController@articleList')->name('list_articles');

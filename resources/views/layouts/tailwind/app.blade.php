@@ -16,7 +16,14 @@
 
     <!-- Fonts -->
     <style>
-
+        .heroicon-svg {
+            width: 100%;
+            min-width: 100%;
+            max-width: 100%;
+            height: 100%;
+            min-height: 100%;
+            max-height: 100%;
+        }
     </style>
     <script>
         const sliderValues = {
@@ -141,7 +148,9 @@
 <body class="w-full font-body" style="background-color: #f4f4f4">
 <main>
     @include('layouts.tailwind.nav')
-    @yield('content')
+    <div class="pt-16 lg:pt-2">
+        @yield('content')
+    </div>
     @include('layouts.tailwind.footer')
 </main>
 @if(session()->has('status'))

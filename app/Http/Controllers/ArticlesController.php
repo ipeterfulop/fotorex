@@ -10,15 +10,15 @@ use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
 {
-    public function articleList($categorySlug, $page = 1)
+    public function articleList($categorySlug)
     {
         if (!request()->isXmlHttpRequest()) {
-            die('Majd');
+            return view('public.articles.index');
         }
         $sortingOption = Article::validateSortingOption(request()->get('sortby', Article::SORTING_OPTION_LATEST));
         $dataproviderResult = ArticleDataprovider::getPublishedArticles(
             $categorySlug,
-            $page,
+            request()->get('page', 1),
             $sortingOption,
             request()->get('search', '')
         );
