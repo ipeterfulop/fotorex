@@ -10,6 +10,7 @@ abstract class SearchField
     protected $label;
     protected $type;
     protected $field;
+    protected $valueset;
 
     /**
      * @param mixed $type
@@ -83,5 +84,23 @@ abstract class SearchField
     public function getField()
     {
         return $this->field;
+    }
+
+    /**
+     * @param mixed $valueset
+     * @return SearchField
+     */
+    public function setValueset($valueset)
+    {
+        $this->valueset = $valueset;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValueset()
+    {
+        return $this->valueset;
     }
 }

@@ -113,7 +113,18 @@
                 this.ajaxURL.searchParams.set('page', this.page);
                 if (typeof(this.$refs.filters) != 'undefined') {
                     Array.from(this.$refs.filters.querySelectorAll('.fotorex-filter')).forEach((filter) => {
-                        this.ajaxURL.searchParams.set(filter.getAttribute('data-field'), filter.value);
+                        if (filter.getAttribute('data-filtertype') == 'text') {
+                            this.ajaxURL.searchParams.set(filter.getAttribute('data-field'), filter.querySelector('.fotorex-filter-text').value);
+                        }
+                        if (filter.getAttribute('data-filtertype') == 'checkboxgroup') {
+                            let currentFilter = [];
+                            Array.from(filter.querySelectorAll('.fotorex-filter-checkboxgroup')).forEach((item) => {
+                                if (item.checked) {
+                                    currentFilter.push(item.value);
+                                }
+                            })
+                            this.ajaxURL.searchParams.set(filter.getAttribute('data-field'), currentFilter.join(','));
+                        }
                     });
                 }
                 window.axios.get(this.ajaxURL)

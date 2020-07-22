@@ -26,10 +26,7 @@ class SearchDataprovider
 
     public function getResults()
     {
-        $results = new SearchresultList();
-        $results->articles = $this->getArticleHits();
-
-        return $results;
+        return $this->getArticleHits();
     }
 
     protected function getArticleHits()
