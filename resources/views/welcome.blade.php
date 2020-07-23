@@ -1,5 +1,8 @@
 @extends('layouts.tailwind.app')
 @section('content')
+    <div class="max-width-container w-full flex justify-center h-64">
+        <x-price-slider :min="0" :max="5000" :field="'field'"></x-price-slider>
+    </div>
     <div class="w-full bg-transparent flex justify-center">
         <div class="w-full max-width-container flex flex-col lg:flex-row items-start justify-between mt-4 bg-transparent">
             <div class="w-full lg:w-3/4 bg-transparent px-2 z-0">

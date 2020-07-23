@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\HasSortingOptions;
 use Datalytix\VueCRUD\Indexfilters\SelectVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Indexfilters\TextVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Traits\hasPosition;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    use VueCRUDManageable, hasPosition;
+    use VueCRUDManageable, hasPosition, HasSortingOptions;
     const SUBJECT_SLUG = 'article';
     const SLUG_BASE = 'cikk';
     const SUBJECT_NAME = 'Cikk';
@@ -143,19 +144,6 @@ class Article extends Model
             self::SORTING_OPTION_LATEST => 'Legfrissebb elöl',
             self::SORTING_OPTION_POPULAR => 'Legnépszerűbb elöl'
         ];
-    }
-
-    public static function validateSortingOption($option, $abortWith404IfNotFound = true)
-    {
-        if (array_key_exists($option, self::getSortingOptionsArray())) {
-            return true;
-        }
-        if ($abortWith404IfNotFound) {
-            abort(404);
-        }
-
-        return false;
-
     }
 
     public function scopePublished($query, $date = null)

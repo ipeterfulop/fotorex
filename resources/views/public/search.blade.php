@@ -20,10 +20,8 @@
         <div class="w-full bg-transparent flex justify-center my-8">
             <div class="w-full max-width-container border border-gray-200 bg-white">
                 <h1 class="text-xl text-white bg-fotored uppercase py-2 mb-2 pl-2 w-full font-bold">Termékek</h1>
-                <x-ajax-list-or-grid-view :url="route('list_articles', [
-                    'categorySlug' => \App\Articlecategory::find(1)->custom_slug_base,
-                ])"
-                                          :sorting-options="\App\Article::getSortingOptionsArray()"
+                <x-ajax-list-or-grid-view :url="route('list_printers')"
+                                          :sorting-options="\App\Printer::getSortingOptionsArray()"
                                           :filters="$productFilters"
                 ></x-ajax-list-or-grid-view>
             </div>

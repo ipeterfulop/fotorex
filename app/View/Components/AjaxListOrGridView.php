@@ -11,6 +11,7 @@ class AjaxListOrGridView extends Component
     public $pushState;
     public $filters = [];
     public $page = 1;
+    public $componentId;
 
     /**
      * Create a new component instance.
@@ -24,6 +25,7 @@ class AjaxListOrGridView extends Component
         $this->sortingOptions = $sortingOptions;
         $this->pushState = $pushState;
         $this->filters = $filters;
+        $this->componentId = \Str::random(9);
     }
 
     /**

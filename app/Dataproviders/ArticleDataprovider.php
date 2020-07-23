@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ArticleDataprovider
 {
-    const ITEMS_PER_INDEX_PAGE = 2;
+    const ITEMS_PER_INDEX_PAGE = 12;
 
     public static function getPublishedArticles($categorySlug, $page, $sortingOption, $filterText = '')
     {

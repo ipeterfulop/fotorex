@@ -4,6 +4,7 @@ namespace App;
 
 use App\Traits\hasFiles;
 use App\Traits\hasIsEnabledProperty;
+use App\Traits\HasSortingOptions;
 use Datalytix\VueCRUD\Indexfilters\SelectVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Indexfilters\TextVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Traits\VueCRUDManageable;
@@ -12,11 +13,14 @@ use Illuminate\Support\Collection;
 
 class Printer extends Model
 {
-    use VueCRUDManageable, hasIsEnabledProperty, hasFiles;
+    use VueCRUDManageable, hasIsEnabledProperty, hasFiles, HasSortingOptions;
     const SUBJECT_SLUG = 'printer';
     const SUBJECT_NAME = 'Termék';
     const SUBJECT_NAME_PLURAL = 'Termékek';
     const FILE_PUBLIC_PATH = 'termekek';
+
+    const SORTING_OPTION_PRICE_UP = 'ar_novekvo';
+    const SORTING_OPTION_PRICE_DOWN = 'ar_csokkeno';
 
     protected $fillable = [
         'manufacturer_id',
@@ -139,6 +143,14 @@ class Printer extends Model
     {
         return [
             'edit' => self::buildButtonFromConfigData('vuecrud.buttons.edit'),
+        ];
+    }
+
+    public static function getSortingOptionsArray()
+    {
+        return [
+            self::SORTING_OPTION_PRICE_UP => 'Ár szerint növekvő',
+            self::SORTING_OPTION_PRICE_DOWN => 'Ár szerint csökkenő',
         ];
     }
 

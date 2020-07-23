@@ -17755,10 +17755,26 @@ video {
   transition-duration: 200ms;
 }
 
+.hover-gray-link {
+  cursor: pointer;
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, -webkit-transform;
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, -webkit-transform;
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
 .hover-red-link:hover {
   --bg-opacity: 1;
   background-color: #eb5858;
   background-color: rgba(235, 88, 88, var(--bg-opacity));
+}
+
+.hover-gray-link:hover {
+  --bg-opacity: 1;
+  background-color: #9e9fa3;
+  background-color: rgba(158, 159, 163, var(--bg-opacity));
 }
 
 select,

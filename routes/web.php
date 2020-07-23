@@ -34,5 +34,7 @@ Route::post('/kapcsolat', 'ContactmessagesController@submit')->name('contactmess
 
 Route::get('/kereses', 'SearchController@search')->name('search_all');
 
+Route::get('/termekek/kereses', 'PrintersController@printerList')->name('list_printers');
+
 
 Route::get('/{categorySlug}', 'ArticlesController@articleList')->name('list_articles');

@@ -4,6 +4,8 @@
 namespace App\Factories;
 
 
+use App\ExtraFeature;
+use App\Manufacturer;
 use App\Searching\CheckboxgroupSearchField;
 use App\Searching\TextSearchField;
 use App\UsergroupSize;
@@ -14,7 +16,7 @@ class PrinterFilterFactory
     public static function createFilters()
     {
         $result = [];
-        $result[] = (new TextSearchField())->setLabel('Keresés')->setField('description');
+        $result[] = (new TextSearchField())->setLabel('Keresés')->setField('search');
         $result[] = (new CheckboxgroupSearchField())->setLabel('Funkciók')
             ->setField('modes')
             ->setValueset([
@@ -22,11 +24,25 @@ class PrinterFilterFactory
                 2 => 'Másolás',
                 3 => 'Lapolvasás',
             ]);
-
+        $result[] = (new CheckboxgroupSearchField())->setLabel('Gyártók')
+            ->setField('manufacturer')
+            ->setValueset(Manufacturer::orderBy('name', 'asc')->enabled()->get()->pluck('name', 'id'));
         $result[] = (new CheckboxgroupSearchField())->setLabel('Csoportméret')
-            ->setField('usergroup_size_id')
-            ->setValueset(UsergroupSize::orderBy('position', 'asc')->get()->pluck('name', 'id'));
+            ->setField('usergroup')
+            ->setValueset(UsergroupSize::orderBy('position', 'asc')->enabled()->get()->pluck('name', 'id'));
+        $result[] = (new CheckboxgroupSearchField())->setLabel('Extra funkciók')
+            ->setField('extra_features')
+            ->setValueset(ExtraFeature::orderBy('name', 'asc')->enabled()->get()->pluck('name', 'id'));
 
-        return $result;
+        return self::setValuesFromRequest($result, request());
+    }
+
+    protected static function setValuesFromRequest($filters, $request)
+    {
+        foreach ($filters as &$filter) {
+            $filter->setValue($request->get($filter->getField(), ''));
+        }
+
+        return $filters;
     }
 }
