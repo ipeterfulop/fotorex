@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class Imageviewer extends Component
 {
     public $imageUrls;
+    public $componentId;
     /**
      * Create a new component instance.
      *
@@ -15,6 +16,7 @@ class Imageviewer extends Component
     public function __construct(array $imageUrls)
     {
         $this->imageUrls = $imageUrls;
+        $this->componentId = \Str::random(9);
     }
 
     /**
