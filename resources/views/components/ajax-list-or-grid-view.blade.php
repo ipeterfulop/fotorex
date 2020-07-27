@@ -86,6 +86,9 @@
                                 if (filter.getAttribute('data-filtertype') == 'text') {
                                     filter.querySelector('.fotorex-filter-text').value = event.state.params[filter.getAttribute('data-field')];
                                 }
+                                if (filter.getAttribute('data-filtertype') == 'range') {
+                                    filter.querySelector('.range-value-input').value = event.state.params[filter.getAttribute('data-field')];
+                                }
                                 if (filter.getAttribute('data-filtertype') == 'checkboxgroup') {
                                     let currentFilter = event.state.params[filter.getAttribute('data-field')].split(',');
                                     Array.from(filter.querySelectorAll('.fotorex-filter-checkboxgroup')).forEach((item) => {
@@ -133,6 +136,9 @@
                     Array.from(this.$refs.filters.querySelectorAll('.fotorex-filter')).forEach((filter) => {
                         if (filter.getAttribute('data-filtertype') == 'text') {
                             this.ajaxURL.searchParams.set(filter.getAttribute('data-field'), filter.querySelector('.fotorex-filter-text').value);
+                        }
+                        if (filter.getAttribute('data-filtertype') == 'range') {
+                            this.ajaxURL.searchParams.set(filter.getAttribute('data-field'), filter.querySelector('.range-value-input').value);
                         }
                         if (filter.getAttribute('data-filtertype') == 'checkboxgroup') {
                             let currentFilter = [];

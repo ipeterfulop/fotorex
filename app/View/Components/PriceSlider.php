@@ -10,6 +10,7 @@ class PriceSlider extends Component
     public $min;
     public $max;
     public $field;
+    public $currency;
 
     /**
      * Create a new component instance.
@@ -17,12 +18,13 @@ class PriceSlider extends Component
      * @param int $min
      * @param int $max
      */
-    public function __construct(int $min, int $max, string $field)
+    public function __construct(int $min, int $max, string $field, string $currency = 'Ft')
     {
         $this->componentId = \Str::random(9);
         $this->min = $min;
         $this->max = $max;
         $this->field = $field;
+        $this->currency = $currency;
     }
 
     /**

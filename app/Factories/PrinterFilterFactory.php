@@ -7,6 +7,7 @@ namespace App\Factories;
 use App\ExtraFeature;
 use App\Manufacturer;
 use App\Searching\CheckboxgroupSearchField;
+use App\Searching\RangeSearchField;
 use App\Searching\TextSearchField;
 use App\UsergroupSize;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,6 +25,8 @@ class PrinterFilterFactory
                 2 => 'Másolás',
                 3 => 'Lapolvasás',
             ]);
+        $result[] = (new RangeSearchField(0, 500000))->setLabel('Ár')
+            ->setField('price');
         $result[] = (new CheckboxgroupSearchField())->setLabel('Gyártók')
             ->setField('manufacturer')
             ->setValueset(Manufacturer::orderBy('name', 'asc')->enabled()->get()->pluck('name', 'id'));

@@ -8,7 +8,7 @@
                 1148 Budapest, Lengyel u. 16.
             </span>
             <span>
-                Kapcsolat
+                <a href="{{ route('contactmessage_index') }}">Kapcsolat</a>
             </span>
             <button @click="menuOpen = !menuOpen" class="focus:outline-none active:outline-none h-8 w-8">
                 <span class="block lg:hidden transition origin-center transition-transform ease-in-out duration-200"

@@ -23,6 +23,7 @@
     @apply bg-fotogray;
 }
 select,
+textarea,
 input {
     @apply p-2 shadow-sm border border-gray-100 bg-gray-200;
 }

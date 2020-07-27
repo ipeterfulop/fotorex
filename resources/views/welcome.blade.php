@@ -1,7 +1,7 @@
 @extends('layouts.tailwind.app')
 @section('content')
-    <div class="max-width-container w-full flex justify-center h-64 pl-16">
-        <x-price-slider :min="0" :max="5000" :field="'field'"></x-price-slider>
+    <div class="max-width-container w-full flex justify-center h-64 pl-16 pr-64">
+        <x-price-slider :min="0" :max="500000" :field="'field'"></x-price-slider>
     </div>
     <div class="max-width-container w-full flex justify-center h-128 pl-16">
         <x-imageviewer :image-urls="['https://via.placeholder.com/200/100', 'https://via.placeholder.com/200/200', 'https://via.placeholder.com/200/300', 'https://via.placeholder.com/200/400', 'https://via.placeholder.com/200/500']"></x-imageviewer>

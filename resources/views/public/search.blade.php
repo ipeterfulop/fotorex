@@ -3,7 +3,7 @@
     @if((string)request()->get('search') != '')
         <div class="w-full bg-transparent flex justify-center">
             <div class="w-full max-width-container border border-gray-200 bg-white">
-                <h1 class="text-center font-bolder text-2xl fotored  py-8">Keresési eredmények a(z) "{{ request()->get('search') }}" kifejezésre</h1>
+                <h1 class="text-center font-bolder text-2xl text-fotored  py-8">Keresési eredmények a(z) "{{ request()->get('search') }}" kifejezésre</h1>
             </div>
         </div>
         <div class="w-full bg-transparent flex justify-center">
