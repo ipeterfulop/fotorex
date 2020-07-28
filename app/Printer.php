@@ -36,6 +36,8 @@ class Printer extends Model
         'copying_mode',
         'scanning_mode',
         'is_enabled',
+        'price',
+        'request_for_price',
     ];
 
     protected $appends = [

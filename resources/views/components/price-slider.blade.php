@@ -39,7 +39,6 @@
             <input type="text"
                    class="flex-grow"
                    value="{{ $min }}"
-                   readonly
                    oninput="updateSliderFromValue(event)"
                    data-slider-id="{{ $componentId }}"
                    data-handle="1"
@@ -51,7 +50,6 @@
             <input type="text"
                    value="{{ $max }}"
                    class="flex-grow text-right"
-                   readonly
                    oninput="updateSliderFromValue(event)"
                    data-handle="2"
                    data-slider-id="{{ $componentId }}"
@@ -107,7 +105,7 @@
                 currentPriceSlider.containerDiv.style.paddingLeft = leftPadding + 'px';
             }
         }
-        setRangeDivSize();
+        window.setTimeout(setRangeDivSize, 5);
     }
 
     function updateValue()
@@ -150,9 +148,9 @@
     }
 
     function setRangeDivSize() {
-        currentPriceSlider.rangeBox.style.width = currentPriceSlider.containerDivBounding.width - (
+        currentPriceSlider.rangeBox.style.width = (currentPriceSlider.containerDivBounding.width - (
             parseInt(currentPriceSlider.containerDiv.style.paddingLeft) + parseInt(currentPriceSlider.containerDiv.style.paddingRight)
-        )+'px';
+        )).toString()+'px';
     }
 
     function initCurrentSliderObject(event) {

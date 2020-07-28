@@ -80,6 +80,18 @@ class MenuitemsSeeder extends \Datalytix\Menu\Seeds\MenuitemsSeederBase
                 'menuitemtype_id' => 2, //one of the constants in Menuitem; the item can either be a group name or a menu item
                 'tag' => 'admin'
             ],
+            7 => [
+                'position' => ++$position,
+                'label' => 'Bérleti konstrukciók',
+                'parent_id' => null, // we can have this element be a child of a parent; the id is the key in $dataset
+                'url' => null, // we can either use direct url-s, or route names
+                'routename' => 'vuecrud_rentaloption_index',
+                'iconclass' => 'mdi mdi-email', // if not null, a <span with this class will be rendered before the label
+                'custom_view_name' => null, // optional blade template name if needed
+                'user_gate' => null, // if set, the item is only rendered if the current user passes a can: check
+                'menuitemtype_id' => 2, //one of the constants in Menuitem; the item can either be a group name or a menu item
+                'tag' => 'admin'
+            ],
         ];
 
         return $dataset;

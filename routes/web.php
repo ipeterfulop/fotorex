@@ -26,6 +26,7 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     \App\Manufacturer::setVueCRUDRoutes();
     \App\ExtraFeature::setVueCRUDRoutes();
     \App\Printer::setVueCRUDRoutes();
+    \App\Rentaloption::setVueCRUDRoutes();
 
 });
 
