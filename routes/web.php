@@ -27,6 +27,11 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     \App\ExtraFeature::setVueCRUDRoutes();
     \App\Printer::setVueCRUDRoutes();
     \App\Rentaloption::setVueCRUDRoutes();
+    \App\PrinterRentaloption::setVueCRUDRoutes();
+
+    Route::get('/ajax/printer-picker', 'PrinterPickerController@operation')->name('printer_picker_endpoint');
+    Route::view('/playground', 'admin.playground');
+
 
 });
 

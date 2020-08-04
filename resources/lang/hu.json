@@ -111,5 +111,7 @@
   "Article": "Cikk",
   "Items/page": "elem/oldal",
   "enabled": "Aktív",
-  "disabled": "Inaktív"
+  "disabled": "Inaktív",
+  "Enabled": "Aktív",
+  "Disabled": "Inaktív"
 }

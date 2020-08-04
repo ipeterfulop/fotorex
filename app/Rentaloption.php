@@ -4,12 +4,13 @@ namespace App;
 
 use App\Helpers\RentalPeriodUnit;
 use App\Traits\hasIsEnabledProperty;
+use Datalytix\KeyValue\canBeTurnedIntoKeyValueCollection;
 use Datalytix\VueCRUD\Traits\VueCRUDManageable;
 use Illuminate\Database\Eloquent\Model;
 
 class Rentaloption extends Model
 {
-    use hasIsEnabledProperty, VueCRUDManageable;
+    use hasIsEnabledProperty, VueCRUDManageable, canBeTurnedIntoKeyValueCollection;
     const SUBJECT_SLUG = 'rentaloption';
     const SUBJECT_NAME = 'Bérleti konstrukció';
     const SUBJECT_NAME_PLURAL = 'Bérleti konstrukciók';

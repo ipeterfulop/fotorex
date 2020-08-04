@@ -1,4 +1,7 @@
 {
     "/js/fotorex.js": "/js/fotorex.js",
-    "/css/fotorex.css": "/css/fotorex.css"
+    "/css/fotorex.css": "/css/fotorex.css",
+    "/css/minton.css": "/css/minton.css",
+    "/js/minton.js": "/js/minton.js",
+    "/js/minton-vendor.js": "/js/minton-vendor.js"
 }

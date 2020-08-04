@@ -10,4 +10,9 @@ trait belongsToPrinter
     {
         return $query->where('printer_id', '=', $printer->id);
     }
+
+    public function printer()
+    {
+        return $this->belongsTo(Printer::class);
+    }
 }
