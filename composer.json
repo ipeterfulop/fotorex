@@ -17,14 +17,15 @@
         "datalytix/vuecrud": "dev-master",
         "fideloper/proxy": "^4.0",
         "intervention/image": "^2.5",
-        "laravel/framework": "7.*",
+        "laravel/framework": "8.*",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^2.0"
+        "guzzlehttp/guzzle": "^7.0.1",
+        "laravel/ui": "^3.0"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "8.*"
+        "phpunit/phpunit": "9.0"
     },
     "config": {
         "optimize-autoloader": true,
@@ -66,27 +67,27 @@
     },
     "repositories": [
         {
-            "type": "vcs",
+            "type": "github",
             "url": "https://github.com/ipeterfulop/keyvalues.package"
         },
         {
-            "type": "vcs",
+            "type": "github",
             "url": "https://github.com/ipeterfulop/vuecrud.package"
         },
         {
-            "type": "vcs",
+            "type": "github",
             "url": "https://github.com/ipeterfulop/utilities.package"
         },
         {
-            "type": "vcs",
+            "type": "github",
             "url": "https://github.com/ipeterfulop/mintontheme.package"
         },
         {
-            "type": "vcs",
+            "type": "github",
             "url": "https://github.com/ipeterfulop/unishoptheme.package"
         },
         {
-            "type": "vcs",
+            "type": "github",
             "url": "https://github.com/ipeterfulop/menu.package"
         }
     ]

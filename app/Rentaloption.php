@@ -41,8 +41,25 @@ class Rentaloption extends Model
         return implode(', ', [
             $this->period_label,
             $this->min_number_of_persons.'-'.$this->max_number_of_persons.' fő',
-            $this->number_of_pages_included.' oldal'
+            $this->number_of_pages_included.' oldal',
+            $this->capabilities_label
         ]);
+    }
+
+    public function getCapabilitiesLabelAttribute()
+    {
+        $result = [];
+        if ($this->printing_included == 1) {
+            $result[] = 'print';
+        }
+        if ($this->scanning_included == 1) {
+            $result[] = 'scan';
+        }
+        if ($this->copying_included == 1) {
+            $result[] = 'copy';
+        }
+
+        return implode('/', $result);
     }
 
     public static function getVueCRUDIndexColumns()

@@ -17,6 +17,8 @@
 @import "../vendor/minton/js/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 @import "../vendor/minton/js/plugins/bootstrap-daterangepicker/daterangepicker.css";
 @import "../vendor/minton/js/plugins/select2/css/select2.min.css";
+@import '../../node_modules/quill/dist/quill.core';
+@import '../../node_modules/quill/dist/quill.snow';
 
 .navbar-laravel {
   background-color: #fff;

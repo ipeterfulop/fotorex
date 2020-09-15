@@ -11,7 +11,9 @@ use App\Printer;
 use App\PrinterTechnicalSpecificationCategory;
 use App\TechnicalSpecificationCategory;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\FileCollectorVueCRUDFormfield;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\ImageLibraryVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichtextTrixVueCRUDFormfield;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichttextQuillVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\SelectVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\SlugVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\TextareaVueCRUDFormfield;
@@ -44,13 +46,9 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setLabel('Multifunkció')
             ->setDefault(0)
             ->setContainerClass('col-4');
-        $result['description'] = (new RichtextTrixVueCRUDFormfield())->setMandatory(true)
+        $result['description'] = (new RichttextQuillVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Leírás')
             ->setProperty('content')
-            ->setProps([
-                'allowTableOperations' => 'true',
-                'allowPreview' => 'true',
-            ])
             ->setContainerClass('col-12');
         $result['slug'] = (new SlugVueCRUDFormfield())->setMandatory(true)
             ->setLabel('URL')
@@ -70,15 +68,14 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setMandatory(true)
             ->setLabel('Meta')
             ->setContainerClass('col-12');
-        $result['photo'] = (new FileCollectorVueCRUDFormfield())
+        $result['photo'] = (new ImageLibraryVueCRUDFormfield())
             ->setLabel('Képek')
             ->setContainerClass('col-12')
-            ->setObjectMode()
-            ->addAcceptCondition(FileCollectorVueCRUDFormfield::ACCEPTS_PRESET_IMAGE)
+            ->addAcceptCondition(ImageLibraryVueCRUDFormfield::ACCEPTS_PRESET_IMAGE)
             ->addRoutes('printer')
             ->setLimit(22);
         foreach (TechnicalSpecificationCategory::where('is_enabled', '=', 1)->get()->all() as $tsc) {
-            $result['tsc_'.$tsc->id] = (new RichtextTrixVueCRUDFormfield())->setMandatory(false)
+            $result['tsc_'.$tsc->id] = (new RichttextQuillVueCRUDFormfield())->setMandatory(false)
                 ->setLabel($tsc->name)
                 ->setProps([
                     'allowTableOperations' => 'true',

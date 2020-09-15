@@ -156,4 +156,8 @@ class Printer extends Model
         ];
     }
 
+    public static function getVueCRUDAdditionalAjaxFunctions()
+    {
+        return ['storePublicPicture'];
+    }
 }

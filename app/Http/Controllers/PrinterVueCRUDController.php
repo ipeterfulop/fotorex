@@ -56,4 +56,9 @@ class PrinterVueCRUDController extends VueCRUDControllerBase implements ICRUDCon
         return $provider->getElementsAndCounts();
     }
 
+    public function storePublicPicture()
+    {
+        return $this->storePublicAttachment();
+    }
+
 }

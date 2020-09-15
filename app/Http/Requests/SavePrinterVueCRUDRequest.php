@@ -47,11 +47,9 @@ class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
 
     protected function handlePhotos(Printer $subject)
     {
-        $p = $this->input('photo') == null
-            ? []
-            : collect($this->input('photo'))->pluck('id')->all();
+        foreach ($this->input('photo') as $photoUrl) {
 
-        return $subject->syncPhotos($p);
+        }
     }
 
     protected function handleTechnicalSpecifications(Printer $subject)
