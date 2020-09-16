@@ -162,4 +162,17 @@ class Printer extends Model
     {
         return ['storePublicPicture'];
     }
+
+
+    public static function findBySlug($slug, $abortWith404IfNotFound = true)
+    {
+        $result = self::where('slug', '=', $slug)->first();
+
+        if (($result == null) && ($abortWith404IfNotFound)) {
+            abort(404);
+        }
+
+        return $result;
+    }
+
 }

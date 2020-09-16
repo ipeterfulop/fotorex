@@ -27,4 +27,13 @@ class PrintersController extends Controller
         ]);
     }
 
+    public function details($slug)
+    {
+        $printer = Printer::findBySlug($slug);
+
+        return view('public.products.details', [
+            'printer' => $printer
+        ]);
+    }
+
 }

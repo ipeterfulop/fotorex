@@ -44,3 +44,4 @@ Route::get('/termekek/kereses', 'PrintersController@printerList')->name('list_pr
 
 
 Route::get('/{categorySlug}', 'ArticlesController@articleList')->name('list_articles');
+Route::get('/termekek/{slug}', 'PrintersController@details')->name('printer_details');
