@@ -96,7 +96,12 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             return [];
         }
         else {
-            return Photo::whereIn('id', $this->subject->customized_printer_photos->pluck('photo_id')->all())->get()->all();
+            return $this->subject->printer_photos->transform(function($printerphoto) {
+                return [
+                    'id' => $printerphoto->original->id,
+                    'url' => $printerphoto->original->public_url
+                ];
+            })->all();
         }
     }
 

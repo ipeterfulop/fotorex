@@ -54,7 +54,7 @@ class Printer extends Model
 
     public function printer_photos()
     {
-        return $this->hasMany(PrinterPhoto::class, 'printer_id', 'id');
+        return $this->hasMany(PrinterPhoto::class, 'printer_id', 'id')->orderBy('position', 'asc');
     }
 
     public function customized_printer_photos()
@@ -77,15 +77,17 @@ class Printer extends Model
     public function syncPhotos(array $photoIds)
     {
         $created = new Collection();
-        foreach (PrinterPhoto::getRemovablePhotos($this->id, $photoIds) as $du) {
-            PrinterPhoto::removePrinterPhoto($du->pp_id);
-        }
-        foreach ($photoIds as $photoId) {
-            $du = PrinterPhoto::firstOrCreateWithCustomizedPrinterPhoto($this->id, $photoId);
-            if ($du->wasRecentlyCreated) {
-                $created->push($du);
+        \DB::transaction(function() use ($photoIds, &$created) {
+            foreach (PrinterPhoto::getRemovablePhotos($this->id, $photoIds) as $du) {
+                PrinterPhoto::removePrinterPhoto($du->pp_id);
             }
-        }
+            foreach (array_values($photoIds) as $index => $photoId) {
+                $du = PrinterPhoto::firstOrCreateWithCustomizedPrinterPhoto($this->id, $photoId, $index + 1);
+                if ($du->wasRecentlyCreated) {
+                    $created->push($du);
+                }
+            }
+        });
 
         return $created;
     }

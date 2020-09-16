@@ -58,7 +58,20 @@ class PrinterVueCRUDController extends VueCRUDControllerBase implements ICRUDCon
 
     public function storePublicPicture()
     {
-        return $this->storePublicAttachment();
+        //create photo from file in attachments
+        $processedFilename = $this->saveUploadedFileToPublic();
+        $photo = Photo::createFromFilepath(storage_path('app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.$processedFilename));
+
+        return response()->json([
+            'image' => [
+                'id' => $photo->id,
+                'url' => asset('storage'
+                    .DIRECTORY_SEPARATOR
+                    .'attachments'
+                    .DIRECTORY_SEPARATOR
+                    .basename($processedFilename))
+            ]
+        ]);
     }
 
 }

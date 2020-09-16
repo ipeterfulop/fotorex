@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Formdatabuilders\PrinterVueCRUDFormdatabuilder;
 use App\Printer;
+use App\PrinterPhoto;
 use App\TechnicalSpecificationCategory;
 use Datalytix\VueCRUD\Requests\VueCRUDRequestBase;
 
@@ -42,14 +43,13 @@ class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
     public function getDataset()
     {
         $result = $this->getBaseDatasetFromRequest(Printer::class);
+        $result['request_for_price'] = 0;
         return $result;
     }
 
     protected function handlePhotos(Printer $subject)
     {
-        foreach ($this->input('photo') as $photoUrl) {
-
-        }
+        $subject->syncPhotos($this->input('photo'));
     }
 
     protected function handleTechnicalSpecifications(Printer $subject)

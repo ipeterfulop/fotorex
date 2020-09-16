@@ -21,11 +21,13 @@ class Photo extends Model
 
     protected $with = ['file'];
 
-    public function file() {
+    public function file()
+    {
         return $this->belongsTo(File::class, 'id', 'id');
     }
 
-    public static function createFromFilepath($path, $original_name = null, $new_name = null) {
+    public static function createFromFilepath($path, $original_name = null, $new_name = null)
+    {
         $result = null;
         \DB::transaction(function() use (&$result, $path, $original_name, $new_name) {
             $file = File::createFromFilepath($path, $original_name, $new_name);
@@ -51,5 +53,10 @@ class Photo extends Model
         $p = Photo::find($photo_id);
         $p->delete();
         File::removeFile($photo_id);
+    }
+
+    public function getPublicUrlAttribute()
+    {
+        return $this->file->public_url;
     }
 }

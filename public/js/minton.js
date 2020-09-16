@@ -3710,6 +3710,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3734,12 +3735,16 @@ __webpack_require__.r(__webpack_exports__);
     },
     accept: {
       default: false
+    },
+    objectMode: {
+      type: Boolean,
+      default: true
     }
   },
   data: function data() {
     return {
       adding: false,
-      imageUrls: [],
+      images: [],
       selectedFileLabel: '',
       selectedFile: '',
       allowedFileTypes: [],
@@ -3759,11 +3764,15 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.imageUrls = this.value;
+    this.images = this.value;
+
+    if (this.objectMode) {
+      this.emitValue();
+    }
   },
   methods: {
     emitValue: function emitValue() {
-      this.$emit('input', this.imageUrls);
+      this.$emit('input', this.formData);
     },
     showDragOverEffect: function showDragOverEffect(event, url) {
       event.preventDefault();
@@ -3779,9 +3788,16 @@ __webpack_require__.r(__webpack_exports__);
       target.classList.remove('image-library-thumbnail-dropping');
     },
     removeImage: function removeImage(url) {
-      this.imageUrls = this.imageUrls.filter(function (item) {
-        return item != url;
-      });
+      if (this.objectMode) {
+        this.images = this.images.filter(function (item) {
+          return item.url != url;
+        });
+      } else {
+        this.images = this.images.filter(function (item) {
+          return item != url;
+        });
+      }
+
       this.emitValue();
     },
     startMoving: function startMoving(event) {
@@ -3794,6 +3810,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       event.dataTransfer.setData('url', target.getAttribute('data-imageurl'));
+      event.dataTransfer.setData('id', target.getAttribute('data-imageid'));
       window.setTimeout(function () {
         Array.from(document.querySelectorAll('.image-library-thumbnail img')).forEach(function (t) {
           t.classList.add('pointer-events-none');
@@ -3813,6 +3830,8 @@ __webpack_require__.r(__webpack_exports__);
       document.querySelector('.image-library-drop-field').classList.remove('image-library-thumbnail-dropping');
     },
     moveToBefore: function moveToBefore(event, imageUrl) {
+      var _this3 = this;
+
       event.stopPropagation();
       event.preventDefault();
       var newOrder = [];
@@ -3825,18 +3844,39 @@ __webpack_require__.r(__webpack_exports__);
           newOrder.push(item);
         }
       });
-      this.imageUrls = newOrder;
+
+      if (this.objectMode) {
+        var newImages = [];
+        newOrder.forEach(function (image) {
+          newImages.push(_this3.images.find(function (element) {
+            return element.url == image;
+          }));
+        });
+        this.images = newImages;
+      } else {
+        this.images = newOrder;
+      }
+
       this.emitValue();
     },
     moveToEnd: function moveToEnd(event) {
       event.stopPropagation();
       event.preventDefault();
       this.removeImage(decodeURI(event.dataTransfer.getData('url')));
-      this.imageUrls.push(decodeURI(event.dataTransfer.getData('url')));
+
+      if (this.objectMode) {
+        this.images.push({
+          id: event.dataTransfer.getData('id'),
+          url: decodeURI(event.dataTransfer.getData('url'))
+        });
+      } else {
+        this.images.push(decodeURI(event.dataTransfer.getData('url')));
+      }
+
       this.emitValue();
     },
     fileSelected: function fileSelected(event) {
-      var _this3 = this;
+      var _this4 = this;
 
       if (event.target.files.length == 0) {
         return false;
@@ -3853,14 +3893,38 @@ __webpack_require__.r(__webpack_exports__);
 
       this.adding = true;
       this.uploadPublicFileToVueCRUDController(this.uploadUrl, event.target.files[0], 'storePublicPicture').then(function (response) {
-        _this3.adding = false;
+        _this4.adding = false;
 
-        _this3.imageUrls.push(response.data.url);
+        if (_this4.objectMode) {
+          _this4.images.push(response.data.image);
+        } else {
+          _this4.images.push(response.data.url);
+        }
 
-        _this3.emitValue();
+        _this4.emitValue();
       }).catch(function (error) {
         console.log(error);
       });
+    }
+  },
+  computed: {
+    imageUrls: function imageUrls() {
+      if (this.objectMode) {
+        return this.images.map(function (imageData) {
+          return imageData.url;
+        });
+      } else {
+        return this.images;
+      }
+    },
+    formData: function formData() {
+      if (this.objectMode) {
+        return this.images.map(function (imageData) {
+          return imageData.id;
+        });
+      } else {
+        return this.images;
+      }
     }
   }
 });
@@ -60971,15 +61035,19 @@ var render = function() {
     "div",
     { staticClass: "image-library-container" },
     [
-      _vm._l(_vm.imageUrls, function(imageUrl) {
+      _vm._l(_vm.images, function(image) {
         return [
           _c(
             "div",
             {
-              ref: "image-" + imageUrl,
+              ref: _vm.objectMode ? "image-" + image.url : "image-" + image,
               refInFor: true,
               staticClass: "image-library-thumbnail",
-              attrs: { draggable: "true", "data-imageurl": imageUrl },
+              attrs: {
+                draggable: "true",
+                "data-imageurl": _vm.objectMode ? image.url : image,
+                "data-imageid": _vm.objectMode ? image.id : image
+              },
               on: {
                 dragover: function($event) {
                   return $event.preventDefault()
@@ -60987,20 +61055,32 @@ var render = function() {
                 dragstart: _vm.startMoving,
                 dragend: _vm.endMoving,
                 dragenter: function($event) {
-                  return _vm.showDragOverEffect($event, imageUrl)
+                  return _vm.showDragOverEffect(
+                    $event,
+                    _vm.objectMode ? image.url : image
+                  )
                 },
                 dragleave: function($event) {
-                  return _vm.hideDragOverEffect($event, imageUrl)
+                  return _vm.hideDragOverEffect(
+                    $event,
+                    _vm.objectMode ? image.url : image
+                  )
                 },
                 drop: function($event) {
-                  return _vm.moveToBefore($event, imageUrl)
+                  return _vm.moveToBefore(
+                    $event,
+                    _vm.objectMode ? image.url : image
+                  )
                 }
               }
             },
             [
               _c("img", {
-                staticStyle: { height: "100%" },
-                attrs: { src: imageUrl, label: imageUrl }
+                staticStyle: { "max-height": "100%", "max-width": "100%" },
+                attrs: {
+                  src: _vm.objectMode ? image.url : image,
+                  label: _vm.objectMode ? image.url : image
+                }
               }),
               _vm._v(" "),
               _c(
@@ -61017,7 +61097,7 @@ var render = function() {
                   staticClass: "image-library-thumbnail-button",
                   on: {
                     click: function($event) {
-                      return _vm.removeImage(imageUrl)
+                      return _vm.removeImage(_vm.objectMode ? image.url : image)
                     }
                   }
                 },
