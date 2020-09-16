@@ -46,6 +46,10 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setLabel('Multifunkció')
             ->setDefault(0)
             ->setContainerClass('col-4');
+        $result['request_for_price'] = (new YesNoSelectVueCRUDFormfield())->setMandatory(true)
+            ->setLabel('Árhoz hívjon')
+            ->setDefault(0)
+            ->setContainerClass('col-4');
         $result['description'] = (new RichttextQuillVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Leírás')
             ->setProperty('content')

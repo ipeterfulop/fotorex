@@ -43,7 +43,6 @@ class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
     public function getDataset()
     {
         $result = $this->getBaseDatasetFromRequest(Printer::class);
-        $result['request_for_price'] = 0;
         return $result;
     }
 
