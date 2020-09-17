@@ -6407,6 +6407,242 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/RelatedPrintersList.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/RelatedPrintersList.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mixins_fileUploadMixin_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mixins/fileUploadMixin.js */ "./resources/js/components/mixins/fileUploadMixin.js");
+/* harmony import */ var _mixins_spinner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mixins/spinner */ "./resources/js/components/mixins/spinner.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_mixins_fileUploadMixin_js__WEBPACK_IMPORTED_MODULE_0__["fileUploadMixin"], _mixins_spinner__WEBPACK_IMPORTED_MODULE_1__["spinner"]],
+  props: {
+    operationsUrl: {
+      type: String
+    },
+    printerId: {},
+    value: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    },
+    fieldname: {
+      type: String,
+      default: 'fieldname'
+    },
+    formElementLabel: {
+      type: String,
+      default: ''
+    },
+    limit: {
+      default: null
+    }
+  },
+  data: function data() {
+    return {
+      loading: true,
+      items: [],
+      valueset: [],
+      selectedElement: '',
+      allowedFileTypes: [],
+      moving: false
+    };
+  },
+  created: function created() {},
+  mounted: function mounted() {
+    this.fetchValueset();
+  },
+  methods: {
+    addSelected: function addSelected() {
+      var _this = this;
+
+      if (this.items.find(function (element) {
+        return element.id == _this.selectedElement;
+      }) === undefined) {
+        this.items.push(this.valueset.find(function (element) {
+          return element.id == _this.selectedElement;
+        }));
+      }
+    },
+    emitValue: function emitValue() {
+      this.$emit('input', this.formData);
+    },
+    showDragOverEffect: function showDragOverEffect(event, itemId) {
+      console.log(itemId);
+      event.preventDefault();
+      var target = this.$refs['item-' + itemId][0] || this.$refs['item-' + itemId];
+
+      if (target.getAttribute('data-itemid') !== this.moving) {
+        target.classList.add('related-printers-row-dropping');
+      }
+    },
+    hideDragOverEffect: function hideDragOverEffect(event, itemId) {
+      event.preventDefault();
+      var target = this.$refs['item-' + itemId][0] || this.$refs['item-' + itemId];
+      target.classList.remove('related-printers-row-dropping');
+    },
+    removeItem: function removeItem(itemId) {
+      this.items = this.items.filter(function (item) {
+        return item.id != itemId;
+      });
+      this.emitValue();
+    },
+    startMoving: function startMoving(event) {
+      var _this2 = this;
+
+      var target = event.target;
+
+      while (target.getAttribute('data-itemid') == null) {
+        target = target.parentNode;
+      }
+
+      console.log(target);
+      event.dataTransfer.setData('id', target.getAttribute('data-itemid'));
+      event.dataTransfer.setDragImage(target.firstChild, 100, 100);
+      window.setTimeout(function () {
+        Array.from(document.querySelectorAll('.related-printers-row')).forEach(function (t) {
+          t.classList.add('pointer-events-none');
+        });
+        _this2.moving = target.getAttribute('data-itemid');
+        target.classList.add('related-printers-row-hidden');
+      }, 10);
+    },
+    endMoving: function endMoving(event) {
+      event.target.classList.remove('related-printers-row-hidden');
+      this.moving = false;
+      Array.from(document.querySelectorAll('.related-printers-row')).forEach(function (t) {
+        t.classList.remove('pointer-events-none');
+        t.classList.remove('related-printers-row-dropping');
+        t.classList.remove('related-printers-row-hidden');
+      });
+      document.querySelector('.related-printers-drop-field').classList.remove('related-printers-row-dropping');
+    },
+    moveToBefore: function moveToBefore(event, itemId) {
+      var _this3 = this;
+
+      event.stopPropagation();
+      event.preventDefault();
+      var newOrder = [];
+      this.items.forEach(function (item) {
+        if (item.id == itemId) {
+          newOrder.push(_this3.valueset.find(function (element) {
+            return element.id == event.dataTransfer.getData('id');
+          }));
+        }
+
+        if (item.id != event.dataTransfer.getData('id')) {
+          newOrder.push(item);
+        }
+      });
+      this.items = newOrder;
+      this.emitValue();
+    },
+    moveToEnd: function moveToEnd(event) {
+      event.stopPropagation();
+      event.preventDefault();
+      this.removeItem(event.dataTransfer.getData('id'));
+      this.items.push(this.valueset.find(function (element) {
+        return element.id == event.dataTransfer.getData('id');
+      }));
+      this.emitValue();
+    },
+    fetchValueset: function fetchValueset() {
+      var _this4 = this;
+
+      window.axios.post(this.operationsUrl, {
+        action: 'fetchValueset'
+      }).then(function (response) {
+        _this4.valueset = response.data.valueset;
+        _this4.items = _this4.valueset.filter(function (item) {
+          return _this4.value.includes(item.id);
+        }); // testing block
+
+        _this4.valueset.forEach(function (item) {
+          if (_this4.items.length < 4) {
+            _this4.items.push(item);
+          }
+        }); // end testing
+
+
+        _this4.loading = false;
+
+        _this4.emitValue();
+      });
+    }
+  },
+  computed: {
+    itemIds: function itemIds() {
+      return this.items.map(function (element) {
+        return element.id;
+      });
+    },
+    formData: function formData() {
+      return this.items.map(function (itemData) {
+        return itemData.id;
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SearchableSelect.vue?vue&type=script&lang=js&":
 /*!***************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SearchableSelect.vue?vue&type=script&lang=js& ***!
@@ -14551,6 +14787,25 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 // module
 exports.push([module.i, "\nbutton.ql-code-view::after {\n    content: '@'\n}\nbutton.ql-attachment::after {\n    content: '\\1F5CE'\n}\n.ql-editor {\n    min-height: 300px;\n    max-height: 500px;\n    overflow-y: auto;\n    padding-bottom: 2rem;\n}\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/RelatedPrintersList.vue?vue&type=style&index=0&lang=css&":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--7-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/RelatedPrintersList.vue?vue&type=style&index=0&lang=css& ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.related-printers-container {\n    min-height: 20rem;\n    display: flex;\n    flex-direction: column;\n    flex-wrap: nowrap;\n    align-items: flex-start;\n    justify-content: flex-start;\n    border: 1px solid darkgrey\n}\n.related-printers-add-button {\n    height: 3rem;\n    width: 3rem;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    font-size: 2.5rem;\n    border-radius: 50%;\n    border: 1px solid darkgrey;\n    transition: box-shadow 200ms ease-in-out;\n}\n.related-printers-add-button:hover {\n    box-shadow: .2rem .2rem rgba(7, 7, 7, .5);\n}\n.related-printers-row {\n    margin: .2rem;\n    width: 100%;\n    display: flex;\n    border: 1px solid lightgray;\n    padding: .5rem;\n    padding-top: .5rem;\n    text-align: left;\n    transition: background-color 200ms ease-in-out, padding-top 200ms ease-in-out;\n    position: relative;\n    cursor: move;\n    flex-direction: row;\n    align-items: center;\n    justify-content: space-between;\n}\n.pointer-events-none {\n    pointer-events: none;\n}\n.related-printers-row-dropping {\n    padding-left: 2rem !important;\n}\n.related-printers-row-hidden {\n    height: 0px !important;\n}\n.related-printers-row-button {\n    visibility: hidden;\n    cursor: pointer;\n    position: absolute;\n    z-index:100;\n    top: 0px;\n    right: 0px;\n    width: 2em;\n    height: 100%;\n    background-color: rgba(7, 7, 7, .5);\n    color: white;\n    font-size: 2rem;\n    font-weight: bold;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n.related-printers-row:hover .related-printers-row-button {\n    visibility: visible;\n}\n.related-printers-drop-field.related-printers-row-dropping {\n    background-color: rgba(7,7,7,.2);\n}\n.related-printers-drop-field {\n    height: 2rem;\n    margin: .2rem;\n    width: 100%;\n    flex-shrink: 0;\n    background-color: transparent;\n    box-shadow: .2rem .2rem rgba(7,7,7,.4);\n    transition: background-color 200ms ease-in-out, -webkit-transform 200ms ease-in-out;\n    transition: transform 200ms ease-in-out, background-color 200ms ease-in-out;\n    transition: transform 200ms ease-in-out, background-color 200ms ease-in-out, -webkit-transform 200ms ease-in-out;\n}\n", ""]);
 
 // exports
 
@@ -57856,6 +58111,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/RelatedPrintersList.vue?vue&type=style&index=0&lang=css&":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--7-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/RelatedPrintersList.vue?vue&type=style&index=0&lang=css& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--7-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--7-2!../../../node_modules/vue-loader/lib??vue-loader-options!./RelatedPrintersList.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/RelatedPrintersList.vue?vue&type=style&index=0&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SearchableSelect.vue?vue&type=style&index=0&lang=css&":
 /*!**************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--7-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SearchableSelect.vue?vue&type=style&index=0&lang=css& ***!
@@ -64202,6 +64487,212 @@ var render = function() {
       attrs: { "data-sitekey": _vm.gKey, id: "recaptcha-div" }
     })
   ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/RelatedPrintersList.vue?vue&type=template&id=5d02b087&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/RelatedPrintersList.vue?vue&type=template&id=5d02b087& ***!
+  \**********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "related-printers-list" },
+    [
+      _vm.loading
+        ? _c("div", { domProps: { innerHTML: _vm._s(_vm.spinnerSrc) } })
+        : [
+            _c(
+              "div",
+              { staticClass: "related-printers-container" },
+              [
+                _vm._l(_vm.items, function(item) {
+                  return _c(
+                    "div",
+                    {
+                      ref: "item-" + item.id,
+                      refInFor: true,
+                      staticClass: "related-printers-row",
+                      attrs: { draggable: "true", "data-itemid": item.id },
+                      on: {
+                        dragover: function($event) {
+                          return $event.preventDefault()
+                        },
+                        dragstart: _vm.startMoving,
+                        dragend: _vm.endMoving,
+                        dragenter: function($event) {
+                          return _vm.showDragOverEffect($event, item.id)
+                        },
+                        dragleave: function($event) {
+                          return _vm.hideDragOverEffect($event, item.id)
+                        },
+                        drop: function($event) {
+                          return _vm.moveToBefore($event, item.id)
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        domProps: { innerHTML: _vm._s(item.name) }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.moving === false,
+                              expression: "moving === false"
+                            }
+                          ],
+                          staticClass: "related-printers-row-button",
+                          on: {
+                            click: function($event) {
+                              return _vm.removeItem(item.id)
+                            }
+                          }
+                        },
+                        [_vm._v("-\n                ")]
+                      )
+                    ]
+                  )
+                }),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.moving !== false,
+                        expression: "moving !== false"
+                      }
+                    ],
+                    ref: "item-end",
+                    staticClass: "related-printers-drop-field",
+                    on: {
+                      dragover: function($event) {
+                        return $event.preventDefault()
+                      },
+                      dragenter: function($event) {
+                        return _vm.showDragOverEffect($event, "end")
+                      },
+                      dragleave: function($event) {
+                        return _vm.hideDragOverEffect($event, "end")
+                      },
+                      drop: function($event) {
+                        return _vm.moveToEnd($event)
+                      }
+                    }
+                  },
+                  [_c("span")]
+                )
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticStyle: {
+                  width: "100%",
+                  "margin-top": "1rem",
+                  display: "flex",
+                  "flex-direction": "row"
+                }
+              },
+              [
+                _c(
+                  "div",
+                  {
+                    staticStyle: {
+                      display: "flex",
+                      "align-items": "stretch",
+                      "justify-content": "flex-start",
+                      "flex-direction": "column"
+                    }
+                  },
+                  [
+                    _c("label", [_vm._v("Válasszon")]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.selectedElement,
+                            expression: "selectedElement"
+                          }
+                        ],
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.selectedElement = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          }
+                        }
+                      },
+                      _vm._l(_vm.valueset, function(value) {
+                        return !_vm.itemIds.includes(value.id)
+                          ? _c("option", {
+                              domProps: {
+                                value: value.id,
+                                innerHTML: _vm._s(value.name)
+                              }
+                            })
+                          : _vm._e()
+                      }),
+                      0
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticStyle: { "margin-left": "auto" },
+                    on: {
+                      click: function($event) {
+                        return _vm.addSelected()
+                      }
+                    }
+                  },
+                  [_vm._v("+")]
+                )
+              ]
+            )
+          ]
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -77679,6 +78170,7 @@ var map = {
 	"./ProfilePictureManager.vue": "./resources/js/components/ProfilePictureManager.vue",
 	"./QuillWrapper.vue": "./resources/js/components/QuillWrapper.vue",
 	"./RecaptchaComponent.vue": "./resources/js/components/RecaptchaComponent.vue",
+	"./RelatedPrintersList.vue": "./resources/js/components/RelatedPrintersList.vue",
 	"./SearchableSelect.vue": "./resources/js/components/SearchableSelect.vue",
 	"./SelectOrAddField.vue": "./resources/js/components/SelectOrAddField.vue",
 	"./Tabgroup.vue": "./resources/js/components/Tabgroup.vue",
@@ -79405,6 +79897,93 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RecaptchaComponent_vue_vue_type_template_id_63dd3a81___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RecaptchaComponent_vue_vue_type_template_id_63dd3a81___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/RelatedPrintersList.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/RelatedPrintersList.vue ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _RelatedPrintersList_vue_vue_type_template_id_5d02b087___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RelatedPrintersList.vue?vue&type=template&id=5d02b087& */ "./resources/js/components/RelatedPrintersList.vue?vue&type=template&id=5d02b087&");
+/* harmony import */ var _RelatedPrintersList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RelatedPrintersList.vue?vue&type=script&lang=js& */ "./resources/js/components/RelatedPrintersList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _RelatedPrintersList_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RelatedPrintersList.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/RelatedPrintersList.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _RelatedPrintersList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _RelatedPrintersList_vue_vue_type_template_id_5d02b087___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _RelatedPrintersList_vue_vue_type_template_id_5d02b087___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/RelatedPrintersList.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/RelatedPrintersList.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/RelatedPrintersList.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedPrintersList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./RelatedPrintersList.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/RelatedPrintersList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedPrintersList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/RelatedPrintersList.vue?vue&type=style&index=0&lang=css&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/RelatedPrintersList.vue?vue&type=style&index=0&lang=css& ***!
+  \******************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_7_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedPrintersList_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--7-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--7-2!../../../node_modules/vue-loader/lib??vue-loader-options!./RelatedPrintersList.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/RelatedPrintersList.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_7_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedPrintersList_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_7_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedPrintersList_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_7_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedPrintersList_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_7_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedPrintersList_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_7_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedPrintersList_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/RelatedPrintersList.vue?vue&type=template&id=5d02b087&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/RelatedPrintersList.vue?vue&type=template&id=5d02b087& ***!
+  \****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedPrintersList_vue_vue_type_template_id_5d02b087___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./RelatedPrintersList.vue?vue&type=template&id=5d02b087& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/RelatedPrintersList.vue?vue&type=template&id=5d02b087&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedPrintersList_vue_vue_type_template_id_5d02b087___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedPrintersList_vue_vue_type_template_id_5d02b087___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
