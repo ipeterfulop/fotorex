@@ -5,16 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{{ config('app.name') }}</title>
+<!--
     <script src="{{ asset('js/fa/all.min.js') }}"></script>
     <script src="{{ asset('js/fa/brands.min.js') }}"></script>
+-->
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.4.1/dist/alpine.js" defer></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="{{ asset('css/fotorex.css') }}" rel="stylesheet">
+<!--
     <link href="{{ asset('css/fa/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/fa/brands.min.css') }}" rel="stylesheet">
-
-    <!-- Fonts -->
+-->
     <style>
         .heroicon-svg {
             width: 100%;
@@ -23,6 +25,11 @@
             height: 100%;
             min-height: 100%;
             max-height: 100%;
+        }
+        .desktop-nav-menuitem {
+            border-left: .5px solid rgba(255,255,255,.2);
+            border-right: .5px solid rgba(255,255,255,.2);
+            border-collapse: collapse;
         }
     </style>
     <script>

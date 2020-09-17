@@ -1,12 +1,16 @@
 @extends('layouts.tailwind.app')
 @section('content')
-    <div class="max-width-container w-full flex justify-center h-64 pl-16 pr-64">
-        <x-price-slider :min="0" :max="500000" :field="'field'"></x-price-slider>
-    </div>
+    @include('public.partials.item-slider-list', [
+        'view' => 'public.partials.printer-summary-box',
+        'items' => [1,2,3,4,5,6,7,8]
+    ])
     @if(false)
-    <div class="max-width-container w-full flex justify-center h-128 pl-16">
-        <x-imageviewer :image-urls="['https://via.placeholder.com/200/100', 'https://via.placeholder.com/200/200', 'https://via.placeholder.com/200/300', 'https://via.placeholder.com/200/400', 'https://via.placeholder.com/200/500']"></x-imageviewer>
-    </div>
+        <div class="max-width-container w-full flex justify-center h-64 pl-16 pr-64">
+            <x-price-slider :min="0" :max="500000" :field="'field'"></x-price-slider>
+        </div>
+        <div class="max-width-container w-full flex justify-center h-128 pl-16">
+            <x-imageviewer :image-urls="['https://via.placeholder.com/200/100', 'https://via.placeholder.com/200/200', 'https://via.placeholder.com/200/300', 'https://via.placeholder.com/200/400', 'https://via.placeholder.com/200/500']"></x-imageviewer>
+        </div>
     @endif
     <div class="w-full bg-transparent flex justify-center">
         <div class="w-full max-width-container flex flex-col lg:flex-row items-start justify-between mt-4 bg-transparent">
@@ -26,10 +30,10 @@
 
             </div>
             <div class="w-full lg:w-1/4 h-full flex flex-row lg:flex-col items-center justify-between py-12">
-                <div class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Szolgáltatások</div>
-                <div class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Megoldások</div>
-                <div class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Hírek</div>
-                <div class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Cégünkről</div>
+                <div class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Szolgáltatások</div>
+                <div class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Megoldások</div>
+                <div class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Hírek</div>
+                <div class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Cégünkről</div>
             </div>
         </div>
     </div>

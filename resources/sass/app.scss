@@ -16,14 +16,23 @@
 }
 
 .hover-red-link:hover {
-    @apply bg-fotored;
+    @apply bg-fotored text-white;
 }
 
 .hover-gray-link:hover {
-    @apply bg-fotogray;
+    @apply bg-fotogray text-gray-900;
 }
 select,
 textarea,
 input {
     @apply p-2 shadow-sm border border-gray-100 bg-gray-200;
+}
+.item-slider-slide-button .item-slider-slide-button-icon {
+    @apply bg-fotogray opacity-50 text-black font-bold;
+}
+.item-slider-slide-button:focus {
+    @apply outline-none border-none;
+}
+.item-slider-slide-button:hover .item-slider-slide-button-icon {
+    @apply bg-fotogray opacity-100;
 }

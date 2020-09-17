@@ -62,14 +62,14 @@
     </div>
 </div>
 <div class="hidden lg:flex w-full justify-center bg-fotoblue">
-    <div class="w-full max-width-container flex items-center justify-between bg-fotoblue text-white uppercase">
-        <div class="py-4 px-2 h-full hover-red-link">Nyomtatók</div>
-        <div class="py-4 px-2 h-full hover-red-link">Multifunkciós nyomtatók</div>
-        <div class="py-4 px-2 h-full hover-red-link">Faxkészülékek</div>
-        <div class="py-4 px-2 h-full hover-red-link">Nyomtatóbérlés</div>
-        <div class="py-4 px-2 h-full hover-red-link">Interaktív monitorok</div>
-        <div class="py-4 px-2 h-full hover-red-link">Irodaszerek</div>
-        <span class="ml-4">
+    <div class="w-full max-width-container flex items-center justify-start bg-fotoblue text-white uppercase">
+        <div class="py-4 px-2 h-full hover-red-link  desktop-nav-menuitem">Nyomtatók</div>
+        <div class="py-4 px-2 h-full hover-red-link  desktop-nav-menuitem">Multifunkciós nyomtatók</div>
+        <div class="py-4 px-2 h-full hover-red-link  desktop-nav-menuitem">Faxkészülékek</div>
+        <div class="py-4 px-2 h-full hover-red-link  desktop-nav-menuitem">Nyomtatóbérlés</div>
+        <div class="py-4 px-2 h-full hover-red-link  desktop-nav-menuitem">Interaktív monitorok</div>
+        <div class="py-4 px-2 h-full hover-red-link  desktop-nav-menuitem">Irodaszerek</div>
+        <span class="ml-auto">
             <span>F</span>
             <span>ln</span>
             <span>g</span>

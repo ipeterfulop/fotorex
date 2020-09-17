@@ -9,7 +9,7 @@
                  style="transform: translateY(0) translateX(0); transition: transform 200ms ease-in-out"
                  x-ref="imageviewer_thumbnails_container">
                 @foreach ($printerphotos as $printerphoto)
-                    <img class="w-24 lg:h-24 opacity-75 hover:opacity-100 imageviewer-thumbnail cursor-pointer mx-8 object-contain"
+                    <img class="w-24 lg:h-24 opacity-75 hover:opacity-100 imageviewer-thumbnail cursor-pointer mx-8 object-contain border-2 border-gray-200"
                          data-imageurl="{{ $printerphoto->original->public_url }}"
                          src="{{ $printerphoto->thumbnail->public_url }}"
                          @click="currentImage = '{{ $printerphoto->original->public_url }}'">
