@@ -22,4 +22,28 @@ class RelatedPrintersController extends Controller
             'valueset' => Printer::all()->all()
         ]);
     }
+
+    public function getRelated()
+    {
+        $printer = Printer::find(request()->get('printerId'));
+        $accessor = Printer::similarRelations()[request()->get('relationType')];
+
+        return response()->json([
+            'value' => $printer->$accessor->pluck('similar_printer_id')
+        ]);
+    }
+
+    public function saveChanges()
+    {
+        $printer = Printer::find(request()->get('printerId'));
+        $result = $printer->syncSimilarPrinters(
+            request()->get('value'),
+            request()->get('relationType')
+        );
+
+        return $result
+            ? response('OK')
+            : response('A művelet nem sikerült', 500);
+
+    }
 }

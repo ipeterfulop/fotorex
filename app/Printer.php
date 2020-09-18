@@ -22,6 +22,9 @@ class Printer extends Model
     const SORTING_OPTION_PRICE_UP = 'ar_novekvo';
     const SORTING_OPTION_PRICE_DOWN = 'ar_csokkeno';
 
+    const RELATIONTYPE_SIMILAR = 1;
+    const RELATIONTYPE_VIEWED_BY_OTHERS = 2;
+
     protected $fillable = [
         'manufacturer_id',
         'name',
@@ -43,6 +46,8 @@ class Printer extends Model
     protected $appends = [
         'manufacturer_name',
         'is_enabled_label',
+        'similar_printers_button',
+        'printers_viewed_by_others_button',
     ];
 
     protected $with = ['manufacturer', 'printer_photos', 'technical_specifications'];
@@ -50,6 +55,20 @@ class Printer extends Model
     public function manufacturer()
     {
         return $this->belongsTo(Manufacturer::class);
+    }
+
+    public function similarprinters()
+    {
+        return $this->hasMany(SimilarPrinter::class)
+            ->where('relationtype', '=', self::RELATIONTYPE_SIMILAR)
+            ->orderBy('position', 'asc');
+    }
+
+    public function printersviewedbyothers()
+    {
+        return $this->hasMany(SimilarPrinter::class)
+            ->where('relationtype', '=', self::RELATIONTYPE_VIEWED_BY_OTHERS)
+            ->orderBy('position', 'asc');
     }
 
     public function printer_photos()
@@ -116,6 +135,9 @@ class Printer extends Model
             'name' => 'Név',
             'manufacturer_name' => 'Gyártó',
             'is_enabled_label' => 'Státusz',
+            'similar_printers_button' => 'Hasonló termékek',
+            'printers_viewed_by_others_button' => 'Mások által megtekintett termékek',
+
         ];
     }
 
@@ -166,13 +188,68 @@ class Printer extends Model
 
     public static function findBySlug($slug, $abortWith404IfNotFound = true)
     {
-        $result = self::where('slug', '=', $slug)->first();
+        $result = self::where('slug', '=', $slug)->with([
+            'manufacturer',
+            'printer_photos',
+            'technical_specifications',
+            'similarprinters',
+            'printersviewedbyothers'
+        ])->first();
 
         if (($result == null) && ($abortWith404IfNotFound)) {
             abort(404);
         }
 
         return $result;
+    }
+
+    public static function similarRelations()
+    {
+        return [
+            self::RELATIONTYPE_SIMILAR => 'similarprinters',
+            self::RELATIONTYPE_VIEWED_BY_OTHERS => 'printersviewedbyothers'
+        ];
+    }
+
+    public function syncSimilarPrinters($ids, $relationtype)
+    {
+        return \DB::transaction(function() use ($ids, $relationtype) {
+            $accessor = self::similarRelations()[$relationtype];
+            $this->$accessor()->delete();
+            $position = 0;
+            foreach ($ids as $id) {
+                SimilarPrinter::create([
+                    'printer_id' => $this->id,
+                    'similar_printer_id' => $id,
+                    'position' => ++$position,
+                    'relationtype' => $relationtype
+                ]);
+            }
+        }) === null;
+    }
+
+    public function getSimilarPrintersButtonAttribute()
+    {
+        return 'component::'.json_encode([
+                'component' => 'related-printers-popup-button',
+                'componentProps' => [
+                    'operationsUrl' => route('related_printer_endpoint'),
+                    'printerId' => $this->id,
+                    'relationType' => self::RELATIONTYPE_SIMILAR
+                ]
+            ]);
+    }
+
+    public function getPrintersViewedByOthersButtonAttribute()
+    {
+        return 'component::'.json_encode([
+                'component' => 'related-printers-popup-button',
+                'componentProps' => [
+                    'operationsUrl' => route('related_printer_endpoint'),
+                    'printerId' => $this->id,
+                    'relationType' => self::RELATIONTYPE_VIEWED_BY_OTHERS
+                ]
+            ]);
     }
 
 }

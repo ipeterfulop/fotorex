@@ -31,9 +31,9 @@
                 ><span></span></div>
             </div>
             <div style="width: 100%; margin-top: 1rem; display: flex; flex-direction: row; ">
-                <div style="display:flex; align-items: stretch; justify-content: flex-start; flex-direction: column">
-                    <label>Válasszon</label>
-                    <select v-model="selectedElement">
+                <div style="display:flex; align-items: stretch; justify-content: flex-start; flex-direction: column; flex-grow:1; margin-right: 3rem">
+                    <label>Válasszon terméket. A sorrend változtatásához húzza a fenti listában egérrel a sorokat.</label>
+                    <select v-model="selectedElement" style="width: 100%; padding: .25rem;">
                         <option v-for="value in valueset"
                                 v-if="!itemIds.includes(value.id)"
                                 :value="value.id"
@@ -41,8 +41,9 @@
                         ></option>
                     </select>
                 </div>
-                <button style="margin-left: auto"
-                        v-on:click="addSelected()">+</button>
+                <button style="margin-left: auto; width: 4rem; border-radius: .25rem"
+                        :disabled="selectedElement == '' || selectedElement == -1 || selectedElement == null"
+                        v-on:click="addSelected">+</button>
             </div>
         </template>
     </div>
@@ -68,7 +69,6 @@
                 items: [],
                 valueset: [],
                 selectedElement: '',
-                allowedFileTypes: [],
                 moving: false,
             }
         },
@@ -81,12 +81,12 @@
                 if (this.items.find(element => element.id == this.selectedElement) === undefined) {
                     this.items.push(this.valueset.find(element => element.id == this.selectedElement));
                 }
+                this.emitValue();
             },
             emitValue: function() {
                 this.$emit('input', this.formData);
             },
             showDragOverEffect: function(event, itemId) {
-                console.log(itemId);
                 event.preventDefault();
                 let target = this.$refs['item-'+itemId][0] || this.$refs['item-'+itemId];
                 if (target.getAttribute('data-itemid') !== this.moving) {
@@ -107,11 +107,10 @@
                 while (target.getAttribute('data-itemid') == null) {
                     target = target.parentNode;
                 }
-                console.log(target);
                 event.dataTransfer.setData('id', target.getAttribute('data-itemid'));
                 event.dataTransfer.setDragImage(target.firstChild, 100, 100);
                 window.setTimeout(() => {
-                    Array.from(document.querySelectorAll('.related-printers-row')).forEach((t) => {
+                    Array.from(document.querySelectorAll('.related-printers-row span')).forEach((t) => {
                         t.classList.add('pointer-events-none');
                     });
                     this.moving = target.getAttribute('data-itemid');
@@ -123,7 +122,7 @@
                 event.target.classList.remove('related-printers-row-hidden');
                 this.moving = false;
                 Array.from(document.querySelectorAll('.related-printers-row')).forEach((t) => {
-                    t.classList.remove('pointer-events-none');
+                    t.querySelector('span').classList.remove('pointer-events-none');
                     t.classList.remove('related-printers-row-dropping');
                     t.classList.remove('related-printers-row-hidden');
                 });
@@ -158,13 +157,6 @@
                         this.items = this.valueset.filter((item) => {
                             return this.value.includes(item.id);
                         });
-                        // testing block
-                            this.valueset.forEach((item) => {
-                                if (this.items.length < 4) {
-                                    this.items.push(item);
-                                }
-                            });
-                        // end testing
                         this.loading = false;
                         this.emitValue();
                     })
@@ -172,6 +164,9 @@
         },
         computed: {
             itemIds: function() {
+                if (this.items == null) {
+                    return [];
+                }
                 return this.items.map(element => element.id);
             },
             formData: function() {
@@ -185,39 +180,27 @@
 <style>
     .related-printers-container {
         min-height: 20rem;
+        max-height: 20rem;
+        overflow-y: auto;
+        padding: .1rem;
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
         align-items: flex-start;
         justify-content: flex-start;
-        border: 1px solid darkgrey
-    }
-
-    .related-printers-add-button {
-        height: 3rem;
-        width: 3rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2.5rem;
-        border-radius: 50%;
-        border: 1px solid darkgrey;
-        transition: box-shadow 200ms ease-in-out;
-    }
-
-    .related-printers-add-button:hover {
-        box-shadow: .2rem .2rem rgba(7, 7, 7, .5);
+        background-color: lightgray;
     }
 
     .related-printers-row {
-        margin: .2rem;
+        margin: 0px;
+        margin-bottom: .2rem;
         width: 100%;
         display: flex;
-        border: 1px solid lightgray;
+        background-color: white;
         padding: .5rem;
         padding-top: .5rem;
         text-align: left;
-        transition: background-color 200ms ease-in-out, padding-top 200ms ease-in-out;
+        transition: padding 200ms ease-in-out;
         position: relative;
         cursor: move;
         flex-direction: row;
@@ -228,22 +211,23 @@
         pointer-events: none;
     }
     .related-printers-row-dropping {
-        padding-left: 2rem !important;
+        padding-top: 2rem !important;
     }
     .related-printers-row-hidden {
-        height: 0px !important;
+        opacity: .25;
     }
 
     .related-printers-row-button {
         visibility: hidden;
         cursor: pointer;
         position: absolute;
+        margin: .25rem;
         z-index:100;
         top: 0px;
         right: 0px;
         width: 2em;
-        height: 100%;
-        background-color: rgba(7, 7, 7, .5);
+        height: 75%;
+        background-color: rgba(128, 7, 7, .5);
         color: white;
         font-size: 2rem;
         font-weight: bold;
@@ -264,7 +248,6 @@
         width: 100%;
         flex-shrink: 0;
         background-color: transparent;
-        box-shadow: .2rem .2rem rgba(7,7,7,.4);
         transition: transform 200ms ease-in-out, background-color 200ms ease-in-out;
     }
 </style>
