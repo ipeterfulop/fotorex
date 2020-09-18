@@ -10,12 +10,16 @@ class ContactmessagesController extends Controller
 {
     public function submit(SaveContactmessageRequest $request)
     {
-        $result = Contactmessage::create($request->getDataset());
+        $result = $request->save();
         if ($result != null) {
-            session()->put('message', 'Üzenetét rögzítettük, köszönjük a megkeresést. Kollégáink hamarosan felveszik önnel a kapcsolatot.');
+            $message = 'Üzenetét rögzítettük, köszönjük a megkeresést. Kollégáink hamarosan felveszik önnel a kapcsolatot.';
         } else {
-            session()->put('message', 'Üzenetét nem sikerült rögzítenünk, kérjük, próbálja meg később.');
+            $message = 'Üzenetét nem sikerült rögzítenünk, kérjük, próbálja meg később.';
         }
+        if ($request->isXmlHttpRequest()) {
+            return response($message);
+        }
+        session()->put('message', $message);
 
         return redirect(route('contactmessage_index'));
     }

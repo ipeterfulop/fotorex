@@ -30,7 +30,7 @@ class PrintersController extends Controller
     public function details($slug)
     {
         $printer = Printer::findBySlug($slug);
-        dd($printer);
+
         return view('public.products.details', [
             'printer' => $printer
         ]);

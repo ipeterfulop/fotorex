@@ -20,7 +20,9 @@
                     <div class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Összehasonlítás más termékkel</div>
                     <div class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1">PDF nyomtatás</div>
                     <div class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Küldés e-mailben</div>
-                    <div class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Érdekel az ajánlat</div>
+                    <button class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1"
+                            onclick="document.getElementById('contact-form-container').classList.remove('hidden'); document.getElementById('contact-form-container').scrollIntoView()"
+                    >Érdekel az ajánlat</button>
                 </div>
             </div>
         </div>
@@ -28,5 +30,11 @@
             {!! $printer->description !!}
         </div>
     </div>
-
+    <div class="flex flex-row items-start justify-start py-4 w-full hidden" id="contact-form-container">
+        @include('public.partials.contactform', [
+            'ajax' => true,
+            'action' => route('contactmessage_submit'),
+            'defaultMessage' => 'Tárgy: kérdés a(z) '.$printer->name.' termékkel kapcsolatban'."\n\n"
+        ])
+    </div>
 @endsection

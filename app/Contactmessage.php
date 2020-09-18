@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Datalytix\VueCRUD\Indexfilters\TextVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Traits\VueCRUDManageable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,10 +18,12 @@ class Contactmessage extends Model
         'email',
         'phone',
         'message',
-        'last_action_taken'
+        'last_action_taken',
+        'printername',
+        'printerdata',
     ];
 
-    protected $appends = ['created_at_label', 'contact_details'];
+    protected $appends = ['created_at_label', 'contact_details', 'printerdata_label'];
 
     public function getCreatedAtLabelAttribute()
     {
@@ -29,16 +32,16 @@ class Contactmessage extends Model
 
     public function getContactDetailsAttribute()
     {
-        return $this->email.'<br>'.$this->phone;
+        return $this->name.'<br>'.$this->email.'<br>'.$this->phone;
     }
 
     public static function getVueCRUDIndexColumns()
     {
         return [
             'created_at_label' => 'Beküldve',
-            'name' => 'Név',
             'contact_details' => 'Kapcsolat',
             'message' => 'Üzenet',
+            'printername' => 'Érintett termék (ha van)',
             'last_action_taken' => 'Állapot',
         ];
     }
@@ -47,8 +50,6 @@ class Contactmessage extends Model
     {
         return [
             'created_at_label' => 'created_at',
-            'name' => 'name',
-            'email' => 'email',
         ];
     }
 
@@ -61,12 +62,17 @@ class Contactmessage extends Model
             'phone' => 'Telefon',
             'message' => 'Üzenet',
             'last_action_taken' => 'Állapot',
+            'printerdata_label' => 'Érintett termék (ha van)'
         ];
     }
 
     public static function getVueCRUDIndexFilters()
     {
-        return [];
+        $result = [];
+        $searchableFields = ['name', 'email', 'message', 'printername'];
+        $result[TextVueCRUDIndexfilter::buildPropertyName($searchableFields)] = new TextVueCRUDIndexfilter($searchableFields, 'Keresés (név, e-mail, érintett termék, üzenet)', '');
+
+        return $result;
     }
 
     public static function shouldVueCRUDAddButtonBeDisplayed()
@@ -102,4 +108,14 @@ class Contactmessage extends Model
         ]);
     }
 
+    public function getPrinterdataLabelAttribute()
+    {
+        if ($this->printerdata == null) {
+            return '';
+        }
+        return view('admin.contactmessage-printerdata', [
+            'printer' => json_decode($this->printerdata),
+            'date' => $this->created_at
+        ])->render();
+    }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Contactmessage;
+use App\Printer;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SaveContactmessageRequest extends FormRequest
@@ -26,7 +28,8 @@ class SaveContactmessageRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required|email',
-            'message' => 'required'
+            'message' => 'required',
+            'printer_id' => 'sometimes|exists:printers,id'
         ];
     }
 
@@ -39,13 +42,25 @@ class SaveContactmessageRequest extends FormRequest
         ];
     }
 
-    public function getDataset()
+    public function save()
     {
-        return [
+        return Contactmessage::create($this->getDataset());
+    }
+
+    protected function getDataset()
+    {
+        $result = [
             'name' => $this->input('name'),
             'email' => $this->input('email'),
             'phone' => $this->input('phone', null),
             'message' => $this->input('message'),
         ];
+        if ($this->has('printer_id')) {
+            $printer = Printer::find($this->input('printer_id'));
+            $result['printername'] = $printer->name;
+            $result['printerdata'] = $printer->toJson();
+        }
+
+        return $result;
     }
 }
