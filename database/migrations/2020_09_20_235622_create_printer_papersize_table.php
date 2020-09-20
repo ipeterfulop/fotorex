@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateSimilarPrintersTable extends Migration
+class CreatePrinterPapersizeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,25 +14,23 @@ class CreateSimilarPrintersTable extends Migration
     public function up()
     {
         Schema::create(
-            'similar_printers',
+            'printer_papersize',
             function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->bigInteger('printer_id')->unsigned();
-                $table->bigInteger('similar_printer_id')->unsigned();
-                $table->integer('position')->default(1);
-                $table->unsignedTinyInteger('is_enabled')->default(1);
+                $table->bigInteger('papersize_id')->unsigned();
                 $table->timestamps();
             }
         );
         Schema::table(
-            'similar_printers',
+            'printer_papersize',
             function (Blueprint $table) {
                 $table->foreign('printer_id')
                       ->references('id')
                       ->on('printers');
-                $table->foreign('similar_printer_id')
+                $table->foreign('papersize_id')
                       ->references('id')
-                      ->on('printers');
+                      ->on('papersizes');
             }
         );
     }
@@ -44,6 +42,6 @@ class CreateSimilarPrintersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('similar_printers');
+        Schema::dropIfExists('printer_papersize');
     }
 }

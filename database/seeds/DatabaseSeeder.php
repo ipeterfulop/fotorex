@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PopulateExtraFeaturesTable::class);
         $this->call(PopulateTechnicalSpecificationCategoriesTable::class);
         $this->call(PopulateUsergroupSizesTable::class);
+        $this->call(PopulatePapersizesTable::class);
     }
 }
