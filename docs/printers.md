@@ -12,7 +12,7 @@ is szerettek valamikor értékesíteni és ez meg is maradt). A ```printers.prin
 3.  ```Scan```: rendelkezik-e az eszköz másolási funkcióval? A ```printers.scaning_mode``` tárolja. A lehetséges 
    értéke megegyeznek a *Print* részben megadott értékekkel. 
 4. Nyitott kérdés
-5. A nyomtatóhoz engedélyezett maximális oldalméret A ```printer_papersize``` táblán keresztül érjük el a ```papersize```
+5. ```A4```: A nyomtatóhoz engedélyezett maximális oldalméret A ```printer_papersize``` táblán keresztül érjük el a ```papersize```
 méreteket.
 6. 
 7. ```Monochrom```: ez valójában arra vonatkozik, hogy hogyan nyomtat a nyomtató, fehér-fekete vagy színes. 
