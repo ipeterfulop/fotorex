@@ -5,6 +5,8 @@ namespace App\Formdatabuilders;
 
 
 use App\Articlecategory;
+use App\Helpers\ColorTechnology;
+use App\Helpers\DeviceFunctionality;
 use App\Manufacturer;
 use App\Photo;
 use App\Printer;
@@ -42,14 +44,43 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setValuesetClass(Manufacturer::class)
             ->setDefault(0)
             ->setContainerClass('col-4');
-        $result['is_multifunctional'] = (new YesNoSelectVueCRUDFormfield())->setMandatory(true)
-            ->setLabel('Multifunkció')
+        $result['is_enabled'] = (new YesNoSelectVueCRUDFormfield())->setMandatory(true)
+            ->setLabel('Aktív')
             ->setDefault(0)
-            ->setContainerClass('col-4');
+            ->setContainerClass('col-3');
         $result['request_for_price'] = (new YesNoSelectVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Árhoz hívjon')
             ->setDefault(0)
-            ->setContainerClass('col-4');
+            ->setContainerClass('col-3');
+        $result['price'] = (new TextVueCRUDFormfield())
+            ->setLabel('Ár')
+            ->setRules(['required_if:request_for_price,0'])
+            ->setDefault(0)
+            ->setContainerClass('col-3');
+        $result['color_technology'] = (new SelectVueCRUDFormfield())
+            ->setMandatory(true)
+            ->setValuesetClass(ColorTechnology::class)
+            ->setContainerClass('col-3')
+            ->setLabel('Színkezelés');
+        $result['is_multifunctional'] = (new YesNoSelectVueCRUDFormfield())->setMandatory(true)
+            ->setLabel('Multifunkció')
+            ->setDefault(0)
+            ->setContainerClass('col-3');
+        $result['printing_mode'] = (new SelectVueCRUDFormfield())
+            ->setMandatory(true)
+            ->setValuesetClass(DeviceFunctionality::class)
+            ->setContainerClass('col-3')
+            ->setLabel('Nyomtató');
+        $result['copying_mode'] = (new SelectVueCRUDFormfield())
+            ->setMandatory(true)
+            ->setValuesetClass(DeviceFunctionality::class)
+            ->setContainerClass('col-3')
+            ->setLabel('Másoló');
+        $result['scanning_mode'] = (new SelectVueCRUDFormfield())
+            ->setMandatory(true)
+            ->setValuesetClass(DeviceFunctionality::class)
+            ->setContainerClass('col-3')
+            ->setLabel('Lapolvasó mód');
         $result['description'] = (new RichttextQuillVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Leírás')
             ->setProperty('content')
@@ -87,10 +118,6 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
                 ])
                 ->setContainerClass('col-12');
         }
-        $result['is_enabled'] = (new YesNoSelectVueCRUDFormfield())->setMandatory(true)
-            ->setLabel('Aktív')
-            ->setDefault(0)
-            ->setContainerClass('col-4');
         return collect($result);
     }
 

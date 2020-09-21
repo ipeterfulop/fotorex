@@ -27,7 +27,6 @@ class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
         \DB::transaction(function() use (&$subject) {
             $dataset = $this->getDataset();
             $dataset['usergroup_size_id'] = 11;
-            $dataset['color_technology'] = 1;
             if ($subject == null) {
                 $subject = Printer::create($dataset);
             } else {
@@ -43,6 +42,7 @@ class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
     public function getDataset()
     {
         $result = $this->getBaseDatasetFromRequest(Printer::class);
+
         return $result;
     }
 
