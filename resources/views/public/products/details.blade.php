@@ -27,6 +27,9 @@
             </div>
         </div>
         <div class="w-full max-width-container border border-gray-200 bg-white p-4 flex flex-col lg:flex-row">
+            @include('public.partials.printers.detail-boxes')
+        </div>
+        <div class="w-full max-width-container border border-gray-200 bg-white p-4 flex flex-col lg:flex-row">
             {!! $printer->description !!}
         </div>
     </div>

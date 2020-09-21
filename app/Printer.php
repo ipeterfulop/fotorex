@@ -88,6 +88,18 @@ class Printer extends Model
         )->where('printer_photo_role_id', '=', PrinterPhotoRole::ORIGINAL_ID);
     }
 
+    public function papersize()
+    {
+        return $this->hasOneThrough(
+            Papersize::class,
+            PrinterPapersize::class,
+            'printer_id',
+            'id',
+            'id',
+            'papersize_id'
+        );
+    }
+
     public function technical_specifications()
     {
         return $this->hasMany(PrinterTechnicalSpecificationCategory::class, 'printer_id', 'id');

@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @php($cacheBuster = config('app.bustCacheForFrontendAssets', false) ? '?ver='.\Illuminate\Support\Str::random(8) : '')
-
+    <script>
+        window.laravelLocales = {};
+        window.laravelTranslations = {!! str_ireplace("\n", "", file_get_contents(resource_path('lang/hu.json'))) !!};
+    </script>
     <link href="{{ asset('css/minton.css') }}{{ $cacheBuster }}" rel="stylesheet">
 
     <title>{{ config('app.title', 'Laravel') }}</title>

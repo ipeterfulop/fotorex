@@ -4,6 +4,7 @@
 namespace App\Dataproviders;
 
 
+use App\Helpers\DeviceFunctionality;
 use App\Printer;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -39,16 +40,22 @@ class PrinterDataprovider
                         ->orWhere('name', 'like', '%'.$request->get('search').'%');
                 });
             })
-            ->when($request->get('modes', '') != '', function ($query) use ($request) {
+            ->when($request->get('price', '') != '', function ($query) use ($request) {
+                $range = explode('-', $request->get('price'));
+                return $query->where(function($query) use ($range) {
+                    return $query->where('request_for_price', '=', 1)
+                        ->orWhereBetween('price', $range);
+                });
+            })->when($request->get('modes', '') != '', function ($query) use ($request) {
                 $modes = explode(',', $request->get('modes'));
                 if (array_search(1, $modes) !== false) {
-                    $query = $query->where('printing_mode', '=', 1);
+                    $query = $query->where('printing_mode', '>=', DeviceFunctionality::BW_ID);
                 }
                 if (array_search(2, $modes) !== false) {
-                    $query = $query->where('copying_mode', '=', 1);
+                    $query = $query->where('copying_mode', '>=', DeviceFunctionality::BW_ID);
                 }
                 if (array_search(3, $modes) !== false) {
-                    $query = $query->where('scanning_mode', '=', 1);
+                    $query = $query->where('scanning_mode', '>=', DeviceFunctionality::BW_ID);
                 }
                 return $query;
             })
