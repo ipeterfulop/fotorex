@@ -12,6 +12,7 @@ module.exports = {
       extend: {
           colors: {
               fotored: '#eb5858',
+              fotoverylightred: '#fef7f3',
               fotoblue: '#333745',
               fotogray: '#9e9fa3',
           },

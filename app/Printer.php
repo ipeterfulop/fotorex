@@ -205,7 +205,9 @@ class Printer extends Model
             'printer_photos',
             'technical_specifications',
             'similarprinters',
-            'printersviewedbyothers'
+            'similarprinters.similarprinter',
+            'printersviewedbyothers',
+            'printersviewedbyothers.similarprinter',
         ])->first();
 
         if (($result == null) && ($abortWith404IfNotFound)) {
@@ -264,4 +266,13 @@ class Printer extends Model
             ]);
     }
 
+    public function mainPhotoUrl()
+    {
+        return optional(optional($this->printer_photos->first())->original)->public_url;
+    }
+
+    public function mainPhotoThumbnailUrl()
+    {
+        return optional(optional($this->printer_photos->first())->thumbnail)->public_url;
+    }
 }
