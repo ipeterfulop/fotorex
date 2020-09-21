@@ -13,4 +13,9 @@ class SimilarPrinter extends Model
         'position',
         'relationtype',
     ];
+
+    public function similarprinter()
+    {
+        return $this->belongsTo(Printer::class, 'similar_printer_id');
+    }
 }
