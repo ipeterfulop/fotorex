@@ -67,7 +67,7 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setProperty('content')
             ->setProps([
                 'allowTableOperations' => 'true',
-                'allowPreview' => 'true',
+                'allowPreview' => 'false',
             ])
             ->setContainerClass('col-12');
         $result['index_image'] = (new ImagePickerVueCRUDFormfield())

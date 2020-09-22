@@ -5284,6 +5284,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         }
       }
 
+      this.saveFilterState();
       this.fetchMode = 'search';
       this.fetchElements(true);
     },
@@ -7839,6 +7840,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
@@ -7855,9 +7857,10 @@ __webpack_require__.r(__webpack_exports__);
       currentColumn: 0
     };
   },
-  mounted: function mounted() {
+  created: function created() {
     this.table = this.value;
   },
+  mounted: function mounted() {},
   methods: {
     convertTableToTrixAttachment: function convertTableToTrixAttachment() {
       var content = '<table>';
@@ -8177,7 +8180,9 @@ __webpack_require__.r(__webpack_exports__);
         editor.deleteInDirection("backward");
       }
 
-      editor.insertAttachment(attachment);
+      try {
+        editor.insertAttachment(attachment);
+      } catch (error) {}
     },
     parseTableStringToTabledata: function parseTableStringToTabledata(tableString) {
       var result = [];
@@ -65981,6 +65986,7 @@ var render = function() {
                         "currentRow == rowIndex && currentColumn == columnIndex"
                     }
                   ],
+                  key: rowIndex + "-" + columnIndex,
                   attrs: {
                     fieldname: "table-" + rowIndex + "-" + columnIndex,
                     "allow-table-operations": "false",
