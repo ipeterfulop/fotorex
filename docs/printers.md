@@ -26,7 +26,7 @@ résznél megadott módon kell színezni (vagy hasonló módon).
 hátterét a tervben megadott színnel kell elvégezni.
 8. (+1) van-e wifije (doboz + wifi icon) ha  a ```printers.wifi_availability``` értéke 
 ```\App\Helpers\OptionalDeviceFunctionality::YES_ID``` 
-vagy ```\App\Helpers\OptionalDeviceFunctionality::OPTIONAL_ID```.
+    vagy ```\App\Helpers\OptionalDeviceFunctionality::OPTIONAL_ID```.
 
 
 # Megjegyzések
