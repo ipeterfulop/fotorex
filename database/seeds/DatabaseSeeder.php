@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,5 +20,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PopulateTechnicalSpecificationCategoriesTable::class);
         $this->call(PopulateUsergroupSizesTable::class);
         $this->call(PopulatePapersizesTable::class);
+        $this->call(PopulateAttributeSetsTable::class);
+        $this->call(PopulateAttributeValuesTable::class);
+        $this->call(PopulateAttributesTable::class);
     }
 }
