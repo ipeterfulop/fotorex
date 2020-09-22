@@ -36,7 +36,7 @@ Route::prefix('admin')->middleware('auth')->group(function() {
 
 });
 
-Route::view('/kapcsolat', 'public.contactmessages.index')->name('contactmessage_index');
+Route::get('/kapcsolat', 'ContactmessagesController@index')->name('contactmessage_index');
 Route::post('/kapcsolat', 'ContactmessagesController@submit')->name('contactmessage_submit');
 
 Route::get('/kereses', 'SearchController@search')->name('search_all');

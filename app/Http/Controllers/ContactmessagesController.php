@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 
 class ContactmessagesController extends Controller
 {
+    public function index()
+    {
+        $viewData = [];
+        if (request()->has('subject')) {
+            $viewData['defaultMessage'] = 'Tárgy: '.request()->get('subject');
+        }
+
+        return view('public.contactmessages.index', $viewData);
+    }
+
     public function submit(SaveContactmessageRequest $request)
     {
         $result = $request->save();

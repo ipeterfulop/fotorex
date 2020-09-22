@@ -206,7 +206,9 @@
                     this.currentSelection = editor.getSelectedRange();
                     editor.deleteInDirection("backward")
                 }
-                editor.insertAttachment(attachment);
+                try {
+                    editor.insertAttachment(attachment);
+                } catch (error) {}
             },
             parseTableStringToTabledata: function(tableString) {
                 let result = [];

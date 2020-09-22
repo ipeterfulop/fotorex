@@ -18,7 +18,7 @@ class Article extends Model
     const SUBJECT_NAME_PLURAL = 'Cikkek';
     const SORTING_OPTION_LATEST = 'friss';
     const SORTING_OPTION_POPULAR = 'nepszeru';
-
+    const IMAGES_PATH = '/images/articles';
 
     protected $fillable = [
         'slug',

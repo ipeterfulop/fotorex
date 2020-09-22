@@ -15,6 +15,15 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
+    <style>
+        .editform-richtext-editor table td {
+            border: 1px solid lightgray;
+        }
+        .editform-richtext-editor table {
+            width: 100%;
+        }
+
+    </style>
 </head>
 <body class="fixed-left">
 <div id="wrapper" class="">
