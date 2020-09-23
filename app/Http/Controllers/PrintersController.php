@@ -14,7 +14,8 @@ class PrintersController extends Controller
             return view('public.articles.index');
         }
         $sortingOption = Printer::validateSortingOption(request()->get('sortby', Printer::SORTING_OPTION_PRICE_DOWN));
-        $dataproviderResult = PrinterDataprovider::getPrinters(
+        $dataprovider = new PrinterDataprovider();
+        $dataproviderResult = $dataprovider->getPrinters(
             request()->get('page', 1),
             $sortingOption,
         );

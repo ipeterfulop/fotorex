@@ -3,6 +3,7 @@ namespace Database\Seeders;
 
 use App\Manufacturer;
 use App\Printer;
+use App\PrinterAttribute;
 use App\PrinterExtraFeature;
 use App\PrinterTechnicalSpecificationCategory;
 use Illuminate\Database\Seeder;
@@ -35,6 +36,7 @@ class TestdataSeeder extends Seeder
             ['manufacturer_id' => 103, 'name' => 'Canon MFC', 'usergroup_size_id' => 12, 'color_technology' => 1, 'is_multifunctional' => 0, 'description' => 'Canon MFC', 'slug' => \Str::slug('Canon MFC'), 'html_page_title' => 'Canon MFC', 'html_page_meta_description' => 'Canon MFC', 'printing_mode' => 1, 'copying_mode' => 1, 'scanning_mode' => 1],
             ['manufacturer_id' => 103, 'name' => 'Canon lézerprinter', 'usergroup_size_id' => 11, 'color_technology' => 0, 'is_multifunctional' => 0, 'description' => 'Canon lézerprinter', 'slug' => \Str::slug('Canon lézerprinter'), 'html_page_title' => 'Canon lézerprinter', 'html_page_meta_description' => 'Canon lézerprinter', 'printing_mode' => 1, 'copying_mode' => 0, 'scanning_mode' => 0],
         ];
+        PrinterAttribute::query()->delete();
         PrinterTechnicalSpecificationCategory::query()->delete();
         Printer::query()->delete();
         foreach ($manufacturers as $manufacturer) {
@@ -44,10 +46,13 @@ class TestdataSeeder extends Seeder
             ], $manufacturer);
         }
         foreach ($printers as $p) {
+            $data = $p;
+            $data['request_for_price'] = random_int(0,1);
+            $data['price'] = random_int(1000,500000);
             $printer = Printer::updateOrCreate([
                 'manufacturer_id' => $p['manufacturer_id'],
                 'name' => $p['name'],
-            ], $p);
+            ], $data);
         }
     }
 }

@@ -2,12 +2,14 @@
 
 namespace App;
 
+use App\Scopes\PrinterWithAttributesScope;
 use App\Traits\hasFiles;
 use App\Traits\hasIsEnabledProperty;
 use App\Traits\HasSortingOptions;
 use Datalytix\VueCRUD\Indexfilters\SelectVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Indexfilters\TextVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Traits\VueCRUDManageable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
@@ -103,6 +105,11 @@ class Printer extends Model
     public function technical_specifications()
     {
         return $this->hasMany(PrinterTechnicalSpecificationCategory::class, 'printer_id', 'id');
+    }
+
+    public function printerattributes()
+    {
+        return $this->hasMany(PrinterAttribute::class);
     }
 
     public function syncPhotos(array $photoIds)
@@ -274,5 +281,10 @@ class Printer extends Model
     public function mainPhotoThumbnailUrl()
     {
         return optional(optional($this->printer_photos->first())->thumbnail)->public_url;
+    }
+
+    public function scopeWithAttributes(Builder $query)
+    {
+        return $query->withGlobalScope('attr', new PrinterWithAttributesScope);
     }
 }
