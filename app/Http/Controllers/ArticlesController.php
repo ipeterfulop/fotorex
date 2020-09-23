@@ -13,7 +13,7 @@ class ArticlesController extends Controller
     public function articleList($categorySlug)
     {
         if (!request()->isXmlHttpRequest()) {
-            return view('public.articles.index');
+            return view('public.articles.index', ['categorySlug' => $categorySlug]);
         }
         $sortingOption = Article::validateSortingOption(request()->get('sortby', Article::SORTING_OPTION_LATEST));
         $dataproviderResult = ArticleDataprovider::getPublishedArticles(
@@ -23,6 +23,7 @@ class ArticlesController extends Controller
             request()->get('search', '')
         );
         return view('public.partials.list-or-grid-inner', [
+            'categorySlug' => $categorySlug,
             'view' => 'public.partials.article-summary-block',
             'elements' => $dataproviderResult->results,
             'showPagination' => 'true',

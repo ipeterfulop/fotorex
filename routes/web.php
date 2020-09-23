@@ -43,6 +43,7 @@ Route::get('/kereses', 'SearchController@search')->name('search_all');
 
 Route::get('/termekek/kereses', 'PrintersController@printerList')->name('list_printers');
 
+Route::get('/termekek/{slug}', 'PrintersController@details')->name('printer_details');
 
 Route::get('/{categorySlug}', 'ArticlesController@articleList')->name('list_articles');
-Route::get('/termekek/{slug}', 'PrintersController@details')->name('printer_details');
+Route::get('/{categorySlug}/{slug}', 'ArticlesController@show')->name('show_article');

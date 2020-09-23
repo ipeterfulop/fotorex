@@ -20,10 +20,11 @@ class ServicesArticlesSeeder extends Seeder
         $dataset = [
             [
                 'title' => 'Szervíz konstrukciók',
-                'summary' => '',
+                'summary' => 'Szervíz-konstrukcióink bemutatása',
                 'articlecategory_id' => $articlecategory->id,
                 'slug' => 'szerviz-konstrukciok',
                 'published_at' => now(),
+                'is_published' => 1,
                 'position' => 1,
             ]
         ];
