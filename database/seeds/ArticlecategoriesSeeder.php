@@ -42,6 +42,13 @@ class ArticlecategoriesSeeder extends Seeder
                 'name' => 'Megoldások',
                 'custom_slug_base' => 'megoldasok'
             ],
+            [
+                'id' => $position,
+                'position' => $position++,
+                'show_in_main_menu' => 0,
+                'name' => 'Szaktanácsadás',
+                'custom_slug_base' => 'szaktanacsadas'
+            ],
         ];
         foreach ($dataset as $row) {
             \App\Articlecategory::updateOrCreate(

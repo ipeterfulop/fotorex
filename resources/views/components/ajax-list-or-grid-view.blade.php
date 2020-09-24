@@ -21,7 +21,6 @@
     }
     .fotorex-grid-container .fotorex-list-item {
         width: 25%;
-        margin: .25rem;
         box-sizing: border-box;
     }
 </style>
@@ -32,16 +31,16 @@
         </div>
     @endif
     <div class="flex flex-col w-full">
-        <div class="flex flex-start flex-no-wrap flex-row p-4 lg:p-0">
+        <div class="flex flex-start flex-no-wrap flex-row p-4 lg:p-0 mb-8">
             <select x-model="sortingOption">
                 @foreach($sortingOptions as $id => $label)
                     <option value="{{ $id }}">{{ $label }}</option>
                 @endforeach
             </select>
-            <button class="hidden lg:flex flex-row items-center justify-start ml-4 hover-red-link pr-2" @click="switchToList()" x-bind:class="{'font-bold': containerClass == 'fotorex-list-container'}">
+            <button class="hidden lg:flex flex-row items-center justify-start ml-4 hover-red-link pr-2 focus:outline-none" @click="switchToList()" x-bind:class="{'opacity-25': containerClass != 'fotorex-list-container'}">
                 <span class="h-8 w-8 mr-1">{!! config('heroicons.solid.view-list') !!}</span>Lista
             </button>
-            <button class="hidden lg:flex flex-row items-center justify-start ml-4 hover-red-link pr-2" @click="switchToGrid()" x-bind:class="{'font-bold': containerClass == 'fotorex-grid-container'}">
+            <button class="hidden lg:flex flex-row items-center justify-start ml-4 hover-red-link pr-2 focus:outline-none" @click="switchToGrid()" x-bind:class="{'opacity-25': containerClass != 'fotorex-grid-container'}">
                 <span class="h-8 w-8 mr-1">{!! config('heroicons.solid.view-grid') !!}</span>Rács
             </button>
         </div>
@@ -72,6 +71,15 @@
             loading: true,
             pushState: {{ $pushState ? 'true' : 'false' }},
             initialize() {
+                if (window.localStorage) {
+                    let savedView = window.localStorage.getItem('listOrGridViewState');
+                    if (savedView == 'list') {
+                        this.switchToList();
+                    }
+                    if (savedView == 'grid') {
+                        this.switchToGrid();
+                    }
+                }
                 this.$watch('sortingOption', (value) => {this.loadContent(true)});
                 this.loadContent(true);
                 if (this.pushState) {
@@ -102,12 +110,19 @@
                     })
                 }
             },
+            storeState(state) {
+                if (window.localStorage) {
+                    window.localStorage.setItem('listOrGridViewState', state);
+                }
+            },
             switchToList() {
                 this.containerClass = 'fotorex-list-container'
+                this.storeState('list');
                 this.initPaginationLinks();
             },
             switchToGrid() {
                 this.containerClass = 'fotorex-grid-container';
+                this.storeState('grid');
                 this.initPaginationLinks();
             },
             showPage(p) {

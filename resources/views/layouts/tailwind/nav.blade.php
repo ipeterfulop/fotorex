@@ -22,10 +22,7 @@
              @click.away="menuOpen = false"
              class="flex flex-col w-full items-start justify-start bg-fotoblue text-white uppercase p-2 shadow-lg">
             <div class="flex flex-row w-full items-between justify-center my-1">
-                <span>F</span>
-                <span>ln</span>
-                <span>g</span>
-                <span>m</span>
+                <a href="https://www.facebook.com/FotorexIrodatechnika" target="_blank"><img class="h-8" src="/images/assets/fblogo.png"></a>
                 <div class="ml-auto flex items-end text-right">
                     +36 (1) 470-4020<br>
                     1148 Budapest, Lengyel u. 16.
@@ -70,10 +67,7 @@
         <div class="py-4 px-2 h-full hover-red-link  desktop-nav-menuitem">Interaktív monitorok</div>
         <div class="py-4 px-2 h-full hover-red-link  desktop-nav-menuitem">Irodaszerek</div>
         <span class="ml-auto">
-            <span>F</span>
-            <span>ln</span>
-            <span>g</span>
-            <span>m</span>
+            <a href="https://www.facebook.com/FotorexIrodatechnika" target="_blank"><img class="h-8" src="/images/assets/fblogo.png"></a>
         </span>
     </div>
 </div>

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ config('app.name') }}</title>
+    <title>{{ isset($pageTitle) ? $pageTitle.' - '  : ''}}{{ config('app.name') }}</title>
 <!--
     <script src="{{ asset('js/fa/all.min.js') }}"></script>
     <script src="{{ asset('js/fa/brands.min.js') }}"></script>
@@ -18,19 +18,6 @@
     <link href="{{ asset('css/fa/brands.min.css') }}" rel="stylesheet">
 -->
     <style>
-        .heroicon-svg {
-            width: 100%;
-            min-width: 100%;
-            max-width: 100%;
-            height: 100%;
-            min-height: 100%;
-            max-height: 100%;
-        }
-        .desktop-nav-menuitem {
-            border-left: .5px solid rgba(255,255,255,.2);
-            border-right: .5px solid rgba(255,255,255,.2);
-            border-collapse: collapse;
-        }
     </style>
     <script>
         const sliderValues = {

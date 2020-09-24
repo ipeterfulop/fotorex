@@ -26,7 +26,52 @@ class ServicesArticlesSeeder extends Seeder
                 'published_at' => now(),
                 'is_published' => 1,
                 'position' => 1,
-            ]
+            ],
+            [
+                'title' => 'Bérleti csomagok',
+                'summary' => 'Bérleti csomagok bemutatása',
+                'articlecategory_id' => $articlecategory->id,
+                'slug' => 'berleti-csomagok',
+                'published_at' => now(),
+                'is_published' => 1,
+                'position' => 1,
+            ],
+            [
+                'title' => 'Szaktanácsadás',
+                'summary' => 'Tanácsok szakértőinktől',
+                'articlecategory_id' => $articlecategory->id,
+                'slug' => 'szaktanacsadas',
+                'published_at' => now(),
+                'is_published' => 1,
+                'position' => 1,
+            ],
+            [
+                'title' => 'Házhozszállítás',
+                'summary' => 'Mindent a házhozszállításról',
+                'articlecategory_id' => $articlecategory->id,
+                'slug' => 'hazhozszallitas',
+                'published_at' => now(),
+                'is_published' => 1,
+                'position' => 1,
+            ],
+            [
+                'title' => 'Környezetvédelem',
+                'summary' => 'Környezetvédelmi tanácsaink',
+                'articlecategory_id' => $articlecategory->id,
+                'slug' => 'kornyezetvedelem',
+                'published_at' => now(),
+                'is_published' => 1,
+                'position' => 1,
+            ],
+            [
+                'title' => 'Letöltésközpont',
+                'summary' => 'Driverek és kézikönyvek',
+                'articlecategory_id' => $articlecategory->id,
+                'slug' => 'letolteskozpont',
+                'published_at' => now(),
+                'is_published' => 1,
+                'position' => 1,
+            ],
         ];
         $assetBasepath = base_path('database'.DIRECTORY_SEPARATOR.'seeds'.DIRECTORY_SEPARATOR.'articles'.DIRECTORY_SEPARATOR);
         foreach ($dataset as $row) {
@@ -46,6 +91,14 @@ class ServicesArticlesSeeder extends Seeder
                 Article::create($data);
             } else {
                 $article->update($data);
+            }
+        }
+        foreach(scandir($assetBasepath.DIRECTORY_SEPARATOR.'articleassets') as $asset) {
+            if (array_search(mb_substr($asset, -3, 3), ['png', 'jpg', 'gif']) !== false) {
+                copy(
+                    $assetBasepath.DIRECTORY_SEPARATOR.'articleassets'.DIRECTORY_SEPARATOR.$asset,
+                    storage_path('app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'attachments'.DIRECTORY_SEPARATOR.$asset)
+                );
             }
         }
     }
