@@ -24,11 +24,11 @@
     <div class="w-full flex flex-row items-start justify-center">
         <div class="w-full max-width-container flex flex-col">
             <div class="flex flex-col items-start justify-start">
-                <div class="w-full article-container ">
+                <div class="w-full article-container">
                     {!! $article->content !!}
                 </div>
-                <div class="w-full py-8">
-                    <a class="bg-fotored hover-gray-link py-2 px-4 mt-8 text-white text-sm my-8" href="{{ $backUrl }}">Vissza</a>
+                <div class="w-full px-8 lg:px-0 py-8 flex flex-row ">
+                    <a class="w-full text-center lg:w-auto bg-fotored hover-gray-link py-2 px-4 mt-8 text-white text-sm my-8" href="{{ $backUrl }}">Vissza</a>
                 </div>
             </div>
         </div>

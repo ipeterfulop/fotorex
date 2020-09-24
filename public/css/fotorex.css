@@ -17937,10 +17937,32 @@ input {
   border-collapse: collapse;
 }
 
+.article-container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  overflow-x: auto;
+}
+
 .article-container p {
   text-align: justify;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  max-width: 100vw;
+}
+
+@media (min-width: 1024px) {
+  .article-container {
+    padding-left: 0;
+    padding-right: 0;
+    overflow-y: unset;
+  }
+
+  .article-container p {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 .article-container h1 {

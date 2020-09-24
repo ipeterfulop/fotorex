@@ -49,9 +49,23 @@ input {
     border-right: .5px solid rgba(255,255,255,.2);
     border-collapse: collapse;
 }
-.article-container p {
-    @apply text-justify my-2;
+.article-container {
+    @apply px-4 overflow-x-auto;
 }
+.article-container p {
+    @apply text-justify my-2 py-2;
+    max-width: 100vw;
+}
+@screen lg {
+    .article-container {
+        @apply px-0;
+        overflow-y: unset;
+    }
+    .article-container p {
+        @apply px-0;
+    }
+}
+
 .article-container h1 {
     @apply text-xl text-fotored my-8 pb-2 border-b border-fotored font-bold;
 }

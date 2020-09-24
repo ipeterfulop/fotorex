@@ -31,7 +31,7 @@
             <div class="h-2 bg-white w-full my-2"></div>
             <div class=" w-full justify-start items-center">
                 <form method="get" action="{{ route('search_all') }}" class="flex flex-row">
-                    <input type="text" class="flex-grow-1 w-4/5" placeholder="Keresés mindenben" name="search">
+                    <input type="text" class="flex-grow-1 w-4/5 text-black" placeholder="Keresés mindenben" name="search">
                     <button type="submit" class="hover-red-link px-2 h-12 w-12">{!! config('heroicons.outline.search')  !!}</button>
                 </form>
 
