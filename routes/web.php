@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/scrape', function() {
+    dd(\App\Scrapers\SharpScraper::scrapeProductPage('https://www.sharp.hu/cps/rde/xchg/hu/hs.xsl/-/html/product-details-office-print.htm?product=MXC507F'));
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
