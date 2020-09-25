@@ -19,7 +19,12 @@ class AddAttributegroupToAttributes extends Migration
                 $table->foreignId('attributegroup_id')
                       ->nullable()
                       ->default(null)
-                      ->constrained();
+                      ->constrained()
+                      ->after('attribute_value_set_id');
+                $table->tinyInteger('use_at_product_comparison')
+                      ->unsigned()
+                      ->default(0)
+                      ->after('is_computed');
             }
         );
     }
