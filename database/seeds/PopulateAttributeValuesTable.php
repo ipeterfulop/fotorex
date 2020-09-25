@@ -51,9 +51,11 @@ class PopulateAttributeValuesTable extends Seeder
             ['id' => 4001, 'attribute_value_set_id' => 4, 'value' => 1, 'label' => 'Nem elérhető'],
             ['id' => 4002, 'attribute_value_set_id' => 4, 'value' => 2, 'label' => 'Alap'],
             ['id' => 4003, 'attribute_value_set_id' => 4, 'value' => 3, 'label' => 'Opció'],
-            ['id' => 5001, 'attribute_value_set_id' => 4, 'value' => 1, 'label' => 'Helyi'],
-            ['id' => 5002, 'attribute_value_set_id' => 4, 'value' => 2, 'label' => 'Hálózatos'],
-            ['id' => 5003, 'attribute_value_set_id' => 4, 'value' => 3, 'label' => 'Opciónálisan hálózatos'],
+            ['id' => 5001, 'attribute_value_set_id' => 5, 'value' => 1, 'label' => 'Helyi'],
+            ['id' => 5002, 'attribute_value_set_id' => 5, 'value' => 2, 'label' => 'Hálózatos'],
+            ['id' => 5003, 'attribute_value_set_id' => 5, 'value' => 3, 'label' => 'Opciónálisan hálózatos'],
+            ['id' => 6001, 'attribute_value_set_id' => 6, 'value' => 1, 'label' => 'Lézeres'],
+            ['id' => 6002, 'attribute_value_set_id' => 6, 'value' => 2, 'label' => 'Tintasugaras'],
         ];
 
         foreach ($dataSet as &$dataRow) {

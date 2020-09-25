@@ -59,6 +59,10 @@ class PopulateAttributeSetsTable extends Seeder
                 'id'   => 5,
                 'name' => 'Helyi/hálózatos',
             ],
+            [
+                'id'   => 6,
+                'name' => 'Nyomtatási technológia',
+            ]
         ];
 
         foreach ($dataSet as &$dataRow) {

@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PopulatePapersizesTable::class);
         $this->call(PopulateAttributeSetsTable::class);
         $this->call(PopulateAttributeValuesTable::class);
+        $this->call(PopulateAttributegroupsTable::class);
         $this->call(PopulateAttributesTable::class);
     }
 }
