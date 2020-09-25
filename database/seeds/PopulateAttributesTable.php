@@ -100,9 +100,9 @@ class PopulateAttributesTable extends Seeder
                 'name'                      => 'Színkezelés',
                 'label'                     => null,
                 'variable_name'             => 'color_management',
-                'attribute_value_set_id'    => '2',
+                'attribute_value_set_id'    => null,
                 'attribute_category_id'     => '2',
-                'is_computed'               => '0',
+                'is_computed'               => '1',
                 'use_at_product_comparison' => '1',
             ],
             [
