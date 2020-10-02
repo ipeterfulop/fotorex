@@ -12,7 +12,7 @@
 */
 
 Route::get('/scrape', function() {
-    dd(\App\Scrapers\SharpScraper::scrapeProductPage('https://www.sharp.hu/cps/rde/xchg/hu/hs.xsl/-/html/product-details-office-print.htm?product=MXC507F'));
+    dd(\App\Scrapers\LexmarkScraper::scrapeProductPage('https://lexmark.com/hu_hu/printer/14449/Lexmark-MC3224dwe'));
 });
 
 Route::get('/', function () {

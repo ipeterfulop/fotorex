@@ -9,6 +9,22 @@ use DOMXPath;
 
 class SharpScraper
 {
+    public static function scrapeProductsPage($url, $ignore = [])
+    {
+        $products = json_decode(mb_convert_encoding(file_get_contents($url), 'HTML-ENTITIES', "UTF-8"))->products;
+        $result = [];
+
+        foreach ($products as $product) {
+            if (isset($product->product_id)) {
+                if (array_search($product->product_id, $ignore) === false) {
+                    $result[$product->product_id] = 'https://www.sharp.hu/cps/rde/xchg/hu/hs.xsl/-/html/product-details-office-print.htm?product='.$product->product_id;
+                }
+            }
+        }
+
+        return $result;
+    }
+
     public static function scrapeProductPage($url)
     {
         $content = mb_convert_encoding(file_get_contents($url), 'HTML-ENTITIES', "UTF-8");
