@@ -72,6 +72,21 @@ class SharpScraper
         foreach ($images as $image) {
             $result['images'][] = $image->getAttribute('src');
         }
+        foreach ($result['specifications'] as $name => $content) {
+            $rawContent = str_ireplace("\n", "", $content);
+            $rawContent = preg_replace('/<div.*?>/miu', '', $rawContent);
+            $rawContent = preg_replace('/<span.*?check.*?<\/span>/miu', 'Igen', $rawContent);
+            $rawContent = str_ireplace(['</div>','<dt>','</dt>', '</dd>', '<dl>'], '', $rawContent);
+            $rows = explode('</dl>', $rawContent);
+            $all['specificationRows'][$name] = [];
+            foreach ($rows as $row) {
+                $rowPieces = explode('<dd>', $row);
+                if (count($rowPieces) == 2) {
+                    $result['specificationRows'][$name][trim($rowPieces[0])] = trim($rowPieces[1]);
+                }
+            }
+        }
+
         return $result;
     }
 }
