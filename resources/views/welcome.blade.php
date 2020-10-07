@@ -1,9 +1,5 @@
 @extends('layouts.tailwind.app')
 @section('content')
-    @include('public.partials.item-slider-list', [
-        'view' => 'public.partials.printer-summary-box',
-        'items' => [1,2,3,4,5,6,7,8]
-    ])
     @if(false)
         <div class="max-width-container w-full flex justify-center h-64 pl-16 pr-64">
             <x-price-slider :min="0" :max="500000" :field="'field'"></x-price-slider>

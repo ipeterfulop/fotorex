@@ -12,7 +12,8 @@
 */
 
 Route::get('/scrape', function() {
-    $all = \App\Scrapers\SharpScraper::scrapeProductPage('https://www.sharp.hu/cps/rde/xchg/hu/hs.xsl/-/html/product-details-office-print.htm?product=MX6071');
+    dd(\App\Scrapers\NewsScraper::scrapeNews(1));
+    $all = \App\Scrapers\NewsScraper::scrapeArticleBody('http://www.fotorex.hu/idc-tanulmany-a-menedzselt-munkafolyamat-szolgaltatasokrol');
     dd($all);
 });
 
