@@ -93,6 +93,7 @@ class ServicesArticlesSeeder extends Seeder
                 $article->update($data);
             }
         }
+        @mkdir(storage_path('app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'attachments'), 02777, true);
         foreach(scandir($assetBasepath.DIRECTORY_SEPARATOR.'articleassets') as $asset) {
             if (array_search(mb_substr($asset, -3, 3), ['png', 'jpg', 'gif']) !== false) {
                 copy(
