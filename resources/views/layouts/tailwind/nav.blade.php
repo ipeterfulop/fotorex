@@ -48,7 +48,9 @@
     <div class="w-full justify-center hidden lg:flex">
     <div class="w-full max-width-container py-4 flex items-center justify-between">
         <div class="w-2/5">
-            <img src="https://via.placeholder.com/500x160" alt="logo" class="w-full">
+            <a class="w-full h-full" href="/">
+                <img src="/images/assets/fotorex-logo.jpg" alt="logo" class="w-full">
+            </a>
         </div>
         <div class="flex flex-row h-full items-center w-2/5 h-12">
             <form method="get" action="{{ route('search_all') }}" class="flex flex-row ">

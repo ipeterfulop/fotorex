@@ -48,9 +48,7 @@ class NewsScraper
                             //article summary
                             $strs = $xpath->query('./tr', $table);
                             if (count($strs) == 3) {
-                                echo htmlentities($dom->saveHTML($strs[1]))."<hr>";
                                 $article['summary'] = self::cleanUpHtml($dom->saveHTML($strs[1]));
-                                echo htmlentities($article['summary'])."<hr>";
                                 $imgs = $xpath->query('.//img', $strs[1]);
                                 if (count($imgs) > 0) {
                                     $article['index_image'] = 'http://fotorex.hu'.$imgs[0]->getAttribute('src');

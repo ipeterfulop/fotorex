@@ -10,25 +10,17 @@
     @endif
     <div class="w-full bg-transparent flex justify-center">
         <div class="w-full max-width-container flex flex-col lg:flex-row items-start justify-between mt-4 bg-transparent">
-            <div class="w-full lg:w-3/4 bg-transparent px-2 z-0">
+            <div class="w-full lg:w-3/4 bg-transparent px-2 z-0 h-full">
                 @include('public.partials.slider', [
-                    'id' => 'offers-slider',
-                    'itemWidthClass' => 'slider-slide-fullwidth flex items-start justify-start',
-                    'sliderInnerClass' => 'm-0',
-                    'heightClass' => 'h-96',
-                    'delay' => '5000',
-                    'bgClass' => 'bg-transparent',
-                    'contents' => [
-                        '<img src="https://via.placeholder.com/800x300">',
-                        '<img src="https://via.placeholder.com/800x300">',
-                    ]
+                    'slider' => \App\Slider::getForFrontpage(),
+                    'view' => 'public.partials.slide'
                 ])
 
             </div>
             <div class="w-full lg:w-1/4 h-full flex flex-row lg:flex-col items-center justify-between py-12">
-                <div class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Szolgáltatások</div>
+                <a class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-3 flex-grow m-1" href="/szolgaltatasok">Szolgáltatások</a>
                 <div class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Megoldások</div>
-                <div class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Hírek</div>
+                <a class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-3 flex-grow m-1" href="/hirek">Hírek</a>
                 <div class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Cégünkről</div>
             </div>
         </div>

@@ -24,5 +24,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PopulateAttributeValuesTable::class);
         $this->call(PopulateAttributegroupsTable::class);
         $this->call(PopulateAttributesTable::class);
+        $this->call(SlidersSeeder::class);
+        $this->call(ScrapedNewsSeeder::class);
+        $this->call(ServicesArticlesSeeder::class);
     }
 }

@@ -15,7 +15,13 @@ class ScrapedNewsSeeder extends Seeder
      */
     public function run()
     {
-        $articles = NewsScraper::scrapeNews(2);
+        $serialized = base_path('database'.DIRECTORY_SEPARATOR.'seeds'.DIRECTORY_SEPARATOR.'articles'.DIRECTORY_SEPARATOR.'news.json');
+        if (file_exists($serialized)) {
+            $articles = json_decode(file_get_contents($serialized), true);
+        } else {
+            $articles = NewsScraper::scrapeNews(2);
+            file_put_contents($serialized, json_encode($articles));
+        }
         $position = 1;
         foreach ($articles as $articleDataset) {
             $dataset = $articleDataset + [
