@@ -32,6 +32,7 @@ class ScrapedNewsSeeder extends Seeder
             $dataset['content'] = str_ireplace('/images/stories', Article::IMAGES_PATH, $dataset['content']);
             if ($dataset['index_image'] != null) {
                 $target = public_path('images'.DIRECTORY_SEPARATOR.'articles'.DIRECTORY_SEPARATOR.basename($dataset['index_image']));
+                @mkdir(dirname($target), 02777, true);
                 if (!file_exists($target)) {
                     $imageContent = file_get_contents($dataset['index_image']);
                     file_put_contents($target, $imageContent);
