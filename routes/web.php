@@ -11,10 +11,10 @@
 |
 */
 
-Route::get('/scrape', function() {
-    dd(\App\Scrapers\NewsScraper::scrapeNews(1));
-    $all = \App\Scrapers\NewsScraper::scrapeArticleBody('http://www.fotorex.hu/idc-tanulmany-a-menedzselt-munkafolyamat-szolgaltatasokrol');
-    dd($all);
+use App\PrinterPhotoRole;
+
+Route::get('/image', function() {
+        echo '<img src="'.\App\Printer::first()->getCustomizedPrinterPhoto(3, PrinterPhotoRole::find(2))->getUrl().'"><hr>';
 });
 
 Route::get('/', function () {

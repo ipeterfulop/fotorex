@@ -87,7 +87,30 @@ class Printer extends Model
             'printer_photo_id',
             'id',
             'id'
-        )->where('printer_photo_role_id', '=', PrinterPhotoRole::ORIGINAL_ID);
+        );
+    }
+
+    public function getCustomizedPhotosForRole(PrinterPhotoRole $role)
+    {
+        return $this->customized_printer_photos->filter(function($cpp) use ($role) {
+            return $cpp->printer_photo_role_id == $role->id;
+        });
+    }
+
+    public function getCustomizedPrinterPhoto($printerPhotoId, PrinterPhotoRole $role = null)
+    {
+        $all = $this->customized_printer_photos->filter(function($cpp) use ($printerPhotoId, $role) {
+            if ($role == null) {
+                return $cpp->printer_photo_id == $printerPhotoId;
+            } else {
+                return $cpp->printer_photo_id == $printerPhotoId && $cpp->printer_photo_role_id == $role->id;
+            }
+        })->keyBy('printer_photo_role_id');
+        if ($role == null) {
+            return $all;
+        }
+
+        return $all->get($role->id);
     }
 
     public function papersize()

@@ -9,12 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 class PrinterPhoto extends Model
 {
     use belongsToPrinter, hasPosition;
+    const SUBDIRECTORY = 'printers';
 
     protected $table = 'printer_photo';
 
     protected $fillable = ['printer_id', 'position'];
 
-    protected $with = ['original', 'thumbnail'];
+    protected $with = ['customized_printer_photos'];
 
     public function customized_printer_photos()
     {

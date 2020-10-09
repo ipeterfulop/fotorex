@@ -16,6 +16,11 @@ class CustomizedPrinterPhoto extends Model
         return $this->belongsTo(Photo::class, 'photo_id', 'id');
     }
 
+    public function getUrl()
+    {
+        return url('/storage/'.PrinterPhoto::SUBDIRECTORY.'/'.$this->photo->file->filename);
+    }
+
     public static function createCustomizedPhotos($printer_photo_id, $photo_id)
     {
         \DB::transaction(function() use ($printer_photo_id, $photo_id) {
