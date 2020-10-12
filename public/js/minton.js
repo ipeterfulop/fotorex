@@ -3717,6 +3717,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -61468,12 +61472,6 @@ var render = function() {
                     $event,
                     _vm.objectMode ? image.url : image
                   )
-                },
-                click: function($event) {
-                  if ($event.target !== $event.currentTarget) {
-                    return null
-                  }
-                  _vm.previewUrl = _vm.objectMode ? image.url : image
                 }
               }
             },
@@ -61483,6 +61481,14 @@ var render = function() {
                 attrs: {
                   src: _vm.objectMode ? image.url : image,
                   label: _vm.objectMode ? image.url : image
+                },
+                on: {
+                  click: function($event) {
+                    if ($event.target !== $event.currentTarget) {
+                      return null
+                    }
+                    _vm.previewUrl = _vm.objectMode ? image.url : image
+                  }
                 }
               }),
               _vm._v(" "),
@@ -61604,7 +61610,15 @@ var render = function() {
             [
               _c("img", {
                 staticStyle: { "max-height": "70vh", "max-width": "70vw" },
-                attrs: { src: _vm.previewUrl }
+                attrs: { src: _vm.previewUrl },
+                on: {
+                  click: function($event) {
+                    if ($event.target !== $event.currentTarget) {
+                      return null
+                    }
+                    _vm.previewUrl = ""
+                  }
+                }
               })
             ]
           )
