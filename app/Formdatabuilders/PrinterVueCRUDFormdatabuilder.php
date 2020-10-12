@@ -10,6 +10,7 @@ use App\Helpers\DeviceFunctionality;
 use App\Manufacturer;
 use App\Photo;
 use App\Printer;
+use App\PrinterPhotoRole;
 use App\PrinterTechnicalSpecificationCategory;
 use App\TechnicalSpecificationCategory;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\FileCollectorVueCRUDFormfield;
@@ -123,16 +124,16 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
 
     public function get_photo_value()
     {
-        if ($this->subject===null) {
+        if ($this->subject === null) {
             return [];
         }
         else {
-            return $this->subject->printer_photos->transform(function($printerphoto) {
+            return $this->subject->getCustomizedPhotosForRole(PrinterPhotoRole::whereName('original')->first())->transform(function($cpp) {
                 return [
-                    'id' => $printerphoto->original->id,
-                    'url' => $printerphoto->original->public_url
+                    'id' => $cpp->photo_id,
+                    'url' => $cpp->getUrl()
                 ];
-            })->all();
+            })->values()->all();
         }
     }
 

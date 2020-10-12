@@ -10,6 +10,7 @@
                  v-on:dragenter="showDragOverEffect($event, objectMode ? image.url : image)"
                  v-on:dragleave="hideDragOverEffect($event, objectMode ? image.url : image)"
                  v-on:drop="moveToBefore($event, objectMode ? image.url : image)"
+                 v-on:click.self="previewUrl = objectMode ? image.url : image"
                  :ref="objectMode ? 'image-'+image.url : 'image-'+image"
                  class="image-library-thumbnail">
                 <img style="max-height: 100%; max-width: 100%" :src="objectMode ? image.url : image" :label="objectMode ? image.url : image">
@@ -39,6 +40,11 @@
                 <span class="image-library-add-button">+</span>
             </label>
         </div>
+        <popup :visible="previewUrl != ''" v-on:close="previewUrl = ''">
+            <div style="display: flex; align-items: center; justify-content: center">
+                <img :src="previewUrl" style="max-height: 70vh; max-width: 70vw">
+            </div>
+        </popup>
     </div>
 </template>
 
@@ -55,7 +61,7 @@
             formElementLabel: {type: String, default: ''},
             limit: {default: null},
             accept: {default: false},
-            objectMode: {type: Boolean, default: true}
+            objectMode: {type: Boolean, default: true},
         },
         data: function () {
             return {
@@ -66,6 +72,7 @@
                 allowedFileTypes: [],
                 defaultValue: null,
                 moving: false,
+                previewUrl: '',
             }
         },
         created() {

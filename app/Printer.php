@@ -87,7 +87,7 @@ class Printer extends Model
             'printer_photo_id',
             'id',
             'id'
-        );
+        )->orderBy('position', 'asc');
     }
 
     public function getCustomizedPhotosForRole(PrinterPhotoRole $role)

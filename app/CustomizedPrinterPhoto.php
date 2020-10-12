@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Intervention\Image\ImageManager;
 
 class CustomizedPrinterPhoto extends Model
@@ -10,6 +11,24 @@ class CustomizedPrinterPhoto extends Model
     protected $fillable = ['printer_photo_id', 'photo_id', 'printer_photo_role_id'];
 
     protected $with = ['photo'];
+
+    protected static function booted()
+    {
+        static::addGlobalScope('position', function (Builder $builder) {
+            $builder->select('customized_printer_photos.*', \DB::raw('pp.position as position'))->joinSub(
+                PrinterPhoto::select(\DB::raw('id as ppid'), 'position'),
+                'pp',
+                'pp.ppid',
+                '=',
+                'customized_printer_photos.printer_photo_id'
+            );
+        });
+    }
+
+    public function printerphoto()
+    {
+        return $this->belongsTo(PrinterPhoto::class, 'printer_photo_id');
+    }
 
     public function photo()
     {
