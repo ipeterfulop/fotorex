@@ -113,6 +113,16 @@ class Printer extends Model
         return $all->get($role->id);
     }
 
+    public function getMainImageUrl($role)
+    {
+        if ($this->printer_photos->isEmpty()) {
+            return null;
+        }
+
+        return $this->getCustomizedPrinterPhoto($this->printer_photos->first()->id, $role)
+            ->getUrl();
+    }
+
     public function papersize()
     {
         return $this->hasOneThrough(

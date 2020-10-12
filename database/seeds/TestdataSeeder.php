@@ -53,6 +53,16 @@ class TestdataSeeder extends Seeder
                 'manufacturer_id' => $p['manufacturer_id'],
                 'name' => $p['name'],
             ], $data);
+            PrinterAttribute::create([
+                'printer_id' => $printer->id,
+                'attribute_id' => 6,
+                'customvalue' => random_int(40, 60),
+            ]);
+            PrinterAttribute::create([
+                'printer_id' => $printer->id,
+                'attribute_id' => 16,
+                'customvalue' => random_int(400, 500),
+            ]);
         }
     }
 }

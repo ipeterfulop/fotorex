@@ -9,7 +9,7 @@
     </div>
 </div>
 <div class="fotorex-list-item-grid-view">
-    <div class="w-full h-24 relative z-0 h-48 m-4" style="background:url('{{ $element->index_image }}'); background-size: contain; background-repeat: no-repeat">
+    <div class="w-full h-24 relative z-0 h-48 m-4" style="background:url('{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}'); background-size: contain; background-repeat: no-repeat">
         <div class="w-full bg-opacity-75 bg-gray-500 absolute bottom-0 left-0 h-8 z-10">
             <strong>{{ $element->name }}</strong>
         </div>
