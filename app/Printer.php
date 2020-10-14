@@ -52,7 +52,14 @@ class Printer extends Model
         'printers_viewed_by_others_button',
     ];
 
-    protected $with = ['manufacturer', 'printer_photos', 'technical_specifications'];
+    protected $with = [
+        'manufacturer',
+        'printer_photos',
+        'technical_specifications',
+        'usergroupsize',
+        'printerattributes',
+        'papersize',
+    ];
 
     public function manufacturer()
     {
@@ -78,6 +85,11 @@ class Printer extends Model
         return $this->hasMany(PrinterPhoto::class, 'printer_id', 'id')->orderBy('position', 'asc');
     }
 
+    public function usergroupsize()
+    {
+        return $this->belongsTo(UsergroupSize::class, 'usergroup_size_id');
+    }
+
     public function customized_printer_photos()
     {
         return $this->hasManyThrough(
@@ -92,14 +104,14 @@ class Printer extends Model
 
     public function getCustomizedPhotosForRole(PrinterPhotoRole $role)
     {
-        return $this->customized_printer_photos->filter(function($cpp) use ($role) {
+        return $this->customized_printer_photos->filter(function ($cpp) use ($role) {
             return $cpp->printer_photo_role_id == $role->id;
         });
     }
 
     public function getCustomizedPrinterPhoto($printerPhotoId, PrinterPhotoRole $role = null)
     {
-        $all = $this->customized_printer_photos->filter(function($cpp) use ($printerPhotoId, $role) {
+        $all = $this->customized_printer_photos->filter(function ($cpp) use ($printerPhotoId, $role) {
             if ($role == null) {
                 return $cpp->printer_photo_id == $printerPhotoId;
             } else {
@@ -148,7 +160,7 @@ class Printer extends Model
     public function syncPhotos(array $photoIds)
     {
         $created = new Collection();
-        \DB::transaction(function() use ($photoIds, &$created) {
+        \DB::transaction(function () use ($photoIds, &$created) {
             foreach (PrinterPhoto::getRemovablePhotos($this->id, $photoIds) as $du) {
                 PrinterPhoto::removePrinterPhoto($du->pp_id);
             }
@@ -168,9 +180,11 @@ class Printer extends Model
         foreach ($tscs as $tsc_id => $tsc_value) {
             if ($tsc_value === null) {
                 PrinterTechnicalSpecificationCategory::removePrinterTechnicalSpecificationCategory($this->id, $tsc_id);
-            }
-            else {
-                PrinterTechnicalSpecificationCategory::updateOrCreate(['printer_id' => $this->id, 'technical_specification_category_id' => $tsc_id], ['html_content' => $tsc_value]);
+            } else {
+                PrinterTechnicalSpecificationCategory::updateOrCreate([
+                    'printer_id'                          => $this->id,
+                    'technical_specification_category_id' => $tsc_id,
+                ], ['html_content' => $tsc_value]);
             }
         }
         return true;
@@ -184,10 +198,10 @@ class Printer extends Model
     public static function getVueCRUDIndexColumns()
     {
         return [
-            'name' => 'Név',
-            'manufacturer_name' => 'Gyártó',
-            'is_enabled_label' => 'Státusz',
-            'similar_printers_button' => 'Hasonló termékek',
+            'name'                             => 'Név',
+            'manufacturer_name'                => 'Gyártó',
+            'is_enabled_label'                 => 'Státusz',
+            'similar_printers_button'          => 'Hasonló termékek',
             'printers_viewed_by_others_button' => 'Mások által megtekintett termékek',
 
         ];
@@ -203,7 +217,8 @@ class Printer extends Model
         $result = [];
         $result['name'] = new TextVueCRUDIndexfilter('name', 'Név', '');
         $result['manufacturer_id'] = new SelectVueCRUDIndexfilter('manufacturer_id', 'Gyártó', -1, -1);
-        $result['manufacturer_id']->setValueSet(Manufacturer::orderBy('name', 'asc')->get()->pluck('name', 'id'), -1, 'Összes');
+        $result['manufacturer_id']->setValueSet(Manufacturer::orderBy('name', 'asc')->get()->pluck('name', 'id'), -1,
+            'Összes');
         $result['is_enabled'] = new SelectVueCRUDIndexfilter('is_enabled', 'Státusz', 1, 1);
         $result['is_enabled']->setValueSet(self::getIsEnabledOptions());
 
@@ -227,7 +242,7 @@ class Printer extends Model
     public static function getSortingOptionsArray()
     {
         return [
-            self::SORTING_OPTION_PRICE_UP => 'Ár szerint növekvő',
+            self::SORTING_OPTION_PRICE_UP   => 'Ár szerint növekvő',
             self::SORTING_OPTION_PRICE_DOWN => 'Ár szerint csökkenő',
         ];
     }
@@ -260,49 +275,49 @@ class Printer extends Model
     public static function similarRelations()
     {
         return [
-            self::RELATIONTYPE_SIMILAR => 'similarprinters',
-            self::RELATIONTYPE_VIEWED_BY_OTHERS => 'printersviewedbyothers'
+            self::RELATIONTYPE_SIMILAR          => 'similarprinters',
+            self::RELATIONTYPE_VIEWED_BY_OTHERS => 'printersviewedbyothers',
         ];
     }
 
     public function syncSimilarPrinters($ids, $relationtype)
     {
-        return \DB::transaction(function() use ($ids, $relationtype) {
-            $accessor = self::similarRelations()[$relationtype];
-            $this->$accessor()->delete();
-            $position = 0;
-            foreach ($ids as $id) {
-                SimilarPrinter::create([
-                    'printer_id' => $this->id,
-                    'similar_printer_id' => $id,
-                    'position' => ++$position,
-                    'relationtype' => $relationtype
-                ]);
-            }
-        }) === null;
+        return \DB::transaction(function () use ($ids, $relationtype) {
+                $accessor = self::similarRelations()[$relationtype];
+                $this->$accessor()->delete();
+                $position = 0;
+                foreach ($ids as $id) {
+                    SimilarPrinter::create([
+                        'printer_id'         => $this->id,
+                        'similar_printer_id' => $id,
+                        'position'           => ++$position,
+                        'relationtype'       => $relationtype,
+                    ]);
+                }
+            }) === null;
     }
 
     public function getSimilarPrintersButtonAttribute()
     {
         return 'component::'.json_encode([
-                'component' => 'related-printers-popup-button',
+                'component'      => 'related-printers-popup-button',
                 'componentProps' => [
                     'operationsUrl' => route('related_printer_endpoint'),
-                    'printerId' => $this->id,
-                    'relationType' => self::RELATIONTYPE_SIMILAR
-                ]
+                    'printerId'     => $this->id,
+                    'relationType'  => self::RELATIONTYPE_SIMILAR,
+                ],
             ]);
     }
 
     public function getPrintersViewedByOthersButtonAttribute()
     {
         return 'component::'.json_encode([
-                'component' => 'related-printers-popup-button',
+                'component'      => 'related-printers-popup-button',
                 'componentProps' => [
                     'operationsUrl' => route('related_printer_endpoint'),
-                    'printerId' => $this->id,
-                    'relationType' => self::RELATIONTYPE_VIEWED_BY_OTHERS
-                ]
+                    'printerId'     => $this->id,
+                    'relationType'  => self::RELATIONTYPE_VIEWED_BY_OTHERS,
+                ],
             ]);
     }
 

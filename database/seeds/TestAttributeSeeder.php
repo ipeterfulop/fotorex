@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Papersize;
 use App\Printer;
 use App\PrinterAttribute;
+use App\PrinterPapersize;
 use Illuminate\Database\Seeder;
 
 class TestAttributeSeeder extends Seeder
@@ -28,6 +30,11 @@ class TestAttributeSeeder extends Seeder
                 ], [
                 'customvalue' => random_int(400, 500),
             ]);
+            PrinterPapersize::create([
+                'printer_id' => $printer->id,
+                'papersize_id' => Papersize::query()->inRandomOrder(now()->format('U'))->first()->id
+            ]);
+
         }
     }
 }

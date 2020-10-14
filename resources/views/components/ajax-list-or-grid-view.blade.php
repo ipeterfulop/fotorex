@@ -26,11 +26,11 @@
 </style>
 <div x-data="listOrGridView_{{ $componentId }}()" x-init="() => {initialize()}" class="w-full flex flex-col lg:flex-row p-2">
     @if(count($filters) > 0)
-        <div>
+        <div class="w-full md:w-1/3">
             @include('public.partials.list-or-grid-filters')
         </div>
     @endif
-    <div class="flex flex-col w-full">
+    <div class="flex flex-col w-full md:w-2/3">
         <div class="flex flex-start flex-no-wrap flex-row p-4 lg:p-0 mb-8">
             <select x-model="sortingOption">
                 @foreach($sortingOptions as $id => $label)
