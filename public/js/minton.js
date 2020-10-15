@@ -3711,6 +3711,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3749,7 +3759,8 @@ __webpack_require__.r(__webpack_exports__);
       selectedFile: '',
       allowedFileTypes: [],
       defaultValue: null,
-      moving: false
+      moving: false,
+      previewUrl: ''
     };
   },
   created: function created() {
@@ -61470,6 +61481,14 @@ var render = function() {
                 attrs: {
                   src: _vm.objectMode ? image.url : image,
                   label: _vm.objectMode ? image.url : image
+                },
+                on: {
+                  click: function($event) {
+                    if ($event.target !== $event.currentTarget) {
+                      return null
+                    }
+                    _vm.previewUrl = _vm.objectMode ? image.url : image
+                  }
                 }
               }),
               _vm._v(" "),
@@ -61563,6 +61582,44 @@ var render = function() {
               _c("span", { staticClass: "image-library-add-button" }, [
                 _vm._v("+")
               ])
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "popup",
+        {
+          attrs: { visible: _vm.previewUrl != "" },
+          on: {
+            close: function($event) {
+              _vm.previewUrl = ""
+            }
+          }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticStyle: {
+                display: "flex",
+                "align-items": "center",
+                "justify-content": "center"
+              }
+            },
+            [
+              _c("img", {
+                staticStyle: { "max-height": "70vh", "max-width": "70vw" },
+                attrs: { src: _vm.previewUrl },
+                on: {
+                  click: function($event) {
+                    if ($event.target !== $event.currentTarget) {
+                      return null
+                    }
+                    _vm.previewUrl = ""
+                  }
+                }
+              })
             ]
           )
         ]

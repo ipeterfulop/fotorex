@@ -35,9 +35,9 @@
         </div>
     </div>
     <div class="w-full flex flex-col lg:flex-row justify-between items-center mt-1">
-        <div class="w-full flex flex-grow items-center">
+        <div class="w-full lg:w-1/3 flex flex-grow items-center">
             <input type="text"
-                   class="flex-grow text-right lg:text-left"
+                   class="flex-grow text-right lg:text-left w-full"
                    value="{{ $min }}"
                    oninput="updateSliderFromValue(event)"
                    data-slider-id="{{ $componentId }}"
@@ -46,10 +46,10 @@
             <span class="mx-1">{{ $currency }}</span>
         </div>
         <span class="hidden lg:block font-bold text-xl mx-2">-</span>
-        <div class="w-full flex flex-grow  items-center">
+        <div class="w-full  md:w-1/3  flex flex-grow  items-center">
             <input type="text"
                    value="{{ $max }}"
-                   class="flex-grow text-right"
+                   class="flex-grow text-right w-full"
                    oninput="updateSliderFromValue(event)"
                    data-handle="2"
                    data-slider-id="{{ $componentId }}"

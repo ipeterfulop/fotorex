@@ -16,7 +16,8 @@ class PrinterPhotoManager
         Photo $photo,
         $printerPhoto = null
     ) {
-        return \DB::transaction(function() use ($printer, $photo, $printerPhoto) {
+        $result = null;
+        \DB::transaction(function() use ($printer, $photo, $printerPhoto, &$result) {
             if ($printerPhoto == null) {
                 $printerPhoto = PrinterPhoto::create([
                     'printer_id' => $printer->id,
@@ -26,8 +27,10 @@ class PrinterPhotoManager
             foreach (PrinterPhotoRole::all() as $role) {
                 $role->createCustomizedPhoto($printerPhoto, $photo);
             }
+            $result = $printerPhoto;
+        });
 
-        }) === null;
+        return $result;
     }
     public static function createPrinterPhotoWithCustomizationsFromFile(
         Printer $printer,

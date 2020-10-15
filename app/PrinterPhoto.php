@@ -81,9 +81,11 @@ class PrinterPhoto extends Model
 
     public static function removePrinterPhoto($printer_photo_id)
     {
-        CustomizedPrinterPhoto::removeCustomizedPrinterPhoto($printer_photo_id);
-        $p = PrinterPhoto::find($printer_photo_id);
-        $p->delete();
+        return \DB::transaction(function() use ($printer_photo_id) {
+            CustomizedPrinterPhoto::removeCustomizedPrinterPhoto($printer_photo_id);
+            $p = PrinterPhoto::find($printer_photo_id);
+            $p->delete();
+        }) === null;
     }
 
     public static function getRestrictingFields()
