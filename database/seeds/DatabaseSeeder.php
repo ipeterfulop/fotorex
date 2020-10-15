@@ -27,5 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SlidersSeeder::class);
         $this->call(ScrapedNewsSeeder::class);
         $this->call(ServicesArticlesSeeder::class);
+
+        $this->call(PopulateManufacturersTable::class);
     }
 }

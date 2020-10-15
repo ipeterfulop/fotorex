@@ -15,6 +15,7 @@ class Manufacturer extends Model
 {
     use canBeTurnedIntoKeyValueCollection;
     use VueCRUDManageable, hasIsEnabledProperty, hasPosition, hasFiles;
+
     const SUBJECT_SLUG = 'manufacturer';
     const SUBJECT_NAME = 'Gyártó';
     const SUBJECT_NAME_PLURAL = 'Gyártók';
@@ -35,6 +36,17 @@ class Manufacturer extends Model
 
     protected $with = ['logo'];
 
+    /**
+     * @param $name
+     * @return Manufacturer|null
+     */
+    public static function findByName($name)
+    {
+        return Manufacturer::where('name', $name)
+                           ->get()
+                           ->first();
+    }
+
     public function logo()
     {
         return $this->hasOne(
@@ -52,7 +64,7 @@ class Manufacturer extends Model
     public static function getVueCRUDIndexColumns()
     {
         return [
-            'name' => 'Név',
+            'name'             => 'Név',
             'is_enabled_label' => 'Státusz',
         ];
     }

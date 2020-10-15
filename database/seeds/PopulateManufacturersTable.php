@@ -1,6 +1,8 @@
 <?php
+
 namespace Database\Seeders;
 
+use App\DatabaseSeedingAction;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -18,7 +20,30 @@ class PopulateManufacturersTable extends Seeder
 
     private function addOrUpdateManufacturers()
     {
-        $dsManufacturers = [
+        $dsManufacturers = $this->getRawDataSet();
+        $this->addOrUpdateRecords($dsManufacturers);
+    }
+
+    private function addOrUpdateRecords(array $dataSet)
+    {
+        $table = 'manufacturers';
+        $fields = [
+            'id',
+            'name',
+            'position',
+            'is_enabled',
+            'created_at',
+            'updated_at',
+        ];
+        DatabaseSeedingAction::insertOrUpdateMultipleRecords($table, $dataSet, $fields);
+    }
+
+    /**
+     * @return array[]
+     */
+    private function getRawDataSet(): array
+    {
+        $dataSet = [
             [
                 'id'         => 1,
                 'name'       => 'Sharp',
@@ -33,7 +58,11 @@ class PopulateManufacturersTable extends Seeder
             ],
         ];
 
+        foreach ($dataSet as &$dataRow) {
+            $dataRow['created_at'] = \Carbon\Carbon::now();
+            $dataRow['updated_at'] = \Carbon\Carbon::now();
+        }
 
-
+        return $dataSet;
     }
 }
