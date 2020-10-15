@@ -10,9 +10,10 @@
                  x-ref="imageviewer_thumbnails_container">
                 @foreach ($printerphotos as $printerphoto)
                     <img class="w-24 lg:h-24 opacity-75 hover:opacity-100 imageviewer-thumbnail cursor-pointer mx-8 object-contain border-2 border-gray-200"
-                         data-imageurl="{{ $printerphoto->original->public_url }}"
-                         src="{{ $printerphoto->thumbnail->public_url }}"
-                         @click="currentImage = '{{ $printerphoto->original->public_url }}'">
+                         data-imageurl="{{ $printerphoto['index'] }}"
+                         data-originalimageurl="{{ $printerphoto['original'] }}"
+                         src="{{ $printerphoto['thumbnail'] }}"
+                         @click="currentImage = '{{ $printerphoto['index'] }}'">
                 @endforeach
                 <div class="h-1 w-full opacity-0" id="{{ $componentId }}-closer"></div>
             </div>
@@ -27,7 +28,7 @@
         <div class="w-full h-full fixed z-20 top-0 left-0 bg-gray-900 bg-opacity-75 p-8"
              style="display: none"
              x-show.transition="imageFullscreen">
-            <img class="w-full h-full object-contain cursor-pointer" x-bind:src="currentImage" @click.stop="imageFullscreen = !imageFullscreen">
+            <img class="w-full h-full object-contain cursor-pointer" x-bind:src="currentOriginalImage" @click.stop="imageFullscreen = !imageFullscreen">
         </div>
     @endif
 </div>
@@ -35,6 +36,7 @@
     function imageViewer_{{ $componentId }}() {
         return {
             currentImage: null,
+            currentOriginalImage: null,
             imageFullscreen: false,
             scrollPositionY: 0,
             scrollPositionX: 0,
@@ -44,6 +46,7 @@
             maxScrollX: null,
             initialize: function() {
                 this.currentImage = this.$refs.imageviewer_thumbnails_container.querySelector('.imageviewer-thumbnail').getAttribute('data-imageurl');
+                this.currentOriginalImage = this.$refs.imageviewer_thumbnails_container.querySelector('.imageviewer-thumbnail').getAttribute('data-originalimageurl');
                 this.$watch('scrollPositionY', (value) => {
                     this.$refs.imageviewer_thumbnails_container.style.transform = 'translateY(-'+value.toString()+'px)';
                 });

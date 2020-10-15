@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\PriceFormatter;
 use App\Scopes\PrinterWithAttributesScope;
 use App\Traits\hasFiles;
 use App\Traits\hasIsEnabledProperty;
@@ -100,6 +101,24 @@ class Printer extends Model
             'id',
             'id'
         )->orderBy('position', 'asc');
+    }
+
+    public function getAllPhotoUrls()
+    {
+        $result = [];
+        $roles = PrinterPhotoRole::all()->keyBy('id');
+        $empty = [];
+        foreach ($roles as $role) {
+            $empty[$role->name] = [];
+        }
+        foreach ($this->customized_printer_photos as $customized_printer_photo) {
+            if (!isset($result[$customized_printer_photo->printer_photo_id])) {
+                $result[$customized_printer_photo->printer_photo_id] = $empty;
+            }
+            $result[$customized_printer_photo->printer_photo_id][$roles->get($customized_printer_photo->printer_photo_role_id)->name] = $customized_printer_photo->getUrl();
+        }
+
+        return $result;
     }
 
     public function getCustomizedPhotosForRole(PrinterPhotoRole $role)
@@ -334,5 +353,12 @@ class Printer extends Model
     public function scopeWithAttributes(Builder $query)
     {
         return $query->withGlobalScope('attr', new PrinterWithAttributesScope);
+    }
+
+    public function getPriceLabelAttribute()
+    {
+        return $this->request_for_price == 1
+            ? 'Az árért keressen!'
+            : PriceFormatter::formatToInteger($this->price);
     }
 }
