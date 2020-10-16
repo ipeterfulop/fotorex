@@ -276,13 +276,14 @@ class Printer extends Model
     {
         $result = self::where('slug', '=', $slug)->with([
             'manufacturer',
+            'papersize',
             'printer_photos',
             'technical_specifications',
             'similarprinters',
             'similarprinters.similarprinter',
             'printersviewedbyothers',
             'printersviewedbyothers.similarprinter',
-        ])->first();
+        ])->withAttributes()->first();
 
         if (($result == null) && ($abortWith404IfNotFound)) {
             abort(404);

@@ -47,6 +47,9 @@ Route::post('/kapcsolat', 'ContactmessagesController@submit')->name('contactmess
 
 Route::get('/kereses', 'SearchController@search')->name('search_all');
 
+Route::get('/osszehasonlitas', 'PrinterComparisonController@index')->name('compare_products');
+Route::get('/osszehasonlitas/termek', 'PrinterComparisonController@getComparisonData')->name('product_comparison_data');
+
 Route::get('/termekek/kereses', 'PrintersController@printerList')->name('list_printers');
 
 Route::get('/termekek/{slug}', 'PrintersController@details')->name('printer_details');

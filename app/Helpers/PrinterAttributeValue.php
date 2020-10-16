@@ -20,7 +20,7 @@ class PrinterAttributeValue extends PrinterAttribute
                 'a.aid',
                 '=',
                 'printer_attribute.attribute_id'
-            )->joinSub(
+            )->leftJoinSub(
                 AttributeValue::select(\DB::raw('label as avlabel'), 'value', \DB::raw('id as avid')),
                 'av',
                 'av.avid',

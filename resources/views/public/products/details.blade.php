@@ -8,7 +8,7 @@
                 </div>
                 <div class="w-full lg:w-3/6 flex flex-col items-stretch justify-start h-64">
                     <h2 class="font-bold">{{ $printer->name }}</h2>
-                    @include('public.partials.printers.detail-boxes')
+                    @include('public.partials.printers.detail-boxes', ['printer' => $printer])
                     <p class="w-full bg-gray-300">
                         @if($printer->request_for_price == 1)
                             Az árért keressen bennünket!
@@ -17,8 +17,8 @@
                         @endif
                     </p>
                 </div>
-                <div class="w-full lg:w-1/6 flex flex-col items-stretch justify-start h-64">
-                    <div class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Összehasonlítás más termékkel</div>
+                <div class="w-full lg:w-1/6 flex flex-col items-stretch justify-start h-64 text-center">
+                    <a class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1" href="{{ route('compare_products', ['first' => $printer->slug]) }}">Összehasonlítás más termékkel</a>
                     <div class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1">PDF nyomtatás</div>
                     <div class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1">Küldés e-mailben</div>
                     <button class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1"
