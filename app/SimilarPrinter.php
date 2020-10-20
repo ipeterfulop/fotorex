@@ -12,10 +12,43 @@ class SimilarPrinter extends Model
         'is_enabled',
         'position',
         'relationtype',
+        'label',
+        'url',
+    ];
+
+    protected $appends = [
+        'final_label',
+        'final_url',
+        'custom_id'
     ];
 
     public function similarprinter()
     {
         return $this->belongsTo(Printer::class, 'similar_printer_id');
+    }
+
+    public function getFinalUrlAttribute()
+    {
+        if ($this->similar_printer_id != null) {
+            return route('printer_details', ['slug' => $this->similarprinter->slug]);
+        }
+
+        return $this->url;
+    }
+
+    public function getFinalLabelAttribute()
+    {
+        if ($this->similar_printer_id != null) {
+            return $this->similarprinter->name;
+        }
+
+        return $this->label;
+    }
+
+    public function getCustomIdAttribute()
+    {
+        return $this->similar_printer_id == null
+            ? 'x_'.random_int(1000000, 9999999)
+            : $this->similar_printer_id;
     }
 }

@@ -300,18 +300,20 @@ class Printer extends Model
         ];
     }
 
-    public function syncSimilarPrinters($ids, $relationtype)
+    public function syncSimilarPrinters($similarPrinters, $relationtype)
     {
-        return \DB::transaction(function () use ($ids, $relationtype) {
+        return \DB::transaction(function () use ($similarPrinters, $relationtype) {
                 $accessor = self::similarRelations()[$relationtype];
                 $this->$accessor()->delete();
                 $position = 0;
-                foreach ($ids as $id) {
+                foreach ($similarPrinters as $row) {
                     SimilarPrinter::create([
                         'printer_id'         => $this->id,
-                        'similar_printer_id' => $id,
+                        'similar_printer_id' => \Str::startsWith($row['custom_id'], 'x') ? null : $row['custom_id'],
                         'position'           => ++$position,
                         'relationtype'       => $relationtype,
+                        'label' => $row['final_label'],
+                        'url' => $row['final_url']
                     ]);
                 }
             }) === null;

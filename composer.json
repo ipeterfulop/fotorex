@@ -15,11 +15,12 @@
         "datalytix/unishoptheme": "dev-master",
         "datalytix/utilities": "dev-master",
         "datalytix/vuecrud": "dev-master",
+        "doctrine/dbal": "^2.11",
         "fideloper/proxy": "^4.0",
+        "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.5",
         "laravel/framework": "8.*",
         "laravel/tinker": "^2.0",
-        "guzzlehttp/guzzle": "^7.0.1",
         "laravel/ui": "^3.0"
     },
     "require-dev": {

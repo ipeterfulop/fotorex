@@ -6481,6 +6481,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -6522,8 +6530,21 @@ __webpack_require__.r(__webpack_exports__);
     this.fetchValueset();
   },
   methods: {
+    randomId: function randomId() {
+      return 'x_' + Math.ceil(Math.random() * 1000000);
+    },
     addSelected: function addSelected() {
       var _this = this;
+
+      if (this.selectedElement == 'custom') {
+        this.items.push({
+          custom_id: this.randomId(),
+          final_label: '',
+          final_url: '',
+          similar_printer_id: null
+        });
+        return;
+      }
 
       if (this.items.find(function (element) {
         return element.id == _this.selectedElement;
@@ -6536,7 +6557,7 @@ __webpack_require__.r(__webpack_exports__);
       this.emitValue();
     },
     emitValue: function emitValue() {
-      this.$emit('input', this.formData);
+      this.$emit('input', this.items);
     },
     showDragOverEffect: function showDragOverEffect(event, itemId) {
       event.preventDefault();
@@ -6553,7 +6574,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     removeItem: function removeItem(itemId) {
       this.items = this.items.filter(function (item) {
-        return item.id != itemId;
+        return item.custom_id != itemId;
       });
       this.emitValue();
     },
@@ -6567,7 +6588,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       event.dataTransfer.setData('id', target.getAttribute('data-itemid'));
-      event.dataTransfer.setDragImage(target.firstChild, 100, 100);
+      event.dataTransfer.setDragImage(target.querySelector('span'), 100, 100);
       window.setTimeout(function () {
         Array.from(document.querySelectorAll('.related-printers-row span')).forEach(function (t) {
           t.classList.add('pointer-events-none');
@@ -6593,13 +6614,13 @@ __webpack_require__.r(__webpack_exports__);
       event.preventDefault();
       var newOrder = [];
       this.items.forEach(function (item) {
-        if (item.id == itemId) {
-          newOrder.push(_this3.valueset.find(function (element) {
-            return element.id == event.dataTransfer.getData('id');
+        if (item.custom_id == itemId) {
+          newOrder.push(_this3.items.find(function (element) {
+            return element.custom_id == event.dataTransfer.getData('id');
           }));
         }
 
-        if (item.id != event.dataTransfer.getData('id')) {
+        if (item.custom_id != event.dataTransfer.getData('id')) {
           newOrder.push(item);
         }
       });
@@ -6609,10 +6630,11 @@ __webpack_require__.r(__webpack_exports__);
     moveToEnd: function moveToEnd(event) {
       event.stopPropagation();
       event.preventDefault();
+      var item = this.items.find(function (element) {
+        return element.custom_id == event.dataTransfer.getData('id');
+      });
       this.removeItem(event.dataTransfer.getData('id'));
-      this.items.push(this.valueset.find(function (element) {
-        return element.id == event.dataTransfer.getData('id');
-      }));
+      this.items.push(item);
       this.emitValue();
     },
     fetchValueset: function fetchValueset() {
@@ -6622,9 +6644,16 @@ __webpack_require__.r(__webpack_exports__);
         action: 'fetchValueset'
       }).then(function (response) {
         _this4.valueset = response.data.valueset;
-        _this4.items = _this4.valueset.filter(function (item) {
-          return _this4.value.includes(item.id);
+        _this4.items = [];
+
+        _this4.value.forEach(function (v) {
+          if (v.custom_id.toString().substr(0, 1) == 'x' || _this4.valueset.filter(function (vi) {
+            return vi.id == v.custom_id;
+          }).length > 0) {
+            _this4.items.push(v);
+          }
         });
+
         _this4.loading = false;
 
         _this4.emitValue();
@@ -6642,9 +6671,9 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     formData: function formData() {
-      return this.items.map(function (itemData) {
-        return itemData.id;
-      });
+      return this.items; //return this.items.map((itemData) => {
+      //  return itemData.id;
+      //});
     }
   }
 });
@@ -64687,10 +64716,13 @@ var render = function() {
                   return _c(
                     "div",
                     {
-                      ref: "item-" + item.id,
+                      ref: "item-" + item.custom_id,
                       refInFor: true,
                       staticClass: "related-printers-row",
-                      attrs: { draggable: "true", "data-itemid": item.id },
+                      attrs: {
+                        draggable: "true",
+                        "data-itemid": item.custom_id
+                      },
                       on: {
                         dragover: function($event) {
                           return $event.preventDefault()
@@ -64698,20 +64730,75 @@ var render = function() {
                         dragstart: _vm.startMoving,
                         dragend: _vm.endMoving,
                         dragenter: function($event) {
-                          return _vm.showDragOverEffect($event, item.id)
+                          return _vm.showDragOverEffect($event, item.custom_id)
                         },
                         dragleave: function($event) {
-                          return _vm.hideDragOverEffect($event, item.id)
+                          return _vm.hideDragOverEffect($event, item.custom_id)
                         },
                         drop: function($event) {
-                          return _vm.moveToBefore($event, item.id)
+                          return _vm.moveToBefore($event, item.custom_id)
                         }
                       }
                     },
                     [
-                      _c("span", {
-                        domProps: { innerHTML: _vm._s(item.name) }
-                      }),
+                      item.custom_id.toString().substr(0, 1) == "x"
+                        ? _c("span", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: item.final_label,
+                                  expression: "item.final_label"
+                                }
+                              ],
+                              attrs: { placeholder: "Megjelenítendő felirat" },
+                              domProps: { value: item.final_label },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    item,
+                                    "final_label",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: item.url,
+                                  expression: "item.url"
+                                }
+                              ],
+                              staticStyle: { "margin-left": "1rem" },
+                              attrs: { placeholder: "URL" },
+                              domProps: { value: item.url },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(item, "url", $event.target.value)
+                                }
+                              }
+                            })
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      item.custom_id.toString().substr(0, 1) != "x"
+                        ? _c("span", [
+                            _c("span", {
+                              domProps: { innerHTML: _vm._s(item.final_label) }
+                            })
+                          ])
+                        : _vm._e(),
                       _vm._v(" "),
                       _c(
                         "div",
@@ -64727,7 +64814,7 @@ var render = function() {
                           staticClass: "related-printers-row-button",
                           on: {
                             click: function($event) {
-                              return _vm.removeItem(item.id)
+                              return _vm.removeItem(item.custom_id)
                             }
                           }
                         },
@@ -64829,17 +64916,27 @@ var render = function() {
                           }
                         }
                       },
-                      _vm._l(_vm.valueset, function(value) {
-                        return !_vm.itemIds.includes(value.id)
-                          ? _c("option", {
-                              domProps: {
-                                value: value.id,
-                                innerHTML: _vm._s(value.name)
-                              }
-                            })
-                          : _vm._e()
-                      }),
-                      0
+                      [
+                        _c("option", { attrs: { value: "custom" } }, [
+                          _vm._v("Egyedi URL")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "-1" } }, [
+                          _vm._v(" --- ")
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.valueset, function(value) {
+                          return !_vm.itemIds.includes(value.id)
+                            ? _c("option", {
+                                domProps: {
+                                  value: value.id,
+                                  innerHTML: _vm._s(value.name)
+                                }
+                              })
+                            : _vm._e()
+                        })
+                      ],
+                      2
                     )
                   ]
                 ),

@@ -19,7 +19,7 @@ class RelatedPrintersController extends Controller
     public function fetchValueset()
     {
         return response()->json([
-            'valueset' => Printer::all()->all()
+            'valueset' => Printer::orderBy('name', 'asc')->get()->all()
         ]);
     }
 
@@ -29,7 +29,7 @@ class RelatedPrintersController extends Controller
         $accessor = Printer::similarRelations()[request()->get('relationType')];
 
         return response()->json([
-            'value' => $printer->$accessor->pluck('similar_printer_id')
+            'value' => $printer->$accessor->all()
         ]);
     }
 

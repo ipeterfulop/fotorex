@@ -5,18 +5,24 @@
             <div class="related-printers-container">
                 <div draggable="true"
                      v-for="item in items"
-                     :data-itemid="item.id"
+                     :data-itemid="item.custom_id"
                      v-on:dragover="$event.preventDefault()"
                      v-on:dragstart="startMoving"
                      v-on:dragend="endMoving"
-                     v-on:dragenter="showDragOverEffect($event, item.id)"
-                     v-on:dragleave="hideDragOverEffect($event, item.id)"
-                     v-on:drop="moveToBefore($event, item.id)"
-                     :ref="'item-'+item.id"
+                     v-on:dragenter="showDragOverEffect($event, item.custom_id)"
+                     v-on:dragleave="hideDragOverEffect($event, item.custom_id)"
+                     v-on:drop="moveToBefore($event, item.custom_id)"
+                     :ref="'item-'+item.custom_id"
                      class="related-printers-row">
-                    <span v-html="item.name"></span>
+                    <span v-if="item.custom_id.toString().substr(0,1) == 'x'">
+                        <input placeholder="Megjelenítendő felirat" v-model="item.final_label">
+                        <input placeholder="URL" v-model="item.url" style="margin-left: 1rem">
+                    </span>
+                    <span v-if="item.custom_id.toString().substr(0,1) != 'x'">
+                        <span v-html="item.final_label"></span>
+                    </span>
                     <div class="related-printers-row-button"
-                         v-on:click="removeItem(item.id)"
+                         v-on:click="removeItem(item.custom_id)"
                          v-show="moving === false"
                     >-
                     </div>
@@ -34,6 +40,8 @@
                 <div style="display:flex; align-items: stretch; justify-content: flex-start; flex-direction: column; flex-grow:1; margin-right: 3rem">
                     <label>Válasszon terméket. A sorrend változtatásához húzza a fenti listában egérrel a sorokat.</label>
                     <select v-model="selectedElement" style="width: 100%; padding: .25rem;">
+                        <option value="custom">Egyedi URL</option>
+                        <option value="-1"> --- </option>
                         <option v-for="value in valueset"
                                 v-if="!itemIds.includes(value.id)"
                                 :value="value.id"
@@ -77,14 +85,26 @@
             this.fetchValueset();
         },
         methods: {
+            randomId: function() {
+                return 'x_'+Math.ceil(Math.random() * 1000000);
+            },
             addSelected: function() {
+                if (this.selectedElement == 'custom') {
+                    this.items.push({
+                        custom_id: this.randomId(),
+                        final_label: '',
+                        final_url: '',
+                        similar_printer_id: null
+                    });
+                    return;
+                }
                 if (this.items.find(element => element.id == this.selectedElement) === undefined) {
                     this.items.push(this.valueset.find(element => element.id == this.selectedElement));
                 }
                 this.emitValue();
             },
             emitValue: function() {
-                this.$emit('input', this.formData);
+                this.$emit('input', this.items);
             },
             showDragOverEffect: function(event, itemId) {
                 event.preventDefault();
@@ -99,7 +119,7 @@
                 target.classList.remove('related-printers-row-dropping');
             },
             removeItem: function (itemId) {
-                this.items = this.items.filter(item => item.id != itemId);
+                this.items = this.items.filter(item => item.custom_id != itemId);
                 this.emitValue();
             },
             startMoving: function(event) {
@@ -108,7 +128,7 @@
                     target = target.parentNode;
                 }
                 event.dataTransfer.setData('id', target.getAttribute('data-itemid'));
-                event.dataTransfer.setDragImage(target.firstChild, 100, 100);
+                event.dataTransfer.setDragImage(target.querySelector('span'), 100, 100);
                 window.setTimeout(() => {
                     Array.from(document.querySelectorAll('.related-printers-row span')).forEach((t) => {
                         t.classList.add('pointer-events-none');
@@ -133,10 +153,10 @@
                 event.preventDefault();
                 let newOrder = [];
                 this.items.forEach((item) => {
-                    if (item.id == itemId) {
-                        newOrder.push(this.valueset.find(element => element.id == event.dataTransfer.getData('id')));
+                    if (item.custom_id == itemId) {
+                        newOrder.push(this.items.find(element => element.custom_id == event.dataTransfer.getData('id')));
                     }
-                    if (item.id != event.dataTransfer.getData('id')) {
+                    if (item.custom_id != event.dataTransfer.getData('id')) {
                         newOrder.push(item);
                     }
                 });
@@ -146,16 +166,20 @@
             moveToEnd: function(event) {
                 event.stopPropagation();
                 event.preventDefault();
+                let item = this.items.find(element => element.custom_id == event.dataTransfer.getData('id'));
                 this.removeItem(event.dataTransfer.getData('id'));
-                this.items.push(this.valueset.find(element => element.id == event.dataTransfer.getData('id')));
+                this.items.push(item);
                 this.emitValue();
             },
             fetchValueset: function() {
                 window.axios.post(this.operationsUrl, {action: 'fetchValueset'})
                     .then((response) => {
                         this.valueset = response.data.valueset;
-                        this.items = this.valueset.filter((item) => {
-                            return this.value.includes(item.id);
+                        this.items = [];
+                        this.value.forEach((v) => {
+                            if ((v.custom_id.toString().substr(0,1) == 'x') || (this.valueset.filter(vi => vi.id == v.custom_id).length > 0)) {
+                                this.items.push(v);
+                            }
                         });
                         this.loading = false;
                         this.emitValue();
@@ -170,9 +194,10 @@
                 return this.items.map(element => element.id);
             },
             formData: function() {
-                return this.items.map((itemData) => {
-                    return itemData.id;
-                });
+                return this.items;
+                //return this.items.map((itemData) => {
+                //  return itemData.id;
+                //});
             }
         }
     }
