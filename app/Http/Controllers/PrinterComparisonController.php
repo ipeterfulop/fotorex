@@ -36,6 +36,9 @@ class PrinterComparisonController extends Controller
         foreach ($attributes as $attribute) {
             $result[$attribute['v']] = $printer->{$attribute['v']};
         }
+        $result['link'] = route('printer_details', ['slug' => $printer->slug]);
+        $result['linkbutton'] = '<a class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-3 flex-grow"'
+            .'href="'.route('printer_details', ['slug' => $printer->slug]).'">Termékoldal</a>';
 
         return response()->json($result);
     }

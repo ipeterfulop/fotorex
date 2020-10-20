@@ -81,7 +81,7 @@ input {
 }
 .article-container table th,
 .article-container table td {
-    @apply text-center p-3 border border-fotogray;
+    @apply text-center p-3 border border-0 border-b border-fotogray border-dotted;
 }
 .article-container table div {
     @apply w-full text-center my-2;
@@ -94,23 +94,11 @@ input {
 }
 
 .printer-compare-table td {
-    @apply border-b-fotogray;
-}
-.printer-compare-table .printer-td {
-    @apply border-l-fotored;
+    @apply p-2;
 }
 .printer-compare-table th {
-    width: 25%;
-    max-width: 25%;
-    font-weight: bold;
+    @apply w-1/4 font-bold p-2;
 }
 .printer-compare-table {
-    width: 100%;
-}
-.printer-compare-table th {
-}
-.printer-compare-table td,
-.printer-compare-table th {
-    border: 1px solid darkgrey;
-    padding: .5rem;
+    @apply w-full;
 }
