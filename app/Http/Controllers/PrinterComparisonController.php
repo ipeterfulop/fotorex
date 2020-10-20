@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Attribute;
+use App\Helpers\ComparablePrinter;
 use App\Printer;
+use App\PrinterPhotoRole;
 use Illuminate\Http\Request;
 
 class PrinterComparisonController extends Controller
@@ -17,7 +19,8 @@ class PrinterComparisonController extends Controller
         $printers = request()->has('first') ? [request()->get('first')] : [];
         return view('public.products.compare', [
             'comparedAttributes' => $comparedAttributes,
-            'printers' => $printers
+            'printers' => $printers,
+            'availablePrinters' => ComparablePrinter::select('name', 'slug', 'mfname')->orderBy('name', 'asc')->get()->groupBy('mfname')
         ]);
     }
 
@@ -25,10 +28,17 @@ class PrinterComparisonController extends Controller
     {
         $printer = Printer::findBySlug(request()->get('printer'));
         $attributes = self::getComparableAttributeKeys();
-        $result = ['name' => $printer->name];
+        $result = [
+            'name' => $printer->name,
+            'photo' => $printer->getMainImageUrl(request()->get('printerphotoroles')->get('index'))
+        ];
+
         foreach ($attributes as $attribute) {
             $result[$attribute['v']] = $printer->{$attribute['v']};
         }
+        $result['link'] = route('printer_details', ['slug' => $printer->slug]);
+        $result['linkbutton'] = '<a class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-3 flex-grow"'
+            .'href="'.route('printer_details', ['slug' => $printer->slug]).'">Termékoldal</a>';
 
         return response()->json($result);
     }

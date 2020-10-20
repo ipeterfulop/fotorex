@@ -81,7 +81,7 @@ input {
 }
 .article-container table th,
 .article-container table td {
-    @apply text-center p-3 border border-fotogray;
+    @apply text-center p-3 border border-0 border-b border-fotogray border-dotted;
 }
 .article-container table div {
     @apply w-full text-center my-2;
@@ -91,4 +91,14 @@ input {
 }
 .article-container table a:hover {
     @apply bg-fotogray text-gray-900;
+}
+
+.printer-compare-table td {
+    @apply p-2;
+}
+.printer-compare-table th {
+    @apply w-1/4 font-bold p-2;
+}
+.printer-compare-table {
+    @apply w-full;
 }

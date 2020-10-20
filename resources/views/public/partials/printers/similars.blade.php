@@ -2,9 +2,14 @@
     <h4 class="font-bold text-sm pb-1 mb-1 border-b border-gray-400">{{ $title }}</h4>
     @forelse($similarPrinters as $similarPrinter)
         <div class="w-full flex flex-row items-stretch justify-between">
-            <div class="w-1/4"><img src="{{ $similarPrinter->similarprinter->mainPhotoThumbnailUrl() }}" class="w-full"></div>
-            <div class="w-2/4"><a href="{{ route('printer_details', ['slug' => $similarPrinter->similarprinter->slug]) }}">{{ $similarPrinter->similarprinter->name }}</a></div>
-            <div class="w-1/4 text-fotored">{{ $similarPrinter->similarprinter->price }}</div>
+            @if($similarPrinter->similar_printer_id != null)
+                <div class="w-1/4"><img src="{{ $similarPrinter->similarprinter->mainPhotoThumbnailUrl() }}" class="w-full"></div>
+                <div class="w-2/4"><a href="{{ route('printer_details', ['slug' => $similarPrinter->similarprinter->slug]) }}">{{ $similarPrinter->similarprinter->name }}</a></div>
+                <div class="w-1/4 text-fotored">{{ $similarPrinter->similarprinter->price }}</div>
+            @else
+                <div class="w-1/4"></div>
+                <div class="w-3/4"><a href="{{ $similarPrinter->final_url }}">{{ $similarPrinter->final_label }}</a></div>
+            @endif
         </div>
     @empty
         <div class="mt-8">Nincs megjeleníthető termék</div>
