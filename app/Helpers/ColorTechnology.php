@@ -10,9 +10,9 @@ class ColorTechnology
 {
     use canBeTurnedIntoKeyValueCollection;
 
-    const BW_ID = 0;
+    const BW_ID = 1;
     const BW_LABEL = 'Fekete-fehér';
-    const COLOR_ID = 1;
+    const COLOR_ID = 2;
     const COLOR_LABEL = 'Színes';
 
     public static function getDetailBoxLabel($id)
