@@ -46,7 +46,7 @@ class PrinterComparisonController extends Controller
     public static function getComparableAttributeKeys()
     {
         $result = [
-            ['v' => 'usergroup_size_id', 'n' => 'Munkakörnyezet'],
+            ['v' => 'usergroup_size_label', 'n' => 'Munkakörnyezet'],
         ];
         foreach (Attribute::where('position_at_product_comparison', '!=', null)->orderBy('position_at_product_comparison', 'asc')->get() as $attribute) {
             $result[] = ['v' => $attribute->variable_name, 'n' => $attribute->name];

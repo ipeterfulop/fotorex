@@ -34,7 +34,6 @@ class TestAttributeSeeder extends Seeder
                 'printer_id' => $printer->id,
                 'papersize_id' => Papersize::query()->inRandomOrder(now()->format('U'))->first()->id
             ]);
-
         }
     }
 }

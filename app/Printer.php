@@ -32,15 +32,10 @@ class Printer extends Model
         'manufacturer_id',
         'name',
         'usergroup_size_id',
-        'color_technology',
-        'is_multifunctional',
         'description',
         'slug',
         'html_page_title',
         'html_page_meta_description',
-        'printing_mode',
-        'copying_mode',
-        'scanning_mode',
         'is_enabled',
         'price',
         'request_for_price',
@@ -374,6 +369,11 @@ class Printer extends Model
 
     public function getMaxPapersizeAttribute()
     {
-        return $this->papersizes->first();
+        return $this->papersizes->first()->code;
+    }
+
+    public function getUsergroupSizeLabelAttribute()
+    {
+        return $this->usergroupsize->name;
     }
 }
