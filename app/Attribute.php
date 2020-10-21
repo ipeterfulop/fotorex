@@ -16,7 +16,7 @@ class Attribute extends Model
         'name',
         'label',
         'is_computed',
-        'use_at_product_comparison',
+        'position_at_product_comparison',
         'created_at',
         'updated_at',
     ];

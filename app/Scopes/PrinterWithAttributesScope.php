@@ -23,7 +23,7 @@ class PrinterWithAttributesScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $fields = Attribute::select('variable_name')->get()->pluck('variable_name');
+        $fields = Attribute::select('variable_name')->where('is_computed', '=', 0)->get()->pluck('variable_name');
         $selects = ['printers.*'];
         foreach ($fields as $field) {
             $selects[] = \DB::raw('MAX(case when variable_name="'.$field.'" then finalvalue end) '.$field);

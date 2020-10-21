@@ -26,7 +26,7 @@ class DatabaseSeedingAction
                 DB::table($table)->insert($source);
             }
         } catch (\Exception $ex) {
-            print "\n Database operation failed while adding to table <" . $table . "> the values below \n"
+            print "\n Database operation failed while adding to table <" . $table . "> the values below withe the exception: ".$ex->getMessage()." \n"
                 . print_r($source, true);
         }
     }

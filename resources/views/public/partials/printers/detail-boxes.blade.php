@@ -24,7 +24,7 @@
         <div class="printer-detail-box" style="background-color: #e62899">SCAN</div>
     @endif
     <div class="printer-detail-box" style="background-color: #00aad2">
-        {{ $printer->papersize }}
+        {{ $printer->max_papersize->code }}
     </div>
     <div class="printer-detail-box" style="background-color: #d1d4d3{{ \App\Helpers\ColorTechnology::getDetailBoxCSS($printer->color_technology) }}">
         {{ \App\Helpers\ColorTechnology::getDetailBoxLabel($printer->color_technology) }}

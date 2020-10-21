@@ -51,6 +51,8 @@ class Printer extends Model
         'is_enabled_label',
         'similar_printers_button',
         'printers_viewed_by_others_button',
+        'max_papersize',
+        'color_management'
     ];
 
     protected $with = [
@@ -59,7 +61,7 @@ class Printer extends Model
         'technical_specifications',
         'usergroupsize',
         'printerattributes',
-        'papersize',
+        'papersizes',
     ];
 
     public function manufacturer()
@@ -154,16 +156,16 @@ class Printer extends Model
             ->getUrl();
     }
 
-    public function papersize()
+    public function papersizes()
     {
-        return $this->hasOneThrough(
+        return $this->hasManyThrough(
             Papersize::class,
             PrinterPapersize::class,
             'printer_id',
             'id',
             'id',
             'papersize_id'
-        );
+        )->orderBy('width_in_millimetres', 'desc');
     }
 
     public function technical_specifications()
@@ -276,7 +278,7 @@ class Printer extends Model
     {
         $result = self::where('slug', '=', $slug)->with([
             'manufacturer',
-            'papersize',
+            'papersizes',
             'printer_photos',
             'technical_specifications',
             'similarprinters',
@@ -363,5 +365,15 @@ class Printer extends Model
         return $this->request_for_price == 1
             ? 'Az árért keressen!'
             : PriceFormatter::formatToInteger($this->price);
+    }
+
+    public function getColorManagementAttribute()
+    {
+        return 1;
+    }
+
+    public function getMaxPapersizeAttribute()
+    {
+        return $this->papersizes->first();
     }
 }
