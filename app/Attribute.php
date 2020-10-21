@@ -21,9 +21,30 @@ class Attribute extends Model
         'updated_at',
     ];
 
+    public static function findByVariableName($variablename)
+    {
+    }
+
     public function attribute_value_set()
     {
         return $this->belongsTo(AttributeValueSet::class);
+    }
+
+    public function takesValueFromSet()
+    {
+        return !is_null($this->attribute_value_set_id);
+    }
+
+    public function hasValueInSet($value)
+    {
+    }
+
+    public function hasLabelInSet($value)
+    {
+    }
+
+    public function getAttributeValueFromSet()
+    {
     }
 
 }
