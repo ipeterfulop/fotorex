@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Helpers\PriceFormatter;
+use App\Helpers\PrinterAttributeValue;
 use App\Scopes\PrinterWithAttributesScope;
 use App\Traits\hasFiles;
 use App\Traits\hasIsEnabledProperty;
@@ -47,7 +48,9 @@ class Printer extends Model
         'similar_printers_button',
         'printers_viewed_by_others_button',
         'max_papersize',
-        'color_management'
+        'max_papersize_label',
+        'color_management',
+        'color_management_label',
     ];
 
     protected $with = [
@@ -55,7 +58,7 @@ class Printer extends Model
         'printer_photos',
         'technical_specifications',
         'usergroupsize',
-        'printerattributes',
+        'printerattributevalues',
         'papersizes',
     ];
 
@@ -168,9 +171,9 @@ class Printer extends Model
         return $this->hasMany(PrinterTechnicalSpecificationCategory::class, 'printer_id', 'id');
     }
 
-    public function printerattributes()
+    public function printerattributevalues()
     {
-        return $this->hasMany(PrinterAttribute::class);
+        return $this->hasMany(PrinterAttributeValue::class);
     }
 
     public function syncPhotos(array $photoIds)
@@ -362,12 +365,54 @@ class Printer extends Model
             : PriceFormatter::formatToInteger($this->price);
     }
 
+    public function getPrinterAttributeValue($attributeVariableName)
+    {
+        return optional($this->printerattributevalues()
+            ->where('variable_name', '=', $attributeVariableName)
+            ->first()
+        )->finalvalue;
+    }
+
+    public function getPrinterAttributeLabel($attributeVariableName)
+    {
+        return optional($this->printerattributevalues()
+            ->where('variable_name', '=', $attributeVariableName)
+            ->first()
+        )->alabel;
+    }
+
+    public function getPrinterAttributeValueLabel($attributeVariableName)
+    {
+        return optional($this->printerattributevalues()
+            ->where('variable_name', '=', $attributeVariableName)
+            ->first()
+        )->avlabel;
+    }
+
     public function getColorManagementAttribute()
     {
-        return 1;
+        if ($this->printing != null) {
+            return $this->printing;
+        }
+
+        return $this->getPrinterAttributeValue('color_management');
+    }
+
+    public function getColorManagementLabelAttribute()
+    {
+        if ($this->printing_label != null) {
+            return $this->printing_label;
+        }
+
+        return $this->getAttributeValueLabel('color_management');
     }
 
     public function getMaxPapersizeAttribute()
+    {
+        return $this->papersizes->first();
+    }
+
+    public function getMaxPapersizeLabelAttribute()
     {
         return $this->papersizes->first()->code;
     }

@@ -31,7 +31,7 @@ class PrinterWithAttributesScope implements Scope
         }
         return $builder->select($selects)
             ->leftJoinSub(
-                PrinterAttributeValue::select('finalvalue')->groupBy(['printer_id', 'variable_name', 'finalvalue', 'avlabel', 'alabel']),
+                PrinterAttributeValue::select('finalvalue')->groupBy(['printer_id', 'variable_name', 'finalvalue', 'avlabel', 'alabel', 'attribute_value_id', 'customvalue']),
                 'attr',
                 'attr.printer_id',
                 '=',

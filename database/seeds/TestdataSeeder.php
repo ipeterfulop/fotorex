@@ -52,6 +52,16 @@ class TestdataSeeder extends Seeder
                 'attribute_id' => 16,
                 'customvalue' => random_int(400, 500),
             ]);
+            PrinterAttribute::create([
+                'printer_id' => $printer->id,
+                'attribute_id' => 12,
+                'attribute_value_id' => random_int(1001,1002),
+            ]);
+            PrinterAttribute::create([
+                'printer_id' => $printer->id,
+                'attribute_id' => 1,
+                'attribute_value_id' => random_int(3002,3003),
+            ]);
             PrinterPapersize::create([
                 'printer_id' => $printer->id,
                 'papersize_id' => Papersize::query()->inRandomOrder()->first()->id

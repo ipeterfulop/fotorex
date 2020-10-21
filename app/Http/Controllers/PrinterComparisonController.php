@@ -49,7 +49,7 @@ class PrinterComparisonController extends Controller
             ['v' => 'usergroup_size_label', 'n' => 'Munkakörnyezet'],
         ];
         foreach (Attribute::where('position_at_product_comparison', '!=', null)->orderBy('position_at_product_comparison', 'asc')->get() as $attribute) {
-            $result[] = ['v' => $attribute->variable_name, 'n' => $attribute->name];
+            $result[] = ['v' => $attribute->variable_name.'_label', 'n' => $attribute->name];
         }
 
         return collect($result);
