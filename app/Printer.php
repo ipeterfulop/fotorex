@@ -51,6 +51,8 @@ class Printer extends Model
         'max_papersize_label',
         'color_management',
         'color_management_label',
+        'is_multifunctional',
+        'is_multifunctional_label',
     ];
 
     protected $with = [
@@ -420,5 +422,19 @@ class Printer extends Model
     public function getUsergroupSizeLabelAttribute()
     {
         return $this->usergroupsize->name;
+    }
+
+    public function getIsMultifunctionalAttribute()
+    {
+        if (($this->printing != null) && ($this->scanning != null)) {
+            return $this->printing > 0 && $this->scanning > 0 ? 1001 : 1002;
+        }
+        return $this->getPrinterAttributeValue('printing') > 0
+            && $this->getPrinterAttributeValue('scanning') > 0 ? 1001 : 1002;
+    }
+
+    public function getIsMultifunctionalLabelAttribute()
+    {
+        return AttributeValue::find($this->is_multifunctional)->label;
     }
 }

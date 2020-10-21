@@ -345,7 +345,7 @@ class PopulateAttributesTable extends Seeder
             ['id'                             => '35',
              'name'                           => 'MFP',
              'label'                          => '',
-             'variable_name'                  => 'is_mfp',
+             'variable_name'                  => 'is_multifunctional',
              'attribute_value_set_id'         => '1',
              'attribute_category_id'          => '1',
              'is_computed'                    => '1',

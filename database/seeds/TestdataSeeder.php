@@ -26,7 +26,6 @@ class TestdataSeeder extends Seeder
             ['manufacturer_id' => 1, 'name' => 'Sharp MFC', 'usergroup_size_id' => 11,  'description' => 'Sharp MFC', 'slug' => \Str::slug('Sharp MFC'), 'html_page_title' => 'Sharp MFC', 'html_page_meta_description' => 'Sharp MFC'],
             ['manufacturer_id' => 2, 'name' => 'Lexmark printer', 'usergroup_size_id' => 11,  'description' => 'Lexmark printer', 'slug' => \Str::slug('Lexmark printer'), 'html_page_title' => 'Lexmark printer', 'html_page_meta_description' => 'Lexmark printer'],
             ['manufacturer_id' => 2, 'name' => 'Lexmark MFC', 'usergroup_size_id' => 11,  'description' => 'Lexmark MFC', 'slug' => \Str::slug('Lexmark MFC'), 'html_page_title' => 'Lexmark MFC', 'html_page_meta_description' => 'Lexmark MFC'],
-            ['manufacturer_id' => 2, 'name' => 'Lexmark MFC', 'usergroup_size_id' => 12,  'description' => 'Lexmark MFC', 'slug' => \Str::slug('Lexmark MFC'), 'html_page_title' => 'Lexmark MFC', 'html_page_meta_description' => 'Lexmark MFC'],
             ['manufacturer_id' => 2, 'name' => 'Lexmark lézerprinter', 'usergroup_size_id' => 11,  'description' => 'Lexmark lézerprinter', 'slug' => \Str::slug('Lexmark lézerprinter'), 'html_page_title' => 'Lexmark lézerprinter', 'html_page_meta_description' => 'Lexmark lézerprinter'],
         ];
         PrinterAttribute::query()->delete();
@@ -61,6 +60,11 @@ class TestdataSeeder extends Seeder
                 'printer_id' => $printer->id,
                 'attribute_id' => 1,
                 'attribute_value_id' => random_int(3002,3003),
+            ]);
+            PrinterAttribute::create([
+                'printer_id' => $printer->id,
+                'attribute_id' => 3,
+                'attribute_value_id' => strpos($printer->name, 'MFC') !== false ? 3003 : 3001,
             ]);
             PrinterPapersize::create([
                 'printer_id' => $printer->id,

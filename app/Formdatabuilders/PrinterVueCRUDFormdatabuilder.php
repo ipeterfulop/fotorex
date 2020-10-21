@@ -58,30 +58,9 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setRules(['required_if:request_for_price,0'])
             ->setDefault(0)
             ->setContainerClass('col-3');
-        $result['color_technology'] = (new SelectVueCRUDFormfield())
-            ->setMandatory(true)
-            ->setValuesetClass(ColorTechnology::class)
-            ->setContainerClass('col-3')
-            ->setLabel('Színkezelés');
-        $result['is_multifunctional'] = (new YesNoSelectVueCRUDFormfield())->setMandatory(true)
-            ->setLabel('Multifunkció')
-            ->setDefault(0)
+        $result['price_discounted'] = (new TextVueCRUDFormfield())
+            ->setLabel('Ár (kedvezményes)')
             ->setContainerClass('col-3');
-        $result['printing_mode'] = (new SelectVueCRUDFormfield())
-            ->setMandatory(true)
-            ->setValuesetClass(DeviceFunctionality::class)
-            ->setContainerClass('col-3')
-            ->setLabel('Nyomtató');
-        $result['copying_mode'] = (new SelectVueCRUDFormfield())
-            ->setMandatory(true)
-            ->setValuesetClass(DeviceFunctionality::class)
-            ->setContainerClass('col-3')
-            ->setLabel('Másoló');
-        $result['scanning_mode'] = (new SelectVueCRUDFormfield())
-            ->setMandatory(true)
-            ->setValuesetClass(DeviceFunctionality::class)
-            ->setContainerClass('col-3')
-            ->setLabel('Lapolvasó mód');
         $result['description'] = (new RichttextQuillVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Leírás')
             ->setProperty('content')
@@ -110,15 +89,7 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->addAcceptCondition(ImageLibraryVueCRUDFormfield::ACCEPTS_PRESET_IMAGE)
             ->addRoutes('printer')
             ->setLimit(22);
-        foreach (TechnicalSpecificationCategory::where('is_enabled', '=', 1)->get()->all() as $tsc) {
-            $result['tsc_'.$tsc->id] = (new RichttextQuillVueCRUDFormfield())->setMandatory(false)
-                ->setLabel($tsc->name)
-                ->setProps([
-                    'allowTableOperations' => 'true',
-                    'allowPreview' => 'true',
-                ])
-                ->setContainerClass('col-12');
-        }
+
         return collect($result);
     }
 
