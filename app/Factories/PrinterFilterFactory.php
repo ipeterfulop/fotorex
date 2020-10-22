@@ -5,8 +5,10 @@ namespace App\Factories;
 
 
 use App\Attribute;
+use App\AttributeValue;
 use App\ExtraFeature;
 use App\Manufacturer;
+use App\Printer;
 use App\Searching\CheckboxgroupSearchField;
 use App\Searching\RangeSearchField;
 use App\Searching\TextSearchField;
@@ -15,24 +17,28 @@ use Illuminate\Database\Eloquent\Builder;
 
 class PrinterFilterFactory
 {
+    const MIN_PRICE = 10000;
+    const MAX_PRICE = 2000000;
+
     public static function createFilters()
     {
         $result = [];
         $result[] = (new TextSearchField())->setLabel('Keresés')->setField('search');
-        $result[] = (new CheckboxgroupSearchField())->setLabel('Funkciók')
-            ->setField('modes')
-            ->setValueset(Attribute::where('attribute_value_set_id', '=', 3)->get()->pluck('name', 'variable_name'));
-        $result[] = (new RangeSearchField(0, 500000))->setLabel('Ár')
+        $result[] = (new CheckboxgroupSearchField())->setLabel('Munkakörnyezet')
+            ->setField('usergroup')
+            ->setValueset(UsergroupSize::orderBy('position', 'asc')->enabled()->get()->pluck('name', 'id'));
+        $result[] = (new CheckboxgroupSearchField())->setLabel('Színkezelés')
+            ->setField('printing')
+            ->setValueset(Attribute::with(['attribute_value_set'])->whereVariableName('printing')->first()->getAttributeValuesFromSetWithoutNA()->pluck('label', 'value'));
+        $result[] = (new RangeSearchField(self::getMinPrice(), self::getMaxPrice()))->setLabel('Ár')
             ->setField('price');
         $result[] = (new CheckboxgroupSearchField())->setLabel('Gyártók')
             ->setField('manufacturer')
             ->setValueset(Manufacturer::orderBy('name', 'asc')->enabled()->get()->pluck('name', 'id'));
-//        $result[] = (new CheckboxgroupSearchField())->setLabel('Csoportméret')
-//            ->setField('usergroup')
-//            ->setValueset(UsergroupSize::orderBy('position', 'asc')->enabled()->get()->pluck('name', 'id'));
 //        $result[] = (new CheckboxgroupSearchField())->setLabel('Extra funkciók')
 //            ->setField('extra_features')
 //            ->setValueset(ExtraFeature::orderBy('name', 'asc')->enabled()->get()->pluck('name', 'id'));
+
 
         return self::setValuesFromRequest($result, request());
     }
@@ -44,5 +50,19 @@ class PrinterFilterFactory
         }
 
         return $filters;
+    }
+
+    public static function getMinPrice()
+    {
+        $value = Printer::min('actualprice');
+
+        return $value ?? self::MIN_PRICE;
+    }
+
+    public static function getMaxPrice()
+    {
+        $value = Printer::max('actualprice');
+
+        return $value ?? self::MAX_PRICE;
     }
 }

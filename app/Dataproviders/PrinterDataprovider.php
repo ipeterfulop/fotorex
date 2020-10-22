@@ -25,7 +25,7 @@ class PrinterDataprovider
     {
         $query = $this->getPrintersQuery($sortingOption, request());
         $result = new DataproviderResult();
-        $result->totalCount = (clone $query)->count();
+        $result->totalCount = (clone $query)->get()->count();
         $result->results = self::addPaginationToQuery($query, $page)->get();
         $result->itemsPerPage = self::ITEMS_PER_INDEX_PAGE;
         $result->currentPage = $page;
@@ -39,32 +39,23 @@ class PrinterDataprovider
 
     protected function getPrintersQuery($sortingOption, Request $request)
     {
-        $printerAttributeSubquery = PrinterAttribute::query()
-            ->when($request->get('modes', '') != '', function ($query) use ($request) {
-                $modes = explode(',', $request->get('modes'));
-                foreach ($modes as $mode) {
-                    $query = $query->where(function($query) use ($mode) {
-                        return $query->where('attribute_id', '=', $this->attributes->get($mode)->id)
-                            ->where('attribute_value_id', '>', 3001);
-                    });
-                }
-                return $query;
-            });
-
-        return Printer::query()
-            ->join(\DB::raw('(select id as mid from manufacturers where is_enabled=1) m'), 'printers.manufacturer_id', '=', 'm.mid')
+        $attributes = Attribute::with(['attribute_value_set'])->get()->keyBy('variable_name');
+        $query = Printer::withAttributes()
+            //->join(\DB::raw('(select id as mid from manufacturers where is_enabled=1) m'), 'printers.manufacturer_id', '=', 'm.mid')
             ->enabled()
             ->when($request->get('search', '') != '', function($query) use ($request) {
                 return $query->where(function($query) use ($request) {
                     return $query->where('description', 'like', '%'.$request->get('search').'%')
-                        ->orWhere('name', 'like', '%'.$request->get('search').'%');
+                        ->orWhere('name', 'like', '%'.$request->get('search').'%')
+                        ->orWhere('model_number', 'like', '%'.$request->get('search').'%')
+                        ->orWhere('model_number_displayed', 'like', '%'.$request->get('search').'%');
                 });
             })
             ->when($request->get('price', '') != '', function ($query) use ($request) {
                 $range = explode('-', $request->get('price'));
                 return $query->where(function($query) use ($range) {
                     return $query->where('request_for_price', '=', 1)
-                        ->orWhereBetween('price', $range);
+                        ->orWhereBetween('actualprice', $range);
                 });
             })->when($request->get('manufacturer', '') != '', function($query) use ($request) {
                 $ids = explode(',', $request->get('manufacturer'));
@@ -73,7 +64,15 @@ class PrinterDataprovider
             ->when($request->get('usergroup', '') != '', function($query) use ($request) {
                 $ids = explode(',', $request->get('usergroup'));
                 return $query->whereIn('usergroup_size_id', $ids);
-            })->whereIn('id', $printerAttributeSubquery->get()->pluck('printer_id')->all());
+            });
+        foreach ($attributes as $variableName => $attribute) {
+            if (request()->has($variableName)) {
+                $values = collect(explode(',', $request->get($variableName)));
+                $query = $query->having($variableName, '=', $values->max());
+            }
+        }
+
+        return $query;
     }
 
     protected static function addPaginationToQuery(Builder $query, $page = 1)
@@ -81,13 +80,4 @@ class PrinterDataprovider
         return $query->skip(($page - 1) * self::ITEMS_PER_INDEX_PAGE)
             ->take(self::ITEMS_PER_INDEX_PAGE);
     }
-
-    protected static function addPrinterAttributeFilterToQuery(Builder $query, $variableName, $operator, $value)
-    {
-        $query->where(function($query) use ($variableName, $value, $operator){
-            return $query->where('variable_name', '=', $variableName)
-                ->having('value', $operator, $value);
-        });
-    }
-
 }

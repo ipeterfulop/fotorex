@@ -69,6 +69,18 @@ class Printer extends Model
         'papersizes',
     ];
 
+    protected static function booted()
+    {
+        static::addGlobalScope('actualprice', function(Builder $builder) {
+            return $builder->leftJoin(
+                \DB::raw('(select id as ap_pid, (case when price_discounted is null then price else price_discounted end) actualprice from printers) apjoin'),
+                'apjoin.ap_pid',
+                '=',
+                'printers.id'
+            );
+        });
+    }
+
     public function manufacturer()
     {
         return $this->belongsTo(Manufacturer::class);

@@ -47,4 +47,13 @@ class Attribute extends Model
     {
     }
 
+    public function getAttributeValuesFromSetWithoutNA()
+    {
+        if (!$this->takesValueFromSet()) {
+            return [];
+        }
+        return $this->attribute_value_set->attribute_values->filter(function($item) {
+            return $item->value != 0;
+        });
+    }
 }
