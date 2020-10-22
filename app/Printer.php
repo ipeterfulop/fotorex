@@ -500,9 +500,24 @@ class Printer extends Model
         }
     }
 
+
     private function setPrinterAttributeFromSet(string $variablename, ?string $value, ?string $label)
     {
-        throw (new \Exception('Not imlemented yet'));
+        $attribute = Attribute::findByVariableName($variablename);
+        if (is_null($attribute) || (!$attribute->takesValueFromSet())) {
+            throw (new \Exception(
+                'Invalid attribute variable name \'' . $variablename .
+                '\' or attribute does not take value from a set!'
+            ));
+        }
+
+        $attributevalue = !is_null($value)
+            ? $attribute->getAttributeValueFromSetByValue($value)
+            : $attribute->getAttributeValueFromSetByLabel($label);
+
+        if (is_null($attributevalue)) {
+            throw (new \Exception('Invalid value or label while setting printer attribute from set!'));
+        }
 
         return null;
     }
@@ -510,7 +525,7 @@ class Printer extends Model
     private function setPrinterAttributeWithCustomValue(string $variablename, $customvalue)
     {
         throw (new \Exception('Not imlemented yet'));
-        
+
         return null;
     }
 }
