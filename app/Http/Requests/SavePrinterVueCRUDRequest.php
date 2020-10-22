@@ -30,14 +30,12 @@ class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
     {
         \DB::transaction(function() use (&$subject) {
             $dataset = $this->getDataset();
-            $dataset['usergroup_size_id'] = 11;
             if ($subject == null) {
                 $subject = Printer::create($dataset);
             } else {
                 $subject->update($dataset);
             }
             $this->handlePhotos($subject);
-            $this->handleTechnicalSpecifications($subject);
         });
 
         return $subject;
@@ -45,7 +43,20 @@ class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
 
     public function getDataset()
     {
-        $result = $this->getBaseDatasetFromRequest(Printer::class);
+        $result = [
+            'manufacturer_id' => $this->input('manufacturer_id'),
+            'name' => $this->input('name'),
+            'description' => $this->input('description'),
+            'slug' => $this->input('slug'),
+            'html_page_title' => $this->input('html_page_title'),
+            'html_page_meta_description' => $this->input('html_page_meta_description'),
+            'is_enabled' => $this->input('is_enabled'),
+            'price' => $this->input('price'),
+            'price_discounted' => $this->input('price_discounted'),
+            'request_for_price' => $this->input('request_for_price'),
+            'model_number' => $this->input('model_number'),
+            'model_number_displayed' => $this->input('model_number_displayed'),
+        ];
 
         return $result;
     }

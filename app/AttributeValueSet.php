@@ -18,6 +18,8 @@ class AttributeValueSet extends Model
         'updated_at',
     ];
 
+    protected $with = ['attribute_values'];
+
     public function attribute_values()
     {
         return $this->hasMany(AttributeValue::class);

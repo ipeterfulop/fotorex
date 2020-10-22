@@ -37,14 +37,22 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
         $result['name'] = (new TextVueCRUDFormfield())
             ->setMandatory(true)
             ->setLabel('Név')
-            ->setContainerClass('col-8');
+            ->setContainerClass('col-6');
         $result['manufacturer_id'] = (new SelectVueCRUDFormfield())
             ->setMandatory(true)
             ->setLabel('Gyártó')
             ->setAddChooseMessage(true)
             ->setValuesetClass(Manufacturer::class)
             ->setDefault(0)
-            ->setContainerClass('col-4');
+            ->setContainerClass('col-6');
+        $result['model_number'] = (new TextVueCRUDFormfield())
+            ->setMandatory(true)
+            ->setLabel('Modellszám')
+            ->setContainerClass('col-6');
+        $result['model_number_displayed'] = (new TextVueCRUDFormfield())
+            ->setMandatory(true)
+            ->setLabel('Modellszám (megjelenítéshez)')
+            ->setContainerClass('col-6');
         $result['is_enabled'] = (new YesNoSelectVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Aktív')
             ->setDefault(0)
@@ -68,7 +76,9 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
         $result['slug'] = (new SlugVueCRUDFormfield())->setMandatory(true)
             ->setLabel('URL')
             ->setProperty('slug')
-            ->addSourceFieldName('title')
+            ->addSourceFieldName('manufacturer_id')
+            ->addSourceFieldName('model_number_displayed')
+            ->addSourceFieldName('name')
             ->setContainerClass('col-6')
             ->setRules(['unique:printers', 'regex:/^[A-Za-z0-9\-\_]*$/miu'])
             ->setMessages([

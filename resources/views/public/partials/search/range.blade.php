@@ -3,6 +3,6 @@
      data-field="{{ $field }}"
      data-filtertype="range"
 >
-    <x-price-slider :min="0" :max="500000" :field="$field"></x-price-slider>
+    <x-price-slider :min="$min" :max="$max" :field="$field"></x-price-slider>
     <button @click="loadContent(true)" class="bg-fotored hover-gray-link p-2 my-2 text-white uppercase">Keresés</button>
 </div>

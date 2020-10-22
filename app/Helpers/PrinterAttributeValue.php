@@ -30,6 +30,8 @@ class PrinterAttributeValue extends PrinterAttribute
                 'printer_attribute.printer_id',
                 'a.alabel',
                 'a.variable_name',
+                'attribute_value_id',
+                \DB::raw('ifnull(attribute_value_id, (case when attribute_value_id is null then customvalue else value end)) finalvalue_or_id'),
                 \DB::raw('case when attribute_value_id is null then customvalue else value end finalvalue'),
                 \DB::raw('case when av.avlabel is not null then av.avlabel else (case when attribute_value_id is null then customvalue else value end) end avlabel')
             );

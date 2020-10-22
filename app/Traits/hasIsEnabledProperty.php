@@ -23,7 +23,7 @@ trait hasIsEnabledProperty
 
     public function getIsEnabledLabelAttribute()
     {
-        return $this->isEnabled() ? __('Enabled') : __('Disabled');
+        return $this->isEnabled() ? __('Aktív') : __('Inaktív');
     }
 
     public static function getIsEnabledOptions()
