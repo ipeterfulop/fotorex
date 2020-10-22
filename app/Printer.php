@@ -133,8 +133,8 @@ class Printer extends Model
     public static function findByModelNumber(string $modelnumber)
     {
         return self::where('model_number', $modelnumber)
-                      ->first()
-                      ->get();
+                   ->first()
+                   ->get();
     }
 
     public function getCustomizedPhotosForRole(PrinterPhotoRole $role)
@@ -478,5 +478,39 @@ class Printer extends Model
     public function getIsMultifunctionalLabelAttribute()
     {
         return AttributeValue::find($this->is_multifunctional)->label;
+    }
+
+    public function setPrinterAttribute(string $variablename, ?string $value, ?string $label): ?PrinterAttribute
+    {
+        $attribute = Attribute::findByVariableName($variablename);
+        if (is_null($attribute)) {
+            throw (new \Exception('Invalid attribute variable name \'' . $variablename . '\''));
+        }
+
+        if ((is_null($label)) && (is_null($label))) {
+            $message = 'To set \'' . $variablename . '\' attribute for the current printer'
+                . ' at least a label or a value should be specified';
+            throw (new \Exception($message));
+        }
+
+        if ($attribute->takesValueFromSet()) {
+            return $this->setPrinterAttributeFromSet($variablename, $value, $label);
+        } else {
+            return $this->setPrinterAttributeWithCustomValue($variablename, $customvalue);
+        }
+    }
+
+    private function setPrinterAttributeFromSet(string $variablename, ?string $value, ?string $label)
+    {
+        throw (new \Exception('Not imlemented yet'));
+
+        return null;
+    }
+
+    private function setPrinterAttributeWithCustomValue(string $variablename, $customvalue)
+    {
+        throw (new \Exception('Not imlemented yet'));
+        
+        return null;
     }
 }
