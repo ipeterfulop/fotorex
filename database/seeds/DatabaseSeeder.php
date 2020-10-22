@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ArticlecategoriesSeeder::class);
         $this->call(MenuitemsSeeder::class);
         $this->call(PopulateExtraFeaturesTable::class);
-        $this->call(PopulateTechnicalSpecificationCategoriesTable::class);
         $this->call(PopulateUsergroupSizesTable::class);
         $this->call(PopulatePapersizesTable::class);
         $this->call(PopulateAttributeSetsTable::class);
