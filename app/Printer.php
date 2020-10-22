@@ -18,6 +18,7 @@ use Illuminate\Support\Collection;
 class Printer extends Model
 {
     use VueCRUDManageable, hasIsEnabledProperty, hasFiles, HasSortingOptions;
+
     const SUBJECT_SLUG = 'printer';
     const SUBJECT_NAME = 'Termék';
     const SUBJECT_NAME_PLURAL = 'Termékek';
@@ -89,15 +90,15 @@ class Printer extends Model
     public function similarprinters()
     {
         return $this->hasMany(SimilarPrinter::class)
-            ->where('relationtype', '=', self::RELATIONTYPE_SIMILAR)
-            ->orderBy('position', 'asc');
+                    ->where('relationtype', '=', self::RELATIONTYPE_SIMILAR)
+                    ->orderBy('position', 'asc');
     }
 
     public function printersviewedbyothers()
     {
         return $this->hasMany(SimilarPrinter::class)
-            ->where('relationtype', '=', self::RELATIONTYPE_VIEWED_BY_OTHERS)
-            ->orderBy('position', 'asc');
+                    ->where('relationtype', '=', self::RELATIONTYPE_VIEWED_BY_OTHERS)
+                    ->orderBy('position', 'asc');
     }
 
     public function printer_photos()
@@ -134,28 +135,45 @@ class Printer extends Model
             if (! isset($result[$customized_printer_photo->printer_photo_id])) {
                 $result[$customized_printer_photo->printer_photo_id] = $empty;
             }
-            $result[$customized_printer_photo->printer_photo_id][$roles->get($customized_printer_photo->printer_photo_role_id)->name] = $customized_printer_photo->getUrl();
+            $result[$customized_printer_photo->printer_photo_id][$roles->get(
+                $customized_printer_photo->printer_photo_role_id
+            )->name] = $customized_printer_photo->getUrl();
         }
 
         return $result;
     }
 
+    /**
+     * @param $modelnumber string
+     * @return Printer|null
+     */
+    public static function findByModelNumber(string $modelnumber)
+    {
+        return self::where('model_number', $modelnumber)
+                   ->first()
+                   ->get();
+    }
+
     public function getCustomizedPhotosForRole(PrinterPhotoRole $role)
     {
-        return $this->customized_printer_photos->filter(function ($cpp) use ($role) {
-            return $cpp->printer_photo_role_id == $role->id;
-        });
+        return $this->customized_printer_photos->filter(
+            function ($cpp) use ($role) {
+                return $cpp->printer_photo_role_id == $role->id;
+            }
+        );
     }
 
     public function getCustomizedPrinterPhoto($printerPhotoId, PrinterPhotoRole $role = null)
     {
-        $all = $this->customized_printer_photos->filter(function ($cpp) use ($printerPhotoId, $role) {
-            if ($role == null) {
-                return $cpp->printer_photo_id == $printerPhotoId;
-            } else {
-                return $cpp->printer_photo_id == $printerPhotoId && $cpp->printer_photo_role_id == $role->id;
+        $all = $this->customized_printer_photos->filter(
+            function ($cpp) use ($printerPhotoId, $role) {
+                if ($role == null) {
+                    return $cpp->printer_photo_id == $printerPhotoId;
+                } else {
+                    return $cpp->printer_photo_id == $printerPhotoId && $cpp->printer_photo_role_id == $role->id;
+                }
             }
-        })->keyBy('printer_photo_role_id');
+        )->keyBy('printer_photo_role_id');
         if ($role == null) {
             return $all;
         }
@@ -170,7 +188,7 @@ class Printer extends Model
         }
 
         return $this->getCustomizedPrinterPhoto($this->printer_photos->first()->id, $role)
-            ->getUrl();
+                    ->getUrl();
     }
 
     public function printerpapersizes()
@@ -203,17 +221,19 @@ class Printer extends Model
     public function syncPhotos(array $photoIds)
     {
         $created = new Collection();
-        \DB::transaction(function () use ($photoIds, &$created) {
-            foreach (PrinterPhoto::getRemovablePhotos($this->id, $photoIds) as $du) {
-                PrinterPhoto::removePrinterPhoto($du->pp_id);
-            }
-            foreach (array_values($photoIds) as $index => $photoId) {
-                $du = PrinterPhoto::firstOrCreateWithCustomizedPrinterPhoto($this->id, $photoId, $index + 1);
-                if ($du->wasRecentlyCreated) {
-                    $created->push($du);
+        \DB::transaction(
+            function () use ($photoIds, &$created) {
+                foreach (PrinterPhoto::getRemovablePhotos($this->id, $photoIds) as $du) {
+                    PrinterPhoto::removePrinterPhoto($du->pp_id);
+                }
+                foreach (array_values($photoIds) as $index => $photoId) {
+                    $du = PrinterPhoto::firstOrCreateWithCustomizedPrinterPhoto($this->id, $photoId, $index + 1);
+                    if ($du->wasRecentlyCreated) {
+                        $created->push($du);
+                    }
                 }
             }
-        });
+        );
 
         return $created;
     }
@@ -224,10 +244,13 @@ class Printer extends Model
             if ($tsc_value === null) {
                 PrinterTechnicalSpecificationCategory::removePrinterTechnicalSpecificationCategory($this->id, $tsc_id);
             } else {
-                PrinterTechnicalSpecificationCategory::updateOrCreate([
-                    'printer_id'                          => $this->id,
-                    'technical_specification_category_id' => $tsc_id,
-                ], ['html_content' => $tsc_value]);
+                PrinterTechnicalSpecificationCategory::updateOrCreate(
+                    [
+                        'printer_id'                          => $this->id,
+                        'technical_specification_category_id' => $tsc_id,
+                    ],
+                    ['html_content' => $tsc_value]
+                );
             }
         }
         return true;
@@ -261,8 +284,11 @@ class Printer extends Model
         $result = [];
         $result['name'] = new TextVueCRUDIndexfilter('name', 'Név', '');
         $result['manufacturer_id'] = new SelectVueCRUDIndexfilter('manufacturer_id', 'Gyártó', -1, -1);
-        $result['manufacturer_id']->setValueSet(Manufacturer::orderBy('name', 'asc')->get()->pluck('name', 'id'), -1,
-            'Összes');
+        $result['manufacturer_id']->setValueSet(
+            Manufacturer::orderBy('name', 'asc')->get()->pluck('name', 'id'),
+            -1,
+            'Összes'
+        );
         $result['is_enabled'] = new SelectVueCRUDIndexfilter('is_enabled', 'Státusz', 1, 1);
         $result['is_enabled']->setValueSet(self::getIsEnabledOptions());
 
@@ -299,16 +325,18 @@ class Printer extends Model
 
     public static function findBySlug($slug, $abortWith404IfNotFound = true)
     {
-        $result = self::where('slug', '=', $slug)->with([
-            'manufacturer',
-            'papersizes',
-            'printer_photos',
-            'technical_specifications',
-            'similarprinters',
-            'similarprinters.similarprinter',
-            'printersviewedbyothers',
-            'printersviewedbyothers.similarprinter',
-        ])->withAttributes()->first();
+        $result = self::where('slug', '=', $slug)->with(
+            [
+                'manufacturer',
+                'papersizes',
+                'printer_photos',
+                'technical_specifications',
+                'similarprinters',
+                'similarprinters.similarprinter',
+                'printersviewedbyothers',
+                'printersviewedbyothers.similarprinter',
+            ]
+        )->withAttributes()->first();
 
         if (($result == null) && ($abortWith404IfNotFound)) {
             abort(404);
@@ -359,26 +387,30 @@ class Printer extends Model
 
     public function getSimilarPrintersButtonAttribute()
     {
-        return 'component::'.json_encode([
-                'component'      => 'related-printers-popup-button',
-                'componentProps' => [
-                    'operationsUrl' => route('related_printer_endpoint'),
-                    'printerId'     => $this->id,
-                    'relationType'  => self::RELATIONTYPE_SIMILAR,
-                ],
-            ]);
+        return 'component::' . json_encode(
+                [
+                    'component'      => 'related-printers-popup-button',
+                    'componentProps' => [
+                        'operationsUrl' => route('related_printer_endpoint'),
+                        'printerId'     => $this->id,
+                        'relationType'  => self::RELATIONTYPE_SIMILAR,
+                    ],
+                ]
+            );
     }
 
     public function getPrintersViewedByOthersButtonAttribute()
     {
-        return 'component::'.json_encode([
-                'component'      => 'related-printers-popup-button',
-                'componentProps' => [
-                    'operationsUrl' => route('related_printer_endpoint'),
-                    'printerId'     => $this->id,
-                    'relationType'  => self::RELATIONTYPE_VIEWED_BY_OTHERS,
-                ],
-            ]);
+        return 'component::' . json_encode(
+                [
+                    'component'      => 'related-printers-popup-button',
+                    'componentProps' => [
+                        'operationsUrl' => route('related_printer_endpoint'),
+                        'printerId'     => $this->id,
+                        'relationType'  => self::RELATIONTYPE_VIEWED_BY_OTHERS,
+                    ],
+                ]
+            );
     }
 
     public function getAttributesButtonAttribute()
@@ -416,25 +448,28 @@ class Printer extends Model
 
     public function getPrinterAttributeValue($attributeVariableName)
     {
-        return optional($this->printerattributevalues()
-            ->where('variable_name', '=', $attributeVariableName)
-            ->first()
+        return optional(
+            $this->printerattributevalues()
+                 ->where('variable_name', '=', $attributeVariableName)
+                 ->first()
         )->finalvalue;
     }
 
     public function getPrinterAttributeLabel($attributeVariableName)
     {
-        return optional($this->printerattributevalues()
-            ->where('variable_name', '=', $attributeVariableName)
-            ->first()
+        return optional(
+            $this->printerattributevalues()
+                 ->where('variable_name', '=', $attributeVariableName)
+                 ->first()
         )->alabel;
     }
 
     public function getPrinterAttributeValueLabel($attributeVariableName)
     {
-        return optional($this->printerattributevalues()
-            ->where('variable_name', '=', $attributeVariableName)
-            ->first()
+        return optional(
+            $this->printerattributevalues()
+                 ->where('variable_name', '=', $attributeVariableName)
+                 ->first()
         )->avlabel;
     }
 
@@ -501,5 +536,39 @@ class Printer extends Model
     public function getDisplaynameAttribute()
     {
         return $this->manufacturer_name.' '.$this->model_number_displayed.' '.$this->name;
+    }
+
+    public function setPrinterAttribute(string $variablename, ?string $value, ?string $label): ?PrinterAttribute
+    {
+        $attribute = Attribute::findByVariableName($variablename);
+        if (is_null($attribute)) {
+            throw (new \Exception('Invalid attribute variable name \'' . $variablename . '\''));
+        }
+
+        if ((is_null($label)) && (is_null($label))) {
+            $message = 'To set \'' . $variablename . '\' attribute for the current printer'
+                . ' at least a label or a value should be specified';
+            throw (new \Exception($message));
+        }
+
+        if ($attribute->takesValueFromSet()) {
+            return $this->setPrinterAttributeFromSet($variablename, $value, $label);
+        } else {
+            return $this->setPrinterAttributeWithCustomValue($variablename, $customvalue);
+        }
+    }
+
+    private function setPrinterAttributeFromSet(string $variablename, ?string $value, ?string $label)
+    {
+        throw (new \Exception('Not imlemented yet'));
+
+        return null;
+    }
+
+    private function setPrinterAttributeWithCustomValue(string $variablename, $customvalue)
+    {
+        throw (new \Exception('Not imlemented yet'));
+        
+        return null;
     }
 }
