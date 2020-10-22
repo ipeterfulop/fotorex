@@ -38,7 +38,7 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     Route::get('/ajax/printer-picker', 'PrinterPickerController@operation')->name('printer_picker_endpoint');
     Route::post('/ajax/related-printer', 'RelatedPrintersController@operation')->name('related_printer_endpoint');
     Route::view('/playground', 'admin.playground');
-
+    Route::post('/ajax/printer-attribute', 'PrinterAttributeController@operation')->name('printer_attribute_endpoints');
 
 });
 

@@ -11,7 +11,7 @@
     </script>
     <link href="{{ asset('css/minton.css') }}{{ $cacheBuster }}" rel="stylesheet">
 
-    <title>{{ config('app.title', 'Laravel') }}</title>
+    <title>{{ config('app.name'.' admin', 'Laravel') }}</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
@@ -21,6 +21,9 @@
         }
         .editform-richtext-editor table {
             width: 100%;
+        }
+        select {
+            padding: .25rem;
         }
 
     </style>

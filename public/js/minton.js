@@ -2993,6 +2993,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3236,6 +3269,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this3 = this;
 
       this.loaded = false;
+      this.$emit('edit-form-loading');
       window.axios.get(this.dataUrl, {
         params: this.extraUrlParameters
       }).then(function (response) {
@@ -3244,6 +3278,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this3.currentStep = _this3.config.mode == 'creating' ? 1 : _this3.lastStep;
         _this3.loaded = true;
         _this3.dirty = false;
+
+        _this3.$emit('edit-form-loaded');
       }).catch(function (error) {});
     },
     updateFormData: function updateFormData() {
@@ -3344,9 +3380,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       .replace(/^-+/, '') // Trim - from start of text
       .replace(/-+$/, ''); // Trim - from end of text
     },
-    generateSlug: function generateSlug(field, fieldname) {
-      var sourceText = this.subjectData[field].value;
-      this.subjectData[fieldname].value = this.slugify(sourceText);
+    generateSlug: function generateSlug(fields, fieldname) {
+      var _this6 = this;
+
+      var sourceText = '';
+      fields.forEach(function (field) {
+        if (_this6.subjectData[field].kind == 'select') {
+          sourceText = sourceText + _this6.subjectData[field].valueset[_this6.subjectData[field].value] + ' ';
+        } else {
+          sourceText = sourceText + _this6.subjectData[field].value + ' ';
+        }
+      });
+      this.subjectData[fieldname].value = this.slugify(sourceText.trim());
     }
   },
   watch: {
@@ -5906,6 +5951,159 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PrinterAttributesPopupButton.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/PrinterAttributesPopupButton.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mixins_spinner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mixins/spinner */ "./resources/js/components/mixins/spinner.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_mixins_spinner__WEBPACK_IMPORTED_MODULE_0__["spinner"]],
+  props: {
+    operationsUrl: {
+      type: String
+    },
+    printerId: {}
+  },
+  data: function data() {
+    return {
+      showPopup: false,
+      statusMessage: '',
+      loaded: false,
+      loading: false,
+      attributes: [],
+      printerattributevalues: [],
+      printer: null
+    };
+  },
+  mounted: function mounted() {},
+  methods: {
+    saveChanges: function saveChanges() {
+      var _this = this;
+
+      this.$refs.savebutton.setAttribute('disabled', true);
+      window.axios.post(this.operationsUrl, {
+        action: 'saveChanges',
+        printerId: this.printerId,
+        attributes: this.attributes
+      }).then(function (response) {
+        _this.value = [];
+        _this.statusMessage = 'Módosítások elmentve';
+        window.setTimeout(function () {
+          _this.showPopup = false;
+        }, 2000);
+      }).catch(function (error) {
+        _this.statusMessage = error.response.data;
+
+        _this.$refs.savebutton.removeAttribute('disabled');
+      });
+    },
+    fetchData: function fetchData() {
+      var _this2 = this;
+
+      window.axios.post(this.operationsUrl, {
+        printerId: this.printerId,
+        action: 'fetchData'
+      }).then(function (response) {
+        _this2.printer = response.data.printer;
+        var attributes = response.data.attributes;
+        _this2.attributes = attributes.map(function (attribute) {
+          var newAttribute = _objectSpread({}, attribute);
+
+          var pav = response.data.printerattributevalues.find(function (item) {
+            return item.variable_name == attribute.variable_name;
+          });
+          newAttribute.value = pav == undefined ? null : pav.finalvalue_or_id;
+          return newAttribute;
+        });
+        _this2.loaded = true;
+        _this2.loading = false;
+        Vue.nextTick(function () {
+          _this2.showPopup = true;
+          Vue.nextTick(function () {
+            _this2.$refs.savebutton.removeAttribute('disabled');
+          });
+        });
+      }).catch(function (error) {
+        alert(error.response.data);
+      });
+    },
+    discardChanges: function discardChanges() {
+      this.showPopup = false;
+      this.value = [];
+      this.loaded = false;
+    },
+    initializePopup: function initializePopup() {
+      this.loading = true;
+      this.statusMessage = '';
+      this.fetchData();
+    }
+  },
+  computed: {},
+  watch: {}
 });
 
 /***/ }),
@@ -60056,270 +60254,248 @@ var render = function() {
                 }
               }
             },
-            _vm._l(_vm.stepsToRender, function(step) {
-              return _c(
-                "div",
-                {
-                  class: _vm.getClassOverrideOrDefaultClass(
-                    "edit-form-step",
-                    "edit-form-step"
-                  )
-                },
-                [
-                  typeof _vm.config.stepLabels[step] != "undefined"
-                    ? _c("div", {
-                        staticClass: "form-step-header",
-                        class: _vm.formHeadClass(step),
-                        domProps: {
-                          innerHTML: _vm._s(_vm.config.stepLabels[step])
-                        }
-                      })
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c(
+            [
+              !_vm.formDisabled
+                ? _c(
                     "div",
                     {
                       staticClass: "row",
                       class: _vm.getClassOverrideOrDefaultClass(
-                        "edit-form-step-body",
-                        "edit-form-step-body"
+                        "edit-form-form-buttons-container",
+                        "edit-form-form-buttons-container"
                       ),
-                      staticStyle: { position: "relative" }
+                      staticStyle: { "margin-bottom": "1rem" }
                     },
                     [
-                      _vm.currentStep != step
-                        ? _c("div", { staticClass: "disabled-overlay" })
-                        : _vm._e(),
+                      _c(
+                        "div",
+                        {
+                          class: _vm.getClassOverrideOrDefaultClass(
+                            "edit-form-form-button-container",
+                            "col"
+                          )
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              class: _vm.buttons["save"]["class"],
+                              attrs: { type: "button", disabled: _vm.loading },
+                              on: { click: _vm.submitForm }
+                            },
+                            [
+                              _vm.loading
+                                ? _c("span", {
+                                    staticClass: "button-loading-indicator",
+                                    domProps: {
+                                      innerHTML: _vm._s(_vm.spinnerSrc)
+                                    }
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.currentStep != _vm.lastStep
+                                ? _c("span", {
+                                    domProps: {
+                                      innerHTML: _vm._s(
+                                        _vm.buttons["proceed"]["html"]
+                                      )
+                                    }
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.currentStep == _vm.lastStep
+                                ? _c("span", {
+                                    domProps: {
+                                      innerHTML: _vm._s(
+                                        _vm.buttons["save"]["html"]
+                                      )
+                                    }
+                                  })
+                                : _vm._e()
+                            ]
+                          )
+                        ]
+                      ),
                       _vm._v(" "),
-                      _vm._l(_vm.subjectDataForStep(step), function(
-                        data,
-                        fieldname
-                      ) {
-                        return _c(
-                          "div",
-                          {
-                            class: data.containerClass,
-                            style: {
-                              height:
-                                typeof data.customOptions["cssHeight"] ==
-                                "undefined"
-                                  ? "auto"
-                                  : data.customOptions["cssHeight"]
-                            }
-                          },
-                          [
-                            !_vm.shouldHideField(fieldname)
-                              ? [
-                                  data.label != null
-                                    ? _c("label", [
-                                        _vm._v(
-                                          "\n                            " +
-                                            _vm._s(data.label) +
-                                            "\n                            "
-                                        ),
-                                        data.mandatory
-                                          ? _c("span", [_vm._v(" *")])
-                                          : _vm._e(),
-                                        _vm._v(" "),
-                                        typeof data.helpTooltip != "undefined"
-                                          ? _c("span", {
-                                              staticClass:
-                                                "edit-form-label-tooltip",
-                                              domProps: {
-                                                innerHTML: _vm._s(
-                                                  data.helpTooltip
-                                                )
-                                              }
-                                            })
-                                          : _vm._e(),
-                                        _vm._v(" "),
-                                        _vm.errorExists(fieldname)
-                                          ? _c("span", {
-                                              staticClass:
-                                                "text-danger validation-error-label-message",
-                                              domProps: {
-                                                innerHTML: _vm._s(
-                                                  _vm.errors[fieldname][0]
-                                                )
-                                              }
-                                            })
-                                          : _vm._e()
-                                      ])
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "color"
-                                    ? _c(
-                                        "div",
-                                        {
-                                          staticStyle: {
-                                            display: "flex",
-                                            "align-items": "center",
-                                            "justify-content": "center"
-                                          }
-                                        },
-                                        [
-                                          _c("input", {
-                                            staticClass: "form-control",
-                                            attrs: { type: "text" },
-                                            domProps: {
-                                              value:
-                                                _vm.subjectData[fieldname].value
-                                            }
-                                          }),
+                      _c(
+                        "div",
+                        {
+                          class: _vm.getClassOverrideOrDefaultClass(
+                            "edit-form-form-button-container",
+                            "col"
+                          )
+                        },
+                        [
+                          _c("button", {
+                            class: _vm.buttons["cancel"]["class"],
+                            attrs: { type: "button" },
+                            domProps: {
+                              innerHTML: _vm._s(_vm.buttons["cancel"]["html"])
+                            },
+                            on: { click: _vm.cancelEditing }
+                          })
+                        ]
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._l(_vm.stepsToRender, function(step) {
+                return _c(
+                  "div",
+                  {
+                    class: _vm.getClassOverrideOrDefaultClass(
+                      "edit-form-step",
+                      "edit-form-step"
+                    )
+                  },
+                  [
+                    typeof _vm.config.stepLabels[step] != "undefined"
+                      ? _c("div", {
+                          staticClass: "form-step-header",
+                          class: _vm.formHeadClass(step),
+                          domProps: {
+                            innerHTML: _vm._s(_vm.config.stepLabels[step])
+                          }
+                        })
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "row",
+                        class: _vm.getClassOverrideOrDefaultClass(
+                          "edit-form-step-body",
+                          "edit-form-step-body"
+                        ),
+                        staticStyle: { position: "relative" }
+                      },
+                      [
+                        _vm.currentStep != step
+                          ? _c("div", { staticClass: "disabled-overlay" })
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm._l(_vm.subjectDataForStep(step), function(
+                          data,
+                          fieldname
+                        ) {
+                          return _c(
+                            "div",
+                            {
+                              class: data.containerClass,
+                              style: {
+                                height:
+                                  typeof data.customOptions["cssHeight"] ==
+                                  "undefined"
+                                    ? "auto"
+                                    : data.customOptions["cssHeight"]
+                              }
+                            },
+                            [
+                              !_vm.shouldHideField(fieldname)
+                                ? [
+                                    data.label != null
+                                      ? _c("label", [
+                                          _vm._v(
+                                            "\n                            " +
+                                              _vm._s(data.label) +
+                                              "\n                            "
+                                          ),
+                                          data.mandatory
+                                            ? _c("span", [_vm._v(" *")])
+                                            : _vm._e(),
                                           _vm._v(" "),
-                                          _c("input", {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
+                                          typeof data.helpTooltip != "undefined"
+                                            ? _c("span", {
+                                                staticClass:
+                                                  "edit-form-label-tooltip",
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    data.helpTooltip
+                                                  )
+                                                }
+                                              })
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          _vm.errorExists(fieldname)
+                                            ? _c("span", {
+                                                staticClass:
+                                                  "text-danger validation-error-label-message",
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    _vm.errors[fieldname][0]
+                                                  )
+                                                }
+                                              })
+                                            : _vm._e()
+                                        ])
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "color"
+                                      ? _c(
+                                          "div",
+                                          {
+                                            staticStyle: {
+                                              display: "flex",
+                                              "align-items": "center",
+                                              "justify-content": "center"
+                                            }
+                                          },
+                                          [
+                                            _c("input", {
+                                              staticClass: "form-control",
+                                              attrs: { type: "text" },
+                                              domProps: {
                                                 value:
                                                   _vm.subjectData[fieldname]
-                                                    .value,
-                                                expression:
-                                                  "subjectData[fieldname].value"
+                                                    .value
                                               }
-                                            ],
-                                            staticClass: "form-control",
-                                            staticStyle: {
-                                              width: "3em",
-                                              padding: "0px"
-                                            },
-                                            attrs: { type: "color" },
-                                            domProps: {
-                                              value:
-                                                _vm.subjectData[fieldname].value
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                if ($event.target.composing) {
-                                                  return
+                                            }),
+                                            _vm._v(" "),
+                                            _c("input", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value:
+                                                    _vm.subjectData[fieldname]
+                                                      .value,
+                                                  expression:
+                                                    "subjectData[fieldname].value"
                                                 }
-                                                _vm.$set(
-                                                  _vm.subjectData[fieldname],
-                                                  "value",
-                                                  $event.target.value
-                                                )
+                                              ],
+                                              staticClass: "form-control",
+                                              staticStyle: {
+                                                width: "3em",
+                                                padding: "0px"
+                                              },
+                                              attrs: { type: "color" },
+                                              domProps: {
+                                                value:
+                                                  _vm.subjectData[fieldname]
+                                                    .value
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    _vm.subjectData[fieldname],
+                                                    "value",
+                                                    $event.target.value
+                                                  )
+                                                }
                                               }
-                                            }
-                                          })
-                                        ]
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "input" &&
-                                  data.type != "password" &&
-                                  data.type != "number"
-                                    ? _c("input", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value:
-                                              _vm.subjectData[fieldname].value,
-                                            expression:
-                                              "subjectData[fieldname].value"
-                                          }
-                                        ],
-                                        class: data.class,
-                                        attrs: {
-                                          placeholder:
-                                            _vm.subjectData[fieldname]
-                                              .placeholder,
-                                          list:
-                                            Object.keys(
-                                              _vm.subjectData[fieldname]
-                                                .valueset
-                                            ).length > 0
-                                              ? fieldname + "-lookup"
-                                              : null,
-                                          type: "text"
-                                        },
-                                        domProps: {
-                                          value:
-                                            _vm.subjectData[fieldname].value
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.$set(
-                                              _vm.subjectData[fieldname],
-                                              "value",
-                                              $event.target.value
-                                            )
-                                          }
-                                        }
-                                      })
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "input" &&
-                                  data.type != "password" &&
-                                  data.type != "number" &&
-                                  Object.keys(
-                                    _vm.subjectData[fieldname].valueset
-                                  ).length > 0
-                                    ? _c(
-                                        "datalist",
-                                        {
-                                          attrs: { id: fieldname + "-lookup" }
-                                        },
-                                        _vm._l(data.valueset, function(
-                                          valuesetvalue,
-                                          valuesetitem
-                                        ) {
-                                          return _c("option", {
-                                            domProps: { value: valuesetvalue }
-                                          })
-                                        }),
-                                        0
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "input" && data.type == "number"
-                                    ? _c("input", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value:
-                                              _vm.subjectData[fieldname].value,
-                                            expression:
-                                              "subjectData[fieldname].value"
-                                          }
-                                        ],
-                                        class: data.class,
-                                        attrs: {
-                                          type: "number",
-                                          placeholder:
-                                            _vm.subjectData[fieldname]
-                                              .placeholder,
-                                          min: _vm.numberFieldMin(fieldname),
-                                          max: _vm.numberFieldMax(fieldname),
-                                          step: _vm.numberFieldStep(fieldname)
-                                        },
-                                        domProps: {
-                                          value:
-                                            _vm.subjectData[fieldname].value
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.$set(
-                                              _vm.subjectData[fieldname],
-                                              "value",
-                                              $event.target.value
-                                            )
-                                          }
-                                        }
-                                      })
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "slug"
-                                    ? _c("div", [
-                                        _c("input", {
+                                            })
+                                          ]
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "input" &&
+                                    data.type != "password" &&
+                                    data.type != "number"
+                                      ? _c("input", {
                                           directives: [
                                             {
                                               name: "model",
@@ -60332,10 +60508,18 @@ var render = function() {
                                             }
                                           ],
                                           class: data.class,
-                                          staticStyle: {
-                                            "padding-right": "1.5em",
-                                            display: "inline-block",
-                                            width: "90%"
+                                          attrs: {
+                                            placeholder:
+                                              _vm.subjectData[fieldname]
+                                                .placeholder,
+                                            list:
+                                              Object.keys(
+                                                _vm.subjectData[fieldname]
+                                                  .valueset
+                                              ).length > 0
+                                                ? fieldname + "-lookup"
+                                                : null,
+                                            type: "text"
                                           },
                                           domProps: {
                                             value:
@@ -60353,257 +60537,35 @@ var render = function() {
                                               )
                                             }
                                           }
-                                        }),
-                                        _vm._v(" "),
-                                        _c(
-                                          "span",
-                                          {
-                                            staticStyle: {
-                                              "margin-left": "-1.5em",
-                                              cursor: "pointer"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.generateSlug(
-                                                  data.customOptions["source"],
-                                                  fieldname
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [_vm._v("↺")]
-                                        )
-                                      ])
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "input" &&
-                                  data.type == "password"
-                                    ? _c("input", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value:
-                                              _vm.subjectData[fieldname].value,
-                                            expression:
-                                              "subjectData[fieldname].value"
-                                          }
-                                        ],
-                                        class: data.class,
-                                        attrs: {
-                                          placeholder:
-                                            _vm.subjectData[fieldname]
-                                              .placeholder,
-                                          type: "password"
-                                        },
-                                        domProps: {
-                                          value:
-                                            _vm.subjectData[fieldname].value
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.$set(
-                                              _vm.subjectData[fieldname],
-                                              "value",
-                                              $event.target.value
-                                            )
-                                          }
-                                        }
-                                      })
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "numberfield"
-                                    ? _c(
-                                        "number-field",
-                                        _vm._b(
-                                          {
-                                            attrs: {
-                                              editable: "true",
-                                              "input-class":
-                                                "form-control col-12",
-                                              "show-currency-label": "true",
-                                              "container-class": "col-12"
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.subjectData[fieldname]
-                                                  .value,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.subjectData[fieldname],
-                                                  "value",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "subjectData[fieldname].value"
-                                            }
-                                          },
-                                          "number-field",
-                                          JSON.parse(data.props),
-                                          false
-                                        )
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "text" && data.type == "simple"
-                                    ? _c("textarea", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value:
-                                              _vm.subjectData[fieldname].value,
-                                            expression:
-                                              "subjectData[fieldname].value"
-                                          }
-                                        ],
-                                        class: data.class,
-                                        attrs: {
-                                          placeholder:
-                                            _vm.subjectData[fieldname]
-                                              .placeholder
-                                        },
-                                        domProps: {
-                                          value:
-                                            _vm.subjectData[fieldname].value
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.$set(
-                                              _vm.subjectData[fieldname],
-                                              "value",
-                                              $event.target.value
-                                            )
-                                          }
-                                        }
-                                      })
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "text" && data.type == "static"
-                                    ? _c("div", [
-                                        _c("div", {
-                                          domProps: {
-                                            innerHTML: _vm._s(
-                                              _vm.subjectData[fieldname]
-                                                .staticValue
-                                            )
-                                          }
                                         })
-                                      ])
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "text" &&
-                                  data.type == "richtext-trix"
-                                    ? _c(
-                                        "div",
-                                        {
-                                          class: data.class,
-                                          staticStyle: {
-                                            "min-height": "95%",
-                                            height: "95%",
-                                            "margin-bottom": "2em"
-                                          }
-                                        },
-                                        [
-                                          _c(
-                                            "trix-wrapper",
-                                            _vm._b(
-                                              {
-                                                attrs: {
-                                                  fieldname: fieldname,
-                                                  "ajax-operations-url":
-                                                    _vm.ajaxOperationsUrl
-                                                },
-                                                model: {
-                                                  value:
-                                                    _vm.subjectData[fieldname]
-                                                      .value,
-                                                  callback: function($$v) {
-                                                    _vm.$set(
-                                                      _vm.subjectData[
-                                                        fieldname
-                                                      ],
-                                                      "value",
-                                                      $$v
-                                                    )
-                                                  },
-                                                  expression:
-                                                    "subjectData[fieldname].value"
-                                                }
-                                              },
-                                              "trix-wrapper",
-                                              JSON.parse(data.props),
-                                              false
-                                            )
-                                          )
-                                        ],
-                                        1
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "text" &&
-                                  data.type == "richtext-quill"
-                                    ? _c(
-                                        "div",
-                                        {
-                                          class: data.class,
-                                          staticStyle: {
-                                            "min-height": "95%",
-                                            height: "95%",
-                                            "margin-bottom": "2em"
-                                          }
-                                        },
-                                        [
-                                          _c(
-                                            "quill-wrapper",
-                                            _vm._b(
-                                              {
-                                                attrs: {
-                                                  fieldname: fieldname,
-                                                  "ajax-operations-url":
-                                                    _vm.ajaxOperationsUrl
-                                                },
-                                                model: {
-                                                  value:
-                                                    _vm.subjectData[fieldname]
-                                                      .value,
-                                                  callback: function($$v) {
-                                                    _vm.$set(
-                                                      _vm.subjectData[
-                                                        fieldname
-                                                      ],
-                                                      "value",
-                                                      $$v
-                                                    )
-                                                  },
-                                                  expression:
-                                                    "subjectData[fieldname].value"
-                                                }
-                                              },
-                                              "quill-wrapper",
-                                              JSON.parse(data.props),
-                                              false
-                                            )
-                                          )
-                                        ],
-                                        1
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "select" &&
-                                  (data.type == null ||
-                                    data.type == "yesno" ||
-                                    data.type == "custom")
-                                    ? _c(
-                                        "select",
-                                        {
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "input" &&
+                                    data.type != "password" &&
+                                    data.type != "number" &&
+                                    Object.keys(
+                                      _vm.subjectData[fieldname].valueset
+                                    ).length > 0
+                                      ? _c(
+                                          "datalist",
+                                          {
+                                            attrs: { id: fieldname + "-lookup" }
+                                          },
+                                          _vm._l(data.valueset, function(
+                                            valuesetvalue,
+                                            valuesetitem
+                                          ) {
+                                            return _c("option", {
+                                              domProps: { value: valuesetvalue }
+                                            })
+                                          }),
+                                          0
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "input" &&
+                                    data.type == "number"
+                                      ? _c("input", {
                                           directives: [
                                             {
                                               name: "model",
@@ -60616,422 +60578,98 @@ var render = function() {
                                             }
                                           ],
                                           class: data.class,
-                                          style:
-                                            _vm.subjectData[fieldname].value ==
-                                            -1
-                                              ? { color: "lightgray" }
-                                              : {},
+                                          attrs: {
+                                            type: "number",
+                                            placeholder:
+                                              _vm.subjectData[fieldname]
+                                                .placeholder,
+                                            min: _vm.numberFieldMin(fieldname),
+                                            max: _vm.numberFieldMax(fieldname),
+                                            step: _vm.numberFieldStep(fieldname)
+                                          },
+                                          domProps: {
+                                            value:
+                                              _vm.subjectData[fieldname].value
+                                          },
                                           on: {
-                                            change: function($event) {
-                                              var $$selectedVal = Array.prototype.filter
-                                                .call(
-                                                  $event.target.options,
-                                                  function(o) {
-                                                    return o.selected
-                                                  }
-                                                )
-                                                .map(function(o) {
-                                                  var val =
-                                                    "_value" in o
-                                                      ? o._value
-                                                      : o.value
-                                                  return val
-                                                })
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
                                               _vm.$set(
                                                 _vm.subjectData[fieldname],
                                                 "value",
-                                                $event.target.multiple
-                                                  ? $$selectedVal
-                                                  : $$selectedVal[0]
+                                                $event.target.value
                                               )
                                             }
                                           }
-                                        },
-                                        _vm._l(data.valuesetSorted, function(
-                                          valuesetvalue,
-                                          valuesetitem
-                                        ) {
-                                          return _c("option", {
-                                            style:
-                                              valuesetvalue == -1
-                                                ? { color: "lightgray" }
-                                                : { color: "black" },
-                                            domProps: {
-                                              value: valuesetvalue,
-                                              innerHTML: _vm._s(valuesetitem)
-                                            }
-                                          })
-                                        }),
-                                        0
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "select" &&
-                                  data.type == "select-or-add-field"
-                                    ? _c(
-                                        "select-or-add-field",
-                                        _vm._b(
-                                          {
-                                            model: {
-                                              value:
-                                                _vm.subjectData[fieldname]
-                                                  .value,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.subjectData[fieldname],
-                                                  "value",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "subjectData[fieldname].value"
-                                            }
-                                          },
-                                          "select-or-add-field",
-                                          JSON.parse(data.props),
-                                          false
-                                        )
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "datepicker"
-                                    ? _c(
-                                        "datepicker",
-                                        _vm._b(
-                                          {
-                                            attrs: {
-                                              "class-overrides":
-                                                _vm.classOverrides
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.subjectData[fieldname]
-                                                  .value,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.subjectData[fieldname],
-                                                  "value",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "subjectData[fieldname].value"
-                                            }
-                                          },
-                                          "datepicker",
-                                          JSON.parse(data.props),
-                                          false
-                                        )
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "imagepicker"
-                                    ? _c(
-                                        "image-picker",
-                                        _vm._b(
-                                          {
-                                            key: fieldname,
-                                            attrs: {
-                                              "upload-url":
-                                                _vm.ajaxOperationsUrl,
-                                              "class-overrides":
-                                                _vm.classOverrides,
-                                              fieldname: fieldname
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.subjectData[fieldname]
-                                                  .value,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.subjectData[fieldname],
-                                                  "value",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "subjectData[fieldname].value"
-                                            }
-                                          },
-                                          "image-picker",
-                                          JSON.parse(data.props),
-                                          false
-                                        )
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "radio"
-                                    ? _c(
-                                        "span",
-                                        _vm._l(data.valuesetSorted, function(
-                                          valuesetvalue,
-                                          valuesetitem
-                                        ) {
-                                          return _c("p", [
-                                            _c("input", {
-                                              directives: [
-                                                {
-                                                  name: "model",
-                                                  rawName: "v-model",
-                                                  value:
-                                                    _vm.subjectData[fieldname]
-                                                      .value,
-                                                  expression:
-                                                    "subjectData[fieldname].value"
-                                                }
-                                              ],
-                                              attrs: {
-                                                type: "radio",
-                                                id:
-                                                  fieldname +
-                                                  "_" +
-                                                  valuesetvalue
-                                              },
-                                              domProps: {
-                                                value: valuesetvalue,
-                                                checked: _vm._q(
+                                        })
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "slug"
+                                      ? _c("div", [
+                                          _c("input", {
+                                            directives: [
+                                              {
+                                                name: "model",
+                                                rawName: "v-model",
+                                                value:
                                                   _vm.subjectData[fieldname]
                                                     .value,
-                                                  valuesetvalue
+                                                expression:
+                                                  "subjectData[fieldname].value"
+                                              }
+                                            ],
+                                            class: data.class,
+                                            staticStyle: {
+                                              "padding-right": "1.5em",
+                                              display: "inline-block",
+                                              width: "90%"
+                                            },
+                                            domProps: {
+                                              value:
+                                                _vm.subjectData[fieldname].value
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                if ($event.target.composing) {
+                                                  return
+                                                }
+                                                _vm.$set(
+                                                  _vm.subjectData[fieldname],
+                                                  "value",
+                                                  $event.target.value
                                                 )
+                                              }
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c(
+                                            "span",
+                                            {
+                                              staticStyle: {
+                                                "margin-left": "-1.5em",
+                                                cursor: "pointer"
                                               },
                                               on: {
-                                                change: function($event) {
-                                                  return _vm.$set(
-                                                    _vm.subjectData[fieldname],
-                                                    "value",
-                                                    valuesetvalue
+                                                click: function($event) {
+                                                  return _vm.generateSlug(
+                                                    data.customOptions[
+                                                      "source"
+                                                    ],
+                                                    fieldname
                                                   )
                                                 }
                                               }
-                                            }),
-                                            _vm._v(" "),
-                                            _c("label", {
-                                              attrs: {
-                                                for:
-                                                  fieldname +
-                                                  "_" +
-                                                  valuesetvalue
-                                              },
-                                              domProps: {
-                                                innerHTML: _vm._s(valuesetitem)
-                                              }
-                                            })
-                                          ])
-                                        }),
-                                        0
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "checkbox"
-                                    ? _c(
-                                        "span",
-                                        _vm._l(data.valuesetSorted, function(
-                                          valuesetvalue,
-                                          valuesetitem
-                                        ) {
-                                          return _c("p", [
-                                            _c("input", {
-                                              directives: [
-                                                {
-                                                  name: "model",
-                                                  rawName: "v-model",
-                                                  value:
-                                                    _vm.subjectData[fieldname]
-                                                      .value[valuesetvalue],
-                                                  expression:
-                                                    "subjectData[fieldname].value[valuesetvalue]"
-                                                }
-                                              ],
-                                              attrs: {
-                                                type: "checkbox",
-                                                id:
-                                                  fieldname +
-                                                  "_" +
-                                                  valuesetvalue
-                                              },
-                                              domProps: {
-                                                value: valuesetvalue,
-                                                checked: Array.isArray(
-                                                  _vm.subjectData[fieldname]
-                                                    .value[valuesetvalue]
-                                                )
-                                                  ? _vm._i(
-                                                      _vm.subjectData[fieldname]
-                                                        .value[valuesetvalue],
-                                                      valuesetvalue
-                                                    ) > -1
-                                                  : _vm.subjectData[fieldname]
-                                                      .value[valuesetvalue]
-                                              },
-                                              on: {
-                                                change: function($event) {
-                                                  var $$a =
-                                                      _vm.subjectData[fieldname]
-                                                        .value[valuesetvalue],
-                                                    $$el = $event.target,
-                                                    $$c = $$el.checked
-                                                      ? true
-                                                      : false
-                                                  if (Array.isArray($$a)) {
-                                                    var $$v = valuesetvalue,
-                                                      $$i = _vm._i($$a, $$v)
-                                                    if ($$el.checked) {
-                                                      $$i < 0 &&
-                                                        _vm.$set(
-                                                          _vm.subjectData[
-                                                            fieldname
-                                                          ].value,
-                                                          valuesetvalue,
-                                                          $$a.concat([$$v])
-                                                        )
-                                                    } else {
-                                                      $$i > -1 &&
-                                                        _vm.$set(
-                                                          _vm.subjectData[
-                                                            fieldname
-                                                          ].value,
-                                                          valuesetvalue,
-                                                          $$a
-                                                            .slice(0, $$i)
-                                                            .concat(
-                                                              $$a.slice($$i + 1)
-                                                            )
-                                                        )
-                                                    }
-                                                  } else {
-                                                    _vm.$set(
-                                                      _vm.subjectData[fieldname]
-                                                        .value,
-                                                      valuesetvalue,
-                                                      $$c
-                                                    )
-                                                  }
-                                                }
-                                              }
-                                            }),
-                                            _vm._v(" "),
-                                            _c("label", {
-                                              attrs: {
-                                                for:
-                                                  fieldname +
-                                                  "_" +
-                                                  valuesetvalue
-                                              },
-                                              domProps: {
-                                                innerHTML: _vm._s(valuesetitem)
-                                              }
-                                            })
-                                          ])
-                                        }),
-                                        0
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "vue-multiselect"
-                                    ? _c(
-                                        "multi-select",
-                                        _vm._b(
-                                          {
-                                            attrs: {
-                                              valueset: data.valuesetSorted,
-                                              "class-overrides":
-                                                _vm.classOverrides
                                             },
-                                            model: {
-                                              value:
-                                                _vm.subjectData[fieldname]
-                                                  .value,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.subjectData[fieldname],
-                                                  "value",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "subjectData[fieldname].value"
-                                            }
-                                          },
-                                          "multi-select",
-                                          JSON.parse(data.props),
-                                          false
-                                        )
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "vue-treeselect"
-                                    ? _c(
-                                        "treeselect",
-                                        _vm._b(
-                                          {
-                                            attrs: {
-                                              options: data.valuesetSorted,
-                                              "class-overrides":
-                                                _vm.classOverrides
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.subjectData[fieldname]
-                                                  .value,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.subjectData[fieldname],
-                                                  "value",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "subjectData[fieldname].value"
-                                            }
-                                          },
-                                          "treeselect",
-                                          JSON.parse(data.props),
-                                          false
-                                        )
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "custom-component"
-                                    ? _c(
-                                        data.type,
-                                        _vm._b(
-                                          {
-                                            tag: "component",
-                                            attrs: {
-                                              errors: _vm.componentError(
-                                                fieldname
-                                              ),
-                                              buttons: _vm.buttons,
-                                              "class-overrides":
-                                                _vm.classOverrides
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.subjectData[fieldname]
-                                                  .value,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.subjectData[fieldname],
-                                                  "value",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "subjectData[fieldname].value"
-                                            }
-                                          },
-                                          "component",
-                                          JSON.parse(data.props),
-                                          false
-                                        )
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "multiselect"
-                                    ? _c(
-                                        "select",
-                                        {
+                                            [_vm._v("↺")]
+                                          )
+                                        ])
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "input" &&
+                                    data.type == "password"
+                                      ? _c("input", {
                                           directives: [
                                             {
                                               name: "model",
@@ -61043,87 +60681,794 @@ var render = function() {
                                                 "subjectData[fieldname].value"
                                             }
                                           ],
-                                          staticClass: "form-control",
                                           class: data.class,
-                                          staticStyle: {
-                                            height: "200px",
-                                            "min-height": "200px"
+                                          attrs: {
+                                            placeholder:
+                                              _vm.subjectData[fieldname]
+                                                .placeholder,
+                                            type: "password"
                                           },
-                                          attrs: { multiple: "multiple" },
+                                          domProps: {
+                                            value:
+                                              _vm.subjectData[fieldname].value
+                                          },
                                           on: {
-                                            change: function($event) {
-                                              var $$selectedVal = Array.prototype.filter
-                                                .call(
-                                                  $event.target.options,
-                                                  function(o) {
-                                                    return o.selected
-                                                  }
-                                                )
-                                                .map(function(o) {
-                                                  var val =
-                                                    "_value" in o
-                                                      ? o._value
-                                                      : o.value
-                                                  return val
-                                                })
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
                                               _vm.$set(
                                                 _vm.subjectData[fieldname],
                                                 "value",
-                                                $event.target.multiple
-                                                  ? $$selectedVal
-                                                  : $$selectedVal[0]
+                                                $event.target.value
                                               )
                                             }
                                           }
-                                        },
-                                        _vm._l(data.valuesetSorted, function(
-                                          valuesetvalue,
-                                          valuesetitem
-                                        ) {
-                                          return _c("option", {
+                                        })
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "numberfield"
+                                      ? _c(
+                                          "number-field",
+                                          _vm._b(
+                                            {
+                                              attrs: {
+                                                editable: "true",
+                                                "input-class":
+                                                  "form-control col-12",
+                                                "show-currency-label": "true",
+                                                "container-class": "col-12"
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.subjectData[fieldname]
+                                                    .value,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.subjectData[fieldname],
+                                                    "value",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "subjectData[fieldname].value"
+                                              }
+                                            },
+                                            "number-field",
+                                            JSON.parse(data.props),
+                                            false
+                                          )
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "text" && data.type == "simple"
+                                      ? _c("textarea", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.subjectData[fieldname]
+                                                  .value,
+                                              expression:
+                                                "subjectData[fieldname].value"
+                                            }
+                                          ],
+                                          class: data.class,
+                                          attrs: {
+                                            placeholder:
+                                              _vm.subjectData[fieldname]
+                                                .placeholder
+                                          },
+                                          domProps: {
+                                            value:
+                                              _vm.subjectData[fieldname].value
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.subjectData[fieldname],
+                                                "value",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "text" && data.type == "static"
+                                      ? _c("div", [
+                                          _c("div", {
                                             domProps: {
-                                              value: valuesetvalue,
-                                              innerHTML: _vm._s(valuesetitem)
+                                              innerHTML: _vm._s(
+                                                _vm.subjectData[fieldname]
+                                                  .staticValue
+                                              )
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("input", {
+                                            attrs: { type: "hidden" },
+                                            domProps: {
+                                              value:
+                                                _vm.subjectData[fieldname].value
                                             }
                                           })
-                                        }),
-                                        0
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  data.kind == "recaptcha"
-                                    ? _c("recaptcha-component", {
-                                        attrs: {
-                                          "g-key": JSON.parse(data.props).key
-                                        },
-                                        model: {
-                                          value:
-                                            _vm.subjectData[fieldname].value,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.subjectData[fieldname],
-                                              "value",
-                                              $$v
-                                            )
+                                        ])
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "text" &&
+                                    data.type == "richtext-trix"
+                                      ? _c(
+                                          "div",
+                                          {
+                                            class: data.class,
+                                            staticStyle: {
+                                              "min-height": "95%",
+                                              height: "95%",
+                                              "margin-bottom": "2em"
+                                            }
                                           },
-                                          expression:
-                                            "subjectData[fieldname].value"
-                                        }
-                                      })
-                                    : _vm._e()
-                                ]
-                              : _vm._e()
-                          ],
-                          2
-                        )
-                      })
-                    ],
-                    2
-                  )
-                ]
-              )
-            }),
-            0
+                                          [
+                                            _c(
+                                              "trix-wrapper",
+                                              _vm._b(
+                                                {
+                                                  attrs: {
+                                                    fieldname: fieldname,
+                                                    "ajax-operations-url":
+                                                      _vm.ajaxOperationsUrl
+                                                  },
+                                                  model: {
+                                                    value:
+                                                      _vm.subjectData[fieldname]
+                                                        .value,
+                                                    callback: function($$v) {
+                                                      _vm.$set(
+                                                        _vm.subjectData[
+                                                          fieldname
+                                                        ],
+                                                        "value",
+                                                        $$v
+                                                      )
+                                                    },
+                                                    expression:
+                                                      "subjectData[fieldname].value"
+                                                  }
+                                                },
+                                                "trix-wrapper",
+                                                JSON.parse(data.props),
+                                                false
+                                              )
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "text" &&
+                                    data.type == "richtext-quill"
+                                      ? _c(
+                                          "div",
+                                          {
+                                            class: data.class,
+                                            staticStyle: {
+                                              "min-height": "95%",
+                                              height: "95%",
+                                              "margin-bottom": "2em"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "quill-wrapper",
+                                              _vm._b(
+                                                {
+                                                  attrs: {
+                                                    fieldname: fieldname,
+                                                    "ajax-operations-url":
+                                                      _vm.ajaxOperationsUrl
+                                                  },
+                                                  model: {
+                                                    value:
+                                                      _vm.subjectData[fieldname]
+                                                        .value,
+                                                    callback: function($$v) {
+                                                      _vm.$set(
+                                                        _vm.subjectData[
+                                                          fieldname
+                                                        ],
+                                                        "value",
+                                                        $$v
+                                                      )
+                                                    },
+                                                    expression:
+                                                      "subjectData[fieldname].value"
+                                                  }
+                                                },
+                                                "quill-wrapper",
+                                                JSON.parse(data.props),
+                                                false
+                                              )
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "select" &&
+                                    (data.type == null ||
+                                      data.type == "yesno" ||
+                                      data.type == "custom")
+                                      ? _c(
+                                          "select",
+                                          {
+                                            directives: [
+                                              {
+                                                name: "model",
+                                                rawName: "v-model",
+                                                value:
+                                                  _vm.subjectData[fieldname]
+                                                    .value,
+                                                expression:
+                                                  "subjectData[fieldname].value"
+                                              }
+                                            ],
+                                            class: data.class,
+                                            style:
+                                              _vm.subjectData[fieldname]
+                                                .value == -1
+                                                ? { color: "lightgray" }
+                                                : {},
+                                            on: {
+                                              change: function($event) {
+                                                var $$selectedVal = Array.prototype.filter
+                                                  .call(
+                                                    $event.target.options,
+                                                    function(o) {
+                                                      return o.selected
+                                                    }
+                                                  )
+                                                  .map(function(o) {
+                                                    var val =
+                                                      "_value" in o
+                                                        ? o._value
+                                                        : o.value
+                                                    return val
+                                                  })
+                                                _vm.$set(
+                                                  _vm.subjectData[fieldname],
+                                                  "value",
+                                                  $event.target.multiple
+                                                    ? $$selectedVal
+                                                    : $$selectedVal[0]
+                                                )
+                                              }
+                                            }
+                                          },
+                                          _vm._l(data.valuesetSorted, function(
+                                            valuesetvalue,
+                                            valuesetitem
+                                          ) {
+                                            return _c("option", {
+                                              style:
+                                                valuesetvalue == -1
+                                                  ? { color: "lightgray" }
+                                                  : { color: "black" },
+                                              domProps: {
+                                                value: valuesetvalue,
+                                                innerHTML: _vm._s(valuesetitem)
+                                              }
+                                            })
+                                          }),
+                                          0
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "select" &&
+                                    data.type == "select-or-add-field"
+                                      ? _c(
+                                          "select-or-add-field",
+                                          _vm._b(
+                                            {
+                                              model: {
+                                                value:
+                                                  _vm.subjectData[fieldname]
+                                                    .value,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.subjectData[fieldname],
+                                                    "value",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "subjectData[fieldname].value"
+                                              }
+                                            },
+                                            "select-or-add-field",
+                                            JSON.parse(data.props),
+                                            false
+                                          )
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "datepicker"
+                                      ? _c(
+                                          "datepicker",
+                                          _vm._b(
+                                            {
+                                              attrs: {
+                                                "class-overrides":
+                                                  _vm.classOverrides
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.subjectData[fieldname]
+                                                    .value,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.subjectData[fieldname],
+                                                    "value",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "subjectData[fieldname].value"
+                                              }
+                                            },
+                                            "datepicker",
+                                            JSON.parse(data.props),
+                                            false
+                                          )
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "imagepicker"
+                                      ? _c(
+                                          "image-picker",
+                                          _vm._b(
+                                            {
+                                              key: fieldname,
+                                              attrs: {
+                                                "upload-url":
+                                                  _vm.ajaxOperationsUrl,
+                                                "class-overrides":
+                                                  _vm.classOverrides,
+                                                fieldname: fieldname
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.subjectData[fieldname]
+                                                    .value,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.subjectData[fieldname],
+                                                    "value",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "subjectData[fieldname].value"
+                                              }
+                                            },
+                                            "image-picker",
+                                            JSON.parse(data.props),
+                                            false
+                                          )
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "radio"
+                                      ? _c(
+                                          "span",
+                                          _vm._l(data.valuesetSorted, function(
+                                            valuesetvalue,
+                                            valuesetitem
+                                          ) {
+                                            return _c("p", [
+                                              _c("input", {
+                                                directives: [
+                                                  {
+                                                    name: "model",
+                                                    rawName: "v-model",
+                                                    value:
+                                                      _vm.subjectData[fieldname]
+                                                        .value,
+                                                    expression:
+                                                      "subjectData[fieldname].value"
+                                                  }
+                                                ],
+                                                attrs: {
+                                                  type: "radio",
+                                                  id:
+                                                    fieldname +
+                                                    "_" +
+                                                    valuesetvalue
+                                                },
+                                                domProps: {
+                                                  value: valuesetvalue,
+                                                  checked: _vm._q(
+                                                    _vm.subjectData[fieldname]
+                                                      .value,
+                                                    valuesetvalue
+                                                  )
+                                                },
+                                                on: {
+                                                  change: function($event) {
+                                                    return _vm.$set(
+                                                      _vm.subjectData[
+                                                        fieldname
+                                                      ],
+                                                      "value",
+                                                      valuesetvalue
+                                                    )
+                                                  }
+                                                }
+                                              }),
+                                              _vm._v(" "),
+                                              _c("label", {
+                                                attrs: {
+                                                  for:
+                                                    fieldname +
+                                                    "_" +
+                                                    valuesetvalue
+                                                },
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    valuesetitem
+                                                  )
+                                                }
+                                              })
+                                            ])
+                                          }),
+                                          0
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "checkbox"
+                                      ? _c(
+                                          "span",
+                                          _vm._l(data.valuesetSorted, function(
+                                            valuesetvalue,
+                                            valuesetitem
+                                          ) {
+                                            return _c("p", [
+                                              _c("input", {
+                                                directives: [
+                                                  {
+                                                    name: "model",
+                                                    rawName: "v-model",
+                                                    value:
+                                                      _vm.subjectData[fieldname]
+                                                        .value[valuesetvalue],
+                                                    expression:
+                                                      "subjectData[fieldname].value[valuesetvalue]"
+                                                  }
+                                                ],
+                                                attrs: {
+                                                  type: "checkbox",
+                                                  id:
+                                                    fieldname +
+                                                    "_" +
+                                                    valuesetvalue
+                                                },
+                                                domProps: {
+                                                  value: valuesetvalue,
+                                                  checked: Array.isArray(
+                                                    _vm.subjectData[fieldname]
+                                                      .value[valuesetvalue]
+                                                  )
+                                                    ? _vm._i(
+                                                        _vm.subjectData[
+                                                          fieldname
+                                                        ].value[valuesetvalue],
+                                                        valuesetvalue
+                                                      ) > -1
+                                                    : _vm.subjectData[fieldname]
+                                                        .value[valuesetvalue]
+                                                },
+                                                on: {
+                                                  change: function($event) {
+                                                    var $$a =
+                                                        _vm.subjectData[
+                                                          fieldname
+                                                        ].value[valuesetvalue],
+                                                      $$el = $event.target,
+                                                      $$c = $$el.checked
+                                                        ? true
+                                                        : false
+                                                    if (Array.isArray($$a)) {
+                                                      var $$v = valuesetvalue,
+                                                        $$i = _vm._i($$a, $$v)
+                                                      if ($$el.checked) {
+                                                        $$i < 0 &&
+                                                          _vm.$set(
+                                                            _vm.subjectData[
+                                                              fieldname
+                                                            ].value,
+                                                            valuesetvalue,
+                                                            $$a.concat([$$v])
+                                                          )
+                                                      } else {
+                                                        $$i > -1 &&
+                                                          _vm.$set(
+                                                            _vm.subjectData[
+                                                              fieldname
+                                                            ].value,
+                                                            valuesetvalue,
+                                                            $$a
+                                                              .slice(0, $$i)
+                                                              .concat(
+                                                                $$a.slice(
+                                                                  $$i + 1
+                                                                )
+                                                              )
+                                                          )
+                                                      }
+                                                    } else {
+                                                      _vm.$set(
+                                                        _vm.subjectData[
+                                                          fieldname
+                                                        ].value,
+                                                        valuesetvalue,
+                                                        $$c
+                                                      )
+                                                    }
+                                                  }
+                                                }
+                                              }),
+                                              _vm._v(" "),
+                                              _c("label", {
+                                                attrs: {
+                                                  for:
+                                                    fieldname +
+                                                    "_" +
+                                                    valuesetvalue
+                                                },
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    valuesetitem
+                                                  )
+                                                }
+                                              })
+                                            ])
+                                          }),
+                                          0
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "vue-multiselect"
+                                      ? _c(
+                                          "multi-select",
+                                          _vm._b(
+                                            {
+                                              attrs: {
+                                                valueset: data.valuesetSorted,
+                                                "class-overrides":
+                                                  _vm.classOverrides
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.subjectData[fieldname]
+                                                    .value,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.subjectData[fieldname],
+                                                    "value",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "subjectData[fieldname].value"
+                                              }
+                                            },
+                                            "multi-select",
+                                            JSON.parse(data.props),
+                                            false
+                                          )
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "searchable-select"
+                                      ? _c(
+                                          "searchable-select",
+                                          _vm._b(
+                                            {
+                                              attrs: {
+                                                valueset: data.valuesetSorted,
+                                                "class-overrides":
+                                                  _vm.classOverrides
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.subjectData[fieldname]
+                                                    .value,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.subjectData[fieldname],
+                                                    "value",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "subjectData[fieldname].value"
+                                              }
+                                            },
+                                            "searchable-select",
+                                            JSON.parse(data.props),
+                                            false
+                                          )
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "vue-treeselect"
+                                      ? _c(
+                                          "treeselect",
+                                          _vm._b(
+                                            {
+                                              attrs: {
+                                                options: data.valuesetSorted,
+                                                "class-overrides":
+                                                  _vm.classOverrides
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.subjectData[fieldname]
+                                                    .value,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.subjectData[fieldname],
+                                                    "value",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "subjectData[fieldname].value"
+                                              }
+                                            },
+                                            "treeselect",
+                                            JSON.parse(data.props),
+                                            false
+                                          )
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "custom-component"
+                                      ? _c(
+                                          data.type,
+                                          _vm._b(
+                                            {
+                                              tag: "component",
+                                              attrs: {
+                                                errors: _vm.componentError(
+                                                  fieldname
+                                                ),
+                                                buttons: _vm.buttons,
+                                                "class-overrides":
+                                                  _vm.classOverrides
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.subjectData[fieldname]
+                                                    .value,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.subjectData[fieldname],
+                                                    "value",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "subjectData[fieldname].value"
+                                              }
+                                            },
+                                            "component",
+                                            JSON.parse(data.props),
+                                            false
+                                          )
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "multiselect"
+                                      ? _c(
+                                          "select",
+                                          {
+                                            directives: [
+                                              {
+                                                name: "model",
+                                                rawName: "v-model",
+                                                value:
+                                                  _vm.subjectData[fieldname]
+                                                    .value,
+                                                expression:
+                                                  "subjectData[fieldname].value"
+                                              }
+                                            ],
+                                            staticClass: "form-control",
+                                            class: data.class,
+                                            staticStyle: {
+                                              height: "200px",
+                                              "min-height": "200px"
+                                            },
+                                            attrs: { multiple: "multiple" },
+                                            on: {
+                                              change: function($event) {
+                                                var $$selectedVal = Array.prototype.filter
+                                                  .call(
+                                                    $event.target.options,
+                                                    function(o) {
+                                                      return o.selected
+                                                    }
+                                                  )
+                                                  .map(function(o) {
+                                                    var val =
+                                                      "_value" in o
+                                                        ? o._value
+                                                        : o.value
+                                                    return val
+                                                  })
+                                                _vm.$set(
+                                                  _vm.subjectData[fieldname],
+                                                  "value",
+                                                  $event.target.multiple
+                                                    ? $$selectedVal
+                                                    : $$selectedVal[0]
+                                                )
+                                              }
+                                            }
+                                          },
+                                          _vm._l(data.valuesetSorted, function(
+                                            valuesetvalue,
+                                            valuesetitem
+                                          ) {
+                                            return _c("option", {
+                                              domProps: {
+                                                value: valuesetvalue,
+                                                innerHTML: _vm._s(valuesetitem)
+                                              }
+                                            })
+                                          }),
+                                          0
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.kind == "recaptcha"
+                                      ? _c("recaptcha-component", {
+                                          attrs: {
+                                            "g-key": JSON.parse(data.props).key
+                                          },
+                                          model: {
+                                            value:
+                                              _vm.subjectData[fieldname].value,
+                                            callback: function($$v) {
+                                              _vm.$set(
+                                                _vm.subjectData[fieldname],
+                                                "value",
+                                                $$v
+                                              )
+                                            },
+                                            expression:
+                                              "subjectData[fieldname].value"
+                                          }
+                                        })
+                                      : _vm._e()
+                                  ]
+                                : _vm._e()
+                            ],
+                            2
+                          )
+                        })
+                      ],
+                      2
+                    )
+                  ]
+                )
+              })
+            ],
+            2
           )
         : _vm._e(),
       _vm._v(" "),
@@ -64138,6 +64483,448 @@ var render = function() {
         2
       )
     ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PrinterAttributesPopupButton.vue?vue&type=template&id=67571ed0&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/PrinterAttributesPopupButton.vue?vue&type=template&id=67571ed0& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("button", { on: { click: _vm.initializePopup } }, [
+        _vm.loading
+          ? _c("span", {
+              staticStyle: { "margin-right": ".5rem" },
+              domProps: { innerHTML: _vm._s(_vm.spinnerSrc) }
+            })
+          : _vm._e(),
+        _vm._v("Kezelés")
+      ]),
+      _vm._v(" "),
+      _vm.loaded
+        ? _c(
+            "popup",
+            {
+              attrs: { "show-close-button": false, visible: _vm.showPopup },
+              on: { close: _vm.discardChanges }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticStyle: {
+                    width: "100%",
+                    display: "flex",
+                    "justify-content": "flex-start",
+                    "flex-direction": "column",
+                    "align-items": "center"
+                  }
+                },
+                [
+                  _c("h3", {
+                    staticStyle: {
+                      "text-align": "center",
+                      width: "100%",
+                      "margin-bottom": "1rem"
+                    },
+                    domProps: {
+                      innerHTML: _vm._s(
+                        _vm.printer.displayname + " tulajdonságai"
+                      )
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticStyle: {
+                        display: "flex",
+                        "flex-direction": "column",
+                        "align-items": "stretch",
+                        "justify-content": "flex-start",
+                        height: "60vh",
+                        "overflow-y": "auto",
+                        "max-width": "980px",
+                        width: "980px",
+                        "border-bottom": "1px solid lightgray",
+                        "border-top": "1px solid lightgray",
+                        padding: ".5rem"
+                      }
+                    },
+                    [
+                      _vm.loading
+                        ? _c("div", {
+                            domProps: { innerHTML: _vm._s(_vm.spinnerSrc) }
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      !_vm.loading
+                        ? _vm._l(_vm.attributes, function(attribute) {
+                            return _c("div", [
+                              _c(
+                                "div",
+                                {
+                                  staticStyle: {
+                                    display: "flex",
+                                    "justify-content": "space-between",
+                                    "flex-direction": "row",
+                                    "align-items": "center",
+                                    "border-bottom": "1px solid lightgray",
+                                    padding: ".2rem"
+                                  }
+                                },
+                                [
+                                  _c("div", {
+                                    class: {
+                                      "text-danger":
+                                        attribute.value == null ||
+                                        JSON.stringify(attribute.value) == "[]"
+                                    },
+                                    staticStyle: {
+                                      width: "60%",
+                                      display: "flex",
+                                      "align-items": "flex-start",
+                                      "justify-content": "flex-start",
+                                      "flex-direction": "column"
+                                    },
+                                    domProps: {
+                                      innerHTML: _vm._s(attribute.name)
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  attribute.attribute_value_set == null
+                                    ? _c(
+                                        "div",
+                                        { staticStyle: { width: "39%" } },
+                                        [
+                                          _c("input", {
+                                            directives: [
+                                              {
+                                                name: "model",
+                                                rawName: "v-model",
+                                                value: attribute.value,
+                                                expression: "attribute.value"
+                                              }
+                                            ],
+                                            staticStyle: {
+                                              width: "100%",
+                                              "text-align": "right"
+                                            },
+                                            attrs: { type: "text" },
+                                            domProps: {
+                                              value: attribute.value
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                if ($event.target.composing) {
+                                                  return
+                                                }
+                                                _vm.$set(
+                                                  attribute,
+                                                  "value",
+                                                  $event.target.value
+                                                )
+                                              }
+                                            }
+                                          })
+                                        ]
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  attribute.attribute_value_set != null
+                                    ? _c(
+                                        "div",
+                                        { staticStyle: { width: "39%" } },
+                                        [
+                                          attribute.multiselect
+                                            ? [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticStyle: {
+                                                      display: "flex",
+                                                      "flex-direction":
+                                                        "column",
+                                                      "align-items": "stretch",
+                                                      "justify-content":
+                                                        "flex-start"
+                                                    }
+                                                  },
+                                                  _vm._l(
+                                                    attribute
+                                                      .attribute_value_set
+                                                      .attribute_values,
+                                                    function(av) {
+                                                      return _c(
+                                                        "label",
+                                                        {
+                                                          staticStyle: {
+                                                            "margin-bottom":
+                                                              "1px",
+                                                            "border-bottom":
+                                                              "1px solid lightgray"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c("input", {
+                                                            directives: [
+                                                              {
+                                                                name: "model",
+                                                                rawName:
+                                                                  "v-model",
+                                                                value:
+                                                                  attribute.value,
+                                                                expression:
+                                                                  "attribute.value"
+                                                              }
+                                                            ],
+                                                            staticStyle: {
+                                                              "margin-right":
+                                                                ".5rem"
+                                                            },
+                                                            attrs: {
+                                                              type: "checkbox"
+                                                            },
+                                                            domProps: {
+                                                              value: av.value,
+                                                              checked: Array.isArray(
+                                                                attribute.value
+                                                              )
+                                                                ? _vm._i(
+                                                                    attribute.value,
+                                                                    av.value
+                                                                  ) > -1
+                                                                : attribute.value
+                                                            },
+                                                            on: {
+                                                              change: function(
+                                                                $event
+                                                              ) {
+                                                                var $$a =
+                                                                    attribute.value,
+                                                                  $$el =
+                                                                    $event.target,
+                                                                  $$c = $$el.checked
+                                                                    ? true
+                                                                    : false
+                                                                if (
+                                                                  Array.isArray(
+                                                                    $$a
+                                                                  )
+                                                                ) {
+                                                                  var $$v =
+                                                                      av.value,
+                                                                    $$i = _vm._i(
+                                                                      $$a,
+                                                                      $$v
+                                                                    )
+                                                                  if (
+                                                                    $$el.checked
+                                                                  ) {
+                                                                    $$i < 0 &&
+                                                                      _vm.$set(
+                                                                        attribute,
+                                                                        "value",
+                                                                        $$a.concat(
+                                                                          [$$v]
+                                                                        )
+                                                                      )
+                                                                  } else {
+                                                                    $$i > -1 &&
+                                                                      _vm.$set(
+                                                                        attribute,
+                                                                        "value",
+                                                                        $$a
+                                                                          .slice(
+                                                                            0,
+                                                                            $$i
+                                                                          )
+                                                                          .concat(
+                                                                            $$a.slice(
+                                                                              $$i +
+                                                                                1
+                                                                            )
+                                                                          )
+                                                                      )
+                                                                  }
+                                                                } else {
+                                                                  _vm.$set(
+                                                                    attribute,
+                                                                    "value",
+                                                                    $$c
+                                                                  )
+                                                                }
+                                                              }
+                                                            }
+                                                          }),
+                                                          _vm._v(
+                                                            "\n                                            " +
+                                                              _vm._s(av.label) +
+                                                              "\n                                        "
+                                                          )
+                                                        ]
+                                                      )
+                                                    }
+                                                  ),
+                                                  0
+                                                )
+                                              ]
+                                            : [
+                                                _c(
+                                                  "select",
+                                                  {
+                                                    directives: [
+                                                      {
+                                                        name: "model",
+                                                        rawName: "v-model",
+                                                        value: attribute.value,
+                                                        expression:
+                                                          "attribute.value"
+                                                      }
+                                                    ],
+                                                    staticStyle: {
+                                                      width: "100%",
+                                                      "text-align": "right"
+                                                    },
+                                                    on: {
+                                                      change: function($event) {
+                                                        var $$selectedVal = Array.prototype.filter
+                                                          .call(
+                                                            $event.target
+                                                              .options,
+                                                            function(o) {
+                                                              return o.selected
+                                                            }
+                                                          )
+                                                          .map(function(o) {
+                                                            var val =
+                                                              "_value" in o
+                                                                ? o._value
+                                                                : o.value
+                                                            return val
+                                                          })
+                                                        _vm.$set(
+                                                          attribute,
+                                                          "value",
+                                                          $event.target.multiple
+                                                            ? $$selectedVal
+                                                            : $$selectedVal[0]
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  _vm._l(
+                                                    attribute
+                                                      .attribute_value_set
+                                                      .attribute_values,
+                                                    function(av) {
+                                                      return _c("option", {
+                                                        domProps: {
+                                                          value: av.id,
+                                                          innerHTML: _vm._s(
+                                                            av.label
+                                                          )
+                                                        }
+                                                      })
+                                                    }
+                                                  ),
+                                                  0
+                                                )
+                                              ]
+                                        ],
+                                        2
+                                      )
+                                    : _vm._e()
+                                ]
+                              )
+                            ])
+                          })
+                        : _vm._e()
+                    ],
+                    2
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _vm.statusMessage != ""
+                ? _c(
+                    "div",
+                    {
+                      staticStyle: {
+                        display: "flex",
+                        "align-items": "center",
+                        "justify-content": "space-between",
+                        width: "100%",
+                        "padding-top": "1rem",
+                        "font-weight": "bold"
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n            " +
+                          _vm._s(_vm.statusMessage) +
+                          "\n        "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticStyle: {
+                    display: "flex",
+                    "align-items": "center",
+                    "justify-content": "space-between",
+                    width: "100%",
+                    "padding-top": "1rem"
+                  }
+                },
+                [
+                  _c(
+                    "button",
+                    {
+                      ref: "savebutton",
+                      staticClass: "btn btn-primary",
+                      on: { click: _vm.saveChanges }
+                    },
+                    [_vm._v("Mentés")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary",
+                      on: { click: _vm.discardChanges }
+                    },
+                    [_vm._v("Mégse")]
+                  )
+                ]
+              )
+            ]
+          )
+        : _vm._e()
+    ],
+    1
   )
 }
 var staticRenderFns = []
@@ -78559,6 +79346,7 @@ var map = {
 	"./ModelManager.vue": "./resources/js/components/ModelManager.vue",
 	"./MultiSelect.vue": "./resources/js/components/MultiSelect.vue",
 	"./Popup.vue": "./resources/js/components/Popup.vue",
+	"./PrinterAttributesPopupButton.vue": "./resources/js/components/PrinterAttributesPopupButton.vue",
 	"./PrinterPicker.vue": "./resources/js/components/PrinterPicker.vue",
 	"./ProfilePictureManager.vue": "./resources/js/components/ProfilePictureManager.vue",
 	"./QuillWrapper.vue": "./resources/js/components/QuillWrapper.vue",
@@ -79997,6 +80785,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Popup_vue_vue_type_template_id_a4c6995e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Popup_vue_vue_type_template_id_a4c6995e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/PrinterAttributesPopupButton.vue":
+/*!******************************************************************!*\
+  !*** ./resources/js/components/PrinterAttributesPopupButton.vue ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PrinterAttributesPopupButton_vue_vue_type_template_id_67571ed0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PrinterAttributesPopupButton.vue?vue&type=template&id=67571ed0& */ "./resources/js/components/PrinterAttributesPopupButton.vue?vue&type=template&id=67571ed0&");
+/* harmony import */ var _PrinterAttributesPopupButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PrinterAttributesPopupButton.vue?vue&type=script&lang=js& */ "./resources/js/components/PrinterAttributesPopupButton.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PrinterAttributesPopupButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PrinterAttributesPopupButton_vue_vue_type_template_id_67571ed0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PrinterAttributesPopupButton_vue_vue_type_template_id_67571ed0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/PrinterAttributesPopupButton.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/PrinterAttributesPopupButton.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/components/PrinterAttributesPopupButton.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PrinterAttributesPopupButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./PrinterAttributesPopupButton.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PrinterAttributesPopupButton.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PrinterAttributesPopupButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/PrinterAttributesPopupButton.vue?vue&type=template&id=67571ed0&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/components/PrinterAttributesPopupButton.vue?vue&type=template&id=67571ed0& ***!
+  \*************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PrinterAttributesPopupButton_vue_vue_type_template_id_67571ed0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./PrinterAttributesPopupButton.vue?vue&type=template&id=67571ed0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PrinterAttributesPopupButton.vue?vue&type=template&id=67571ed0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PrinterAttributesPopupButton_vue_vue_type_template_id_67571ed0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PrinterAttributesPopupButton_vue_vue_type_template_id_67571ed0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

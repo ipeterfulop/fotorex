@@ -39,7 +39,10 @@ class Printer extends Model
         'html_page_meta_description',
         'is_enabled',
         'price',
+        'price_discounted',
         'request_for_price',
+        'model_number',
+        'model_number_displayed',
     ];
 
     protected $appends = [
@@ -47,12 +50,14 @@ class Printer extends Model
         'is_enabled_label',
         'similar_printers_button',
         'printers_viewed_by_others_button',
+        'attributes_button',
         'max_papersize',
         'max_papersize_label',
         'color_management',
         'color_management_label',
         'is_multifunctional',
         'is_multifunctional_label',
+        'displayname'
     ];
 
     protected $with = [
@@ -114,7 +119,7 @@ class Printer extends Model
             $empty[$role->name] = [];
         }
         foreach ($this->customized_printer_photos as $customized_printer_photo) {
-            if (!isset($result[$customized_printer_photo->printer_photo_id])) {
+            if (! isset($result[$customized_printer_photo->printer_photo_id])) {
                 $result[$customized_printer_photo->printer_photo_id] = $empty;
             }
             $result[$customized_printer_photo->printer_photo_id][$roles->get($customized_printer_photo->printer_photo_role_id)->name] = $customized_printer_photo->getUrl();
@@ -154,6 +159,11 @@ class Printer extends Model
 
         return $this->getCustomizedPrinterPhoto($this->printer_photos->first()->id, $role)
             ->getUrl();
+    }
+
+    public function printerpapersizes()
+    {
+        return $this->hasMany(PrinterPapersize::class, 'printer_id');
     }
 
     public function papersizes()
@@ -219,11 +229,12 @@ class Printer extends Model
     public static function getVueCRUDIndexColumns()
     {
         return [
-            'name'                             => 'Név',
+            'displayname'                             => 'Név',
             'manufacturer_name'                => 'Gyártó',
             'is_enabled_label'                 => 'Státusz',
             'similar_printers_button'          => 'Hasonló termékek',
             'printers_viewed_by_others_button' => 'Mások által megtekintett termékek',
+            'attributes_button' => 'Tulajdonságok',
 
         ];
     }
@@ -314,8 +325,21 @@ class Printer extends Model
                         'similar_printer_id' => \Str::startsWith($row['custom_id'], 'x') ? null : $row['custom_id'],
                         'position'           => ++$position,
                         'relationtype'       => $relationtype,
-                        'label' => $row['final_label'],
-                        'url' => $row['final_url']
+                        'label'              => $row['final_label'],
+                        'url'                => $row['final_url'],
+                    ]);
+                }
+            }) === null;
+    }
+
+    public function syncPapersizes($ids)
+    {
+        return \DB::transaction(function () use ($ids) {
+                $this->printerpapersizes()->delete();
+                foreach ($ids as $id) {
+                    PrinterPapersize::create([
+                        'printer_id'   => $this->id,
+                        'papersize_id' => $id,
                     ]);
                 }
             }) === null;
@@ -341,6 +365,17 @@ class Printer extends Model
                     'operationsUrl' => route('related_printer_endpoint'),
                     'printerId'     => $this->id,
                     'relationType'  => self::RELATIONTYPE_VIEWED_BY_OTHERS,
+                ],
+            ]);
+    }
+
+    public function getAttributesButtonAttribute()
+    {
+        return 'component::'.json_encode([
+                'component'      => 'printer-attributes-popup-button',
+                'componentProps' => [
+                    'operationsUrl' => route('printer_attribute_endpoints'),
+                    'printerId'     => $this->id,
                 ],
             ]);
     }
@@ -406,7 +441,7 @@ class Printer extends Model
             return $this->printing_label;
         }
 
-        return $this->getAttributeValueLabel('color_management');
+        return $this->getPrinterAttributeValueLabel('color_management');
     }
 
     public function getMaxPapersizeAttribute()
@@ -430,11 +465,29 @@ class Printer extends Model
             return $this->printing > 0 && $this->scanning > 0 ? 1001 : 1002;
         }
         return $this->getPrinterAttributeValue('printing') > 0
-            && $this->getPrinterAttributeValue('scanning') > 0 ? 1001 : 1002;
+        && $this->getPrinterAttributeValue('scanning') > 0 ? 1001 : 1002;
     }
 
     public function getIsMultifunctionalLabelAttribute()
     {
         return AttributeValue::find($this->is_multifunctional)->label;
+    }
+
+    public function remove()
+    {
+        return \DB::transaction(function () {
+                SimilarPrinter::where('printer_id', '=', $this->id)->delete();
+                PrinterPapersize::where('printer_id', '=', $this->id)->delete();
+                $this->printerattributevalues()->delete();
+                foreach ($this->printer_photos as $printer_photo) {
+                    PrinterPhoto::removePrinterPhoto($printer_photo->id);
+                }
+                $this->delete();
+            }) === null;
+    }
+
+    public function getDisplaynameAttribute()
+    {
+        return $this->manufacturer_name.' '.$this->model_number_displayed.' '.$this->name;
     }
 }
