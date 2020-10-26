@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class PrinterAttribute extends Model
 {
     use HasFactory;
-    protected $table='printer_attribute';
+
+    protected $table = 'printer_attribute';
 
     protected $fillable = [
         'printer_id',
@@ -43,4 +44,21 @@ class PrinterAttribute extends Model
 //                \DB::raw('case when attribute_value_id is null then customvalue else value end finalvalue'));
 //        });
 //    }
+
+    public static function addOrUpdateFromAttributeArray(int $printerId, array $attributesArr)
+    {
+        $addedOrUpdatedPrinterAttributes = [ ];
+
+        return $addedOrUpdatedPrinterAttributes;
+    }
+
+    /**
+     * @param int $printerId
+     * @param string $attributeVariableName
+     * @param $value
+     * @return PrinterAttribute
+     */
+    public static function addOrUpdate(int $printerId, string $attributeVariableName, $value): PrinterAttribute
+    {
+    }
 }

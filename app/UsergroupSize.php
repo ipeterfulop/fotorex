@@ -21,4 +21,11 @@ class UsergroupSize extends Model
         return $this->name;
     }
 
+    public static function findByName($name)
+    {
+        return UsergroupSize::where('name', $name)
+                            ->get()
+                            ->first();
+    }
+
 }

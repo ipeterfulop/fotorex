@@ -18,7 +18,7 @@ class PopulateTechnicalSpecificationCategoriesTable extends Seeder
 
     private function addOrUpdateTechnicalSpecificationCategory()
     {
-        $dsTechnicalSpecCatgories = [
+        $dsTechnicalSpecCategories = [
             [ 'id' => 11, 'name' => 'Általános', 'position' => '1', 'is_enabled' => 1, ],
             [ 'id' => 12, 'name' => 'Másoló', 'position' => '2', 'is_enabled' => 1, ],
             [ 'id' => 13, 'name' => 'Nyomtató', 'position' => '3', 'is_enabled' => 1, ],
@@ -30,7 +30,7 @@ class PopulateTechnicalSpecificationCategoriesTable extends Seeder
         ];
 
         $tableName = 'technical_specification_categories';
-        foreach ($dsTechnicalSpecCatgories as $row) {
+        foreach ($dsTechnicalSpecCategories as $row) {
             $itemsFound = DB::table($tableName)
                             ->where('id', $row['id'])
                             ->get()

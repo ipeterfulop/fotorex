@@ -58,13 +58,12 @@ class Printer extends Model
         'color_management_label',
         'is_multifunctional',
         'is_multifunctional_label',
-        'displayname'
+        'displayname',
     ];
 
     protected $with = [
         'manufacturer',
         'printer_photos',
-        'technical_specifications',
         'usergroupsize',
         'printerattributevalues',
         'papersizes',
@@ -72,14 +71,19 @@ class Printer extends Model
 
     protected static function booted()
     {
-        static::addGlobalScope('actualprice', function(Builder $builder) {
-            return $builder->leftJoin(
-                \DB::raw('(select id as ap_pid, (case when price_discounted is null then price else price_discounted end) actualprice from printers) apjoin'),
-                'apjoin.ap_pid',
-                '=',
-                'printers.id'
-            );
-        });
+        static::addGlobalScope(
+            'actualprice',
+            function (Builder $builder) {
+                return $builder->leftJoin(
+                    \DB::raw(
+                        '(select id as ap_pid, (case when price_discounted is null then price else price_discounted end) actualprice from printers) apjoin'
+                    ),
+                    'apjoin.ap_pid',
+                    '=',
+                    'printers.id'
+                );
+            }
+        );
     }
 
     public function manufacturer()
@@ -132,7 +136,7 @@ class Printer extends Model
             $empty[$role->name] = [];
         }
         foreach ($this->customized_printer_photos as $customized_printer_photo) {
-            if (! isset($result[$customized_printer_photo->printer_photo_id])) {
+            if (!isset($result[$customized_printer_photo->printer_photo_id])) {
                 $result[$customized_printer_photo->printer_photo_id] = $empty;
             }
             $result[$customized_printer_photo->printer_photo_id][$roles->get(
@@ -150,8 +154,8 @@ class Printer extends Model
     public static function findByModelNumber(string $modelnumber)
     {
         return self::where('model_number', $modelnumber)
-                   ->first()
-                   ->get();
+                   ->get()
+                   ->first();
     }
 
     public function getCustomizedPhotosForRole(PrinterPhotoRole $role)
@@ -208,11 +212,6 @@ class Printer extends Model
         )->orderBy('width_in_millimetres', 'desc');
     }
 
-    public function technical_specifications()
-    {
-        return $this->hasMany(PrinterTechnicalSpecificationCategory::class, 'printer_id', 'id');
-    }
-
     public function printerattributevalues()
     {
         return $this->hasMany(PrinterAttributeValue::class);
@@ -264,12 +263,12 @@ class Printer extends Model
     public static function getVueCRUDIndexColumns()
     {
         return [
-            'displayname'                             => 'Név',
+            'displayname'                      => 'Név',
             'manufacturer_name'                => 'Gyártó',
             'is_enabled_label'                 => 'Státusz',
             'similar_printers_button'          => 'Hasonló termékek',
             'printers_viewed_by_others_button' => 'Mások által megtekintett termékek',
-            'attributes_button' => 'Tulajdonságok',
+            'attributes_button'                => 'Tulajdonságok',
 
         ];
     }
@@ -330,7 +329,6 @@ class Printer extends Model
                 'manufacturer',
                 'papersizes',
                 'printer_photos',
-                'technical_specifications',
                 'similarprinters',
                 'similarprinters.similarprinter',
                 'printersviewedbyothers',
@@ -355,34 +353,45 @@ class Printer extends Model
 
     public function syncSimilarPrinters($similarPrinters, $relationtype)
     {
-        return \DB::transaction(function () use ($similarPrinters, $relationtype) {
-                $accessor = self::similarRelations()[$relationtype];
-                $this->$accessor()->delete();
-                $position = 0;
-                foreach ($similarPrinters as $row) {
-                    SimilarPrinter::create([
-                        'printer_id'         => $this->id,
-                        'similar_printer_id' => \Str::startsWith($row['custom_id'], 'x') ? null : $row['custom_id'],
-                        'position'           => ++$position,
-                        'relationtype'       => $relationtype,
-                        'label'              => $row['final_label'],
-                        'url'                => $row['final_url'],
-                    ]);
+        return \DB::transaction(
+                function () use ($similarPrinters, $relationtype) {
+                    $accessor = self::similarRelations()[$relationtype];
+                    $this->$accessor()->delete();
+                    $position = 0;
+                    foreach ($similarPrinters as $row) {
+                        SimilarPrinter::create(
+                            [
+                                'printer_id'         => $this->id,
+                                'similar_printer_id' => \Str::startsWith(
+                                    $row['custom_id'],
+                                    'x'
+                                ) ? null : $row['custom_id'],
+                                'position'           => ++$position,
+                                'relationtype'       => $relationtype,
+                                'label'              => $row['final_label'],
+                                'url'                => $row['final_url'],
+                            ]
+                        );
+                    }
                 }
-            }) === null;
+            ) === null;
     }
 
     public function syncPapersizes($ids)
     {
-        return \DB::transaction(function () use ($ids) {
-                $this->printerpapersizes()->delete();
-                foreach ($ids as $id) {
-                    PrinterPapersize::create([
-                        'printer_id'   => $this->id,
-                        'papersize_id' => $id,
-                    ]);
+        return \DB::transaction(
+                function () use ($ids) {
+                    $this->printerpapersizes()->delete();
+                    foreach ($ids as $id) {
+                        PrinterPapersize::create(
+                            [
+                                'printer_id'   => $this->id,
+                                'papersize_id' => $id,
+                            ]
+                        );
+                    }
                 }
-            }) === null;
+            ) === null;
     }
 
     public function getSimilarPrintersButtonAttribute()
@@ -415,13 +424,15 @@ class Printer extends Model
 
     public function getAttributesButtonAttribute()
     {
-        return 'component::'.json_encode([
-                'component'      => 'printer-attributes-popup-button',
-                'componentProps' => [
-                    'operationsUrl' => route('printer_attribute_endpoints'),
-                    'printerId'     => $this->id,
-                ],
-            ]);
+        return 'component::' . json_encode(
+                [
+                    'component'      => 'printer-attributes-popup-button',
+                    'componentProps' => [
+                        'operationsUrl' => route('printer_attribute_endpoints'),
+                        'printerId'     => $this->id,
+                    ],
+                ]
+            );
     }
 
     public function mainPhotoUrl()
@@ -522,20 +533,22 @@ class Printer extends Model
 
     public function remove()
     {
-        return \DB::transaction(function () {
-                SimilarPrinter::where('printer_id', '=', $this->id)->delete();
-                PrinterPapersize::where('printer_id', '=', $this->id)->delete();
-                $this->printerattributevalues()->delete();
-                foreach ($this->printer_photos as $printer_photo) {
-                    PrinterPhoto::removePrinterPhoto($printer_photo->id);
+        return \DB::transaction(
+                function () {
+                    SimilarPrinter::where('printer_id', '=', $this->id)->delete();
+                    PrinterPapersize::where('printer_id', '=', $this->id)->delete();
+                    $this->printerattributevalues()->delete();
+                    foreach ($this->printer_photos as $printer_photo) {
+                        PrinterPhoto::removePrinterPhoto($printer_photo->id);
+                    }
+                    $this->delete();
                 }
-                $this->delete();
-            }) === null;
+            ) === null;
     }
 
     public function getDisplaynameAttribute()
     {
-        return $this->manufacturer_name.' '.$this->model_number_displayed.' '.$this->name;
+        return $this->manufacturer_name . ' ' . $this->model_number_displayed . ' ' . $this->name;
     }
 
     public function setPrinterAttribute(string $variablename, ?string $value, ?string $label): ?PrinterAttribute
