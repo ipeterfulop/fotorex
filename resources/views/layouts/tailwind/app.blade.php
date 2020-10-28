@@ -19,6 +19,7 @@
     <link href="{{ asset('css/fa/brands.min.css') }}" rel="stylesheet">
 -->
     <style>
+
     </style>
 </head>
 <body class="w-full font-body" style="background-color: #f4f4f4">

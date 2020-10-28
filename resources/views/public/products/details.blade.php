@@ -9,12 +9,7 @@
                 <div class="w-full lg:w-3/6 flex flex-col items-stretch justify-start h-64">
                     <h2 class="font-bold">{{ $printer->name }}</h2>
                     @include('public.partials.printers.detail-boxes', ['printer' => $printer])
-                    <p class="w-full bg-gray-300">
-                        @if($printer->request_for_price == 1)
-                            Az árért keressen bennünket!
-                        @else
-                            {{ \App\Helpers\PriceFormatter::formatToInteger($printer->price) }}
-                        @endif
+                    <p class="w-full bg-fotolightgray text-xl"> {!! $printer->price_label !!}
                     </p>
                 </div>
                 <div class="w-full lg:w-1/6 flex flex-col items-stretch justify-start h-64 text-center">

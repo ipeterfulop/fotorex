@@ -15,6 +15,7 @@ module.exports = {
               fotoverylightred: '#fef7f3',
               fotoblue: '#333745',
               fotogray: '#9e9fa3',
+              fotolightgray: '#ede9e9',
           },
           height: {
               '96': '24rem',

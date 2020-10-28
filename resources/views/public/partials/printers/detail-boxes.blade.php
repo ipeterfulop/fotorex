@@ -7,8 +7,8 @@
         justify-content: center;
         color: white;
         font-weight: bold;
-        margin-left: .1rem;
-        margin-right: .1rem;
+        margin-left: .2rem;
+        margin-right: .2rem;
         word-break: break-all;
         text-align: center;
     }

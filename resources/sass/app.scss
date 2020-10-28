@@ -102,3 +102,10 @@ input {
 .printer-compare-table {
     @apply w-full;
 }
+.printer-price {
+    @apply text-fotored text-xl font-bold;
+}
+
+.printer-original-price {
+    @apply line-through;
+}
