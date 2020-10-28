@@ -103,4 +103,13 @@ abstract class SearchField
     {
         return $this->valueset;
     }
+
+    public function getDefaultValue()
+    {
+        if ($this->type == 'radiogroup') {
+            return -1;
+        }
+
+        return '';
+    }
 }

@@ -5,7 +5,7 @@
 >
     @foreach($valueset as $optionValue => $optionLabel)
         <label>
-        <input class="fotorex-filter fotorex-filter-{{ $type }}"
+        <input class="fotorex-filter-{{ $type }}"
                type="checkbox"
                value="{{ $optionValue }}">
             {{ $optionLabel }}

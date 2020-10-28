@@ -8,8 +8,10 @@ use App\Attribute;
 use App\AttributeValue;
 use App\ExtraFeature;
 use App\Manufacturer;
+use App\Papersize;
 use App\Printer;
 use App\Searching\CheckboxgroupSearchField;
+use App\Searching\RadiogroupSearchField;
 use App\Searching\RangeSearchField;
 use App\Searching\TextSearchField;
 use App\UsergroupSize;
@@ -27,17 +29,17 @@ class PrinterFilterFactory
         $result[] = (new CheckboxgroupSearchField())->setLabel('Munkakörnyezet')
             ->setField('usergroup')
             ->setValueset(UsergroupSize::orderBy('position', 'asc')->enabled()->get()->pluck('name', 'id'));
-        $result[] = (new CheckboxgroupSearchField())->setLabel('Színkezelés')
+        $result[] = (new RadiogroupSearchField())->setLabel('Színkezelés')
             ->setField('printing')
             ->setValueset(Attribute::with(['attribute_value_set'])->whereVariableName('printing')->first()->getAttributeValuesFromSetWithoutNA()->pluck('label', 'value'));
         $result[] = (new RangeSearchField(self::getMinPrice(), self::getMaxPrice()))->setLabel('Ár')
             ->setField('price');
-        $result[] = (new CheckboxgroupSearchField())->setLabel('Gyártók')
-            ->setField('manufacturer')
-            ->setValueset(Manufacturer::orderBy('name', 'asc')->enabled()->get()->pluck('name', 'id'));
-//        $result[] = (new CheckboxgroupSearchField())->setLabel('Extra funkciók')
-//            ->setField('extra_features')
-//            ->setValueset(ExtraFeature::orderBy('name', 'asc')->enabled()->get()->pluck('name', 'id'));
+        $result[] = (new RadiogroupSearchField())->setLabel('Maximális nyomtatási méret')
+            ->setField('papersize')
+            ->setValueset(Papersize::getAllCurrentlySold()->pluck('label', 'value'));
+        $result[] = (new RadiogroupSearchField())->setLabel('Hálózati csatlakozás')
+            ->setField('networked')
+            ->setValueset(Attribute::with(['attribute_value_set'])->whereVariableName('networked')->first()->getAttributeValuesFromSetWithoutNA()->pluck('label', 'value'));
 
 
         return self::setValuesFromRequest($result, request());
@@ -46,7 +48,7 @@ class PrinterFilterFactory
     protected static function setValuesFromRequest($filters, $request)
     {
         foreach ($filters as &$filter) {
-            $filter->setValue($request->get($filter->getField(), ''));
+            $filter->setValue($request->get($filter->getField(), $filter->getDefaultValue()));
         }
 
         return $filters;
