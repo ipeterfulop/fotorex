@@ -1,6 +1,7 @@
 .idea
 /node_modules
 /public/hot
+/public/files
 /public/storage
 /public/images/articles
 /public/images/slides
