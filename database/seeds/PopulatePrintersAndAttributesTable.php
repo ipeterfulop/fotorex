@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Attribute;
 use App\Manufacturer;
 use App\Printer;
+use App\PrinterAttribute;
 use App\UsergroupSize;
 use Exception;
 use Illuminate\Database\Seeder;
@@ -29,6 +30,7 @@ class PopulatePrintersAndAttributesTable extends Seeder
     {
         foreach ($dataSet as $dataRow) {
             $printerArr = $this->createPrinterDataSet($dataRow);
+
             $printerId = $printerArr['fields']['id'];
             if (!is_null($printerId)) {
                 DB::table('printers')
@@ -37,6 +39,8 @@ class PopulatePrintersAndAttributesTable extends Seeder
             } else {
                 $printerId = (Printer::create($printerArr['fields']))->id;
             }
+
+            PrinterAttribute::addOrUpdateMultipleRecordsFromAttributeArray($printerId, $printerArr['attributes']);
         }
     }
 
@@ -54,13 +58,20 @@ class PopulatePrintersAndAttributesTable extends Seeder
             'copying',
             'faxing',
             'technology',
-            'color_management',
             'networked',
             'product_url_on_manufacturer_website',
+            'specification_sheet',
         ];
 
 
-        $printerDataSet = ['attributes' => [], 'fields' => ['id' => null, 'name' => '', 'description' => '',]];
+        $printerDataSet = [
+            'attributes' => [],
+            'fields'     => [
+                'id'          => null,
+                'name'        => '',
+                'description' => '',
+            ],
+        ];
 
         $printerDataSet['fields']['model_number'] = $dataSet['model_number'];
         $printerDataSet['fields']['model_number_displayed'] = $dataSet['model_number_displayed'];
@@ -92,6 +103,10 @@ class PopulatePrintersAndAttributesTable extends Seeder
             }
         }
 
+        $dataSet['specification_sheet'] = '/files/specification_sheet/'
+            . Manufacturer::findByName($dataSet['manufacturer'])->name
+            . '_' . strtoupper($dataSet['model_number'])
+            . '_adatlap_hu.pdf';
         foreach ($attributesToAdd as $attributeVariableName) {
             $attribute = Attribute::findByVariableName($attributeVariableName);
             if (is_null($attribute)) {
@@ -109,11 +124,15 @@ class PopulatePrintersAndAttributesTable extends Seeder
                 } else {
                     $printerDataSet['attributes'][$attributeVariableName] = $attribute->getAttributeValueFromSetByLabel(
                         $dataSet[$attributeVariableName]
-                    );
+                    )->value;
                 }
             } else {
                 $printerDataSet['attributes'][$attributeVariableName] = $dataSet[$attributeVariableName];
             }
+            $printerDataSet['attributes']['specification_sheet'] = '/files/specification_sheet/'
+                . Manufacturer::findByName($dataSet['manufacturer'])->name
+                . '_' . strtoupper($dataSet['model_number'])
+                . '_adatlap_hu.pdf';
         }
 
 

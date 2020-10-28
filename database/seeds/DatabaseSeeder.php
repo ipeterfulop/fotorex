@@ -28,5 +28,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ServicesArticlesSeeder::class);
 
         $this->call(PopulateManufacturersTable::class);
+        $this->call(PopulatePrintersAndAttributesTable::class);
     }
 }
