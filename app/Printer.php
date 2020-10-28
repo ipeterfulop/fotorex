@@ -19,6 +19,8 @@ class Printer extends Model
 {
     use VueCRUDManageable, hasIsEnabledProperty, hasFiles, HasSortingOptions;
 
+    const CALL_FOR_PRICE_LABEL = 'Hívjon az árért!';
+
     const SUBJECT_SLUG = 'printer';
     const SUBJECT_NAME = 'Termék';
     const SUBJECT_NAME_PLURAL = 'Termékek';
@@ -59,6 +61,7 @@ class Printer extends Model
         'is_multifunctional',
         'is_multifunctional_label',
         'displayname',
+        'functions_label',
     ];
 
     protected $with = [
@@ -452,9 +455,19 @@ class Printer extends Model
 
     public function getPriceLabelAttribute()
     {
-        return $this->request_for_price == 1
-            ? 'Az árért keressen!'
-            : PriceFormatter::formatToInteger($this->price);
+        if ($this->request_for_price == 1) {
+            return '<div class="printer-price">'.self::CALL_FOR_PRICE_LABEL.'</div>';
+        }
+        if ($this->price_discounted) {
+            return '<div class="printer-original-price">'
+                .PriceFormatter::formatToInteger($this->price)
+                .'</div><div class="printer-price">'
+                .PriceFormatter::formatToInteger($this->price_discounted)
+                .'</div>';
+        }
+        return '<div class="printer-price">'
+                .PriceFormatter::formatToInteger($this->price)
+                .'</div>';
     }
 
     public function getPrinterAttributeValue($attributeVariableName)
@@ -466,13 +479,22 @@ class Printer extends Model
         )->finalvalue;
     }
 
-    public function getPrinterAttributeLabel($attributeVariableName)
+    public function getPrinterAttributeAttributeLabel($attributeVariableName)
     {
         return optional(
             $this->printerattributevalues()
                  ->where('variable_name', '=', $attributeVariableName)
                  ->first()
         )->alabel;
+    }
+
+    public function getPrinterAttributeLabel($attributeVariableName)
+    {
+        return optional(
+            $this->printerattributevalues()
+                 ->where('variable_name', '=', $attributeVariableName)
+                 ->first()
+        )->label;
     }
 
     public function getPrinterAttributeValueLabel($attributeVariableName)
@@ -500,6 +522,24 @@ class Printer extends Model
         }
 
         return $this->getPrinterAttributeValueLabel('color_management');
+    }
+
+    public function getFunctionsLabelAttribute()
+    {
+        $data = [];
+        if (($this->printing != null) || ($this->copying != null) || ($this->scanning != null)) {
+            $data = [$this->printing_attribute_label, $this->copying_attribute_label, $this->scanning_attribute_label];
+        } else {
+            $data = [
+                $this->getPrinterAttributeAttributeLabel('printing'),
+                $this->getPrinterAttributeAttributeLabel('copying'),
+                $this->getPrinterAttributeAttributeLabel('scanning'),
+            ];
+        }
+
+        return collect($data)->filter(function($item) {
+            return $item != null && $item != '';
+        })->implode(' / ');
     }
 
     public function getMaxPapersizeAttribute()

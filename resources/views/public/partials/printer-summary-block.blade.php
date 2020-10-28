@@ -13,21 +13,21 @@
 
                 <div class="w-full md:w-1/2">
                     <p><strong>Munkakörnyezet</strong>:{{ $element->usergroupsize->name }}</p>
-                    <p><strong>Funkciók</strong>:</p>
-                    <p><strong>Színkezelés</strong>:</p>
-                    <p><strong>Helyi/Hálózatos</strong>:</p>
+                    <p><strong>Funkciók</strong>: {{ $element->functions_label }}</p>
+                    <p><strong>Színkezelés</strong>: {{ $element->color_management_label }}</p>
+                    <p><strong>Helyi/Hálózatos</strong>: {{ $element->networked_label }}</p>
                 </div>
                 <div class="w-full md:w-1/2">
-                    <p><strong>Sebesség fekete-fehér max.(A4)</strong>:</p>
-                    <p><strong>Hardveres felbontás</strong>:</p>
-                    <p><strong>Nyomtatási méret, max</strong>:</p>
-                    <p><strong>Ajánlott terhelhetőség / hó (max.)</strong>:</p>
+                    <p><strong>Sebesség fekete-fehér max.(A4)</strong>: {{ $element->printing_speed_a4_bw_label }}</p>
+                    <p><strong>Hardveres felbontás</strong>: {{ $element->printing_resolution }}</p>
+                    <p><strong>Nyomtatási méret, max</strong>: {{ $element->max_papersize_label }}</p>
+                    <p><strong>Ajánlott terhelhetőség / hó (max.)</strong>: {{ $element->recommended_load_per_month_label }}</p>
 
                 </div>
             </div>
             <div class="w-full flex items-center justify-end mt-2 pr-2">
-                <div class="w-1/2 bg-fotogray bg-opacity-50 text-fotored text-xl font-bold text-right p-4 flex flex-col items-end justify-center ">
-                    {{ $element->price_label }}
+                <div class="w-1/2 bg-fotolightgray bg-opacity-50 text-right p-4 flex flex-col items-end justify-center ">
+                    {!! $element->price_label !!}
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-<div class="w-full p-1 font-bold bg-gray-400 text-sm">{{ $label }}</div>
+<div class="w-full p-1 font-bold bg-fotolightgray text-sm">{{ $label }}</div>
 <div class="p-4 border-gray-200 border flex flex-col items-start justify-start fotorex-filter"
      data-field="{{ $field }}"
      data-filtertype="text"
