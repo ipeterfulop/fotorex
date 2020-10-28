@@ -8,6 +8,7 @@ use App\Attribute;
 use App\Helpers\DeviceFunctionality;
 use App\Printer;
 use App\PrinterAttribute;
+use App\PrinterPapersize;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -64,6 +65,9 @@ class PrinterDataprovider
             ->when($request->get('usergroup', '') != '', function($query) use ($request) {
                 $ids = explode(',', $request->get('usergroup'));
                 return $query->whereIn('usergroup_size_id', $ids);
+            })
+            ->when($request->get('papersize', '') != '', function($query) use ($request) {
+                return $query->whereIn('id', PrinterPapersize::distinct('printer_id')->where('papersize_id', '=', $request->get('papersize'))->get()->pluck('printer_id'));
             });
         foreach ($attributes as $variableName => $attribute) {
             if (request()->has($variableName)) {

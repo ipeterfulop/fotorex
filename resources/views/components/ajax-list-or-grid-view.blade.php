@@ -69,6 +69,9 @@
                 @endforeach
             },
             loading: true,
+            resetUrl() {
+                this.ajaxURL = new URL('{{ $url }}');
+            },
             pushState: {{ $pushState ? 'true' : 'false' }},
             initialize() {
                 if (window.localStorage) {
@@ -145,15 +148,24 @@
                 if (resetPage) {
                     this.page = 1;
                 }
+                this.resetUrl();
                 this.ajaxURL.searchParams.set('sortby', this.sortingOption);
                 this.ajaxURL.searchParams.set('page', this.page);
                 if (typeof(this.$refs.filters) != 'undefined') {
                     Array.from(this.$refs.filters.querySelectorAll('.fotorex-filter')).forEach((filter) => {
+                        let value = -1;
                         if (filter.getAttribute('data-filtertype') == 'text') {
-                            this.ajaxURL.searchParams.set(filter.getAttribute('data-field'), filter.querySelector('.fotorex-filter-text').value);
+                            value = filter.querySelector('.fotorex-filter-text').value;
                         }
                         if (filter.getAttribute('data-filtertype') == 'range') {
-                            this.ajaxURL.searchParams.set(filter.getAttribute('data-field'), filter.querySelector('.range-value-input').value);
+                            value = filter.querySelector('.range-value-input').value;
+                        }
+                        if (filter.getAttribute('data-filtertype') == 'radiogroup') {
+                            let r = filter.querySelector('input[type="radio"]:checked');
+                            if (r != null) {
+                                value = r.value;
+                            }
+                            console.log(value);
                         }
                         if (filter.getAttribute('data-filtertype') == 'checkboxgroup') {
                             let currentFilter = [];
@@ -162,10 +174,16 @@
                                     currentFilter.push(item.value);
                                 }
                             })
-                            this.ajaxURL.searchParams.set(filter.getAttribute('data-field'), currentFilter.join(','));
+                            if (currentFilter.length > 0) {
+                                value = currentFilter.join(',');
+                            }
+                        }
+                        if (value != -1) {
+                            this.ajaxURL.searchParams.set(filter.getAttribute('data-field'), value);
                         }
                     });
                 }
+                this.ajaxURL.searchParams.set('queryid', Math.random());
                 if (this.pushState) {
                     let state = {params: Object.fromEntries(this.ajaxURL.searchParams.entries())};
                     state.sortby = this.sortingOption;

@@ -20,4 +20,11 @@ class Papersize extends Model
     {
         return $this->code;
     }
+
+    public static function getAllCurrentlySold()
+    {
+        return self::whereIn('id', PrinterPapersize::select('papersize_id')->distinct('papersize_id')->get()->pluck('papersize_id'))
+            ->orderBy('width_in_millimetres', 'asc')
+            ->get();
+    }
 }
