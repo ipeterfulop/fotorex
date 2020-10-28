@@ -43,15 +43,10 @@ class PopulatePrintersAndAttributesTable extends Seeder
             }
 
             PrinterAttribute::addOrUpdateMultipleRecordsFromAttributeArray($printerId, $printerArr['attributes']);
-
-            if (PrinterPapersize::where('printer_id', $printerId)->count() == 0){
-                PrinterPapersize::create(
-                    [
-                        'printer_id'   => $printerId,
-                        'papersize_id' => Papersize::query()->inRandomOrder()->first()->id,
-                    ]
-                );
+            if ((in_array('A3', $printerArr['papersize'], true)) && (!in_array('A4', $printerArr['papersize'], true))) {
+                $printerArr['papersize'][] = 'A4';
             }
+            PrinterPapersize::addOrUpdatePapersizes($printerId, $printerArr['papersize']);
         }
     }
 
@@ -82,6 +77,7 @@ class PopulatePrintersAndAttributesTable extends Seeder
                 'name'        => '',
                 'description' => '',
             ],
+            'papersize'  => [],
         ];
 
         $printerDataSet['fields']['model_number'] = $dataSet['model_number'];
@@ -145,6 +141,8 @@ class PopulatePrintersAndAttributesTable extends Seeder
                 . '_' . strtoupper($dataSet['model_number'])
                 . '_adatlap_hu.pdf';
         }
+
+        $printerDataSet['papersize'][] = $dataSet['papersize'];
 
 
         return $printerDataSet;
