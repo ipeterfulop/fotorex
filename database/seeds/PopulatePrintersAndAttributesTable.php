@@ -4,8 +4,10 @@ namespace Database\Seeders;
 
 use App\Attribute;
 use App\Manufacturer;
+use App\Papersize;
 use App\Printer;
 use App\PrinterAttribute;
+use App\PrinterPapersize;
 use App\UsergroupSize;
 use Exception;
 use Illuminate\Database\Seeder;
@@ -41,6 +43,15 @@ class PopulatePrintersAndAttributesTable extends Seeder
             }
 
             PrinterAttribute::addOrUpdateMultipleRecordsFromAttributeArray($printerId, $printerArr['attributes']);
+
+            if (PrinterPapersize::where('printer_id', $printerId)->count() == 0){
+                PrinterPapersize::create(
+                    [
+                        'printer_id'   => $printerId,
+                        'papersize_id' => Papersize::query()->inRandomOrder()->first()->id,
+                    ]
+                );
+            }
         }
     }
 
