@@ -46,8 +46,9 @@ class PrinterDataprovider
             ->enabled()
             ->when($request->get('search', '') != '', function($query) use ($request) {
                 return $query->where(function($query) use ($request) {
+                    $manufacturerIds = Manufacturer::where('name', 'like', '%'.$request->get('search').'%')->get()->pluck('id');
                     return $query->where('description', 'like', '%'.$request->get('search').'%')
-                        //->orWhereIn('manufacturer_id', Manufacturer::where('name', 'like', '%'.$request->get('search').'%')->get()->pluck('name'))
+                        ->orWhereIn('manufacturer_id', $manufacturerIds)
                         ->orWhere('name', 'like', '%'.$request->get('search').'%')
                         ->orWhere('model_number', 'like', '%'.$request->get('search').'%')
                         ->orWhere('model_number_displayed', 'like', '%'.$request->get('search').'%');
