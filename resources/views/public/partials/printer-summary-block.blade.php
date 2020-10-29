@@ -7,7 +7,7 @@
             </a>
         </div>
         <div class="w-2/3 pl-2 flex flex-col items-start justify-start">
-            <h1 class="text-2xl font-bold mb-4"><a href="{{ route('printer_details', ['slug' => $element->slug]) }}">{{ $element->name }}</a></h1>
+            <h1 class="text-2xl font-bold mb-4"><a href="{{ route('printer_details', ['slug' => $element->slug]) }}">{{ $element->display_name }}</a></h1>
             @include('public.partials.printers.detail-boxes', ['printer' => $element])
             <div class="mt-4 flex flex-col md:flex-row text-sm">
 

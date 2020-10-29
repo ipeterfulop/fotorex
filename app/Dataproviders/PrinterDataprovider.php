@@ -6,6 +6,7 @@ namespace App\Dataproviders;
 
 use App\Attribute;
 use App\Helpers\DeviceFunctionality;
+use App\Manufacturer;
 use App\Printer;
 use App\PrinterAttribute;
 use App\PrinterPapersize;
@@ -42,11 +43,11 @@ class PrinterDataprovider
     {
         $attributes = Attribute::with(['attribute_value_set'])->get()->keyBy('variable_name');
         $query = Printer::withAttributes()
-            //->join(\DB::raw('(select id as mid from manufacturers where is_enabled=1) m'), 'printers.manufacturer_id', '=', 'm.mid')
             ->enabled()
             ->when($request->get('search', '') != '', function($query) use ($request) {
                 return $query->where(function($query) use ($request) {
                     return $query->where('description', 'like', '%'.$request->get('search').'%')
+                        //->orWhereIn('manufacturer_id', Manufacturer::where('name', 'like', '%'.$request->get('search').'%')->get()->pluck('name'))
                         ->orWhere('name', 'like', '%'.$request->get('search').'%')
                         ->orWhere('model_number', 'like', '%'.$request->get('search').'%')
                         ->orWhere('model_number_displayed', 'like', '%'.$request->get('search').'%');
@@ -56,11 +57,9 @@ class PrinterDataprovider
                 $range = explode('-', $request->get('price'));
                 return $query->where(function($query) use ($range) {
                     return $query->where('request_for_price', '=', 1)
-                        ->orWhereBetween('actualprice', $range);
+                        ->orWhere('actualprice', '=', null)
+                       ->orWhereBetween('actualprice', $range);
                 });
-            })->when($request->get('manufacturer', '') != '', function($query) use ($request) {
-                $ids = explode(',', $request->get('manufacturer'));
-                return $query->whereIn('manufacturer_id', $ids);
             })
             ->when($request->get('usergroup', '') != '', function($query) use ($request) {
                 $ids = explode(',', $request->get('usergroup'));

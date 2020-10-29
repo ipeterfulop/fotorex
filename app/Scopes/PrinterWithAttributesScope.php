@@ -6,6 +6,8 @@ namespace App\Scopes;
 
 use App\Attribute;
 use App\Helpers\PrinterAttributeValue;
+use App\Manufacturer;
+use App\Printer;
 use App\PrinterAttribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +26,7 @@ class PrinterWithAttributesScope implements Scope
     public function apply(Builder $builder, Model $model)
     {
         $fields = Attribute::select('variable_name')->where('is_computed', '=', 0)->get()->pluck('variable_name');
-        $selects = ['printers.*'];
+        $selects = $this->getPrinterSelects();
         foreach ($fields as $field) {
             $selects[] = \DB::raw('MAX(case when variable_name="'.$field.'" then finalvalue end) '.$field);
             $selects[] = \DB::raw('MAX(case when variable_name="'.$field.'" then avlabel end) '.$field.'_label');
@@ -32,6 +34,7 @@ class PrinterWithAttributesScope implements Scope
             $selects[] = \DB::raw('MAX(case when variable_name="'.$field.'" then finalvalue_or_id end) '.$field.'_value_or_id');
         }
         return $builder->select($selects)
+            ->leftJoinSub(Manufacturer::select('id', 'name as mname'), 'm', 'printers.manufacturer_id', '=', 'm.id')
             ->leftJoinSub(
                 PrinterAttributeValue::select('finalvalue', 'finalvalue_or_id', 'alabel')->groupBy(['printer_id', 'variable_name', 'finalvalue', 'avlabel', 'alabel', 'attribute_value_id', 'customvalue', 'finalvalue_or_id']),
                 'attr',
@@ -39,5 +42,21 @@ class PrinterWithAttributesScope implements Scope
                 '=',
                 $model->getTable().'.'.$model->getKeyName()
             )->groupBy('printers.id');
+    }
+
+    protected function getPrinterSelects()
+    {
+        $result = [
+            \DB::raw('ANY_VALUE(m.mname) as manufacturername'),
+            \DB::raw('ANY_VALUE(printers.id) as id'),
+            \DB::raw('ANY_VALUE(printers.created_at) as created_at'),
+            \DB::raw('ANY_VALUE(printers.updated_at) as updated_at'),
+            \DB::raw('ANY_VALUE(case when price_discounted is null then price else price_discounted end) as actualprice'),
+        ];
+        foreach ((new Printer())->getFillable() as $field) {
+            $result[] = \DB::raw('ANY_VALUE(printers.'.$field.') as '.$field);
+        }
+
+        return $result;
     }
 }
