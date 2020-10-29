@@ -47,14 +47,14 @@ class PrinterWithAttributesScope implements Scope
     protected function getPrinterSelects()
     {
         $result = [
-            \DB::raw('ANY_VALUE(m.mname) as manufacturername'),
-            \DB::raw('ANY_VALUE(printers.id) as id'),
-            \DB::raw('ANY_VALUE(printers.created_at) as created_at'),
-            \DB::raw('ANY_VALUE(printers.updated_at) as updated_at'),
-            \DB::raw('ANY_VALUE(case when price_discounted is null then price else price_discounted end) as actualprice'),
+            \DB::raw('MIN(m.mname) as manufacturername'),
+            \DB::raw('MIN(printers.id) as id'),
+            \DB::raw('MIN(printers.created_at) as created_at'),
+            \DB::raw('MIN(printers.updated_at) as updated_at'),
+            \DB::raw('MIN(case when price_discounted is null then price else price_discounted end) as actualprice'),
         ];
         foreach ((new Printer())->getFillable() as $field) {
-            $result[] = \DB::raw('ANY_VALUE(printers.'.$field.') as '.$field);
+            $result[] = \DB::raw('MIN(printers.'.$field.') as '.$field);
         }
 
         return $result;
