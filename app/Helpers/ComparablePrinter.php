@@ -19,7 +19,7 @@ class ComparablePrinter extends Printer
     protected static function booted()
     {
         static::addGlobalScope('manufacturerName', function(Builder $builder) {
-            $builder->select('printers.name', 'printers.slug', 'manuf.mname as mfname')
+            $builder->select('printers.name', 'printers.model_number_displayed', 'printers.slug', 'manuf.mname as mfname')
                 ->join(
                     \DB::raw('(select name as mname, id as mid from manufacturers) manuf'),
                 'manuf.mid',
@@ -28,4 +28,10 @@ class ComparablePrinter extends Printer
                 );
         });
     }
+
+    public function getDisplaynameAttribute()
+    {
+        return $this->mfname . ' ' . $this->model_number_displayed . ' ' . $this->name;
+    }
+
 }

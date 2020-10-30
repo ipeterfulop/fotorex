@@ -109,3 +109,6 @@ input {
 .printer-original-price {
     @apply line-through;
 }
+.transition-visible {
+    transition: visibility 200ms ease-in-out;
+}

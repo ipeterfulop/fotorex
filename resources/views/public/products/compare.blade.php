@@ -95,7 +95,7 @@
                             } else {
                                 let a = document.createElement('a');
                                 a.setAttribute('href', p.link);
-                                a.innerHTML = p.name;
+                                a.innerHTML = p.displayname;
                                 t.appendChild(a);
                             }
                             r.appendChild(t);

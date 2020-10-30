@@ -1,3 +1,4 @@
+@php($value = $value ?? '')
 <div class="form-group w-full lg:w-8/12 flex flex-col my-2" data-fieldname="{{ $fieldName }}">
     <div class="w-full flex flex-row items-center justify-center">
         <label class="w-1/2 form-label text-right pr-2" for="text-input">
@@ -9,7 +10,7 @@
                    type="text"
                    name="{{ $fieldName }}"
                    id="{{ $fieldName }}"
-                   value="{{ old($fieldName) ?? '' }}"
+                   value="{{ old($fieldName) ?? $value }}"
                    placeholder="{{ $label }}">
         </div>
     </div>

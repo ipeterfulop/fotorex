@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Dataproviders\PrinterDataprovider;
+use App\Http\Requests\SendPrinterInEmailRequest;
 use App\Printer;
 use Illuminate\Http\Request;
 
@@ -31,10 +32,15 @@ class PrintersController extends Controller
     public function details($slug)
     {
         $printer = Printer::findBySlug($slug);
-
+        $attributes = PrinterComparisonController::getComparableAttributeKeys();
         return view('public.products.details', [
-            'printer' => $printer
+            'printer' => $printer,
+            'attributes' => $attributes,
         ]);
     }
 
+    public function sendEmail(SendPrinterInEmailRequest $request)
+    {
+
+    }
 }

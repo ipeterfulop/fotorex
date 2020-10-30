@@ -45,6 +45,8 @@ Route::prefix('admin')->middleware('auth')->group(function() {
 Route::get('/kapcsolat', 'ContactmessagesController@index')->name('contactmessage_index');
 Route::post('/kapcsolat', 'ContactmessagesController@submit')->name('contactmessage_submit');
 
+Route::post('/ajax/nyomtato-email', 'PrintersController@sendEmail')->name('send_printer_details_in_email');
+
 Route::get('/kereses', 'SearchController@search')->name('search_all');
 
 Route::get('/osszehasonlitas', 'PrinterComparisonController@index')->name('compare_products');

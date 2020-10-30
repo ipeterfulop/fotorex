@@ -5,7 +5,7 @@
     @foreach($availablePrinters as $group => $printers)
     <optgroup label="{{$group}}">
         @foreach($printers as $printer)
-            <option value="{{ $printer->slug }}">{{ $printer->name }}</option>
+            <option value="{{ $printer->slug }}">{{ $printer->displayname }}</option>
         @endforeach
     </optgroup>
     @endforeach
