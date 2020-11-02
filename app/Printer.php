@@ -456,18 +456,18 @@ class Printer extends Model
     public function getPriceLabelAttribute()
     {
         if ($this->request_for_price == 1) {
-            return '<div class="printer-price">'.self::CALL_FOR_PRICE_LABEL.'</div>';
+            return '<div class="printer-price">' . self::CALL_FOR_PRICE_LABEL . '</div>';
         }
         if ($this->price_discounted) {
             return '<div class="printer-original-price">'
-                .PriceFormatter::formatToInteger($this->price)
-                .'</div><div class="printer-price">'
-                .PriceFormatter::formatToInteger($this->price_discounted)
-                .'</div>';
+                . PriceFormatter::formatToInteger($this->price)
+                . '</div><div class="printer-price">'
+                . PriceFormatter::formatToInteger($this->price_discounted)
+                . '</div>';
         }
         return '<div class="printer-price">'
-                .PriceFormatter::formatToInteger($this->price)
-                .'</div>';
+            . PriceFormatter::formatToInteger($this->price)
+            . '</div>';
     }
 
     public function getPrinterAttributeValue($attributeVariableName)
@@ -537,9 +537,11 @@ class Printer extends Model
             ];
         }
 
-        return collect($data)->filter(function($item) {
-            return $item != null && $item != '';
-        })->implode(' / ');
+        return collect($data)->filter(
+            function ($item) {
+                return $item != null && $item != '';
+            }
+        )->implode(' / ');
     }
 
     public function getMaxPapersizeAttribute()
@@ -633,10 +635,24 @@ class Printer extends Model
         return null;
     }
 
-    private function setPrinterAttributeWithCustomValue(string $variablename, $customvalue)
+    private function setPrinterAttributeWithCustomValue(string $variablename, $customvalue, $updateIfFound = false)
     {
-        throw (new \Exception('Not imlemented yet'));
+        $returnedPrinterAttribute = null;
+        $attribute = Attribute::findByVariableName($variablename);
+        if (!is_null($attribute)) {
+            $printerattribute = PrinterAttribute::where('printer_id', $this->id)
+                                                ->where('attribute_id', $attribute->id)
+                                                ->get()
+                                                ->first();
+            if (!is_null($printerattribute)) {
+                if ($updateIfFound) {
+                    $returnedPrinterAttribute = PrinterAttribute::addOrUpdate($this->id, $variablename, $customvalue);
+                }
+            } else {
+                $returnedPrinterAttribute = PrinterAttribute::addOrUpdate($this->id, $variablename, $customvalue);
+            }
+        }
 
-        return null;
+        return $returnedPrinterAttribute;
     }
 }

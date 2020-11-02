@@ -29,7 +29,7 @@ class SharpScraper
     {
         $content = mb_convert_encoding(file_get_contents($url), 'HTML-ENTITIES', "UTF-8");
         $dom = new DOMDocument;
-        @$dom->loadHTML($content);
+        @($dom->loadHTML($content));
         $xpath = new DOMXpath($dom);
         $result = [
             'name' => '',
