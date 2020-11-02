@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 class Highlightedprinter extends Model
 {
     const SUBJECT_SLUG = 'highlightedprinter';
-    const SUBJECT_NAME = 'Akciós ajánlat';
-    const SUBJECT_NAME_PLURAL = 'Akciós ajánlatok';
+    const SUBJECT_NAME = 'Kiemelt termék';
+    const SUBJECT_NAME_PLURAL = 'Kiemelt termékek';
 
     use VueCRUDManageable, hasPosition, belongsToPrinter;
 

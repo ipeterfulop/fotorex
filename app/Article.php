@@ -165,4 +165,12 @@ class Article extends Model
                 ->orWhere('content', 'like', "%$searchText%");
         });
     }
+
+    public static function getForSearchableSelect()
+    {
+        return self::published()->get()->sortBy('title')->map(function($item) {
+            return ['id' => $item->id, 'name' => $item->title];
+        })->values()->all();
+    }
+
 }
