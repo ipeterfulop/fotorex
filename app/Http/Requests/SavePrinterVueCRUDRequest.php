@@ -93,13 +93,4 @@ class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
             }
         });
     }
-
-    protected function handleTechnicalSpecifications(Printer $subject)
-    {
-        foreach (TechnicalSpecificationCategory::where('is_enabled', '=', 1)->get()->all() as $tsc) {
-            $p[$tsc->id] = $this->input('tsc_'.$tsc->id);
-        }
-        return $subject->syncTechnicalSpecifications($p);
-    }
-
 }

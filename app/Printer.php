@@ -655,4 +655,11 @@ class Printer extends Model
 
         return $returnedPrinterAttribute;
     }
+
+    public static function getForSearchableSelect()
+    {
+        return self::enabled()->get()->sortBy('displayname')->map(function($item) {
+            return ['id' => $item->id, 'name' => $item->displayname];
+        })->values()->all();
+    }
 }

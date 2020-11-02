@@ -41,6 +41,10 @@ class SendPrinterInEmailRequest extends FormRequest
 
     public function send()
     {
-        \Mail::send(new SendPrinter())
+        \Mail::send(new SendPrinter(
+            $this->input('email'),
+            $this->input('subject'),
+            $this->input('message')
+        ));
     }
 }

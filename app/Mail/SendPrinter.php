@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 class SendPrinter extends Mailable
 {
     use Queueable, SerializesModels;
-    public $email;
+    public $messageRecipient;
     public $messageSubject;
     public $messageContent;
 
@@ -19,9 +19,9 @@ class SendPrinter extends Mailable
      *
      * @return void
      */
-    public function __construct($email, $messageSubject, $messageContent)
+    public function __construct($messageRecipient, $messageSubject, $messageContent)
     {
-        $this->email = $email;
+        $this->messageRecipient = $messageRecipient;
         $this->messageSubject = $messageSubject;
         $this->messageContent = $messageContent;
     }
@@ -33,6 +33,8 @@ class SendPrinter extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->view('mail.printeremail')
+            ->to($this->messageRecipient)
+            ->subject($this->messageSubject);
     }
 }

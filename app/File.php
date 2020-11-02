@@ -49,4 +49,17 @@ class File extends Model
         unlink($f->getFullPath());
         $f->delete();
     }
+
+    public function move($newPath)
+    {
+        return \DB::transaction(function() use ($newPath) {
+            @mkdir($newPath, 02777, true);
+            if (substr($newPath, -1, 1) == DIRECTORY_SEPARATOR) {
+                $newPath = mb_substr($newPath, 0, mb_strlen($newPath) - 1);
+            }
+            rename($this->getFullPath(), $newPath.DIRECTORY_SEPARATOR.$this->filename);
+
+            $this->update(['path_to' => $newPath]);
+        }) === false;
+    }
 }
