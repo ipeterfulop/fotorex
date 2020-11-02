@@ -41,6 +41,12 @@ class PrintersController extends Controller
 
     public function sendEmail(SendPrinterInEmailRequest $request)
     {
+        try {
+            $request->send();
+        } catch (\Exception $e) {
+            return response('Sikertelen küldés, kérjük próbálja meg később.');
+        }
 
+        return response('Üzenet elküldve.');
     }
 }
