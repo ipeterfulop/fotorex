@@ -34,6 +34,7 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     \App\Printer::setVueCRUDRoutes();
     \App\Rentaloption::setVueCRUDRoutes();
     \App\PrinterRentaloption::setVueCRUDRoutes();
+    \App\Highlightedprinter::setVueCRUDRoutes();
 
     Route::get('/ajax/printer-picker', 'PrinterPickerController@operation')->name('printer_picker_endpoint');
     Route::post('/ajax/related-printer', 'RelatedPrintersController@operation')->name('related_printer_endpoint');
