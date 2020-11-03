@@ -4,6 +4,7 @@ namespace App;
 
 use App\Helpers\PriceFormatter;
 use App\Helpers\PrinterAttributeValue;
+use App\Helpers\Productfamily;
 use App\Scopes\PrinterWithAttributesScope;
 use App\Traits\hasFiles;
 use App\Traits\hasIsEnabledProperty;
@@ -22,8 +23,8 @@ class Printer extends Model
     const CALL_FOR_PRICE_LABEL = 'Hívjon az árért!';
 
     const SUBJECT_SLUG = 'printer';
-    const SUBJECT_NAME = 'Termék';
-    const SUBJECT_NAME_PLURAL = 'Termékek';
+    const SUBJECT_NAME = 'Nyomtató';
+    const SUBJECT_NAME_PLURAL = 'Nyomtatók';
     const FILE_PUBLIC_PATH = 'termekek';
 
     const SORTING_OPTION_PRICE_UP = 'ar_novekvo';
@@ -46,6 +47,9 @@ class Printer extends Model
         'request_for_price',
         'model_number',
         'model_number_displayed',
+        'popularity_index',
+        'productfamily',
+        'productsubfamily',
     ];
 
     protected $appends = [
@@ -61,6 +65,7 @@ class Printer extends Model
         'is_multifunctional',
         'is_multifunctional_label',
         'displayname',
+        'shortdisplayname',
         'functions_label',
     ];
 
@@ -87,6 +92,9 @@ class Printer extends Model
                 );
             }
         );
+        static::addGlobalScope('printerfamily', function(Builder $builder) {
+            return $builder->where('productfamily', '=', Productfamily::PRINTERS_ID);
+        });
     }
 
     public function manufacturer()
@@ -96,14 +104,14 @@ class Printer extends Model
 
     public function similarprinters()
     {
-        return $this->hasMany(SimilarPrinter::class)
+        return $this->hasMany(SimilarPrinter::class, 'similar_printer_id', 'id')
                     ->where('relationtype', '=', self::RELATIONTYPE_SIMILAR)
                     ->orderBy('position', 'asc');
     }
 
     public function printersviewedbyothers()
     {
-        return $this->hasMany(SimilarPrinter::class)
+        return $this->hasMany(SimilarPrinter::class, 'similar_printer_id', 'id')
                     ->where('relationtype', '=', self::RELATIONTYPE_VIEWED_BY_OTHERS)
                     ->orderBy('position', 'asc');
     }
@@ -218,45 +226,7 @@ class Printer extends Model
 
     public function printerattributevalues()
     {
-        return $this->hasMany(PrinterAttributeValue::class);
-    }
-
-    public function syncPhotos(array $photoIds)
-    {
-        $created = new Collection();
-        \DB::transaction(
-            function () use ($photoIds, &$created) {
-                foreach (PrinterPhoto::getRemovablePhotos($this->id, $photoIds) as $du) {
-                    PrinterPhoto::removePrinterPhoto($du->pp_id);
-                }
-                foreach (array_values($photoIds) as $index => $photoId) {
-                    $du = PrinterPhoto::firstOrCreateWithCustomizedPrinterPhoto($this->id, $photoId, $index + 1);
-                    if ($du->wasRecentlyCreated) {
-                        $created->push($du);
-                    }
-                }
-            }
-        );
-
-        return $created;
-    }
-
-    public function syncTechnicalSpecifications(array $tscs)
-    {
-        foreach ($tscs as $tsc_id => $tsc_value) {
-            if ($tsc_value === null) {
-                PrinterTechnicalSpecificationCategory::removePrinterTechnicalSpecificationCategory($this->id, $tsc_id);
-            } else {
-                PrinterTechnicalSpecificationCategory::updateOrCreate(
-                    [
-                        'printer_id'                          => $this->id,
-                        'technical_specification_category_id' => $tsc_id,
-                    ],
-                    ['html_content' => $tsc_value]
-                );
-            }
-        }
-        return true;
+        return $this->hasMany(PrinterAttributeValue::class, 'printer_id', 'id');
     }
 
     public function getManufacturerNameAttribute()
@@ -552,12 +522,12 @@ class Printer extends Model
 
     public function getMaxPapersizeLabelAttribute()
     {
-        return $this->papersizes->first()->code;
+        return optional($this->papersizes->first())->code;
     }
 
     public function getUsergroupSizeLabelAttribute()
     {
-        return $this->usergroupsize->name;
+        return optional($this->usergroupsize)->name;
     }
 
     public function getIsMultifunctionalAttribute()
@@ -592,6 +562,11 @@ class Printer extends Model
     public function getDisplaynameAttribute()
     {
         return $this->manufacturer_name . ' ' . $this->model_number_displayed . ' ' . $this->name;
+    }
+
+    public function getShortdisplaynameAttribute()
+    {
+        return $this->manufacturer_name . ' ' . $this->model_number_displayed;
     }
 
     public function setPrinterAttribute(string $variablename, ?string $value, ?string $label): ?PrinterAttribute
@@ -662,5 +637,13 @@ class Printer extends Model
         return self::enabled()->get()->sortBy('displayname')->map(function($item) {
             return ['id' => $item->id, 'name' => $item->displayname];
         })->values()->all();
+    }
+
+    public static function getProductfamily($printerId)
+    {
+        return \DB::table('printers')->select('productfamily')
+            ->where('id', '=', $printerId)
+            ->first()
+            ->productfamily;
     }
 }

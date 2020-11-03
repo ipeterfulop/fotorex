@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\CustomizedPrinterPhoto;
 use App\Formdatabuilders\PrinterVueCRUDFormdatabuilder;
 use App\Helpers\PrinterPhotoManager;
+use App\Helpers\Productfamily;
 use App\Photo;
 use App\Printer;
 use App\PrinterPhoto;
@@ -15,6 +16,7 @@ use Datalytix\VueCRUD\Requests\VueCRUDRequestBase;
 class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
 {
     const FORMDATABUILDER_CLASS = PrinterVueCRUDFormdatabuilder::class;
+    const PRODUCTFAMILY = Productfamily::PRINTERS_ID;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -31,7 +33,8 @@ class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
         \DB::transaction(function() use (&$subject) {
             $dataset = $this->getDataset();
             if ($subject == null) {
-                $subject = Printer::create($dataset);
+                $class = Productfamily::getProductfamilyClass(static::PRODUCTFAMILY);
+                $subject = $class::create($dataset);
             } else {
                 $subject->update($dataset);
             }
@@ -44,6 +47,7 @@ class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
     public function getDataset()
     {
         $result = [
+            'productfamily' => static::PRODUCTFAMILY,
             'manufacturer_id' => $this->input('manufacturer_id'),
             'name' => $this->input('name'),
             'description' => $this->input('description'),
