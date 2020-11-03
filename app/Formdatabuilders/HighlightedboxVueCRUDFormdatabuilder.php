@@ -63,10 +63,12 @@ class HighlightedboxVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
 
     public function get_photo_value()
     {
-        if (($this->subject === null) || ($this->subject->custom_photo_id == null)) {
+        if (($this->subject === null) || ($this->subject->photo_id == null)) {
             return [];
         }
-        return [$this->subject->photo_id];
+        return [
+            ['id' => $this->subject->photo_id, 'url' => $this->subject->image_url,]
+        ];
     }
 
 }

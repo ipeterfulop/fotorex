@@ -188,8 +188,9 @@ class Printer extends Model
         return $all->get($role->id);
     }
 
-    public function getMainImageUrl($role)
+    public function getMainImageUrl($role = null)
     {
+        $role = $role ?? PrinterPhotoRole::getByName('original');
         if ($this->printer_photos->isEmpty()) {
             return null;
         }
