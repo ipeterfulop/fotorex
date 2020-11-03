@@ -42,6 +42,8 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     Route::post('/ajax/related-printer', 'RelatedPrintersController@operation')->name('related_printer_endpoint');
     Route::view('/playground', 'admin.playground');
     Route::post('/ajax/printer-attribute', 'PrinterAttributeController@operation')->name('printer_attribute_endpoints');
+    Route::post('/ajax/printer-popularity', 'PrinterPopularityIndexController@update')->name('printer_popularity_index_update');
+    Route::post('/ajax/printer-rentail-popularity', 'PrinterRentalPopularityIndexController@update')->name('printer_rentaloption_popularity_index_update');
 
 });
 

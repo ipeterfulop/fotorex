@@ -39,4 +39,11 @@ class Display extends Printer
         });
     }
 
+    public static function getVueCRUDModellistButtons()
+    {
+        return [
+            'edit' => self::buildButtonFromConfigData('vuecrud.buttons.edit'),
+        ];
+    }
+
 }

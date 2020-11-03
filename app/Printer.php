@@ -30,6 +30,9 @@ class Printer extends Model
     const SORTING_OPTION_PRICE_UP = 'ar_novekvo';
     const SORTING_OPTION_PRICE_DOWN = 'ar_csokkeno';
 
+    const SORTING_OPTION_POPULARITY_UP = 'nepszeruseg_novekvo';
+    const SORTING_OPTION_POPULARITY_DOWN = 'nepszeruseg_csokkeno';
+
     const RELATIONTYPE_SIMILAR = 1;
     const RELATIONTYPE_VIEWED_BY_OTHERS = 2;
 
@@ -64,6 +67,7 @@ class Printer extends Model
         'color_management_label',
         'is_multifunctional',
         'is_multifunctional_label',
+        'popularity_index_label',
         'displayname',
         'shortdisplayname',
         'functions_label',
@@ -240,6 +244,7 @@ class Printer extends Model
             'displayname'                      => 'Név',
             'manufacturer_name'                => 'Gyártó',
             'is_enabled_label'                 => 'Státusz',
+            'popularity_index_label'                 => 'Népszerűségi index',
             'similar_printers_button'          => 'Hasonló termékek',
             'printers_viewed_by_others_button' => 'Mások által megtekintett termékek',
             'attributes_button'                => 'Tulajdonságok',
@@ -271,6 +276,7 @@ class Printer extends Model
     public static function getVueCRUDSortingIndexColumns()
     {
         return [
+            'popularity_index_label' => 'popularity_index',
             'name' => 'name',
         ];
     }
@@ -287,6 +293,8 @@ class Printer extends Model
         return [
             self::SORTING_OPTION_PRICE_UP   => 'Ár szerint növekvő',
             self::SORTING_OPTION_PRICE_DOWN => 'Ár szerint csökkenő',
+            self::SORTING_OPTION_POPULARITY_UP   => 'Népszerűség szerint növekvő',
+            self::SORTING_OPTION_POPULARITY_DOWN => 'Népszerűség szerint csökkenő',
         ];
     }
 
@@ -404,6 +412,20 @@ class Printer extends Model
                     'componentProps' => [
                         'operationsUrl' => route('printer_attribute_endpoints'),
                         'printerId'     => $this->id,
+                    ],
+                ]
+            );
+    }
+
+    public function getPopularityIndexLabelAttribute()
+    {
+        return 'component::' . json_encode(
+                [
+                    'component'      => 'ajax-editable-value',
+                    'componentProps' => [
+                        'question' => $this->shortdisplayname.' népszerűségi indexe:',
+                        'operationsUrl' => route('printer_popularity_index_update'),
+                        'value' => $this->popularity_index,
                     ],
                 ]
             );
@@ -645,5 +667,14 @@ class Printer extends Model
             ->where('id', '=', $printerId)
             ->first()
             ->productfamily;
+    }
+
+    public function scopeForSale($query)
+    {
+        return $query->where(function($query) {
+            return $query->where('request_for_price', '=', 1)
+                ->orWhere('price', '!=', null)
+                ->orWhere('price_discounted', '!=', null);
+        });
     }
 }

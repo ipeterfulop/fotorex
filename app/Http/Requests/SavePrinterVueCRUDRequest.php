@@ -48,6 +48,7 @@ class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
     {
         $result = [
             'productfamily' => static::PRODUCTFAMILY,
+            'productsubfamily' => $this->input('productsubfamily'),
             'manufacturer_id' => $this->input('manufacturer_id'),
             'name' => $this->input('name'),
             'description' => $this->input('description'),
