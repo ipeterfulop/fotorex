@@ -69,7 +69,8 @@ class PopulatePrinterPhotosSeeder extends Seeder
                             $imageFullPath
                         )
                         : null;
-                    if (!is_null($printerphoto)) {
+
+                    if (is_object($printerphoto)) {
                         $printerphoto->customized_printer_photos
                             ->first()
                             ->photo
