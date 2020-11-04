@@ -58,7 +58,9 @@ Route::get('/osszehasonlitas', 'PrinterComparisonController@index')->name('compa
 Route::get('/osszehasonlitas/termek', 'PrinterComparisonController@getComparisonData')->name('product_comparison_data');
 
 Route::get('/termekek/kereses', 'PrintersController@printerList')->name('list_printers');
+Route::get('/termekek/{productcategoryId}/kereses', 'PrintersController@productcategoryList')->name('list_products_in_category');
 
+Route::get('/termekek/kategoriak/{productcategoryId}', 'PrintersController@category')->name('printer_category_index');
 Route::get('/termekek/{slug}', 'PrintersController@details')->name('printer_details');
 
 Route::get('/{categorySlug}', 'ArticlesController@articleList')->name('list_articles');

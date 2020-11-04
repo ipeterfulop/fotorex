@@ -291,10 +291,10 @@ class Printer extends Model
     public static function getSortingOptionsArray()
     {
         return [
-            self::SORTING_OPTION_PRICE_UP   => 'Ár szerint növekvő',
-            self::SORTING_OPTION_PRICE_DOWN => 'Ár szerint csökkenő',
-            self::SORTING_OPTION_POPULARITY_UP   => 'Népszerűség szerint növekvő',
             self::SORTING_OPTION_POPULARITY_DOWN => 'Népszerűség szerint csökkenő',
+            self::SORTING_OPTION_POPULARITY_UP   => 'Népszerűség szerint növekvő',
+            self::SORTING_OPTION_PRICE_DOWN => 'Ár szerint csökkenő',
+            self::SORTING_OPTION_PRICE_UP   => 'Ár szerint növekvő',
         ];
     }
 
@@ -521,20 +521,24 @@ class Printer extends Model
     {
         $data = [];
         if (($this->printing != null) || ($this->copying != null) || ($this->scanning != null)) {
-            $data = [$this->printing_attribute_label, $this->copying_attribute_label, $this->scanning_attribute_label];
+            $data = [
+                $this->printing_attribute_label => $this->printing,
+                $this->copying_attribute_label => $this->copying,
+                $this->scanning_attribute_label => $this->scanning
+            ];
         } else {
             $data = [
-                $this->getPrinterAttributeAttributeLabel('printing'),
-                $this->getPrinterAttributeAttributeLabel('copying'),
-                $this->getPrinterAttributeAttributeLabel('scanning'),
+                $this->getPrinterAttributeAttributeLabel('printing') => $this->getPrinterAttributeValue('printing'),
+                $this->getPrinterAttributeAttributeLabel('copying') => $this->getPrinterAttributeValue('copying'),
+                $this->getPrinterAttributeAttributeLabel('scanning') => $this->getPrinterAttributeValue('scanning'),
             ];
         }
 
         return collect($data)->filter(
             function ($item) {
-                return $item != null && $item != '';
+                return $item > 0;
             }
-        )->implode(' / ');
+        )->keys()->implode(' / ');
     }
 
     public function getMaxPapersizeAttribute()
@@ -676,5 +680,55 @@ class Printer extends Model
                 ->orWhere('price', '!=', null)
                 ->orWhere('price_discounted', '!=', null);
         });
+    }
+
+    public function scopeMultifunctionals($query)
+    {
+        //only applicable with the PrinterWithAttributes scope
+        return $query->having('printing', '>', 0)
+            ->having('copying', '>', 0);
+    }
+
+    public function scopeOnlyPrinters($query)
+    {
+        //only applicable with the PrinterWithAttributes scope
+        return $query->having('printing', '>', 0)
+            ->having('copying', '=', 0);
+    }
+
+    public function scopeTextSearch($query, $search)
+    {
+        return $query->where(function($query) use ($search) {
+            $manufacturerIds = Manufacturer::where('name', 'like', '%'.$search.'%')->get()->pluck('id');
+            return $query->where('description', 'like', '%'.$search.'%')
+                ->orWhereIn('manufacturer_id', $manufacturerIds)
+                ->orWhere('name', 'like', '%'.$search.'%')
+                ->orWhere('model_number', 'like', '%'.$search.'%')
+                ->orWhere('model_number_displayed', 'like', '%'.$search.'%');
+        });
+    }
+
+    public function scopeInPriceRange($query, $range)
+    {
+        return $query->where(function($query) use ($range) {
+            return $query->where('request_for_price', '=', 1)
+                ->orWhere('actualprice', '=', null)
+                ->orWhereBetween('actualprice', $range);
+        });
+    }
+
+    public function scopeSorted($query, $sortingOption)
+    {
+        switch ($sortingOption) {
+            case self::SORTING_OPTION_POPULARITY_DOWN:
+                return $query->orderBy('popularity_index', 'asc');
+            case self::SORTING_OPTION_POPULARITY_UP:
+                return $query->orderBy('popularity_index', 'desc');
+            case self::SORTING_OPTION_PRICE_UP:
+                return $query->orderBy('price', 'asc');
+            case self::SORTING_OPTION_PRICE_DOWN:
+                return $query->orderBy('price', 'desc');
+        }
+        return $query;
     }
 }
