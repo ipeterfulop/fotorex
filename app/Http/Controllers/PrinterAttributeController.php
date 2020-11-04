@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Attribute;
 use App\Helpers\PrinterAttributeValue;
+use App\Helpers\Productfamily;
 use App\Papersize;
 use App\Printer;
 use App\PrinterAttribute;
@@ -24,28 +25,37 @@ class PrinterAttributeController extends Controller
 
     protected function fetchData()
     {
-        $printer = Printer::find(request()->get('printerId'));
-        $attributes = Attribute::with('attribute_value_set')->orderBy('name', 'asc')->where('is_computed', '=', 0)->get();
-        $attributes->push((object)[
-            'name' => 'Papírméretek',
-            'variable_name' => 'papersize',
-            'multiselect' => true,
-            'attribute_value_set' => (object)['attribute_values' => Papersize::orderBy('code', 'asc')->get()]
-        ]);
-        $attributes->push((object)[
-            'name' => 'Munkakörnyezet',
-            'variable_name' => 'usergroup_size_id',
-            'attribute_value_set' => (object)['attribute_values' => UsergroupSize::orderBy('position', 'asc')->get()]
-        ]);
+        $class = Productfamily::getProductfamilyClassFromProductId(request()->get('printerId'));
+        $productfamily = Productfamily::getProductfamilyIdFromProductId(request()->get('printerId'));
+        $printer = $class::find(request()->get('printerId'));
+        $attributes = Attribute::forProductfamily($productfamily)->with('attribute_value_set')->orderBy('name', 'asc')->where('is_computed', '=', 0)->get();
+        if ($productfamily == Productfamily::PRINTERS_ID) {
+            $attributes->push((object)[
+                'name'                => 'Papírméretek',
+                'variable_name'       => 'papersize',
+                'multiselect'         => true,
+                'attribute_value_set' => (object)['attribute_values' => Papersize::orderBy('code', 'asc')->get()]
+            ]);
+            $attributes->push((object)[
+                'name'                => 'Munkakörnyezet',
+                'variable_name'       => 'usergroup_size_id',
+                'attribute_value_set' => (object)[
+                    'attribute_values' => UsergroupSize::orderBy('position', 'asc')->get()
+                ]
+            ]);
+        }
         $printerAttributeValues = PrinterAttributeValue::where('printer_id', '=', request()->get('printerId'))->get();
-        $printerAttributeValues->push((object)[
-            'variable_name' => 'papersize',
-            'finalvalue_or_id' => PrinterPapersize::where('printer_id', '=', request()->get('printerId'))->pluck('papersize_id')->all()
-        ]);
-        $printerAttributeValues->push((object)[
-            'variable_name' => 'usergroup_size_id',
-            'finalvalue_or_id' => $printer->usergroup_size_id
-        ]);
+        if ($productfamily == Productfamily::PRINTERS_ID) {
+            $printerAttributeValues->push((object)[
+                'variable_name'    => 'papersize',
+                'finalvalue_or_id' => PrinterPapersize::where('printer_id', '=',
+                    request()->get('printerId'))->pluck('papersize_id')->all()
+            ]);
+            $printerAttributeValues->push((object)[
+                'variable_name'    => 'usergroup_size_id',
+                'finalvalue_or_id' => $printer->usergroup_size_id
+            ]);
+        }
         $attributes = $attributes->sortBy('name')->values()->all();
         return response()->json([
             'printer' => $printer,

@@ -69,6 +69,10 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
         $result['price_discounted'] = (new TextVueCRUDFormfield())
             ->setLabel('Ár (kedvezményes)')
             ->setContainerClass('col-3');
+        $result['popularity_index'] = (new TextVueCRUDFormfield())
+            ->setContainerClass('col-4')
+            ->setLabel('Népszerűségi index')
+            ->setRules(['numeric']);
         $result['description'] = (new RichttextQuillVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Leírás')
             ->setProperty('content')

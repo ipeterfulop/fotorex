@@ -5,15 +5,10 @@ namespace App\Dataproviders;
 
 
 use App\Attribute;
-use App\Helpers\DeviceFunctionality;
-use App\Manufacturer;
 use App\Printer;
-use App\PrinterAttribute;
-use App\PrinterPapersize;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-class PrinterDataprovider extends ProductDataproviderBase
+class MFPDataprovider extends ProductDataproviderBase
 {
 
     protected function getQuery($sortingOption, Request $request)
@@ -21,8 +16,9 @@ class PrinterDataprovider extends ProductDataproviderBase
         $query = Printer::withAttributes()
             ->enabled()
             ->forSale()
-            ->onlyPrinters()
+            ->multifunctionals()
             ->sorted($sortingOption);
+
         foreach ($this->filterbuilderClass::getAllAvailableFilters() as $field) {
             $query = $this->filterbuilderClass::addFilterToQuery(
                 $field,

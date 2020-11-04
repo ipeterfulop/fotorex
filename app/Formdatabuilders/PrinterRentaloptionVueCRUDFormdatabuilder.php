@@ -52,6 +52,10 @@ class PrinterRentaloptionVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setLabel('Aktív')
             ->setDefault(1)
             ->setContainerClass('col-4');
+        $result['popularity_index'] = (new TextVueCRUDFormfield())
+            ->setContainerClass('col-4')
+            ->setLabel('Népszerűségi index')
+            ->setRules(['numeric']);
 
         return collect($result);
     }

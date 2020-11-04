@@ -68,4 +68,13 @@ class PrinterPhotoRole extends Model
 
         return $result;
     }
+
+    public static function getByName($name)
+    {
+        if (request()->has('printerphotoroles')) {
+            return request()->get('printerphotoroles')->get($name);
+        }
+
+        return self::whereName($name)->first();
+    }
 }

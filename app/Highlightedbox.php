@@ -29,7 +29,8 @@ class Highlightedbox extends Model
     ];
 
     protected $appends = [
-        'targetname'
+        'targetname',
+        'image_admin_thumbnail',
     ];
 
     protected $with = ['article', 'printer'];
@@ -47,13 +48,18 @@ class Highlightedbox extends Model
     public function getTargetnameAttribute()
     {
         if ($this->printer_id != null) {
-            return $this->printer->displayname;
+            return 'Termék: '.$this->printer->displayname;
         }
         if ($this->article_id != null) {
-            return $this->article->title;
+            return 'Cikk: '.$this->article->title;
         }
 
         return null;
+    }
+
+    public function getImageAdminThumbnailAttribute()
+    {
+        return '<img src="'.$this->image_url.'" style="max-width: 10rem">';
     }
 
     public function article()
@@ -66,7 +72,8 @@ class Highlightedbox extends Model
         return [
             'title' => 'Cím',
             'subtitle' => 'Alcím',
-            'targetname' => 'Hivatkozott elem'
+            'targetname' => 'Hivatkozott elem',
+            'image_admin_thumbnail' => 'Kép',
         ];
     }
 
@@ -110,6 +117,15 @@ class Highlightedbox extends Model
 
     public function getImageUrlAttribute()
     {
-        return url('/storage'.self::IMAGES_PATH.'/'.$this->photo->name);
+        if ($this->photo_id != null) {
+            return url('/storage'.self::IMAGES_PATH.'/'.$this->photo->name);
+        }
+        if ($this->article_id != null) {
+            return \App\Article::IMAGES_PATH.'/'.$this->article->index_image;
+        }
+        if ($this->printer_id != null) {
+            return $this->printer->getMainImageUrl();
+        }
+
     }
 }

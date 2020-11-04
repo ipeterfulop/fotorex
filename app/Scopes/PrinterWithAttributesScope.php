@@ -33,6 +33,7 @@ class PrinterWithAttributesScope implements Scope
             $selects[] = \DB::raw('MAX(case when variable_name="'.$field.'" then alabel end) '.$field.'_attribute_label');
             $selects[] = \DB::raw('MAX(case when variable_name="'.$field.'" then finalvalue_or_id end) '.$field.'_value_or_id');
         }
+
         return $builder->select($selects)
             ->leftJoinSub(Manufacturer::select('id', 'name as mname'), 'm', 'printers.manufacturer_id', '=', 'm.id')
             ->leftJoinSub(

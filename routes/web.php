@@ -32,6 +32,7 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     \App\Manufacturer::setVueCRUDRoutes();
     \App\ExtraFeature::setVueCRUDRoutes();
     \App\Printer::setVueCRUDRoutes();
+    \App\Display::setVueCRUDRoutes();
     \App\Rentaloption::setVueCRUDRoutes();
     \App\PrinterRentaloption::setVueCRUDRoutes();
     \App\Highlightedprinter::setVueCRUDRoutes();
@@ -41,6 +42,8 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     Route::post('/ajax/related-printer', 'RelatedPrintersController@operation')->name('related_printer_endpoint');
     Route::view('/playground', 'admin.playground');
     Route::post('/ajax/printer-attribute', 'PrinterAttributeController@operation')->name('printer_attribute_endpoints');
+    Route::post('/ajax/printer-popularity', 'PrinterPopularityIndexController@update')->name('printer_popularity_index_update');
+    Route::post('/ajax/printer-rentail-popularity', 'PrinterRentalPopularityIndexController@update')->name('printer_rentaloption_popularity_index_update');
 
 });
 
@@ -55,7 +58,9 @@ Route::get('/osszehasonlitas', 'PrinterComparisonController@index')->name('compa
 Route::get('/osszehasonlitas/termek', 'PrinterComparisonController@getComparisonData')->name('product_comparison_data');
 
 Route::get('/termekek/kereses', 'PrintersController@printerList')->name('list_printers');
+Route::get('/termekek/{productcategoryId}/kereses', 'PrintersController@productcategoryList')->name('list_products_in_category');
 
+Route::get('/termekek/kategoriak/{productcategoryId}', 'PrintersController@category')->name('printer_category_index');
 Route::get('/termekek/{slug}', 'PrintersController@details')->name('printer_details');
 
 Route::get('/{categorySlug}', 'ArticlesController@articleList')->name('list_articles');

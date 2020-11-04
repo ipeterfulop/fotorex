@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Productfamily;
 use App\Printer;
 use Illuminate\Http\Request;
 
@@ -18,14 +19,16 @@ class RelatedPrintersController extends Controller
 
     public function fetchValueset()
     {
+        $class = Productfamily::getProductfamilyClassFromProductId(request()->get('printerId'));
         return response()->json([
-            'valueset' => Printer::orderBy('name', 'asc')->get()->all()
+            'valueset' => $class::where('id', '!=', request()->get('printerId'))->get()->sortBy('shortdisplayname')->values()->all()
         ]);
     }
 
     public function getRelated()
     {
-        $printer = Printer::find(request()->get('printerId'));
+        $class = Productfamily::getProductfamilyClassFromProductId(request()->get('printerId'));
+        $printer = $class::find(request()->get('printerId'));
         $accessor = Printer::similarRelations()[request()->get('relationType')];
 
         return response()->json([
@@ -35,7 +38,8 @@ class RelatedPrintersController extends Controller
 
     public function saveChanges()
     {
-        $printer = Printer::find(request()->get('printerId'));
+        $class = Productfamily::getProductfamilyClassFromProductId(request()->get('printerId'));
+        $printer = $class::find(request()->get('printerId'));
         $result = $printer->syncSimilarPrinters(
             request()->get('value'),
             request()->get('relationType')

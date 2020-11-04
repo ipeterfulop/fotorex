@@ -45,7 +45,7 @@
                         <option v-for="value in valueset"
                                 v-if="!itemIds.includes(value.id)"
                                 :value="value.id"
-                                v-html="value.name"
+                                v-html="value.shortdisplayname"
                         ></option>
                     </select>
                 </div>
@@ -99,7 +99,13 @@
                     return;
                 }
                 if (this.items.find(element => element.id == this.selectedElement) === undefined) {
-                    this.items.push(this.valueset.find(element => element.id == this.selectedElement));
+                    let newItem = this.valueset.find(element => element.id == this.selectedElement);
+                    this.items.push({
+                        custom_id: newItem.id,
+                        final_label: newItem.shortdisplayname,
+                        final_url: null,
+                        similar_printer_id: newItem.id
+                    });
                 }
                 this.emitValue();
             },
@@ -172,7 +178,7 @@
                 this.emitValue();
             },
             fetchValueset: function() {
-                window.axios.post(this.operationsUrl, {action: 'fetchValueset'})
+                window.axios.post(this.operationsUrl, {action: 'fetchValueset', printerId: this.printerId})
                     .then((response) => {
                         this.valueset = response.data.valueset;
                         this.items = [];

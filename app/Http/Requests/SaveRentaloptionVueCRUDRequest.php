@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Formdatabuilders\RentaloptionVueCRUDFormdatabuilder;
 use App\Helpers\RentaloptionFunction;
 use App\Rentaloption;
+use App\Traits\ValidatesFloats;
 use Datalytix\VueCRUD\Requests\VueCRUDRequestBase;
 
 class SaveRentaloptionVueCRUDRequest extends VueCRUDRequestBase
@@ -46,8 +47,9 @@ class SaveRentaloptionVueCRUDRequest extends VueCRUDRequestBase
             'description' => $this->input('description'),
             'is_enabled' => $this->input('is_enabled'),
         ];
+        $rentaloptions = request()->get('rentaloptions');
         foreach (RentaloptionFunction::getFieldNames() as $id => $field) {
-            $result[$field] = request()->get('rentaloptions')[$id] === true ? 1 : 0;
+            $result[$field] = (isset($rentaloptions[$id])) && ($rentaloptions[$id] === true) ? 1 : 0;
         }
 
         return $result;

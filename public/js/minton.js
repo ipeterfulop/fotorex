@@ -1857,6 +1857,92 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AjaxEditableValue.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AjaxEditableValue.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mixins_spinner_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mixins/spinner.js */ "./resources/js/components/mixins/spinner.js");
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_mixins_spinner_js__WEBPACK_IMPORTED_MODULE_0__["spinner"]],
+  props: {
+    operationsUrl: {
+      type: String
+    },
+    subject: {},
+    action: {
+      type: String
+    },
+    successEvent: {
+      type: String,
+      default: 'submit-success'
+    },
+    failureEvent: {
+      type: String,
+      default: 'submit-failed'
+    },
+    value: {},
+    question: {
+      type: String
+    }
+  },
+  data: function data() {
+    return {
+      showLoader: false,
+      internalValue: ''
+    };
+  },
+  created: function created() {
+    this.internalValue = this.value;
+  },
+  mounted: function mounted() {},
+  methods: {
+    showInput: function showInput() {
+      var _this = this;
+
+      var newValue = window.prompt(this.question, this.internalValue);
+
+      if (newValue == null) {
+        return;
+      }
+
+      this.showLoader = true;
+      window.axios.post(this.operationsUrl, {
+        action: this.action,
+        subject: this.subject,
+        value: newValue
+      }).then(function (response) {
+        _this.showLoader = false;
+        _this.internalValue = newValue;
+
+        _this.$emit(_this.successEvent, response.data);
+      }).catch(function (error) {
+        _this.showLoader = false;
+
+        _this.$emit(_this.failureEvent, error.response.data);
+
+        alert(error.response.data);
+      });
+    }
+  },
+  computed: {},
+  watch: {}
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AjaxSelect.vue?vue&type=script&lang=js&":
 /*!*********************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AjaxSelect.vue?vue&type=script&lang=js& ***!
@@ -6747,9 +6833,15 @@ __webpack_require__.r(__webpack_exports__);
       if (this.items.find(function (element) {
         return element.id == _this.selectedElement;
       }) === undefined) {
-        this.items.push(this.valueset.find(function (element) {
+        var newItem = this.valueset.find(function (element) {
           return element.id == _this.selectedElement;
-        }));
+        });
+        this.items.push({
+          custom_id: newItem.id,
+          final_label: newItem.shortdisplayname,
+          final_url: null,
+          similar_printer_id: newItem.id
+        });
       }
 
       this.emitValue();
@@ -6839,7 +6931,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this4 = this;
 
       window.axios.post(this.operationsUrl, {
-        action: 'fetchValueset'
+        action: 'fetchValueset',
+        printerId: this.printerId
       }).then(function (response) {
         _this4.valueset = response.data.valueset;
         _this4.items = [];
@@ -59307,6 +59400,45 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AjaxEditableValue.vue?vue&type=template&id=7f9971d2&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AjaxEditableValue.vue?vue&type=template&id=7f9971d2& ***!
+  \********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("a", {
+      attrs: { href: "#" },
+      domProps: { innerHTML: _vm._s(_vm.internalValue) },
+      on: {
+        click: function($event) {
+          $event.preventDefault()
+          return _vm.showInput($event)
+        }
+      }
+    }),
+    _vm._v(" "),
+    _vm.showLoader
+      ? _c("span", { domProps: { innerHTML: _vm._s(_vm.spinnerSrc) } })
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AjaxSelect.vue?vue&type=template&id=a6e52c32&":
 /*!*************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AjaxSelect.vue?vue&type=template&id=a6e52c32& ***!
@@ -65717,7 +65849,7 @@ var render = function() {
                             ? _c("option", {
                                 domProps: {
                                   value: value.id,
-                                  innerHTML: _vm._s(value.name)
+                                  innerHTML: _vm._s(value.shortdisplayname)
                                 }
                               })
                             : _vm._e()
@@ -79331,6 +79463,7 @@ module.exports = function(module) {
 var map = {
 	"./AjaxButton.vue": "./resources/js/components/AjaxButton.vue",
 	"./AjaxCheckbox.vue": "./resources/js/components/AjaxCheckbox.vue",
+	"./AjaxEditableValue.vue": "./resources/js/components/AjaxEditableValue.vue",
 	"./AjaxSelect.vue": "./resources/js/components/AjaxSelect.vue",
 	"./Checklist.vue": "./resources/js/components/Checklist.vue",
 	"./CollapsiblePortlet.vue": "./resources/js/components/CollapsiblePortlet.vue",
@@ -79516,6 +79649,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AjaxCheckbox_vue_vue_type_template_id_21a3cc6e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AjaxCheckbox_vue_vue_type_template_id_21a3cc6e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/AjaxEditableValue.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/AjaxEditableValue.vue ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AjaxEditableValue_vue_vue_type_template_id_7f9971d2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AjaxEditableValue.vue?vue&type=template&id=7f9971d2& */ "./resources/js/components/AjaxEditableValue.vue?vue&type=template&id=7f9971d2&");
+/* harmony import */ var _AjaxEditableValue_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AjaxEditableValue.vue?vue&type=script&lang=js& */ "./resources/js/components/AjaxEditableValue.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AjaxEditableValue_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AjaxEditableValue_vue_vue_type_template_id_7f9971d2___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AjaxEditableValue_vue_vue_type_template_id_7f9971d2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/AjaxEditableValue.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/AjaxEditableValue.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/AjaxEditableValue.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AjaxEditableValue_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./AjaxEditableValue.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AjaxEditableValue.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AjaxEditableValue_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/AjaxEditableValue.vue?vue&type=template&id=7f9971d2&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/AjaxEditableValue.vue?vue&type=template&id=7f9971d2& ***!
+  \**************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AjaxEditableValue_vue_vue_type_template_id_7f9971d2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./AjaxEditableValue.vue?vue&type=template&id=7f9971d2& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AjaxEditableValue.vue?vue&type=template&id=7f9971d2&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AjaxEditableValue_vue_vue_type_template_id_7f9971d2___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AjaxEditableValue_vue_vue_type_template_id_7f9971d2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -82060,10 +82262,10 @@ var app = new Vue({
   !*** ./resources/lang/hu.json ***!
   \********************************/
 /*! exports provided: New, Save, Proceed, Operations, Filters, Results, Please select:, Are you sure you want to delete this element, Yes, No, Cancel, Back to the list, Reset, Details, Edit, Edit element, Delete, Element, No sub-options, No options available, No results found, Clear all, Clear value, Select..., Search, Active, Inactive, All, Page, Single page, Select/deselect all, Operations on the selected items, Export items, Export as CSV, Export as HTML, Export as XLSX, updated successfully, created successfully, deleted, Items/page, Datepicker, Email, Role, Add element, Item, No results, Export all, not just search results, Fields marked with * are mandatory, Highlight, validation.accepted, validation.active_url, validation.after, validation.after_or_equal, validation.alpha, validation.alpha_dash, validation.alpha_num, validation.array, validation.before, validation.before_or_equal, validation.between.numeric, validation.between.file, validation.between.string, validation.between.array, validation.boolean, validation.confirmed, validation.date, validation.date_equals, validation.date_format, validation.different, validation.digits, validation.digits_between, validation.dimensions, validation.distinct, validation.email, validation.ends_with, validation.exists, validation.file, validation.filled, validation.gt.numeric, validation.gt.file, validation.gt.string, validation.gt.array, validation.gte.numeric, validation.gte.file, validation.gte.string, validation.gte.array, validation.image, validation.in, validation.in_array, validation.integer, validation.ip, validation.ipv4, validation.ipv6, validation.json, validation.lt.numeric, validation.lt.file, validation.lt.string, validation.lt.array, validation.lte.numeric, validation.lte.file, validation.lte.string, validation.lte.array, validation.max.numeric, validation.max.file, validation.max.string, validation.max.array, validation.mimes, validation.mimetypes, validation.min.numeric, validation.min.file, validation.min.string, validation.min.array, validation.not_in, validation.not_regex, validation.numeric, validation.password, validation.present, validation.regex, validation.required, validation.required_if, validation.required_unless, validation.required_with, validation.required_with_all, validation.required_without, validation.required_without_all, validation.same, validation.size.numeric, validation.size.file, validation.size.string, validation.size.array, validation.starts_with, validation.string, validation.timezone, validation.unique, validation.uploaded, validation.url, validation.uuid, auth.failed, auth.throttle, pagination.previous, pagination.next, passwords.reset, passwords.sent, passwords.throttled, passwords.token, passwords.user, Verify Email Address, Please click the button below to verify your email address., If you did not create an account, no further action is required., Reset Password Notification, Reset Password, You are receiving this email because we received a password reset request for your account., This password reset link will expire in :count minutes., If you did not request a password reset, no further action is required., Whoops!, Hello!, Regards, All rights reserved., If you’re having trouble clicking the ":actionText" button, copy and paste the URL below
-into your web browser:, default */
+into your web browser:, Position, The two password fields do not match, The two fields do not match, Not a valid date, Not a valid e-mail address, Value cannot exceed :max, Value has to be at least :min, Not a number, Not an integer, Value missing, Not a string, Already exists in database, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"New\":\"Új\",\"Save\":\"Mentés\",\"Proceed\":\"Tovább\",\"Operations\":\"Műveletek\",\"Filters\":\"Szűrők\",\"Results\":\"Találatok\",\"Please select:\":\"Válasszon:\",\"Are you sure you want to delete this element\":\"Biztosan törli ezt az elemet\",\"Yes\":\"Igen\",\"No\":\"Nem\",\"Cancel\":\"Mégsem\",\"Back to the list\":\"Vissza a listához\",\"Reset\":\"Alaphelyzet\",\"Details\":\"Részletek\",\"Edit\":\"Szerkesztés\",\"Edit element\":\"Szerkesztés\",\"Delete\":\"Törlés\",\"Element\":\"Elem\",\"No sub-options\":\"Nincsenek további opciók\",\"No options available\":\"Nincsenek opciók\",\"No results found\":\"Nincs találat\",\"Clear all\":\"Összes törlése\",\"Clear value\":\"Alaphelyzet\",\"Select...\":\"Válasszon...\",\"Search\":\"Keresés\",\"Active\":\"Aktív\",\"Inactive\":\"Inaktív\",\"All\":\"Összes\",\"Page\":\"Oldal\",\"Single page\":\"Egy oldalra\",\"Select/deselect all\":\"Összes kijelölése/törlése\",\"Operations on the selected items\":\"Műveletek a kijelölt elemekkel\",\"Export items\":\"Exportálás\",\"Export as CSV\":\"Exportálás CSV formátumban\",\"Export as HTML\":\"Exportálás HTML formátumban\",\"Export as XLSX\":\"Exportálás XLSX formátumban\",\"updated successfully\":\"sikeresen módosítva\",\"created successfully\":\"sikeresen létrehozva\",\"deleted\":\"törölve\",\"Items/page\":\"Elem/oldal\",\"Datepicker\":\"Datepicker\",\"Email\":\"E-mail\",\"Role\":\"Szerepkör\",\"Add element\":\"Elem hozzáadása\",\"Item\":\"Elem\",\"No results\":\"No results\",\"Export all, not just search results\":\"Összes exportálása (nem csak a keresési eredményeké)\",\"Fields marked with * are mandatory\":\"Fields marked with * are mandatory\",\"Highlight\":\"Kiemelés\",\"validation.accepted\":\"Jelölje be, hogy elfogadja a feltételt.\",\"validation.active_url\":\"Nem érvényes URL.\",\"validation.after\":\"A dátum :date utánra kell, hogy essen.\",\"validation.after_or_equal\":\"A dátum :date vagy az utáni lehet.\",\"validation.alpha\":\"A mező csak betűket tartalmazhat.\",\"validation.alpha_dash\":\"A mező csak betűket, számokat, kötőjelet és alávonást tartalmazhat.\",\"validation.alpha_num\":\"A mező csak betűket és számokat tartalmazhat.\",\"validation.array\":\"A mező csak tömb lehet.\",\"validation.before\":\"A dátum :date előttre kell, hogy essen.\",\"validation.before_or_equal\":\"A dátum :date vagy az előtti lehet.\",\"validation.between.numeric\":\"A mező értéke :min és :max között kell, hogy legyen.\",\"validation.between.file\":\"A fájl mérete :min és :max KB között kell, hogy legyen.\",\"validation.between.string\":\"A mező hossza :min és :max karakter között kell, hogy legyen.\",\"validation.between.array\":\"A tömb elemeinek száma :min és :max között kell, hogy legyen.\",\"validation.boolean\":\"A mező értéke csak igaz vagy hamis lehet\",\"validation.confirmed\":\"A mező értéke nem egyezik a megerősítő-mező értékével.\",\"validation.date\":\"Érvénytelen dátum.\",\"validation.date_equals\":\"A dátum csak :date lehet.\",\"validation.date_format\":\"A mező formátuma nem megfelelő (:format).\",\"validation.different\":\"A mező és a(z) :other mező értéke nem egyezhet.\",\"validation.digits\":\"A mező értéke :digits számjegyű kell, hogy legyen.\",\"validation.digits_between\":\"A mező értéke minimum :min számjegyű, maximum :max számjegyű lehet.\",\"validation.dimensions\":\"Érvénytelen képméret.\",\"validation.distinct\":\"A mező értéke egyedi kell, hogy legyen.\",\"validation.email\":\"Érvénytelen e-mailcím.\",\"validation.ends_with\":\"A mező értékének vége az alábbiak közül legyen valami: :values.\",\"validation.exists\":\"Érvénytelen érték\",\"validation.file\":\"A mező tartalma csak fájl lehet\",\"validation.filled\":\"A mező kitöltése kötelező\",\"validation.gt.numeric\":\"A mező értékének nagyobbnak kell lennie mint :value.\",\"validation.gt.file\":\"A fájlnak nagyobbnak kell lennie mint :value KB.\",\"validation.gt.string\":\"A mező értékének hosszabbnak kell lennie mint :value karakter.\",\"validation.gt.array\":\"A mező értéke több mint :value elemet kell, hogy tartalmazzon.\",\"validation.gte.numeric\":\"A mező értékének egyenlőnek vagy nagyobbnak kell lennie mint :value.\",\"validation.gte.file\":\"A fájlnak legalább :value KB méretűnek kell lennie.\",\"validation.gte.string\":\"A mező értékének legalább :value karakter hosszúnak kell lennie.\",\"validation.gte.array\":\"A mező értéke legalább :value elemet kell, hogy tartalmazzon.\",\"validation.image\":\"A mező értéke csak kép lehet.\",\"validation.in\":\"Érvénytelen választási lehetőség.\",\"validation.in_array\":\"A mező field does not exist in :other.\",\"validation.integer\":\"A mező értéke csak szám lehet\",\"validation.ip\":\"A mező értéke csak érvényes IP cím lehet\",\"validation.ipv4\":\"A mező értéke csak érvényes IPv4 cím lehet\",\"validation.ipv6\":\"A mező értéke csak érvényes IPv6 cím lehet\",\"validation.json\":\"A mező értéke csak érvényes JSON karakterlánc lehet\",\"validation.lt.numeric\":\"A mező értékének kevesebbnek kell lennie mint :value.\",\"validation.lt.file\":\"A fájl kisebb kell, hogy legyen mint :value KB.\",\"validation.lt.string\":\"A mező hossza kevesebb kell, hogy legyen mint :value karakter.\",\"validation.lt.array\":\"A mező kevesebb mint :value értéket kell, hogy tartalmazzon.\",\"validation.lte.numeric\":\"A mező értéke maximum :value lehet\",\"validation.lte.file\":\"A fájl mérete maximum :value KB lehet.\",\"validation.lte.string\":\"A mező maximum :value karakter hosszú lehet.\",\"validation.lte.array\":\"A mezőnek nem lehet több mint :value eleme.\",\"validation.max.numeric\":\"A mező értéke maximum :max lehet.\",\"validation.max.file\":\"A fájl mérete maximum :value KB lehet.\",\"validation.max.string\":\"A mező maximum :value karakter hosszú lehet.\",\"validation.max.array\":\"A mezőnek nem lehet több mint :value eleme.\",\"validation.mimes\":\"A mező értéke csak az alábbiak közül kerülhet ki: :values.\",\"validation.mimetypes\":\"A fájl típusa csak az alábbiak közül kerülhet ki: :values.\",\"validation.min.numeric\":\"A mező minimális értéke :min.\",\"validation.min.file\":\"A minimum fájméret :min KB.\",\"validation.min.string\":\"A mezőnek legalább :min karakter hosszúnak kell lennie.\",\"validation.min.array\":\"A mező értéke legalább :min elemet kell, hogy tartalmazzon.\",\"validation.not_in\":\"Érvénytelen választási lehetőség.\",\"validation.not_regex\":\"A mező értékének formátuma érvénytelen.\",\"validation.numeric\":\"A mező csak számot tartalmazhat.\",\"validation.password\":\"Érvénytelen jelszó.\",\"validation.present\":\"A mező kitöltése kötelező.\",\"validation.regex\":\"Érvénytelen formátum.\",\"validation.required\":\"A mező kitöltése kötelező.\",\"validation.required_if\":\"A mező kitöltése kötelező ha :other mező értéke :value.\",\"validation.required_unless\":\"A mező kitöltése kötelező ha :other nem ezek valamelyike: :values.\",\"validation.required_with\":\"A mező kitöltése kötelező ha az alábbiak valamelyike ki van töltve: :values.\",\"validation.required_with_all\":\"A mező kitöltése kötelező ha az alábbiak mindegyike ki van töltve: :values.\",\"validation.required_without\":\"A mező kitöltése kötelező ha az alábbiak valamelyike nincs kitöltve: :values.\",\"validation.required_without_all\":\"A mező kitöltése kötelező ha az alábbiak nincsenek kitöltve: :values.\",\"validation.same\":\"A mező értéke és :other nem egyeznek.\",\"validation.size.numeric\":\"A mező értékének hossza :size kell, hogy legyen.\",\"validation.size.file\":\"A fájl hossza :size KB kell, hogy legyen.\",\"validation.size.string\":\"A mező értékének hossza :size karakter kell, hogy legyen.\",\"validation.size.array\":\"A mező értékének hossza :size elem kell, hogy legyen.\",\"validation.starts_with\":\"A mező értéke az alábbiak valamelyikével kell, hogy kezdődjön: :values.\",\"validation.string\":\"A mező értéke csak szöveg lehet.\",\"validation.timezone\":\"A mező értéke csak érvényes időzóna lehet.\",\"validation.unique\":\"A mező értéke már szerepel az adatbázisban.\",\"validation.uploaded\":\"Sikertelen feltöltés.\",\"validation.url\":\"Érvénytelen URL.\",\"validation.uuid\":\"Érvénytelen UUID\",\"auth.failed\":\"Ilyen adatokkal nem található felhasználó a rendszerben.\",\"auth.throttle\":\"Túl sok hibás próbálkozás, ismételje meg :seconds másodperc múlva.\",\"pagination.previous\":\"&laquo; Előző\",\"pagination.next\":\"Következő &raquo;\",\"passwords.reset\":\"Jelszó módosítva!\",\"passwords.sent\":\"Elküldtük e-mailben a jelszómódosításhoz szükséges linket!\",\"passwords.throttled\":\"Túl sok próbálkozás, kérjük ismételje meg később.\",\"passwords.token\":\"Érvénytelen hivatkozás.\",\"passwords.user\":\"Ezzel az e-mailcímmel nem található felhasználó.\",\"Verify Email Address\":\"E-mailcím megerősítése\",\"Please click the button below to verify your email address.\":\"Kattintson az alábbi gombra regisztrációs e-mailcíme megerősítéséhez:\",\"If you did not create an account, no further action is required.\":\"Ha nem ön kezdeményezte a regisztrációt, nincs további tennivalója.\",\"Reset Password Notification\":\"Értesítés jelszómódosítási kérelemről\",\"Reset Password\":\"Új jelszó\",\"You are receiving this email because we received a password reset request for your account.\":\"Ezt a levelet azért kapta, mert a fiókján ön vagy valaki más jelszómódosítást kezdeményezett.\",\"This password reset link will expire in :count minutes.\":\"A fenti hivatkozás :count percig érvényes.\",\"If you did not request a password reset, no further action is required.\":\"Ha nem ön kezdeményezte a módosítást, nincs több tennivalója, a fiókja biztonságban van.\",\"Whoops!\":\"Hiba történt!\",\"Hello!\":\"Tisztelt felhasználónk!\",\"Regards\":\"Üdvözlettel,\",\"All rights reserved.\":\"Minden jog fenntartva.\",\"If you’re having trouble clicking the \\\":actionText\\\" button, copy and paste the URL below\\ninto your web browser:\":\"Ha nem tudja megnyomni a(z) :actionText gombot, másolja be böngészőjébe az elábbi hivatkozást:\"}");
+module.exports = JSON.parse("{\"New\":\"Új\",\"Save\":\"Mentés\",\"Proceed\":\"Tovább\",\"Operations\":\"Műveletek\",\"Filters\":\"Szűrők\",\"Results\":\"Találatok\",\"Please select:\":\"Válasszon:\",\"Are you sure you want to delete this element\":\"Biztosan törli ezt az elemet\",\"Yes\":\"Igen\",\"No\":\"Nem\",\"Cancel\":\"Mégsem\",\"Back to the list\":\"Vissza a listához\",\"Reset\":\"Alaphelyzet\",\"Details\":\"Részletek\",\"Edit\":\"Szerkesztés\",\"Edit element\":\"Szerkesztés\",\"Delete\":\"Törlés\",\"Element\":\"Elem\",\"No sub-options\":\"Nincsenek további opciók\",\"No options available\":\"Nincsenek opciók\",\"No results found\":\"Nincs találat\",\"Clear all\":\"Összes törlése\",\"Clear value\":\"Alaphelyzet\",\"Select...\":\"Válasszon...\",\"Search\":\"Keresés\",\"Active\":\"Aktív\",\"Inactive\":\"Inaktív\",\"All\":\"Összes\",\"Page\":\"Oldal\",\"Single page\":\"Egy oldalra\",\"Select/deselect all\":\"Összes kijelölése/törlése\",\"Operations on the selected items\":\"Műveletek a kijelölt elemekkel\",\"Export items\":\"Exportálás\",\"Export as CSV\":\"Exportálás CSV formátumban\",\"Export as HTML\":\"Exportálás HTML formátumban\",\"Export as XLSX\":\"Exportálás XLSX formátumban\",\"updated successfully\":\"sikeresen módosítva\",\"created successfully\":\"sikeresen létrehozva\",\"deleted\":\"törölve\",\"Items/page\":\"Elem/oldal\",\"Datepicker\":\"Datepicker\",\"Email\":\"E-mail\",\"Role\":\"Szerepkör\",\"Add element\":\"Elem hozzáadása\",\"Item\":\"Elem\",\"No results\":\"No results\",\"Export all, not just search results\":\"Összes exportálása (nem csak a keresési eredményeké)\",\"Fields marked with * are mandatory\":\"Fields marked with * are mandatory\",\"Highlight\":\"Kiemelés\",\"validation.accepted\":\"Jelölje be, hogy elfogadja a feltételt.\",\"validation.active_url\":\"Nem érvényes URL.\",\"validation.after\":\"A dátum :date utánra kell, hogy essen.\",\"validation.after_or_equal\":\"A dátum :date vagy az utáni lehet.\",\"validation.alpha\":\"A mező csak betűket tartalmazhat.\",\"validation.alpha_dash\":\"A mező csak betűket, számokat, kötőjelet és alávonást tartalmazhat.\",\"validation.alpha_num\":\"A mező csak betűket és számokat tartalmazhat.\",\"validation.array\":\"A mező csak tömb lehet.\",\"validation.before\":\"A dátum :date előttre kell, hogy essen.\",\"validation.before_or_equal\":\"A dátum :date vagy az előtti lehet.\",\"validation.between.numeric\":\"A mező értéke :min és :max között kell, hogy legyen.\",\"validation.between.file\":\"A fájl mérete :min és :max KB között kell, hogy legyen.\",\"validation.between.string\":\"A mező hossza :min és :max karakter között kell, hogy legyen.\",\"validation.between.array\":\"A tömb elemeinek száma :min és :max között kell, hogy legyen.\",\"validation.boolean\":\"A mező értéke csak igaz vagy hamis lehet\",\"validation.confirmed\":\"A mező értéke nem egyezik a megerősítő-mező értékével.\",\"validation.date\":\"Érvénytelen dátum.\",\"validation.date_equals\":\"A dátum csak :date lehet.\",\"validation.date_format\":\"A mező formátuma nem megfelelő (:format).\",\"validation.different\":\"A mező és a(z) :other mező értéke nem egyezhet.\",\"validation.digits\":\"A mező értéke :digits számjegyű kell, hogy legyen.\",\"validation.digits_between\":\"A mező értéke minimum :min számjegyű, maximum :max számjegyű lehet.\",\"validation.dimensions\":\"Érvénytelen képméret.\",\"validation.distinct\":\"A mező értéke egyedi kell, hogy legyen.\",\"validation.email\":\"Érvénytelen e-mailcím.\",\"validation.ends_with\":\"A mező értékének vége az alábbiak közül legyen valami: :values.\",\"validation.exists\":\"Érvénytelen érték\",\"validation.file\":\"A mező tartalma csak fájl lehet\",\"validation.filled\":\"A mező kitöltése kötelező\",\"validation.gt.numeric\":\"A mező értékének nagyobbnak kell lennie mint :value.\",\"validation.gt.file\":\"A fájlnak nagyobbnak kell lennie mint :value KB.\",\"validation.gt.string\":\"A mező értékének hosszabbnak kell lennie mint :value karakter.\",\"validation.gt.array\":\"A mező értéke több mint :value elemet kell, hogy tartalmazzon.\",\"validation.gte.numeric\":\"A mező értékének egyenlőnek vagy nagyobbnak kell lennie mint :value.\",\"validation.gte.file\":\"A fájlnak legalább :value KB méretűnek kell lennie.\",\"validation.gte.string\":\"A mező értékének legalább :value karakter hosszúnak kell lennie.\",\"validation.gte.array\":\"A mező értéke legalább :value elemet kell, hogy tartalmazzon.\",\"validation.image\":\"A mező értéke csak kép lehet.\",\"validation.in\":\"Érvénytelen választási lehetőség.\",\"validation.in_array\":\"A mező field does not exist in :other.\",\"validation.integer\":\"A mező értéke csak szám lehet\",\"validation.ip\":\"A mező értéke csak érvényes IP cím lehet\",\"validation.ipv4\":\"A mező értéke csak érvényes IPv4 cím lehet\",\"validation.ipv6\":\"A mező értéke csak érvényes IPv6 cím lehet\",\"validation.json\":\"A mező értéke csak érvényes JSON karakterlánc lehet\",\"validation.lt.numeric\":\"A mező értékének kevesebbnek kell lennie mint :value.\",\"validation.lt.file\":\"A fájl kisebb kell, hogy legyen mint :value KB.\",\"validation.lt.string\":\"A mező hossza kevesebb kell, hogy legyen mint :value karakter.\",\"validation.lt.array\":\"A mező kevesebb mint :value értéket kell, hogy tartalmazzon.\",\"validation.lte.numeric\":\"A mező értéke maximum :value lehet\",\"validation.lte.file\":\"A fájl mérete maximum :value KB lehet.\",\"validation.lte.string\":\"A mező maximum :value karakter hosszú lehet.\",\"validation.lte.array\":\"A mezőnek nem lehet több mint :value eleme.\",\"validation.max.numeric\":\"A mező értéke maximum :max lehet.\",\"validation.max.file\":\"A fájl mérete maximum :value KB lehet.\",\"validation.max.string\":\"A mező maximum :value karakter hosszú lehet.\",\"validation.max.array\":\"A mezőnek nem lehet több mint :value eleme.\",\"validation.mimes\":\"A mező értéke csak az alábbiak közül kerülhet ki: :values.\",\"validation.mimetypes\":\"A fájl típusa csak az alábbiak közül kerülhet ki: :values.\",\"validation.min.numeric\":\"A mező minimális értéke :min.\",\"validation.min.file\":\"A minimum fájméret :min KB.\",\"validation.min.string\":\"A mezőnek legalább :min karakter hosszúnak kell lennie.\",\"validation.min.array\":\"A mező értéke legalább :min elemet kell, hogy tartalmazzon.\",\"validation.not_in\":\"Érvénytelen választási lehetőség.\",\"validation.not_regex\":\"A mező értékének formátuma érvénytelen.\",\"validation.numeric\":\"A mező csak számot tartalmazhat.\",\"validation.password\":\"Érvénytelen jelszó.\",\"validation.present\":\"A mező kitöltése kötelező.\",\"validation.regex\":\"Érvénytelen formátum.\",\"validation.required\":\"A mező kitöltése kötelező.\",\"validation.required_if\":\"A mező kitöltése kötelező ha :other mező értéke :value.\",\"validation.required_unless\":\"A mező kitöltése kötelező ha :other nem ezek valamelyike: :values.\",\"validation.required_with\":\"A mező kitöltése kötelező ha az alábbiak valamelyike ki van töltve: :values.\",\"validation.required_with_all\":\"A mező kitöltése kötelező ha az alábbiak mindegyike ki van töltve: :values.\",\"validation.required_without\":\"A mező kitöltése kötelező ha az alábbiak valamelyike nincs kitöltve: :values.\",\"validation.required_without_all\":\"A mező kitöltése kötelező ha az alábbiak nincsenek kitöltve: :values.\",\"validation.same\":\"A mező értéke és :other nem egyeznek.\",\"validation.size.numeric\":\"A mező értékének hossza :size kell, hogy legyen.\",\"validation.size.file\":\"A fájl hossza :size KB kell, hogy legyen.\",\"validation.size.string\":\"A mező értékének hossza :size karakter kell, hogy legyen.\",\"validation.size.array\":\"A mező értékének hossza :size elem kell, hogy legyen.\",\"validation.starts_with\":\"A mező értéke az alábbiak valamelyikével kell, hogy kezdődjön: :values.\",\"validation.string\":\"A mező értéke csak szöveg lehet.\",\"validation.timezone\":\"A mező értéke csak érvényes időzóna lehet.\",\"validation.unique\":\"A mező értéke már szerepel az adatbázisban.\",\"validation.uploaded\":\"Sikertelen feltöltés.\",\"validation.url\":\"Érvénytelen URL.\",\"validation.uuid\":\"Érvénytelen UUID\",\"auth.failed\":\"Ilyen adatokkal nem található felhasználó a rendszerben.\",\"auth.throttle\":\"Túl sok hibás próbálkozás, ismételje meg :seconds másodperc múlva.\",\"pagination.previous\":\"&laquo; Előző\",\"pagination.next\":\"Következő &raquo;\",\"passwords.reset\":\"Jelszó módosítva!\",\"passwords.sent\":\"Elküldtük e-mailben a jelszómódosításhoz szükséges linket!\",\"passwords.throttled\":\"Túl sok próbálkozás, kérjük ismételje meg később.\",\"passwords.token\":\"Érvénytelen hivatkozás.\",\"passwords.user\":\"Ezzel az e-mailcímmel nem található felhasználó.\",\"Verify Email Address\":\"E-mailcím megerősítése\",\"Please click the button below to verify your email address.\":\"Kattintson az alábbi gombra regisztrációs e-mailcíme megerősítéséhez:\",\"If you did not create an account, no further action is required.\":\"Ha nem ön kezdeményezte a regisztrációt, nincs további tennivalója.\",\"Reset Password Notification\":\"Értesítés jelszómódosítási kérelemről\",\"Reset Password\":\"Új jelszó\",\"You are receiving this email because we received a password reset request for your account.\":\"Ezt a levelet azért kapta, mert a fiókján ön vagy valaki más jelszómódosítást kezdeményezett.\",\"This password reset link will expire in :count minutes.\":\"A fenti hivatkozás :count percig érvényes.\",\"If you did not request a password reset, no further action is required.\":\"Ha nem ön kezdeményezte a módosítást, nincs több tennivalója, a fiókja biztonságban van.\",\"Whoops!\":\"Hiba történt!\",\"Hello!\":\"Tisztelt felhasználónk!\",\"Regards\":\"Üdvözlettel,\",\"All rights reserved.\":\"Minden jog fenntartva.\",\"If you’re having trouble clicking the \\\":actionText\\\" button, copy and paste the URL below\\ninto your web browser:\":\"Ha nem tudja megnyomni a(z) :actionText gombot, másolja be böngészőjébe az elábbi hivatkozást:\",\"Position\":\"Pozíció\",\"The two password fields do not match\":\"A mező értéke nem egyezik a megerősítő-mező értékével\",\"The two fields do not match\":\"A mező értéke nem egyezik ezzel\",\"Not a valid date\":\"Érvénytelen dátum\",\"Not a valid e-mail address\":\"Érvénytelen e-mailcím\",\"Value cannot exceed :max\":\"A mező értéke maximum :max lehet.\",\"Value has to be at least :min\":\"A mező minimális értéke :min.\",\"Not a number\":\"A mező csak számot tartalmazhat.\",\"Not an integer\":\"A mező csak egész számot tartalmazhat.\",\"Value missing\":\"A mező kitöltése kötelező.\",\"Not a string\":\"A mező értéke csak szöveg lehet.\",\"Already exists in database\":\"A mező értéke már szerepel az adatbázisban.\"}");
 
 /***/ }),
 

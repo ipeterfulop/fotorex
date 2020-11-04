@@ -17,41 +17,20 @@ use App\Searching\TextSearchField;
 use App\UsergroupSize;
 use Illuminate\Database\Eloquent\Builder;
 
-class PrinterFilterFactory
+class PrinterFilterFactory extends FilterFactory
 {
     const MIN_PRICE = 10000;
     const MAX_PRICE = 2000000;
 
-    public static function createFilters()
+    public static function getAllAvailableFilters()
     {
-        $result = [];
-        $result[] = (new TextSearchField())->setLabel('Keresés')->setField('search');
-        $result[] = (new CheckboxgroupSearchField())->setLabel('Munkakörnyezet')
-            ->setField('usergroup')
-            ->setValueset(UsergroupSize::orderBy('position', 'asc')->enabled()->get()->pluck('name', 'id'));
-        $result[] = (new RadiogroupSearchField())->setLabel('Színkezelés')
-            ->setField('printing')
-            ->setValueset(Attribute::with(['attribute_value_set'])->whereVariableName('printing')->first()->getAttributeValuesFromSetWithoutNA()->pluck('label', 'value'));
-        $result[] = (new RangeSearchField(self::getMinPrice(), self::getMaxPrice()))->setLabel('Ár')
-            ->setField('price');
-        $result[] = (new RadiogroupSearchField())->setLabel('Maximális nyomtatási méret')
-            ->setField('papersize')
-            ->setValueset(Papersize::getAllCurrentlySold()->pluck('label', 'value'));
-        $result[] = (new RadiogroupSearchField())->setLabel('Hálózati csatlakozás')
-            ->setField('networked')
-            ->setValueset(Attribute::with(['attribute_value_set'])->whereVariableName('networked')->first()->getAttributeValuesFromSetWithoutNA()->pluck('label', 'value'));
-
-
-        return self::setValuesFromRequest($result, request());
-    }
-
-    protected static function setValuesFromRequest($filters, $request)
-    {
-        foreach ($filters as &$filter) {
-            $filter->setValue($request->get($filter->getField(), $filter->getDefaultValue()));
-        }
-
-        return $filters;
+        return [
+            'search',
+            'usergroup',
+            'price',
+            'papersize',
+            'networked'
+        ];
     }
 
     public static function getMinPrice()

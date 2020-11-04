@@ -39,7 +39,7 @@ class SimilarPrinter extends Model
     public function getFinalLabelAttribute()
     {
         if ($this->similar_printer_id != null) {
-            return $this->similarprinter->name;
+            return $this->similarprinter->shortdisplayname;
         }
 
         return $this->label;

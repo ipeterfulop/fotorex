@@ -18,7 +18,7 @@ class AjaxListOrGridView extends Component
      *
      * @return void
      */
-    public function __construct($url, $sortingOptions, $filters = [], $pushState = false)
+    public function __construct($url, $sortingOptions, $filters = [], $pushState = true)
     {
         //
         $this->url = $url;

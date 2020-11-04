@@ -4,6 +4,7 @@ namespace App;
 
 use App\Helpers\PriceFormatter;
 use App\Helpers\PrinterAttributeValue;
+use App\Helpers\Productfamily;
 use App\Scopes\PrinterWithAttributesScope;
 use App\Traits\hasFiles;
 use App\Traits\hasIsEnabledProperty;
@@ -22,12 +23,15 @@ class Printer extends Model
     const CALL_FOR_PRICE_LABEL = 'Hívjon az árért!';
 
     const SUBJECT_SLUG = 'printer';
-    const SUBJECT_NAME = 'Termék';
-    const SUBJECT_NAME_PLURAL = 'Termékek';
+    const SUBJECT_NAME = 'Nyomtató';
+    const SUBJECT_NAME_PLURAL = 'Nyomtatók';
     const FILE_PUBLIC_PATH = 'termekek';
 
     const SORTING_OPTION_PRICE_UP = 'ar_novekvo';
     const SORTING_OPTION_PRICE_DOWN = 'ar_csokkeno';
+
+    const SORTING_OPTION_POPULARITY_UP = 'nepszeruseg_novekvo';
+    const SORTING_OPTION_POPULARITY_DOWN = 'nepszeruseg_csokkeno';
 
     const RELATIONTYPE_SIMILAR = 1;
     const RELATIONTYPE_VIEWED_BY_OTHERS = 2;
@@ -46,6 +50,9 @@ class Printer extends Model
         'request_for_price',
         'model_number',
         'model_number_displayed',
+        'popularity_index',
+        'productfamily',
+        'productsubfamily',
     ];
 
     protected $appends = [
@@ -60,7 +67,9 @@ class Printer extends Model
         'color_management_label',
         'is_multifunctional',
         'is_multifunctional_label',
+        'popularity_index_label',
         'displayname',
+        'shortdisplayname',
         'functions_label',
     ];
 
@@ -87,6 +96,9 @@ class Printer extends Model
                 );
             }
         );
+        static::addGlobalScope('printerfamily', function(Builder $builder) {
+            return $builder->where('productfamily', '=', Productfamily::PRINTERS_ID);
+        });
     }
 
     public function manufacturer()
@@ -96,14 +108,14 @@ class Printer extends Model
 
     public function similarprinters()
     {
-        return $this->hasMany(SimilarPrinter::class)
+        return $this->hasMany(SimilarPrinter::class, 'similar_printer_id', 'id')
                     ->where('relationtype', '=', self::RELATIONTYPE_SIMILAR)
                     ->orderBy('position', 'asc');
     }
 
     public function printersviewedbyothers()
     {
-        return $this->hasMany(SimilarPrinter::class)
+        return $this->hasMany(SimilarPrinter::class, 'similar_printer_id', 'id')
                     ->where('relationtype', '=', self::RELATIONTYPE_VIEWED_BY_OTHERS)
                     ->orderBy('position', 'asc');
     }
@@ -188,8 +200,9 @@ class Printer extends Model
         return $all->get($role->id);
     }
 
-    public function getMainImageUrl($role)
+    public function getMainImageUrl($role = null)
     {
+        $role = $role ?? PrinterPhotoRole::getByName('original');
         if ($this->printer_photos->isEmpty()) {
             return null;
         }
@@ -217,45 +230,7 @@ class Printer extends Model
 
     public function printerattributevalues()
     {
-        return $this->hasMany(PrinterAttributeValue::class);
-    }
-
-    public function syncPhotos(array $photoIds)
-    {
-        $created = new Collection();
-        \DB::transaction(
-            function () use ($photoIds, &$created) {
-                foreach (PrinterPhoto::getRemovablePhotos($this->id, $photoIds) as $du) {
-                    PrinterPhoto::removePrinterPhoto($du->pp_id);
-                }
-                foreach (array_values($photoIds) as $index => $photoId) {
-                    $du = PrinterPhoto::firstOrCreateWithCustomizedPrinterPhoto($this->id, $photoId, $index + 1);
-                    if ($du->wasRecentlyCreated) {
-                        $created->push($du);
-                    }
-                }
-            }
-        );
-
-        return $created;
-    }
-
-    public function syncTechnicalSpecifications(array $tscs)
-    {
-        foreach ($tscs as $tsc_id => $tsc_value) {
-            if ($tsc_value === null) {
-                PrinterTechnicalSpecificationCategory::removePrinterTechnicalSpecificationCategory($this->id, $tsc_id);
-            } else {
-                PrinterTechnicalSpecificationCategory::updateOrCreate(
-                    [
-                        'printer_id'                          => $this->id,
-                        'technical_specification_category_id' => $tsc_id,
-                    ],
-                    ['html_content' => $tsc_value]
-                );
-            }
-        }
-        return true;
+        return $this->hasMany(PrinterAttributeValue::class, 'printer_id', 'id');
     }
 
     public function getManufacturerNameAttribute()
@@ -269,6 +244,7 @@ class Printer extends Model
             'displayname'                      => 'Név',
             'manufacturer_name'                => 'Gyártó',
             'is_enabled_label'                 => 'Státusz',
+            'popularity_index_label'                 => 'Népszerűségi index',
             'similar_printers_button'          => 'Hasonló termékek',
             'printers_viewed_by_others_button' => 'Mások által megtekintett termékek',
             'attributes_button'                => 'Tulajdonságok',
@@ -300,6 +276,7 @@ class Printer extends Model
     public static function getVueCRUDSortingIndexColumns()
     {
         return [
+            'popularity_index_label' => 'popularity_index',
             'name' => 'name',
         ];
     }
@@ -314,8 +291,10 @@ class Printer extends Model
     public static function getSortingOptionsArray()
     {
         return [
-            self::SORTING_OPTION_PRICE_UP   => 'Ár szerint növekvő',
+            self::SORTING_OPTION_POPULARITY_DOWN => 'Népszerűség szerint csökkenő',
+            self::SORTING_OPTION_POPULARITY_UP   => 'Népszerűség szerint növekvő',
             self::SORTING_OPTION_PRICE_DOWN => 'Ár szerint csökkenő',
+            self::SORTING_OPTION_PRICE_UP   => 'Ár szerint növekvő',
         ];
     }
 
@@ -438,6 +417,20 @@ class Printer extends Model
             );
     }
 
+    public function getPopularityIndexLabelAttribute()
+    {
+        return 'component::' . json_encode(
+                [
+                    'component'      => 'ajax-editable-value',
+                    'componentProps' => [
+                        'question' => $this->shortdisplayname.' népszerűségi indexe:',
+                        'operationsUrl' => route('printer_popularity_index_update'),
+                        'value' => $this->popularity_index,
+                    ],
+                ]
+            );
+    }
+
     public function mainPhotoUrl()
     {
         return optional(optional($this->printer_photos->first())->original)->public_url;
@@ -528,20 +521,24 @@ class Printer extends Model
     {
         $data = [];
         if (($this->printing != null) || ($this->copying != null) || ($this->scanning != null)) {
-            $data = [$this->printing_attribute_label, $this->copying_attribute_label, $this->scanning_attribute_label];
+            $data = [
+                $this->printing_attribute_label => $this->printing,
+                $this->copying_attribute_label => $this->copying,
+                $this->scanning_attribute_label => $this->scanning
+            ];
         } else {
             $data = [
-                $this->getPrinterAttributeAttributeLabel('printing'),
-                $this->getPrinterAttributeAttributeLabel('copying'),
-                $this->getPrinterAttributeAttributeLabel('scanning'),
+                $this->getPrinterAttributeAttributeLabel('printing') => $this->getPrinterAttributeValue('printing'),
+                $this->getPrinterAttributeAttributeLabel('copying') => $this->getPrinterAttributeValue('copying'),
+                $this->getPrinterAttributeAttributeLabel('scanning') => $this->getPrinterAttributeValue('scanning'),
             ];
         }
 
         return collect($data)->filter(
             function ($item) {
-                return $item != null && $item != '';
+                return $item > 0;
             }
-        )->implode(' / ');
+        )->keys()->implode(' / ');
     }
 
     public function getMaxPapersizeAttribute()
@@ -551,12 +548,12 @@ class Printer extends Model
 
     public function getMaxPapersizeLabelAttribute()
     {
-        return $this->papersizes->first()->code;
+        return optional($this->papersizes->first())->code;
     }
 
     public function getUsergroupSizeLabelAttribute()
     {
-        return $this->usergroupsize->name;
+        return optional($this->usergroupsize)->name;
     }
 
     public function getIsMultifunctionalAttribute()
@@ -591,6 +588,11 @@ class Printer extends Model
     public function getDisplaynameAttribute()
     {
         return $this->manufacturer_name . ' ' . $this->model_number_displayed . ' ' . $this->name;
+    }
+
+    public function getShortdisplaynameAttribute()
+    {
+        return $this->manufacturer_name . ' ' . $this->model_number_displayed;
     }
 
     public function setPrinterAttribute(string $variablename, ?string $value, ?string $label): ?PrinterAttribute
@@ -678,6 +680,73 @@ class Printer extends Model
                 . 'image'
                 . $separator
             );
+    }
+
+    public static function getProductfamily($printerId)
+    {
+        return \DB::table('printers')->select('productfamily')
+            ->where('id', '=', $printerId)
+            ->first()
+            ->productfamily;
+    }
+
+    public function scopeForSale($query)
+    {
+        return $query->where(function($query) {
+            return $query->where('request_for_price', '=', 1)
+                ->orWhere('price', '!=', null)
+                ->orWhere('price_discounted', '!=', null);
+        });
+    }
+
+    public function scopeMultifunctionals($query)
+    {
+        //only applicable with the PrinterWithAttributes scope
+        return $query->having('printing', '>', 0)
+            ->having('copying', '>', 0);
+    }
+
+    public function scopeOnlyPrinters($query)
+    {
+        //only applicable with the PrinterWithAttributes scope
+        return $query->having('printing', '>', 0)
+            ->having('copying', '=', 0);
+    }
+
+    public function scopeTextSearch($query, $search)
+    {
+        return $query->where(function($query) use ($search) {
+            $manufacturerIds = Manufacturer::where('name', 'like', '%'.$search.'%')->get()->pluck('id');
+            return $query->where('description', 'like', '%'.$search.'%')
+                ->orWhereIn('manufacturer_id', $manufacturerIds)
+                ->orWhere('name', 'like', '%'.$search.'%')
+                ->orWhere('model_number', 'like', '%'.$search.'%')
+                ->orWhere('model_number_displayed', 'like', '%'.$search.'%');
+        });
+    }
+
+    public function scopeInPriceRange($query, $range)
+    {
+        return $query->where(function($query) use ($range) {
+            return $query->where('request_for_price', '=', 1)
+                ->orWhere('actualprice', '=', null)
+                ->orWhereBetween('actualprice', $range);
+        });
+    }
+
+    public function scopeSorted($query, $sortingOption)
+    {
+        switch ($sortingOption) {
+            case self::SORTING_OPTION_POPULARITY_DOWN:
+                return $query->orderBy('popularity_index', 'asc');
+            case self::SORTING_OPTION_POPULARITY_UP:
+                return $query->orderBy('popularity_index', 'desc');
+            case self::SORTING_OPTION_PRICE_UP:
+                return $query->orderBy('price', 'asc');
+            case self::SORTING_OPTION_PRICE_DOWN:
+                return $query->orderBy('price', 'desc');
+        }
+        return $query;
     }
 }
 

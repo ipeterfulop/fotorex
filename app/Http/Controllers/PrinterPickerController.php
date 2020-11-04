@@ -18,32 +18,36 @@ class PrinterPickerController extends Controller
 
     protected function fetchManufacturers()
     {
-        $manufacturers = request()->get('allowUndefined', true)
+        $result = request()->get('allowUndefined', true)
             ? [['id' => -1, 'name' => 'Mind']]
             : [];
-        $manufacturers = $manufacturers
-            + Manufacturer::orderBy('name', 'asc')->enabled()->get()->transform(function($manufacturer) {
-                return ['id' => $manufacturer->id, 'name' => $manufacturer->name];
-            })->all();
+        $manufacturers = Manufacturer::orderBy('name', 'asc')->enabled()->get()->transform(function($manufacturer) {
+            return ['id' => $manufacturer->id, 'name' => $manufacturer->name];
+        })->all();
+        foreach ($manufacturers as $manufacturer) {
+            $result[] = $manufacturer;
+        }
 
         return response()->json([
-            'manufacturers' => $manufacturers
+            'manufacturers' => $result
         ]);
     }
 
     protected function fetchPrinters()
     {
-        $printers = request()->get('allowUndefined', true)
+        $result = request()->get('allowUndefined', true)
             ? [['id' => -1, 'name' => 'Mind']]
             : [];
-        $printers = $printers + Printer::when(request()->get('manufacturer_id') > 0, function($query) {
+        $printers = Printer::when(request()->get('manufacturer_id') > 0, function($query) {
                 return $query->where('manufacturer_id', '=', request()->get('manufacturer_id'));
             })->orderBy('name', 'asc')->enabled()->get()->transform(function($printer) {
-                    return ['id' => $printer->id, 'name' => $printer->name];
+                    return ['id' => $printer->id, 'name' => $printer->shortdisplayname];
                 })->all();
-
+        foreach ($printers as $printer) {
+            $result[] = $printer;
+        }
         return response()->json([
-            'printers' => $printers
+            'printers' => $result
         ]);
     }
 }

@@ -26,6 +26,7 @@ class PrinterRentaloption extends Model
         'extra_page_price',
         'extra_description',
         'is_enabled',
+        'popularity_index',
     ];
 
     protected $with = [
@@ -39,11 +40,12 @@ class PrinterRentaloption extends Model
         'is_enabled_label',
         'extra_page_price_label',
         'price_label',
+        'popularity_index_label',
     ];
 
     public function getPrinterLabelAttribute()
     {
-        return $this->printer->name;
+        return $this->printer->shortdisplayname;
     }
 
     public function getRentaloptionLabelAttribute()
@@ -74,12 +76,15 @@ class PrinterRentaloption extends Model
             'rentaloption_label' => 'Konstrukció',
             'price_label' => 'Ár',
             'extra_page_price_label' => 'Ft / extra oldal',
+            'popularity_index_label' => 'Népszerűségi index',
         ];
     }
 
     public static function getVueCRUDSortingIndexColumns()
     {
-        return [];
+        return [
+            'popularity_index_label' => 'popularity_index'
+        ];
     }
 
     public function getVueCRUDDetailsFields()
@@ -91,6 +96,7 @@ class PrinterRentaloption extends Model
             'price_label' => 'Ár',
             'extra_page_price_label' => 'Ft / extra oldal',
             'description' => 'Leírás',
+            'popularity_index' => 'Népszerűségi index',
         ];
     }
 
@@ -108,4 +114,20 @@ class PrinterRentaloption extends Model
         );
         return $result;
     }
+
+    public function getPopularityIndexLabelAttribute()
+    {
+        return 'component::' . json_encode(
+                [
+                    'component'      => 'ajax-editable-value',
+                    'componentProps' => [
+                        'question' => $this->printer_label.' ('.$this->rentaloption_label.') népszerűségi indexe:',
+                        'operationsUrl' => route('printer_rentaloption_popularity_index_update'),
+                        'subject'     => $this->id,
+                        'value' => $this->popularity_index,
+                    ],
+                ]
+            );
+    }
+
 }

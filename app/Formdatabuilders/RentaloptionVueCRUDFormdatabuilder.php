@@ -58,7 +58,7 @@ class RentaloptionVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setDefault(-1);
         $result['rentaloptions'] = (new CheckboxgroupVueCRUDFormfield())
             ->setContainerClass('col-12')
-            ->setDefault([])
+            ->setDefault(array_fill(0, count(RentaloptionFunction::getFieldNames()), false))
             ->setValuesetClass(RentaloptionFunction::class)
             ->setLabel('');
         $result['is_enabled'] = (new YesNoSelectVueCRUDFormfield())

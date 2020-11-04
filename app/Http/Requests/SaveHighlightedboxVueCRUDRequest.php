@@ -45,7 +45,7 @@ class SaveHighlightedboxVueCRUDRequest extends VueCRUDRequestBase
         }
         if ((count($this->input('photo')) > 0) && ($this->input('photo')[0] != $subject->photo_id)) {
             \DB::transaction(function() use (&$subject) {
-                $photo = Photo::find($this->input('photo'));
+                $photo = Photo::find($this->input('photo')[0]);
                 $photo->file->move(storage_path('app'.DIRECTORY_SEPARATOR.'public'.Highlightedbox::IMAGES_PATH));
                 $subject->update([
                     'photo_id' => $this->input('photo')[0],
