@@ -11,12 +11,21 @@ use App\Printer;
 use App\PrinterPhoto;
 use App\PrinterPhotoRole;
 use App\TechnicalSpecificationCategory;
+use App\Traits\ValidatesFloats;
 use Datalytix\VueCRUD\Requests\VueCRUDRequestBase;
 
 class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
 {
     const FORMDATABUILDER_CLASS = PrinterVueCRUDFormdatabuilder::class;
     const PRODUCTFAMILY = Productfamily::PRINTERS_ID;
+
+    use ValidatesFloats;
+
+    public function getFloatFields()
+    {
+        return ['popularity_index'];
+    }
+
 
     /**
      * Determine if the user is authorized to make this request.
@@ -61,6 +70,7 @@ class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
             'request_for_price' => $this->input('request_for_price'),
             'model_number' => $this->input('model_number'),
             'model_number_displayed' => $this->input('model_number_displayed'),
+            'popularity_index' => $this->input('popularity_index'),
         ];
 
         return $result;

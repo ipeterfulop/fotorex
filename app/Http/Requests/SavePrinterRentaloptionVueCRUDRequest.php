@@ -4,11 +4,19 @@ namespace App\Http\Requests;
 
 use App\Formdatabuilders\PrinterRentaloptionVueCRUDFormdatabuilder;
 use App\PrinterRentaloption;
+use App\Traits\ValidatesFloats;
 use Datalytix\VueCRUD\Requests\VueCRUDRequestBase;
 
 class SavePrinterRentaloptionVueCRUDRequest extends VueCRUDRequestBase
 {
     const FORMDATABUILDER_CLASS = PrinterRentaloptionVueCRUDFormdatabuilder::class;
+
+    use ValidatesFloats;
+
+    public function getFloatFields()
+    {
+        return ['popularity_index'];
+    }
 
     /**
      * Determine if the user is authorized to make this request.

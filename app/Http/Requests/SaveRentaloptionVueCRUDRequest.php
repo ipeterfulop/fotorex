@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Formdatabuilders\RentaloptionVueCRUDFormdatabuilder;
 use App\Helpers\RentaloptionFunction;
 use App\Rentaloption;
+use App\Traits\ValidatesFloats;
 use Datalytix\VueCRUD\Requests\VueCRUDRequestBase;
 
 class SaveRentaloptionVueCRUDRequest extends VueCRUDRequestBase
