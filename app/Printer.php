@@ -660,9 +660,26 @@ class Printer extends Model
 
     public static function getForSearchableSelect()
     {
-        return self::enabled()->get()->sortBy('displayname')->map(function($item) {
-            return ['id' => $item->id, 'name' => $item->displayname];
-        })->values()->all();
+        return self::enabled()->get()->sortBy('displayname')->map(
+            function ($item) {
+                return ['id' => $item->id, 'name' => $item->displayname];
+            }
+        )->values()->all();
+    }
+
+    public function getBasePhotoFilename($separator = '_')
+    {
+        return
+            str_replace(
+                ' ',
+                $separator,
+                strtolower($this->manufacturer->name)
+                . $separator
+                . strtolower($this->model_number)
+                . $separator
+                . 'image'
+                . $separator
+            );
     }
 
     public static function getProductfamily($printerId)
@@ -732,3 +749,4 @@ class Printer extends Model
         return $query;
     }
 }
+

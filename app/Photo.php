@@ -29,16 +29,20 @@ class Photo extends Model
     public static function createFromFilepath($path, $original_name = null, $new_name = null)
     {
         $result = null;
-        \DB::transaction(function() use (&$result, $path, $original_name, $new_name) {
-            $file = File::createFromFilepath($path, $original_name, $new_name);
-            // open an image file
-            $img = Image::make($file->getFullPath());
-            $result = self::create([
-                'id'        => $file->id,
-                'width'     => $img->width(),
-                'height'    => $img->height(),
-            ]);
-        });
+        \DB::transaction(
+            function () use (&$result, $path, $original_name, $new_name) {
+                $file = File::createFromFilepath($path, $original_name, $new_name);
+                // open an image file
+                $img = Image::make($file->getFullPath());
+                $result = self::create(
+                    [
+                        'id'     => $file->id,
+                        'width'  => $img->width(),
+                        'height' => $img->height(),
+                    ]
+                );
+            }
+        );
 
         return $result;
     }

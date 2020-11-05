@@ -35,6 +35,7 @@ class PrinterPhotoRole extends Model
             @mkdir($directory, 02777, false);
             $newImage->save($directory.DIRECTORY_SEPARATOR.$filename);
             $newPhoto = Photo::createFromFilepath($directory.DIRECTORY_SEPARATOR.$filename);
+            $newPhoto->file->update(['original_file_id' => $photo->file->id]);
             return CustomizedPrinterPhoto::updateOrCreate([
                 'printer_photo_id' => $printerPhoto->id,
                 'printer_photo_role_id' => $this->id
