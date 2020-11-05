@@ -82,8 +82,7 @@ class PrinterAttribute extends Model
         }
         $printerattribute = null;
         try {
-            $printer = Printer::find($printerId);
-            if (is_null($printer)) {
+            if (DB::table('printers')->where('id', $printerId)->count() < 1) {
                 throw new Exception(
                     'Error: cannot add or update printer attribute.'
                     . ' Printer with the given id <' . $printerId . '> does not exists.'
@@ -114,7 +113,7 @@ class PrinterAttribute extends Model
             $printerattributeArr = [
                 'id'                 => (is_null($printerattribute) ? null : $printerattribute->id),
                 'attribute_id'       => $attribute->id,
-                'printer_id'         => $printer->id,
+                'printer_id'         => $printerId,
                 'attribute_value_id' => $attribute->takesValueFromSet()
                     ? $attribute->getAttributeValueFromSetByValue($value)->id
                     : null,
