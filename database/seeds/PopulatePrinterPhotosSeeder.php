@@ -2,12 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Display;
 use App\File;
 use App\Helpers\PrinterPhotoManager;
+use App\Helpers\Productfamily;
 use App\Scrapers\LexmarkScraper;
 use Illuminate\Database\Seeder;
 use App\Scrapers\SharpScraper;
 use App\Printer;
+use Illuminate\Support\Facades\DB;
 
 class PopulatePrinterPhotosSeeder extends Seeder
 {
@@ -23,9 +26,15 @@ class PopulatePrinterPhotosSeeder extends Seeder
 
     private function addOrUpdateProductImages()
     {
-        $printers = Printer::all();
+        $printers = DB::table('printers')
+                      ->where('id', '>', 0)
+                      ->get();
 
         foreach ($printers as $printer) {
+            $printer = ($printer->productfamily == Productfamily::PRINTERS_ID)
+                ? Printer::find($printer->id)
+                : Display::find($printer->id);
+
             print "\n Processing printer <#{$printer->id}> {$printer->manufacturer->name} {$printer->model_number}";
 
             $imageIndex = 1;
