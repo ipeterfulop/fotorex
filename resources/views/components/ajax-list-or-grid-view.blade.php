@@ -80,13 +80,25 @@
                     });
                     Array.from(this.$refs.filters.querySelectorAll('.fotorex-filter')).forEach((filter) => {
                         if (filter.getAttribute('data-filtertype') == 'text') {
-                            filter.querySelector('.fotorex-filter-text').value = params[filter.getAttribute('data-field')];
+                            if (params[filter.getAttribute('data-field')]) {
+                                filter.querySelector('.fotorex-filter-text').value = params[filter.getAttribute('data-field')];
+                            }
                         }
                         if (filter.getAttribute('data-filtertype') == 'range') {
-                            filter.querySelector('.range-value-input').value = params[filter.getAttribute('data-field')];
+                            if (params[filter.getAttribute('data-field')]) {
+                                let pieces = params[filter.getAttribute('data-field')].split('-');
+                                filter.querySelector('.range-value-input').value = params[filter.getAttribute('data-field')];
+                                filter.querySelector('.price-slider-min-input').value = pieces[0];
+                                filter.querySelector('.price-slider-max-input').value = pieces[1];
+                                filter.querySelector('.price-slider-update-button').click();
+                            }
+                        }
+                        if (filter.getAttribute('data-filtertype') == 'radiogroup') {
+                            if (params[filter.getAttribute('data-field')]) {
+                                filter.querySelector('.fotorex-filter-radiogroup[name="'+filter.getAttribute('data-field')+'"][value="'+params[filter.getAttribute('data-field')]+'"]').setAttribute('checked', true)
+                            }
                         }
                         if (filter.getAttribute('data-filtertype') == 'checkboxgroup') {
-                            console.log(params[filter.getAttribute('data-field')]);
                             if (params[filter.getAttribute('data-field')]) {
                                 let currentFilter = params[filter.getAttribute('data-field')].split(',');
                                 Array.from(filter.querySelectorAll('.fotorex-filter-checkboxgroup')).forEach((item) => {
@@ -113,8 +125,8 @@
                     }
                 }
                 this.$watch('sortingOption', (value) => {this.loadContent(true)});
+               this.initFilters(Object.fromEntries(new URL(window.location.href).searchParams.entries()));
                 this.loadContent(true);
-                this.initFilters(Object.fromEntries(new URL(window.location.href).searchParams.entries()));
                 if (this.pushState) {
                     window.addEventListener('popstate', (event) => {
                         this.page = event.state.page;
@@ -176,7 +188,6 @@
                             if (r != null) {
                                 value = r.value;
                             }
-                            console.log(value);
                         }
                         if (filter.getAttribute('data-filtertype') == 'checkboxgroup') {
                             let currentFilter = [];
