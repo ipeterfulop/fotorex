@@ -12,12 +12,19 @@
            id="price-slider-value-input-{{ $componentId }}"
            data-slider-id="{{ $componentId }}"
            value="{{ $min }}-{{ $max }}">
+    <button type="button"
+           class="price-slider-update-button"
+           style="display:none"
+           data-handle="both"
+           data-slider-id="{{ $componentId }}"
+            onclick="updateSliderFromValue(event)"></button>
     <div class="w-full h-2 bg-gray-400 relative"
          style="box-sizing: border-box; padding-left: 0px; padding-right: 0px"
          id="price-slider-{{ $componentId }}"
     >
         <div class="absolute h-full w-full bg-fotored flex items-center justify-between price-slider-range-box "
              style="max-width: 100%; box-sizing:border-box"
+             id="price-slider-rangebox-{{ $componentId }}"
              draggable="false"
         >
             <div class="price-slider-handle bg-fotored"
@@ -37,7 +44,7 @@
     <div class="w-full flex flex-col lg:flex-row justify-between items-center mt-1">
         <div class="w-full lg:w-1/3 flex flex-grow items-center">
             <input type="text"
-                   class="flex-grow text-right lg:text-left w-full"
+                   class="flex-grow text-right lg:text-left w-full price-slider-min-input"
                    value="{{ $min }}"
                    oninput="updateSliderFromValue(event)"
                    data-slider-id="{{ $componentId }}"
@@ -49,7 +56,7 @@
         <div class="w-full  md:w-1/3  flex flex-grow  items-center">
             <input type="text"
                    value="{{ $max }}"
-                   class="flex-grow text-right w-full"
+                   class="flex-grow text-right w-full price-slider-max-input"
                    oninput="updateSliderFromValue(event)"
                    data-handle="2"
                    data-slider-id="{{ $componentId }}"
@@ -74,37 +81,33 @@
         max: {{ $max }}
     }
     function updateSliderFromValue(event) {
-        currentPriceSlider = priceSliders[event.currentTarget.getAttribute('data-slider-id')];
+        console.log('ch');
+        currentPriceSlider = priceSliders[event.target.getAttribute('data-slider-id')];
         initCurrentSliderObject(event);
-        let value = parseInt(event.currentTarget.value)
-        if (event.currentTarget.getAttribute('data-handle') == 1) {
-            value = isNaN(value) ? priceSliders[event.currentTarget.getAttribute('data-slider-id')].min : value;
-            value = value < priceSliders[event.currentTarget.getAttribute('data-slider-id')].min
-                ? priceSliders[event.currentTarget.getAttribute('data-slider-id')].min : value;
-            value = value > priceSliders[event.currentTarget.getAttribute('data-slider-id')].max
-                ? priceSliders[event.currentTarget.getAttribute('data-slider-id')].max
-                : value;
-            let leftPadding = Math.ceil(currentPriceSlider.containerDivBounding.width * (
-                value / priceSliders[event.currentTarget.getAttribute('data-slider-id')].max
-            ));
-            if (leftPadding + parseInt(currentPriceSlider.containerDiv.style.paddingRight) < currentPriceSlider.containerDivBounding.width - 20) {
-                currentPriceSlider.containerDiv.style.paddingLeft = leftPadding + 'px';
-            }
-        } else {
-            value = isNaN(value) ? priceSliders[event.currentTarget.getAttribute('data-slider-id')].max : value;
-            value = value < priceSliders[event.currentTarget.getAttribute('data-slider-id')].min
-                ? priceSliders[event.currentTarget.getAttribute('data-slider-id')].min
-                : value;
-            value = value > priceSliders[event.currentTarget.getAttribute('data-slider-id')].max
-                ? priceSliders[event.currentTarget.getAttribute('data-slider-id')].max
-                : value;
-            let rightPadding = priceSliders[event.currentTarget.getAttribute('data-slider-id')].max * (
-                value / priceSliders[event.currentTarget.getAttribute('data-slider-id')].max
-            );
-            if (leftPadding + parseInt(currentPriceSlider.containerDiv.style.paddingRight) < currentPriceSlider.containerDivBounding.width - 20) {
-                currentPriceSlider.containerDiv.style.paddingLeft = leftPadding + 'px';
-            }
+        let minvalue = parseInt(document.getElementById('price-slider-min-input-{{ $componentId }}').value)
+        let maxvalue = parseInt(document.getElementById('price-slider-max-input-{{ $componentId }}').value)
+        let value = 0;
+        value = isNaN(minvalue) ? currentPriceSlider.min : minvalue;
+        value = value < currentPriceSlider.min ? currentPriceSlider.min : value;
+        value = value > currentPriceSlider.max ? currentPriceSlider.max : value;
+        let leftPadding = Math.ceil(currentPriceSlider.containerDivBounding.width * (
+            value / currentPriceSlider.max
+        ));
+        if (leftPadding + parseInt(currentPriceSlider.containerDiv.style.paddingRight) > currentPriceSlider.containerDivBounding.width - 20) {
+            leftPadding = currentPriceSlider.containerDivBounding.width - 20 - parseInt(currentPriceSlider.containerDiv.style.paddingRight);
         }
+        currentPriceSlider.containerDiv.style.paddingLeft = leftPadding + 'px';
+        value = isNaN(maxvalue) ? currentPriceSlider.max : maxvalue;
+        value = value < currentPriceSlider.min ? currentPriceSlider.min : value;
+        value = value > currentPriceSlider.max ? currentPriceSlider.max : value;
+        let rightPadding = Math.ceil(currentPriceSlider.containerDivBounding.width * (
+            (currentPriceSlider.max - value) / currentPriceSlider.max
+        ));
+
+        if (rightPadding + parseInt(currentPriceSlider.containerDiv.style.paddingLeft) > currentPriceSlider.containerDivBounding.width - 20) {
+            rightPadding = currentPriceSlider.containerDivBounding.width - 20 - parseInt(currentPriceSlider.containerDiv.style.paddingLeft);
+        }
+        currentPriceSlider.containerDiv.style.paddingRight = rightPadding + 'px';
         window.setTimeout(setRangeDivSize, 5);
     }
 
@@ -121,20 +124,20 @@
         currentPriceSlider.containerDivBounding = currentPriceSlider.containerDiv.getBoundingClientRect();
         if ((event.screenX >= currentPriceSlider.containerDivBounding.left)
             && (event.screenX <= currentPriceSlider.containerDivBounding.left + currentPriceSlider.containerDivBounding.width)) {
-                if (currentPriceSlider.draggedHandle.getAttribute('data-handle') == 1) {
-                    let leftPadding = (event.screenX - currentPriceSlider.containerDivBounding.left);
-                    if (leftPadding + parseInt(currentPriceSlider.containerDiv.style.paddingRight) < currentPriceSlider.containerDivBounding.width - 20) {
-                        currentPriceSlider.containerDiv.style.paddingLeft = leftPadding + 'px';
-                    }
-                } else {
-                    let rightPadding = window.innerWidth
-                        - (window.innerWidth - currentPriceSlider.containerDivBounding.width)
-                        + currentPriceSlider.containerDivBounding.left
-                        - event.screenX;
-                    if (rightPadding + parseInt(currentPriceSlider.containerDiv.style.paddingLeft) < currentPriceSlider.containerDivBounding.width - 20) {
-                        currentPriceSlider.containerDiv.style.paddingRight = rightPadding + 'px';
-                    }
+            if (currentPriceSlider.draggedHandle.getAttribute('data-handle') == 1) {
+                let leftPadding = (event.screenX - currentPriceSlider.containerDivBounding.left);
+                if (leftPadding + parseInt(currentPriceSlider.containerDiv.style.paddingRight) < currentPriceSlider.containerDivBounding.width - 20) {
+                    currentPriceSlider.containerDiv.style.paddingLeft = leftPadding + 'px';
                 }
+            } else {
+                let rightPadding = window.innerWidth
+                    - (window.innerWidth - currentPriceSlider.containerDivBounding.width)
+                    + currentPriceSlider.containerDivBounding.left
+                    - event.screenX;
+                if (rightPadding + parseInt(currentPriceSlider.containerDiv.style.paddingLeft) < currentPriceSlider.containerDivBounding.width - 20) {
+                    currentPriceSlider.containerDiv.style.paddingRight = rightPadding + 'px';
+                }
+            }
         } else {
             if (event.screenX < currentPriceSlider.containerDivBounding.left) {
                 currentPriceSlider.containerDiv.style.paddingLeft = '0px';
@@ -154,12 +157,12 @@
     }
 
     function initCurrentSliderObject(event) {
-        currentPriceSlider = priceSliders[event.currentTarget.getAttribute('data-slider-id')];
-        currentPriceSlider.draggedHandle = event.currentTarget;
-        currentPriceSlider.containerDiv = document.getElementById('price-slider-'+event.currentTarget.getAttribute('data-slider-id'));
+        currentPriceSlider = priceSliders[event.target.getAttribute('data-slider-id')];
+        currentPriceSlider.draggedHandle = event.target;
+        currentPriceSlider.containerDiv = document.getElementById('price-slider-'+event.target.getAttribute('data-slider-id'));
         currentPriceSlider.containerDivBounding = currentPriceSlider.containerDiv.getBoundingClientRect();
-        currentPriceSlider.valueInput = document.getElementById('price-slider-value-input-'+event.currentTarget.getAttribute('data-slider-id'));
-        currentPriceSlider.rangeBox = event.currentTarget.parentNode;
+        currentPriceSlider.valueInput = document.getElementById('price-slider-value-input-'+event.target.getAttribute('data-slider-id'));
+        currentPriceSlider.rangeBox = document.getElementById('price-slider-rangebox-{{ $componentId }}');
     }
 
     function initHandleDrag(event) {
