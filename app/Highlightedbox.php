@@ -31,6 +31,7 @@ class Highlightedbox extends Model
     protected $appends = [
         'targetname',
         'image_admin_thumbnail',
+        'url'
     ];
 
     protected $with = ['article', 'printer'];
@@ -55,6 +56,18 @@ class Highlightedbox extends Model
         }
 
         return null;
+    }
+
+    public function getUrlAttribute()
+    {
+        if ($this->printer_id != null) {
+            return route('printer_details', ['slug' => $this->printer->slug]);
+        }
+        if ($this->article_id != null) {
+            return $this->article->url;
+        }
+
+        return '#';
     }
 
     public function getImageAdminThumbnailAttribute()

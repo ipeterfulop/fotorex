@@ -3,8 +3,11 @@
 @tailwind utilities;
 @import 'components/slider';
 
+html {
+    font-size: 14px;
+}
 .max-width-container {
-    max-width: 1196px;
+    max-width: 1280px;
 }
 
 .hover-red-link {

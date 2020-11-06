@@ -1,7 +1,7 @@
 <div class="w-full bg-fotoblue pb-8 flex flex-row justify-center">
     <div class="w-full max-width-container py-4 px-8 flex flex-col lg:flex-row items-center lg:items-start justify-center">
         <div class="w-full lg:w-1/4 mt-8 lg:mt-0 flex flex-col items-start text-gray-200 text-sm mr-2 mb-8 lg:mb-0">
-            <div class="border-t-0 border-l-0 border-r-0 border-b-2 border-fotogray w-full pl-3 mb-4 uppercase  text-xl">Megoldások</div>
+            <div class="h-12 border-t-0 border-l-0 border-r-0 border-b-2 border-fotogray w-full pl-3 mb-4 uppercase  text-xl">Megoldások</div>
             <div class="w-full py-1 pl-3 bg-transparent hover-gray-link">Költségszámlálás</div>
             <div class="w-full py-1 pl-3 bg-transparent hover-gray-link">Dokumentumkezelés</div>
             <div class="w-full py-1 pl-3 bg-transparent hover-gray-link">Biztonsági megoldások</div>
@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="w-full lg:w-1/4 mt-8 lg:mt-0 flex flex-col items-start text-gray-200 text-sm mr-2">
-            <div class="border-t-0 border-l-0 border-r-0 border-b-2 border-fotogray w-full pl-3 mb-4 uppercase  text-xl">Márkák</div>
+            <div class="h-12 border-t-0 border-l-0 border-r-0 border-b-2 border-fotogray w-full pl-3 mb-4 uppercase  text-xl">Márkák</div>
             <div class="w-full py-1 pl-3 bg-transparent hover-gray-link">Sharp</div>
             <div class="w-full py-1 pl-3 bg-transparent hover-gray-link">Kyocera</div>
             <div class="w-full py-1 pl-3 bg-transparent hover-gray-link">Samsung</div>
@@ -19,7 +19,7 @@
             <div class="w-full py-1 pl-3 bg-transparent hover-gray-link">Xerox</div>
         </div>
         <div class="w-full lg:w-1/4 mt-8 lg:mt-0 flex flex-col items-start text-gray-200 text-sm mr-2">
-            <div class="border-t-0 border-l-0 border-r-0 border-b-2 border-fotogray w-full pl-3 mb-4 uppercase  text-xl">Színes MFP</div>
+            <div class="h-12 border-t-0 border-l-0 border-r-0 border-b-2 border-fotogray w-full pl-3 mb-4 uppercase  text-xl">Színes MFP</div>
             <div class="w-full py-1 pl-3 bg-transparent hover-gray-link">Sharp</div>
             <div class="w-full py-1 pl-3 bg-transparent hover-gray-link">Sharp</div>
             <div class="w-full py-1 pl-3 bg-transparent hover-gray-link">Sharp</div>

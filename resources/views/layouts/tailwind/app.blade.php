@@ -22,10 +22,28 @@
 
     </style>
 </head>
-<body class="w-full font-body" style="background-color: #f4f4f4">
+<body class="w-full font-body" style="background-color: #f4f4f4; font-size: 14px">
 <main>
     @include('layouts.tailwind.nav')
     <div class="pt-16 lg:pt-2">
+        <div class="w-full bg-transparent flex justify-center  mb-6">
+            <div class="w-full max-width-container flex flex-col lg:flex-row items-start justify-between mt-4 bg-transparent h-80">
+                <div class="w-full lg:w-3/4 bg-transparent px-2 z-0 h-full">
+                    @include('public.partials.slider', [
+                        'slider' => \App\Slider::getForFrontpage(),
+                        'view' => 'public.partials.slide'
+                    ])
+
+                </div>
+                <div class="w-full lg:w-1/4 h-full flex flex-row lg:flex-col items-center justify-between text-xl uppercase pl-6">
+                    <a class="bg-fotomediumgray hover-red-link w-full flex items-center justify-start pl-4 flex-grow mb-2 h-18" href="/szolgaltatasok">Szolgáltatások</a>
+                    <div class="bg-fotomediumgray hover-red-link w-full flex items-center justify-start pl-4 flex-grow mt-2 mb-2 h-18">Megoldások</div>
+                    <a class="bg-fotomediumgray hover-red-link w-full flex items-center justify-start pl-4 flex-grow mt-2 mb-2 h-18" href="/hirek">Hírek</a>
+                    <div class="bg-fotomediumgray hover-red-link w-full flex items-center justify-start pl-4 flex-grow mt-2 h-18">Cégünkről</div>
+                </div>
+            </div>
+        </div>
+
         @yield('content')
     </div>
     @include('layouts.tailwind.footer')

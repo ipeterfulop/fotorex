@@ -4,12 +4,12 @@
      x-init="() => {initialize()}"
 >
     @if(count($items) > 0)
-        <div class="relative w-full flex-shrink-0 mt-2 lg:mt-0  overflow-x-hidden lg:overflow-y-hidden flex flex-row flex-no-wrap">
-            <button class="z-10 cursor-pointer text-white font-xl h-full flex flex-col items-center justify-center p-1 select-none item-slider-slide-button px-2"
+        <div class="relative w-full flex-shrink-0 overflow-x-hidden lg:overflow-y-hidden flex flex-row flex-no-wrap">
+            <button class="z-10 cursor-pointer text-white font-xl h-full flex flex-col items-center justify-center p-1 select-none item-slider-slide-button px-2 bg-white text-4xl font-bold"
                     @click="scrollLeft"
-                    style="background-color: rgba(128,128,128,.1)"
+                    style=""
                     x-bind:disabled="scrollPositionX == 0"
-            ><div class="h-8 w-8 rounded-full hover:bg-gray-700 bg-gray-400 flex items-center justify-center item-slider-slide-button-icon">&lt;</div>
+            ><div class="h-12 w-12 rounded-full hover:bg-gray-700 bg-gray-400 flex items-center justify-center item-slider-slide-button-icon">&lt;</div>
             </button>
             <div class="w-full h-auto flex flex-row justify-start items-center"
                  style="transform: translateY(0) translateX(0); transition: transform 200ms ease-in-out"
@@ -21,11 +21,11 @@
                 @endforeach
                 <div class="h-1 w-full opacity-0" id="{{ $componentId }}-closer"></div>
             </div>
-            <button class="z-10 cursor-pointer text-white font-xl h-full flex flex-col items-center justify-center p-1 select-none item-slider-slide-button px-2"
+            <button class="z-10 cursor-pointer text-white font-xl h-full flex flex-col items-center justify-center p-1 select-none item-slider-slide-button px-2 bg-white text-4xl font-bold"
                     @click="scrollRight"
-                    style="background-color: rgba(128,128,128,.1)"
+                    style=""
                     x-bind:disabled="scrollPositionX >= maxScrollX"
-            ><div class="h-8 w-8 rounded-full hover:bg-gray-700 bg-gray-400 flex items-center justify-center item-slider-slide-button-icon">&gt;</div></button>
+            ><div class="h-12 w-12 rounded-full hover:bg-gray-700 bg-gray-400 flex items-center justify-center item-slider-slide-button-icon">&gt;</div></button>
         </div>
     @endif
 </div>
@@ -49,6 +49,7 @@
             },
             calculateMaxScrollX: function() {
                 let i = Array.from(this.$refs.slider_list_container.querySelectorAll('.slider-list-item'));
+                i.pop();
                 i.pop();
                 if (i.length > 2) {
                     i.pop();
