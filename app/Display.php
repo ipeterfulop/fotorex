@@ -18,6 +18,11 @@ class Display extends Printer
     const SUBJECT_NAME_PLURAL = 'Kijelzők';
 
     protected $table = 'printers';
+    protected $with = [
+        'manufacturer',
+        'printer_photos',
+        'printerattributevalues',
+    ];
 
     protected static function booted()
     {
