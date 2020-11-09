@@ -27,8 +27,8 @@
                       style="padding: .5rem; font-size: 3rem; color: #333745; transition: opacity 200ms ease-in-out; cursor:pointer ">●</span>
             @endpush
         @endforeach
-        <button class="slider-page-button focus:outline-none" style="left:0px;" onclick="slider{{ $slider->id }}.nextSlideNoRollover()">&lt;</button>
-        <button class="slider-page-button focus:outline-none" style="right:0px;" onclick="slider{{ $slider->id }}.prevSlide()">&gt;</button>
+        <button class="slider-page-button focus:outline-none text-white" style="left:0px;" onclick="slider{{ $slider->id }}.prevSlide()">{!! config('heroicons.solid.arrow-circle-left') !!}</button>
+        <button class="slider-page-button focus:outline-none" style="right:0px;" onclick="slider{{ $slider->id }}.nextSlide()">{!! config('heroicons.solid.arrow-circle-right') !!}</button>
     </div>
     @if(false)
         @if($slider->slides->count() > 1)
@@ -86,7 +86,7 @@
         prevSlide: function () {
             this.position--;
             if (this.position < 0) {
-                this.position = 0;
+                this.position =  this.slideCount - 1;
             }
             this.showSlide(this.position);
         },

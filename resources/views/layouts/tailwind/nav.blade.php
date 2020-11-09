@@ -3,12 +3,15 @@
         <div class="w-full flex justify-center bg-fotored">
             <div class="w-full max-width-container h-10 bg-fotored text-white flex items-center justify-between text-white">
                 <div class="block lg:hidden">Fotorex</div>
-                <div class="hidden lg:inline flex-grow-1">
+                <div class="hidden lg:flex items-center justify-start flex-row">
+                    <span class="mr-2 h-8 w-8 flex flex-grow-0">{!! config('heroicons.solid.phone') !!}</span>
                     +36 (1) 470-4020
+                    <span class="ml-2 mr-2 h-8 w-8 flex flex-grow-0">{!! config('heroicons.solid.location-marker') !!}</span>
                     1148 Budapest, Lengyel u. 16.
                 </div>
-                <div class="text-right flex-grow-1">
+                <div class="hidden lg:flex items-center justify-end flex-row">
                     <a href="{{ route('contactmessage_index') }}">Kapcsolat</a>
+                    <span class="ml-2 h-8 w-8 flex flex-grow-0">{!! config('heroicons.solid.arrow-circle-right') !!}</span>
                 </div>
                 <button @click="menuOpen = !menuOpen"
                         class="focus:outline-none active:outline-none h-8 w-8  lg:hidden ">
@@ -37,7 +40,7 @@
                     <input type="text" class="flex-grow-1 w-4/5 text-black" placeholder="Keresés mindenben"
                            name="search">
                     <button type="submit"
-                            class="hover-red-link px-2 h-12 w-12">{!! config('heroicons.outline.search')  !!}</button>
+                            class="hover-red-link px-2 h-12 w-12 text-white">{!! config('heroicons.outline.search')  !!}</button>
                 </form>
 
             </div>
@@ -67,21 +70,24 @@
                            class="flex-grow-1 w-3/5 h-16 bg-white border border-fotogray font-bold text-xl italic"
                            placeholder="Keresés mindenben..." name="search">
                     <button type="submit"
-                            class="hover-red-link px-2 h-16 w-16 bg-fotogray border border-fotogray">{!! config('heroicons.outline.search')  !!}</button>
+                            class="hover-red-link px-2 h-16 w-16 bg-fotogray border border-fotogray text-white">{!! config('heroicons.solid.search')  !!}</button>
                 </form>
             </div>
         </div>
     </div>
     <div class="hidden lg:flex w-full justify-center bg-fotoblue text-xs h-12">
-        <div class="w-full max-width-container flex items-center justify-start bg-fotoblue text-white uppercase">
-            <a class="py-4 px-2 h-full hover-red-link  desktop-nav-menuitem"
+        <div class="w-full max-width-container flex items-center justify-start bg-fotoblue text-white uppercase text-xl">
+            <a href="/" class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem">
+                {!! config('heroicons.solid.home') !!}
+            </a>
+            <a class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem"
                href="{{ route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::PRINTERS_ID]) }}">Nyomtatók</a>
-            <a class="py-4 px-2 h-full hover-red-link  desktop-nav-menuitem"
+            <a class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem"
                href="{{ route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::MFP_ID]) }}">Multifunkciós
                 nyomtatók</a>
-            <div class="py-4 px-2 h-full hover-red-link  desktop-nav-menuitem">Nyomtatóbérlés</div>
-            <div class="py-4 px-2 h-full hover-red-link  desktop-nav-menuitem">Interaktív monitorok</div>
-            <div class="py-4 px-2 h-full hover-red-link  desktop-nav-menuitem">Irodaszerek</div>
+            <div class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem">Nyomtatóbérlés</div>
+            <div class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem">Interaktív monitorok</div>
+            <div class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem">Irodaszerek</div>
             <span class="ml-auto">
             <a href="https://www.facebook.com/FotorexIrodatechnika" target="_blank"><img class="h-8"
                                                                                          src="/images/assets/fblogo.png"></a>

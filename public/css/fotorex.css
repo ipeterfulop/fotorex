@@ -18680,7 +18680,7 @@ html {
 }
 
 .max-width-container {
-  max-width: 1280px;
+  max-width: 1260px;
 }
 
 .hover-red-link {
@@ -18707,6 +18707,12 @@ html {
   --bg-opacity: 1;
   background-color: #eb5858;
   background-color: rgba(235, 88, 88, var(--bg-opacity));
+  --text-opacity: 1;
+  color: #fff;
+  color: rgba(255, 255, 255, var(--text-opacity));
+}
+
+.hover-red-link:hover .main-menu-svg-container {
   --text-opacity: 1;
   color: #fff;
   color: rgba(255, 255, 255, var(--text-opacity));

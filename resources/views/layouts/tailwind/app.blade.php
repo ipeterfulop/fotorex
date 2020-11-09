@@ -19,7 +19,6 @@
     <link href="{{ asset('css/fa/brands.min.css') }}" rel="stylesheet">
 -->
     <style>
-
     </style>
 </head>
 <body class="w-full font-body" style="background-color: #f4f4f4; font-size: 14px">
@@ -35,11 +34,23 @@
                     ])
 
                 </div>
-                <div class="w-full lg:w-1/4 h-full flex flex-row lg:flex-col items-center justify-between text-xl uppercase pl-6">
-                    <a class="bg-fotomediumgray hover-red-link w-full flex items-center justify-start pl-4 flex-grow mb-2 h-18" href="/szolgaltatasok">Szolgáltatások</a>
-                    <div class="bg-fotomediumgray hover-red-link w-full flex items-center justify-start pl-4 flex-grow mt-2 mb-2 h-18">Megoldások</div>
-                    <a class="bg-fotomediumgray hover-red-link w-full flex items-center justify-start pl-4 flex-grow mt-2 mb-2 h-18" href="/hirek">Hírek</a>
-                    <div class="bg-fotomediumgray hover-red-link w-full flex items-center justify-start pl-4 flex-grow mt-2 h-18">Cégünkről</div>
+                <div class="w-full lg:w-1/4 h-full flex flex-row lg:flex-col items-center justify-between text-2xl uppercase pl-6 font-semibold">
+                    <a class="bg-fotomediumgray hover-red-link w-full flex items-center justify-start pl-4 flex-grow mb-2 h-18" href="/szolgaltatasok">
+                        <span class="mr-2 h-18 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.cog') !!}</span>
+                        Szolgáltatások
+                    </a>
+                    <a class="bg-fotomediumgray hover-red-link w-full flex items-center justify-start pl-4 flex-grow mt-2 mb-2 h-18" href="#">
+                        <span class="mr-2 h-18 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.cube') !!}</span>
+                        Megoldások
+                    </a>
+                    <a class="bg-fotomediumgray hover-red-link w-full flex items-center justify-start pl-4 flex-grow mt-2 mb-2 h-18" href="/hirek">
+                        <span class="mr-2 h-18 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.document-text') !!}</span>
+                        Hírek
+                    </a>
+                    <a class="bg-fotomediumgray hover-red-link w-full flex items-center justify-start pl-4 flex-grow mt-2 h-18" href="#">
+                        <span class="mr-2 h-18 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.menu-alt-2') !!}</span>
+                        Cégünkről
+                    </a>
                 </div>
             </div>
         </div>
