@@ -1,12 +1,14 @@
 <div x-data="{menuOpen:false}">
     <div class="w-full flex flex-col justify-start items-start  fixed lg:relative z-10 lg:z-0">
         <div class="w-full flex justify-center bg-fotored">
-            <div class="w-full max-width-container h-10 bg-fotored text-white flex items-center justify-between text-white">
-                <div class="block lg:hidden">Fotorex</div>
+            <div class="w-full max-width-container h-18  lg:h-10 bg-fotored text-white flex items-center justify-between text-white">
+                <div class="block lg:hidden ml-2">
+                    <img src="/images/assets/fotorex-logo.jpg" alt="logo" class="h-full">
+                </div>
                 <div class="hidden lg:flex items-center justify-start flex-row">
-                    <span class="mr-2 h-8 w-8 flex flex-grow-0">{!! config('heroicons.solid.phone') !!}</span>
+                    <span class="flex mr-2 h-8 w-8 flex flex-grow-0">{!! config('heroicons.solid.phone') !!}</span>
                     +36 (1) 470-4020
-                    <span class="ml-2 mr-2 h-8 w-8 flex flex-grow-0">{!! config('heroicons.solid.location-marker') !!}</span>
+                    <span class="flex ml-2 mr-2 h-8 w-8 flex flex-grow-0">{!! config('heroicons.solid.location-marker') !!}</span>
                     1148 Budapest, Lengyel u. 16.
                 </div>
                 <div class="hidden lg:flex items-center justify-end flex-row">

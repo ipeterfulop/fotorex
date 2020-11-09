@@ -18653,7 +18653,6 @@ video {
 .slider-page-button {
   position: absolute;
   top: 0px;
-  width: 5%;
   height: 100%;
   opacity: 0.3;
   display: flex;
