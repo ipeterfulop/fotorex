@@ -45,14 +45,9 @@
 
             </div>
             <div class="h-2 bg-white w-full my-2"></div>
-            <a class="py-1 w-full hover-red-link"
-               href="{{ route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::PRINTERS_ID]) }}">Nyomtatók</a>
-            <a class="py-1 w-full hover-red-link"
-               href="{{ route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::MFP_ID]) }}">Multifunkciós
-                nyomtatók</a>
-            <div class="py-1 w-full hover-red-link">Nyomtatóbérlés</div>
-            <div class="py-1 w-full hover-red-link">Interaktív monitorok</div>
-            <div class="py-1 w-full hover-red-link">Irodaszerek</div>
+            @foreach($publicmenuitems as $label => $link)
+                <a class="py-1 w-full hover-red-link" href="{{ $link }}">{{ $label }}</a>
+            @endforeach
         </div>
     </div>
     <!--desktop menu-->
@@ -80,16 +75,10 @@
             <a href="/" class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem">
                 {!! config('heroicons.solid.home') !!}
             </a>
-            <a class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem"
-               href="{{ route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::PRINTERS_ID]) }}">Nyomtatók</a>
-            <a class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem"
-               href="{{ route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::MFP_ID]) }}">Multifunkciós
-                nyomtatók</a>
-            <div class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem">Nyomtatóbérlés</div>
-            <div class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem">Interaktív monitorok</div>
-            <div class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem">Irodaszerek</div>
-            <span class="ml-auto">
-            <a href="https://www.facebook.com/FotorexIrodatechnika" target="_blank"><img class="h-8"
+            @foreach($publicmenuitems as $label => $link)
+                <a class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem" href="{{ $link }}">{{ $label }}</a>
+            @endforeach
+            <a class="ml-auto" href="https://www.facebook.com/FotorexIrodatechnika" target="_blank"><img class="h-8"
                                                                                          src="/images/assets/fblogo.png"></a>
         </span>
         </div>

@@ -14,7 +14,7 @@
             @endfor
             <div class="w-full flex flex-col mx-6 mt-10">
                 <div class="w-full bg-fotored h-10 pl-8 uppercase text-white text-xl flex items-center justify-start">Akciós ajánlatok</div>
-                @include('public.partials.item-slider-list', ['items' => \App\Highlightedprinter::all(), 'view' => 'public.partials.highlightedprinter'])
+                @include('public.partials.item-slider-list', ['items' => $highlightedprinters, 'view' => 'public.partials.highlightedprinter'])
             </div>
         </div>
     </div>
