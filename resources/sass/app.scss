@@ -3,8 +3,11 @@
 @tailwind utilities;
 @import 'components/slider';
 
+html {
+    font-size: 14px;
+}
 .max-width-container {
-    max-width: 1196px;
+    max-width: 1260px;
 }
 
 .hover-red-link {
@@ -17,6 +20,10 @@
 
 .hover-red-link:hover {
     @apply bg-fotored text-white;
+}
+
+.hover-red-link:hover .main-menu-svg-container {
+    @apply text-white;
 }
 
 .hover-gray-link:hover {

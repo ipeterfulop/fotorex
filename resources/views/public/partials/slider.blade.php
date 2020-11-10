@@ -27,11 +27,15 @@
                       style="padding: .5rem; font-size: 3rem; color: #333745; transition: opacity 200ms ease-in-out; cursor:pointer ">●</span>
             @endpush
         @endforeach
+        <button class="slider-page-button focus:outline-none text-white px-6 text-xl" style="left:0px;" onclick="slider{{ $slider->id }}.prevSlide()"><span class="h-12" style="width: 2rem">{!! config('heroicons.solid.arrow-circle-left') !!}</span></button>
+            <button class="slider-page-button focus:outline-none text-white px-6 text-xl" style="right:0px;" onclick="slider{{ $slider->id }}.nextSlide()"><span class="h-12" style="width: 2rem">{!! config('heroicons.solid.arrow-circle-right') !!}</span></button>
     </div>
-    @if($slider->slides->count() > 1)
-        <div style="position: absolute; bottom: 0px; height: 20%; left: 0px; width: 100%; background-color: transparent; display: flex; align-items: center; justify-content: center; z-index:50">
-            @stack('sliderbuttons')
-        </div>
+    @if(false)
+        @if($slider->slides->count() > 1)
+            <div style="position: absolute; bottom: 0px; height: 20%; left: 0px; width: 100%; background-color: transparent; display: flex; align-items: center; justify-content: center; z-index:50">
+                @stack('sliderbuttons')
+            </div>
+        @endif
     @endif
 </div>
 <script>
@@ -42,14 +46,14 @@
         sliderNode: document.getElementById('slider-{{ $slider->id }}'),
         innerContainer: document.getElementById('slider-inner-{{ $slider->id }}'),
         firstSlide: document.getElementById('slider-{{ $slider->id }}-slide-0'),
-        showSlide: function(position) {
+        showSlide: function (position) {
             this.position = position;
-            let currentSlide = document.getElementById('slider-{{ $slider->id }}-slide-'+position);
+            let currentSlide = document.getElementById('slider-{{ $slider->id }}-slide-' + position);
             let previousSlide = null;
             if (position > 0) {
-                previousSlide = document.getElementById('slider-{{ $slider->id }}-slide-'+(position - 1).toString());
+                previousSlide = document.getElementById('slider-{{ $slider->id }}-slide-' + (position - 1).toString());
             } else {
-                previousSlide = document.getElementById('slider-{{ $slider->id }}-slide-'+(this.slideCount - 1).toString());
+                previousSlide = document.getElementById('slider-{{ $slider->id }}-slide-' + (this.slideCount - 1).toString());
             }
             if (previousSlide != null) {
                 previousSlide.style.opacity = 0;
@@ -63,7 +67,7 @@
                 }
             });
         },
-        nextSlide: function() {
+        nextSlide: function () {
             this.position++;
             if (this.position == this.slideCount) {
                 this.position = 0;
@@ -72,17 +76,31 @@
                 this.showSlide(this.position);
             }
         },
-        resizeSlides: function() {
+        nextSlideNoRollover: function () {
+            this.position++;
+            if (this.position > this.slideCount) {
+                this.position = this.slideCount;
+            }
+            this.showSlide(this.position);
+        },
+        prevSlide: function () {
+            this.position--;
+            if (this.position < 0) {
+                this.position =  this.slideCount - 1;
+            }
+            this.showSlide(this.position);
+        },
+        resizeSlides: function () {
             Array.from(this.innerContainer.querySelectorAll('.slider-slide')).forEach((slide) => {
                 let width = this.sliderNode.getBoundingClientRect().width
                     - parseInt(window.getComputedStyle(this.sliderNode).marginLeft)
                     - parseInt(window.getComputedStyle(this.sliderNode).marginRight);
-                slide.style.width = width +'px';
-                slide.style.maxWidth = width +'px';
+                slide.style.width = width + 'px';
+                slide.style.maxWidth = width + 'px';
             });
             this.showSlide(0);
         },
-        start: function() {
+        start: function () {
             this.resizeSlides();
             if (this.slideCount > 1) {
                 window.setInterval(() => {

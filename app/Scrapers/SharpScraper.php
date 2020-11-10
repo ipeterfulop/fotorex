@@ -35,8 +35,10 @@ class SharpScraper
         $result = [
             'name'                  => '',
             'descriptionParagraphs' => [],
-            'specifications'        => [],
-            'images'                => [],
+            'specifications' => [],
+            'images' => [],
+            'keyFeatures' => [],
+
         ];
         $elements = $xpath->query('//main//h1');
         if (count($elements) > 0) {
@@ -85,6 +87,14 @@ class SharpScraper
                 if (count($rowPieces) == 2) {
                     $result['specificationRows'][$name][trim($rowPieces[0])] = trim($rowPieces[1]);
                 }
+            }
+        }
+        $keyfeaturesList = $xpath->query('//ul[contains(@class, "list-keyfeatures")]');
+        if (count($keyfeaturesList) > 0) {
+            $list = $keyfeaturesList[0];
+            $items = $xpath->query('.//li', $list);
+            foreach ($items as $item) {
+                $result['keyFeatures'][] = $item->textContent;
             }
         }
 

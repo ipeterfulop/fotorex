@@ -19,13 +19,42 @@
     <link href="{{ asset('css/fa/brands.min.css') }}" rel="stylesheet">
 -->
     <style>
-
     </style>
 </head>
-<body class="w-full font-body" style="background-color: #f4f4f4">
+<body class="w-full font-body" style="background-color: #f4f4f4; font-size: 14px">
 <main>
     @include('layouts.tailwind.nav')
     <div class="pt-16 lg:pt-2">
+        <div class="w-full bg-transparent flex justify-center  mb-6">
+            <div class="w-full max-width-container flex flex-col lg:flex-row items-start justify-between mt-4 bg-transparent h-auto lg:h-80">
+                <div class="w-full lg:w-3/4 bg-transparent px-2 z-0 h-32 md:h-64 lg:h-full">
+                    @include('public.partials.slider', [
+                        'slider' => \App\Slider::getForFrontpage(),
+                        'view' => 'public.partials.slide'
+                    ])
+
+                </div>
+                <div class="w-full lg:w-1/4 h-full flex flex-row flex-wrap lg:flex-no-wrap lg:flex-col items-center justify-between text-base lg:text-2xl uppercase pl-2 lg:pl-6 pr-2 lg:pr-0 font-semibold mt-4 lg:mt-0">
+                    <div class="p-1 lg:p-0 w-1/2 lg:w-full h-18"><a class="w-full h-full bg-fotomediumgray hover-red-link  flex items-center justify-center lg:justify-start pl-0 lg:pl-4 mr-2 lg:mr-0 lg:flex-grow mb-2" href="/szolgaltatasok">
+                        <span class="hidden md:block mr-2 h-16 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.cog') !!}</span>
+                        Szolgáltatások
+                    </a></div>
+                    <div class="p-1 lg:p-0 w-1/2 lg:w-full  h-18"><a class="w-full h-full bg-fotomediumgray hover-red-link  flex items-center justify-center lg:justify-start pl-0 lg:pl-4 lg:flex-grow mt-0 lg:mt-2 mb-2" href="#">
+                        <span class="hidden md:block mr-2 h-16 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.cube') !!}</span>
+                        Megoldások
+                    </a></div>
+                    <div class="p-1 lg:p-0 w-1/2 lg:w-full  h-18"><a class="w-full h-full bg-fotomediumgray hover-red-link  flex items-center justify-center lg:justify-start pl-0 lg:pl-4 mr-2 lg:mr-0 lg:flex-grow mt-0 lg:mt-2 mb-2" href="/hirek">
+                        <span class="hidden md:block mr-2 h-16 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.document-text') !!}</span>
+                        Hírek
+                    </a></div>
+                    <div class="p-1 lg:p-0 w-1/2 lg:w-full  h-18"><a class="w-full h-full bg-fotomediumgray hover-red-link  flex items-center justify-center lg:justify-start pl-0 lg:pl-4 lg:flex-grow mt-0 lg:mt-2" href="#">
+                        <span class="hidden md:block mr-2 h-16 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.menu-alt-2') !!}</span>
+                        Cégünkről
+                    </a></div>
+                </div>
+            </div>
+        </div>
+
         @yield('content')
     </div>
     @include('layouts.tailwind.footer')
