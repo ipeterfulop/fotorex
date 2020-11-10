@@ -81,7 +81,6 @@
         max: {{ $max }}
     }
     function updateSliderFromValue(event) {
-        console.log('ch');
         currentPriceSlider = priceSliders[event.target.getAttribute('data-slider-id')];
         initCurrentSliderObject(event);
         let minvalue = parseInt(document.getElementById('price-slider-min-input-{{ $componentId }}').value)
@@ -122,7 +121,6 @@
 
     function moveHandle(event) {
         currentPriceSlider.containerDivBounding = currentPriceSlider.containerDiv.getBoundingClientRect();
-        console.log(event);
         if ((event.clientX >= currentPriceSlider.containerDivBounding.left)
             && (event.clientX <= currentPriceSlider.containerDivBounding.left + currentPriceSlider.containerDivBounding.width)) {
             if (currentPriceSlider.draggedHandle.getAttribute('data-handle') == 1) {

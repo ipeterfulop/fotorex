@@ -108,8 +108,12 @@ input {
 .printer-compare-table {
     @apply w-full;
 }
-.printer-price {
+
+.printer-discounted-price {
     @apply text-fotored text-xl font-bold;
+}
+.printer-price {
+    @apply text-gray-900 text-xl font-bold;
 }
 
 .printer-original-price {

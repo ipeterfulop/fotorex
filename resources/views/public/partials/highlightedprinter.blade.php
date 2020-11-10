@@ -5,7 +5,7 @@
             {{ $item->printer->displayname }}
         </h4>
         <div class="text-sm">{{ $item->printer->description }}</div>
-        <div class="text-base font-bold fixed bottom-0 w-full mb-8">{!! $item->printer->price_label !!} </div>
+        <div class="text-base font-bold absolute bottom-0 w-full mb-8">{!! $item->printer->price_label !!} </div>
     </a>
 
 </div>

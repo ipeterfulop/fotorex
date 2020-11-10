@@ -18814,10 +18814,18 @@ input {
   width: 100%;
 }
 
-.printer-price {
+.printer-discounted-price {
   --text-opacity: 1;
   color: #eb5858;
   color: rgba(235, 88, 88, var(--text-opacity));
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.printer-price {
+  --text-opacity: 1;
+  color: #1a202c;
+  color: rgba(26, 32, 44, var(--text-opacity));
   font-size: 1.25rem;
   font-weight: 700;
 }

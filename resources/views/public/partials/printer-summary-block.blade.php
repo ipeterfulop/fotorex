@@ -34,14 +34,18 @@
     </div>
 </div>
 <div class="fotorex-list-item-grid-view">
-    <div class="w-full relative z-0 h-48">
-        <a href="{{ route('printer_details', ['slug' => $element->slug]) }}" class="w-full h-full  flex flex-col items-stretch justify-start">
+    <div class="pr-10 h-72 w-72 hover:shadow-md my-4">
+        <a href="{{ route('printer_details', ['slug' => $element->slug]) }}" class="w-full h-full  flex flex-col items-stretch justify-start p-2 relative">
             <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}" class="object-contain">
-            <h4 class="text-fotored uppercase" >
-                {{ $element->name }}
-            </h4>
-            <div class="text-sm">{{ $element->description }}</div>
-            <div class="text-base font-bold">{!! $element->price_label !!} </div>
+            <div class="absolute bottom-0 w-full mb-2">
+                <h4 class="text-fotored uppercase text-xl" >
+                    {{ $element->displayname }}
+                </h4>
+                <div class="text-sm">{{ $element->description }}</div>
+                <div class="text-base font-bold">{!! $element->price_label !!} </div>
+
+            </div>
         </a>
+
     </div>
 </div>

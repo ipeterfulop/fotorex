@@ -450,12 +450,12 @@ class Printer extends Model
     public function getPriceLabelAttribute()
     {
         if ($this->request_for_price == 1) {
-            return '<div class="printer-price flex flex-row items-center justify-end">' . self::CALL_FOR_PRICE_LABEL . '<span class=" h-10 ml-3">'.config('heroicons.solid.phone').'</span></div>';
+            return '<div class="printer-discounted-price flex flex-row items-center">' . self::CALL_FOR_PRICE_LABEL . '<span class=" h-10 ml-3">'.config('heroicons.solid.phone').'</span></div>';
         }
         if ($this->price_discounted) {
             return '<div class="printer-original-price">'
                 . PriceFormatter::formatToInteger($this->price)
-                . '</div><div class="printer-price">'
+                . '</div><div class="printer-discounted-price">'
                 . PriceFormatter::formatToInteger($this->price_discounted)
                 . '</div>';
         }
