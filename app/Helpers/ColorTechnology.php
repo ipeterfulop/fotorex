@@ -18,7 +18,7 @@ class ColorTechnology
     public static function getDetailBoxLabel($id)
     {
         if ($id == self::BW_ID) {
-            return 'MONOKRÓM';
+            return 'MONO<br>KRÓM';
         }
         if ($id == self::COLOR_ID) {
             return 'SZÍNES';
@@ -31,7 +31,7 @@ class ColorTechnology
             return '; background-image:radial-gradient(#ffff00,#f06d06);';
         }
 
-        return '';
+        return 'background-color: #d1d4d3';
     }
 
 

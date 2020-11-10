@@ -260,7 +260,8 @@ class Printer extends Model
     public static function getVueCRUDIndexFilters()
     {
         $result = [];
-        $result['name'] = new TextVueCRUDIndexfilter('name', 'Név', '');
+        $searchedProperties = ['name', 'model_number', 'model_number_displayed'];
+        $result[TextVueCRUDIndexfilter::buildPropertyName($searchedProperties)] = new TextVueCRUDIndexfilter($searchedProperties, 'Név', '');
         $result['manufacturer_id'] = new SelectVueCRUDIndexfilter('manufacturer_id', 'Gyártó', -1, -1);
         $result['manufacturer_id']->setValueSet(
             Manufacturer::orderBy('name', 'asc')->get()->pluck('name', 'id'),
@@ -449,7 +450,7 @@ class Printer extends Model
     public function getPriceLabelAttribute()
     {
         if ($this->request_for_price == 1) {
-            return '<div class="printer-price">' . self::CALL_FOR_PRICE_LABEL . '</div>';
+            return '<div class="printer-price flex flex-row items-center justify-end">' . self::CALL_FOR_PRICE_LABEL . '<span class=" h-10 ml-3">'.config('heroicons.solid.phone').'</span></div>';
         }
         if ($this->price_discounted) {
             return '<div class="printer-original-price">'

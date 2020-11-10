@@ -122,10 +122,11 @@
 
     function moveHandle(event) {
         currentPriceSlider.containerDivBounding = currentPriceSlider.containerDiv.getBoundingClientRect();
-        if ((event.screenX >= currentPriceSlider.containerDivBounding.left)
-            && (event.screenX <= currentPriceSlider.containerDivBounding.left + currentPriceSlider.containerDivBounding.width)) {
+        console.log(event);
+        if ((event.clientX >= currentPriceSlider.containerDivBounding.left)
+            && (event.clientX <= currentPriceSlider.containerDivBounding.left + currentPriceSlider.containerDivBounding.width)) {
             if (currentPriceSlider.draggedHandle.getAttribute('data-handle') == 1) {
-                let leftPadding = (event.screenX - currentPriceSlider.containerDivBounding.left);
+                let leftPadding = (event.clientX - currentPriceSlider.containerDivBounding.left);
                 if (leftPadding + parseInt(currentPriceSlider.containerDiv.style.paddingRight) < currentPriceSlider.containerDivBounding.width - 20) {
                     currentPriceSlider.containerDiv.style.paddingLeft = leftPadding + 'px';
                 }
@@ -133,16 +134,16 @@
                 let rightPadding = window.innerWidth
                     - (window.innerWidth - currentPriceSlider.containerDivBounding.width)
                     + currentPriceSlider.containerDivBounding.left
-                    - event.screenX;
+                    - event.clientX;
                 if (rightPadding + parseInt(currentPriceSlider.containerDiv.style.paddingLeft) < currentPriceSlider.containerDivBounding.width - 20) {
                     currentPriceSlider.containerDiv.style.paddingRight = rightPadding + 'px';
                 }
             }
         } else {
-            if (event.screenX < currentPriceSlider.containerDivBounding.left) {
+            if (event.clientX < currentPriceSlider.containerDivBounding.left) {
                 currentPriceSlider.containerDiv.style.paddingLeft = '0px';
             }
-            if (event.screenX > currentPriceSlider.containerDivBounding.left + currentPriceSlider.containerDivBounding.width) {
+            if (event.clientX > currentPriceSlider.containerDivBounding.left + currentPriceSlider.containerDivBounding.width) {
                 currentPriceSlider.containerDiv.style.paddingRight = '0px';
             }
         }

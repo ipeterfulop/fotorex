@@ -4,6 +4,7 @@
 namespace App\Helpers;
 
 
+use App\Dataproviders\AllPrintersDataprovider;
 use App\Dataproviders\MFPDataprovider;
 use App\Dataproviders\PrinterDataprovider;
 use App\Factories\PrinterFilterFactory;
@@ -21,6 +22,8 @@ class Productcategory
     const RENTALS_LABEL = 'Nyomtatóbérlés';
     const DISPLAYS_ID = 'megjelenito-megoldasok';
     const DISPLAYS_LABEL = 'Megjelenítő megoldások';
+    const ALLPRINTERS_ID = 'osszes-nyomtato';
+    const ALLPRINTERS_LABEL = 'Nyomtatók';
 
     public static function getConfiguration($id, $abortWith404OnNotFound = true)
     {
@@ -40,6 +43,15 @@ class Productcategory
                 PrinterFilterFactory::class,
                 [],
                 self::MFP_LABEL
+            );
+        }
+        if ($id == self::ALLPRINTERS_ID) {
+            return new ProductcategoryConfiguration(
+                $id,
+                AllPrintersDataprovider::class,
+                PrinterFilterFactory::class,
+                [],
+                self::ALLPRINTERS_LABEL
             );
         }
         if ($abortWith404OnNotFound) {
