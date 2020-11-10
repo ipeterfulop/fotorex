@@ -12,6 +12,7 @@ use App\UsergroupSize;
 use Exception;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Symfony\Component\VarDumper\VarDumper;
 
 class PopulatePrintersAndAttributesTable extends Seeder
@@ -76,6 +77,7 @@ class PopulatePrintersAndAttributesTable extends Seeder
                 'id'          => null,
                 'name'        => '',
                 'description' => '',
+                'request_for_price' => 1,
             ],
             'papersize'  => [],
         ];
@@ -88,9 +90,12 @@ class PopulatePrintersAndAttributesTable extends Seeder
         $printerDataSet['fields']['manufacturer_id'] = is_null(Manufacturer::findByName($dataSet['manufacturer']))
             ? null
             : Manufacturer::findByName($dataSet['manufacturer'])->id;
-        $printerDataSet['fields']['slug'] = strtolower($dataSet['manufacturer'])
+        $printerDataSet['fields']['slug'] =Str::slug(
+            strtolower($dataSet['manufacturer'])
             . '-'
-            . strtolower($dataSet['model_number']);
+            . strtolower($dataSet['model_number'])
+            . '-'
+            . $dataSet['model_number']);
         $printerDataSet['fields']['html_page_title'] = $dataSet['manufacturer']
             . ' '
             . $dataSet['model_number_displayed']

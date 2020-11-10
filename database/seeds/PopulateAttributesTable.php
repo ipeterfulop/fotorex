@@ -36,6 +36,7 @@ class PopulateAttributesTable extends Seeder
             'is_computed',
             'position_at_product_comparison',
             'variable_name',
+            'productfamily',
             'created_at',
             'updated_at',
         ];
@@ -54,6 +55,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '1',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '2',
@@ -64,6 +66,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '1',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '3',
@@ -74,6 +77,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '1',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '4',
@@ -84,6 +88,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '1',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '10',
@@ -94,6 +99,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '1',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '11',
@@ -104,6 +110,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '1',
                 'position_at_product_comparison' => '2',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '9',
@@ -114,6 +121,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '3',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '6',
@@ -124,6 +132,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '4',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '7',
@@ -134,6 +143,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '5',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '12',
@@ -144,6 +154,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '6',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '13',
@@ -154,6 +165,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '7',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '14',
@@ -164,6 +176,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '8',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '15',
@@ -174,6 +187,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '9',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '16',
@@ -184,6 +198,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '10',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '17',
@@ -194,6 +209,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '11',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '5',
@@ -204,6 +220,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '1',
                 'position_at_product_comparison' => '12',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '18',
@@ -214,6 +231,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '13',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '19',
@@ -224,6 +242,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '14',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '20',
@@ -234,6 +253,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '15',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '21',
@@ -244,6 +264,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '16',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '22',
@@ -254,6 +275,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '17',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '23',
@@ -264,6 +286,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '18',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '24',
@@ -274,6 +297,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => '19',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '25',
@@ -284,6 +308,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '3',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => 'null',
             ],
             [
                 'id'                             => '26',
@@ -294,6 +319,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '4',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '27',
@@ -304,6 +330,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '4',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '28',
@@ -314,6 +341,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '4',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '29',
@@ -324,6 +352,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '4',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '30',
@@ -334,6 +363,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '4',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '31',
@@ -344,6 +374,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '4',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '32',
@@ -354,6 +385,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '4',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '33',
@@ -364,6 +396,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '4',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '34',
@@ -374,6 +407,7 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
             [
                 'id'                             => '35',
@@ -384,8 +418,8 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '1',
                 'is_computed'                    => '1',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
-
             [
                 'id'                             => '36',
                 'name'                           => 'Link a gyártó oldalára',
@@ -395,6 +429,29 @@ class PopulateAttributesTable extends Seeder
                 'attribute_category_id'          => '2',
                 'is_computed'                    => '0',
                 'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
+            ],
+            [
+                'id'                             => '37',
+                'name'                           => 'Kiemelt tulajdonságok',
+                'label'                          => '',
+                'variable_name'                  => 'key_features',
+                'attribute_value_set_id'         => 'null',
+                'attribute_category_id'          => '1',
+                'is_computed'                    => '0',
+                'position_at_product_comparison' => 'null',
+                'productfamily'                  => '2',
+            ],
+            [
+                'id'                             => '38',
+                'name'                           => 'Erősségek',
+                'label'                          => '',
+                'variable_name'                  => 'highlighted_features',
+                'attribute_value_set_id'         => 'null',
+                'attribute_category_id'          => '1',
+                'is_computed'                    => '0',
+                'position_at_product_comparison' => 'null',
+                'productfamily'                  => '1',
             ],
         ];
 
@@ -402,14 +459,19 @@ class PopulateAttributesTable extends Seeder
          * @todo Ide további attribútumokat kell felvenni
          */
 
+        $attributeToCheckForNullValues = [
+            'attribute_value_set_id',
+            'position_at_product_comparison',
+            'productfamily',
+        ];
         foreach ($dataSet as &$dataRow) {
             $dataRow['created_at'] = Carbon::now();
             $dataRow['updated_at'] = Carbon::now();
-            if ($dataRow['attribute_value_set_id'] == 'null') {
-                $dataRow['attribute_value_set_id'] = null;
-            }
-            if ($dataRow['position_at_product_comparison'] == 'null') {
-                $dataRow['position_at_product_comparison'] = null;
+
+            foreach ($attributeToCheckForNullValues as $variablename) {
+                if ($dataRow[$variablename] == 'null') {
+                    $dataRow[$variablename] = null;
+                }
             }
         }
 
