@@ -15,9 +15,10 @@ class SharpScraper
         $result = [];
 
         foreach ($products as $product) {
+            print print_r($product, true);
             if (isset($product->product_id)) {
                 if (array_search($product->product_id, $ignore) === false) {
-                    $result[$product->product_id] = 'https://www.sharp.hu/cps/rde/xchg/hu/hs.xsl/-/html/product-details-office-print.htm?product='.$product->product_id;
+                    $result[$product->product_id] = 'https://www.sharp.hu/cps/rde/xchg/hu/hs.xsl/-/html/product-details-office-print.htm?product=' . $product->product_id;
                 }
             }
         }
@@ -32,10 +33,10 @@ class SharpScraper
         @($dom->loadHTML($content));
         $xpath = new DOMXpath($dom);
         $result = [
-            'name' => '',
+            'name'                  => '',
             'descriptionParagraphs' => [],
-            'specifications' => [],
-            'images' => [],
+            'specifications'        => [],
+            'images'                => [],
         ];
         $elements = $xpath->query('//main//h1');
         if (count($elements) > 0) {
@@ -43,9 +44,9 @@ class SharpScraper
         }
         $elements = $xpath->query('//main//h2');
         foreach ($elements as $element) {
-            if ($element->textContent == 'Áttekintés' ) {
+            if ($element->textContent == 'Áttekintés') {
                 $paragraphs = $xpath->query('.//p', $element->parentNode);
-                foreach($paragraphs as $paragraph) {
+                foreach ($paragraphs as $paragraph) {
                     $paragraphText = str_ireplace(["\r", "\n", "<p>"], '', $dom->saveHTML($paragraph));
                     $paragraphText = str_ireplace("</p>", "<br>", $paragraphText);
                     foreach (explode("<br>", $paragraphText) as $pt) {
@@ -55,7 +56,7 @@ class SharpScraper
                     }
                 }
             }
-            if ($element->textContent == 'Műszaki jellemzők' ) {
+            if ($element->textContent == 'Műszaki jellemzők') {
                 $listItems = $xpath->query('.//li', $element->parentNode);
                 foreach ($listItems as $listItem) {
                     $titleElement = $xpath->query('.//h2', $listItem)[0];
@@ -76,7 +77,7 @@ class SharpScraper
             $rawContent = str_ireplace("\n", "", $content);
             $rawContent = preg_replace('/<div.*?>/miu', '', $rawContent);
             $rawContent = preg_replace('/<span.*?check.*?<\/span>/miu', 'Igen', $rawContent);
-            $rawContent = str_ireplace(['</div>','<dt>','</dt>', '</dd>', '<dl>'], '', $rawContent);
+            $rawContent = str_ireplace(['</div>', '<dt>', '</dt>', '</dd>', '<dl>'], '', $rawContent);
             $rows = explode('</dl>', $rawContent);
             $all['specificationRows'][$name] = [];
             foreach ($rows as $row) {
