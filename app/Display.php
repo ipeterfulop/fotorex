@@ -51,4 +51,26 @@ class Display extends Printer
         ];
     }
 
+
+    public static function findBySlug($slug, $abortWith404IfNotFound = true)
+    {
+        $result = self::where('slug', '=', $slug)->with(
+            [
+                'manufacturer',
+                'printer_photos',
+                'similarprinters',
+                'similarprinters.similarprinter',
+                'printersviewedbyothers',
+                'printersviewedbyothers.similarprinter',
+            ]
+        )->withAttributes()->first();
+
+        if (($result == null) && ($abortWith404IfNotFound)) {
+            abort(404);
+        }
+
+        return $result;
+    }
+
+
 }

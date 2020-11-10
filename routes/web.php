@@ -56,14 +56,19 @@ Route::post('/ajax/nyomtato-email', 'PrintersController@sendEmail')->name('send_
 
 Route::get('/kereses', 'SearchController@search')->name('search_all');
 
-Route::get('/osszehasonlitas', 'PrinterComparisonController@index')->name('compare_products');
-Route::get('/osszehasonlitas/termek', 'PrinterComparisonController@getComparisonData')->name('product_comparison_data');
+Route::get('/osszehasonlitas/nyomtatok', 'PrinterComparisonController@index')->name('compare_products');
+Route::get('/osszehasonlitas/nyomtatok/termek', 'PrinterComparisonController@getComparisonData')->name('product_comparison_data');
+Route::get('/osszehasonlitas/kijelzok', 'DisplayComparisonController@index')->name('compare_displays');
+Route::get('/osszehasonlitas/kijelzok/termek', 'DisplayComparisonController@getComparisonData')->name('display_comparison_data');
 
-Route::get('/termekek/kereses', 'PrintersController@printerList')->name('list_printers');
-Route::get('/termekek/{productcategoryId}/kereses', 'PrintersController@productcategoryList')->name('list_products_in_category');
+Route::get('/termekek/nyomtatok/kereses', 'PrintersController@printerList')->name('list_printers');
+Route::get('/termekek/kijelzok/kereses', 'DisplaysController@displayList')->name('list_displays');
 
 Route::get('/termekek/kategoriak/{productcategoryId}', 'PrintersController@category')->name('printer_category_index');
-Route::get('/termekek/{slug}', 'PrintersController@details')->name('printer_details');
+Route::get('/termekek/nyomtatok/{slug}', 'PrintersController@details')->name('printer_details');
+Route::get('/termekek/kijelzok/{slug}', 'DisplaysController@details')->name('display_details');
+
+Route::get('/termekek/{productcategoryId}/kereses', 'PrintersController@productcategoryList')->name('list_products_in_category');
 
 Route::get('/{categorySlug}', 'ArticlesController@articleList')->name('list_articles');
 Route::get('/{categorySlug}/{slug}', 'ArticlesController@show')->name('show_article');

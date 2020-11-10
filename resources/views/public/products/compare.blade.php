@@ -61,7 +61,7 @@
                         this.printerData[index] = null;
                         this.render();
                     } else {
-                        window.axios.get('{{ route('product_comparison_data') }}', {params: {printer: slug}})
+                        window.axios.get('{{ $dataUrl }}', {params: {printer: slug}})
                             .then((response) => {
                                 this.printerData[index] = response.data;
                                 this.render();
