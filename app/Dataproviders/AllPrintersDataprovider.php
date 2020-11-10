@@ -14,6 +14,7 @@ class AllPrintersDataprovider extends ProductDataproviderBase
     {
         $query = Printer::withAttributes()
             ->enabled()
+            ->printer()
             ->forSale()
             ->sorted($sortingOption);
 

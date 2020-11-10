@@ -1,4 +1,4 @@
-<div class="px-6 py-5 w-full md:w-1/2 lg:w-1/3 h-64">
+<div class="px-6 py-5 w-full md:w-1/2 lg:w-1/3 h-56">
     <div class="w-full h-full relative border border-fotogray">
         <a class="w-full h-full" href="{{ $highlightedbox->url }}">
             <img class="w-full h-full" src="{{ $highlightedbox->image_url }}">

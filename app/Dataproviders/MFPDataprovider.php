@@ -15,6 +15,7 @@ class MFPDataprovider extends ProductDataproviderBase
     {
         $query = Printer::withAttributes()
             ->enabled()
+            ->printer()
             ->forSale()
             ->multifunctionals()
             ->sorted($sortingOption);

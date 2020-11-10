@@ -22,7 +22,6 @@
                         </div>
                     </div>
                     <div class="w-full lg:w-1/6 flex flex-col items-stretch justify-start h-64 text-center">
-                        <a class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1" href="{{ route('compare_displays', ['first' => $display->slug]) }}">Összehasonlítás más termékkel</a>
                         <div class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1">PDF nyomtatás</div>
                         <button class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1"
                                 onclick="showSendForm()"

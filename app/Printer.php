@@ -96,9 +96,6 @@ class Printer extends Model
                 );
             }
         );
-        static::addGlobalScope('printerfamily', function(Builder $builder) {
-            return $builder->where('productfamily', '=', Productfamily::PRINTERS_ID);
-        });
     }
 
     public function manufacturer()
@@ -748,6 +745,11 @@ class Printer extends Model
                 return $query->orderBy('price', 'desc');
         }
         return $query;
+    }
+
+    public function scopePrinter($query)
+    {
+        return $query->where('productfamily', '=', Productfamily::PRINTERS_ID);
     }
 }
 

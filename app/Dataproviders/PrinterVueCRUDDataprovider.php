@@ -12,7 +12,7 @@ class PrinterVueCRUDDataprovider extends VueCRUDDataproviderBase implements IVue
 
     function getBaseQuery()
     {
-        return Printer::query();
+        return Printer::printer();
     }
 
     function getQuery()
