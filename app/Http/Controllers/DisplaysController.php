@@ -2,28 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Dataproviders\PrinterDataprovider;
-use App\Factories\PrinterFilterFactory;
+use App\Dataproviders\DisplayDataprovider;
+use App\Display;
 use App\Helpers\Productcategory;
-use App\Http\Requests\SendPrinterInEmailRequest;
-use App\Printer;
 use Illuminate\Http\Request;
 
-class PrintersController extends ProductController
+class DisplaysController extends ProductController
 {
-    public function printerList()
+    public function displayList()
     {
         if (!request()->isXmlHttpRequest()) {
             return view('public.articles.index');
         }
-        $sortingOption = Printer::validateSortingOption(request()->get('sortby', Printer::SORTING_OPTION_PRICE_DOWN));
-        $dataprovider = new PrinterDataprovider(Productcategory::ALLPRINTERS_ID);
+        $sortingOption = Display::validateSortingOption(request()->get('sortby', Display::SORTING_OPTION_PRICE_DOWN));
+        $dataprovider = new DisplayDataprovider(Productcategory::DISPLAYS_ID);
         $dataproviderResult = $dataprovider->getResults(
             request()->get('page', 1),
             $sortingOption,
-        );
+            );
         return view('public.partials.list-or-grid-inner', [
-            'view' => 'public.partials.printer-summary-block',
+            'view' => 'public.partials.display-summary-block',
             'elements' => $dataproviderResult->results,
             'showPagination' => 'true',
             'result' => $dataproviderResult,
@@ -33,10 +31,10 @@ class PrintersController extends ProductController
 
     public function details($slug)
     {
-        $printer = Printer::findBySlug($slug);
+        $display = Display::findBySlug($slug);
         $attributes = PrinterComparisonController::getComparableAttributeKeys();
-        return view('public.products.printer-details', [
-            'printer' => $printer,
+        return view('public.products.display-details', [
+            'display' => $display,
             'attributes' => $attributes,
         ]);
     }

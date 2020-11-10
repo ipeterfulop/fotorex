@@ -26,8 +26,11 @@
     <div class="printer-detail-box" style="background-color: #00aad2">
         {{ $printer->max_papersize->code }}
     </div>
-    <div class="printer-detail-box" style="background-color: #d1d4d3{{ \App\Helpers\ColorTechnology::getDetailBoxCSS($printer->color_technology) }}">
-        {{ \App\Helpers\ColorTechnology::getDetailBoxLabel($printer->color_management) }}
+    @if($printer->networked >= 2)
+        <div class="printer-detail-box" style="background-color: #4891dc">NET<br>WORK</div>
+    @endif
+    <div class="printer-detail-box" style="{{ \App\Helpers\ColorTechnology::getDetailBoxCSS($printer->printing) }}">
+        {!! \App\Helpers\ColorTechnology::getDetailBoxLabel($printer->color_management) !!}
     </div>
 
 </div>

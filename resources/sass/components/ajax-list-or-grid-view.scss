@@ -1,0 +1,38 @@
+.fotorex-list-container {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 30rem;
+}
+.fotorex-grid-container {
+  flex-wrap: wrap;
+  flex-direction: row;
+  min-height: 30rem;
+}
+.fotorex-list-container .fotorex-list-item-grid-view {
+  display: none;
+}
+.fotorex-grid-container .fotorex-list-item-list-view {
+  display: none;
+}
+.fotorex-list-container .fotorex-list-item {
+  margin-top: 1.75rem;
+  width: 100%;
+}
+.fotorex-grid-container .fotorex-list-item {
+  margin-top: 1.75rem;
+  width: 25%;
+  box-sizing: border-box;
+}
+.ajax-list-or-grid .filter-header {
+  @apply w-full pl-4 h-10 bg-fotomediumgray text-sm flex items-center justify-start;
+}
+.ajax-list-or-grid .filter-button {
+  @apply h-7 bg-fotored hover-gray-link px-6 mt-4 text-white flex items-center justify-center;
+}
+.ajax-list-or-grid .filter-button:hover {
+  @apply bg-fotogray text-gray-900;
+}
+.ajax-list-or-grid .fotorex-filter {
+  @apply pt-4 pb-3 px-5 border-gray-200 border flex flex-col items-start justify-start;
+}

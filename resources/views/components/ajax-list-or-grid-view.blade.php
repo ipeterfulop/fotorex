@@ -1,42 +1,20 @@
 <style>
-    .fotorex-list-container {
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        min-height: 30rem;
-    }
-    .fotorex-grid-container {
-        flex-wrap: wrap;
-        flex-direction: row;
-        min-height: 30rem;
-    }
-    .fotorex-list-container .fotorex-list-item-grid-view {
-        display: none;
-    }
-    .fotorex-grid-container .fotorex-list-item-list-view {
-        display: none;
-    }
-    .fotorex-list-container .fotorex-list-item {
-        width: 100%;
-    }
-    .fotorex-grid-container .fotorex-list-item {
-        width: 25%;
-        box-sizing: border-box;
-    }
 </style>
-<div x-data="listOrGridView_{{ $componentId }}()" x-init="() => {initialize()}" class="w-full flex flex-col lg:flex-row p-2">
+<div x-data="listOrGridView_{{ $componentId }}()" x-init="() => {initialize()}" class="w-full flex flex-col lg:flex-row p-2 ajax-list-or-grid">
     @if(count($filters) > 0)
         <div class="w-full md:w-1/3">
             @include('public.partials.list-or-grid-filters')
         </div>
     @endif
     <div class="flex flex-col w-full md:w-2/3">
-        <div class="flex flex-start flex-no-wrap flex-row p-4 lg:p-0 mb-8">
+        <div class="h-12 flex flex-start flex-no-wrap flex-row p-4 lg:p-0 lg:pl-2 mb-0 items-center justify-start bg-fotomediumgray" id="top-{{ $componentId }}">
+            <label class="mr-2">Rendezés:</label>
             <select x-model="sortingOption">
                 @foreach($sortingOptions as $id => $label)
                     <option value="{{ $id }}">{{ $label }}</option>
                 @endforeach
             </select>
+            <label class="ml-4">Megjelenítés:</label>
             <button class="hidden lg:flex flex-row items-center justify-start ml-4 hover-red-link pr-2 focus:outline-none" @click="switchToList()" x-bind:class="{'opacity-25': containerClass != 'fotorex-list-container'}">
                 <span class="h-8 w-8 mr-1">{!! config('heroicons.solid.view-list') !!}</span>Lista
             </button>
@@ -208,6 +186,7 @@
                 this.ajaxURL.searchParams.set('queryid', Math.random());
                 let historyUrl = new URL(this.baseURL);
                 historyUrl.search = this.ajaxURL.search;
+                document.getElementById('top-{{ $componentId }}').scrollIntoView();
                 if (this.pushState) {
                     let state = {params: Object.fromEntries(this.ajaxURL.searchParams.entries())};
                     state.sortby = this.sortingOption;

@@ -37,7 +37,7 @@ class PublicViewServiceProvider extends ServiceProvider
             'Nyomtatók' => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::PRINTERS_ID]),
             'Multifunkciós nyomtatók' => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::MFP_ID]),
             'Nyomtatóbérlés' => '#',
-            'Interaktív monitorok' => '#',
+            'Interaktív monitorok' => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::DISPLAYS_ID]),
             'Irodaszerek' => 'https://webaruhaz.fotorex.hu/',
         ];
     }

@@ -4,11 +4,10 @@
 namespace App\Dataproviders;
 
 
-use App\Attribute;
 use App\Printer;
 use Illuminate\Http\Request;
 
-class MFPDataprovider extends ProductDataproviderBase
+class AllPrintersDataprovider extends ProductDataproviderBase
 {
 
     protected function getQuery($sortingOption, Request $request)
@@ -17,7 +16,6 @@ class MFPDataprovider extends ProductDataproviderBase
             ->enabled()
             ->printer()
             ->forSale()
-            ->multifunctionals()
             ->sorted($sortingOption);
 
         foreach ($this->filterbuilderClass::getAllAvailableFilters() as $field) {

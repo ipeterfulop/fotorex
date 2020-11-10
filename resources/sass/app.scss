@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import 'components/slider';
 
 html {
     font-size: 14px;
@@ -109,13 +108,20 @@ input {
 .printer-compare-table {
     @apply w-full;
 }
-.printer-price {
+
+.printer-discounted-price {
     @apply text-fotored text-xl font-bold;
+}
+.printer-price {
+    @apply text-gray-900 text-xl font-bold;
 }
 
 .printer-original-price {
-    @apply line-through;
+    @apply line-through text-fotogray;
 }
 .transition-visible {
     transition: visibility 200ms ease-in-out;
 }
+
+@import 'components/slider';
+@import 'components/ajax-list-or-grid-view';

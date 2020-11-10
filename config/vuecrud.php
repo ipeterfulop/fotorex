@@ -20,6 +20,16 @@ return [
             'html'        => '<span title="__label__">✕</span>',
             'translationLabel' => 'Delete',
         ],
+        'delete' => [
+            'class'       => 'btn btn-outline-danger',
+            'html'        => '<span title="__label__">✕</span>',
+            'translationLabel' => 'Delete',
+        ],
+        'confirmDeletion' => [
+            'class'       => 'btn btn-outline-danger',
+            'html'        => '<span title="__label__">Törlés</span>',
+            'translationLabel' => 'Törlés',
+        ],
         'moveUp' => [
             'class'       => 'btn btn-outline-secondary',
             'html'        => '↑',

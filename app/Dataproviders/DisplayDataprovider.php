@@ -4,22 +4,18 @@
 namespace App\Dataproviders;
 
 
-use App\Attribute;
-use App\Printer;
+use App\Display;
 use Illuminate\Http\Request;
 
-class MFPDataprovider extends ProductDataproviderBase
+class DisplayDataprovider extends ProductDataproviderBase
 {
 
     protected function getQuery($sortingOption, Request $request)
     {
-        $query = Printer::withAttributes()
+        $query = Display::withAttributes()
             ->enabled()
-            ->printer()
             ->forSale()
-            ->multifunctionals()
             ->sorted($sortingOption);
-
         foreach ($this->filterbuilderClass::getAllAvailableFilters() as $field) {
             $query = $this->filterbuilderClass::addFilterToQuery(
                 $field,
