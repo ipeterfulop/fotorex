@@ -9,6 +9,10 @@ html {
     max-width: 1260px;
 }
 
+.max-width-container-bordered {
+    @apply max-width-container border border-fotomediumgray;
+}
+
 .hover-red-link {
     @apply cursor-pointer transition transition-colors ease-in-out duration-200;
 }

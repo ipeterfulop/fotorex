@@ -16,7 +16,7 @@
                     <span class="ml-2 h-8 w-8 flex flex-grow-0">{!! config('heroicons.solid.arrow-circle-right') !!}</span>
                 </div>
                 <button @click="menuOpen = !menuOpen"
-                        class="focus:outline-none active:outline-none h-8 w-8  lg:hidden ">
+                        class="focus:outline-none active:outline-none h-8 w-8  lg:hidden  mr-5">
                 <span class="block transition origin-center transition-transform ease-in-out duration-200"
 
                       x-bind:class="{'transform rotate-90': menuOpen}"
@@ -74,7 +74,7 @@
     </div>
     <div class="hidden lg:flex w-full justify-center bg-fotoblue text-xs h-12">
         <div class="w-full max-width-container flex items-center justify-start bg-fotoblue text-white uppercase text-xl">
-            <a href="/" class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem">
+            <a href="/" class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem flex-grow-0" style="width: 4rem">
                 {!! config('heroicons.solid.home') !!}
             </a>
             @foreach($publicmenuitems as $label => $link)

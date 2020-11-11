@@ -1,16 +1,12 @@
-<div class="w-full bg-fotoblue pb-8 flex flex-row justify-center">
+<div class="w-full bg-fotoblue pb-8 flex flex-col justify-start">
     <div class="w-full max-width-container py-4 px-8 flex flex-col lg:flex-row items-center lg:items-start justify-center">
         <div class="w-full lg:w-1/4 mt-8 lg:mt-0 flex flex-col items-start text-gray-200 text-base mr-8 mb-8 lg:mb-0">
             <div class="h-12 border-t-0 border-l-0 border-r-0 border-b-4 border-fotogray w-full pl-3 mb-4 uppercase  text-xl flex flex-row items-center justify-start">
                 Megoldások
             </div>
-            <div class="w-full py-1 pl-3 bg-transparent hover-gray-link">Költségszámlálás</div>
-            <div class="w-full py-1 pl-3 bg-transparent hover-gray-link">Dokumentumkezelés</div>
-            <div class="w-full py-1 pl-3 bg-transparent hover-gray-link">Biztonsági megoldások</div>
-            <div class="mt-16 flex flex-row items-center justify-start w-full px-3">
-                <a href="https://www.facebook.com/FotorexIrodatechnika" target="_blank"><img class="h-8" src="/images/assets/fblogo.png"></a>
-
-            </div>
+            @foreach($solutions as $solution)
+                <a class="w-full py-1 pl-3 bg-transparent hover-gray-link" href="{{ $solution->url }}">{{ $solution->name }}</a>
+            @endforeach
         </div>
         <div class="w-full lg:w-1/4 mt-8 lg:mt-0 flex flex-col items-start text-gray-200 text-base mr-8">
             <div class="h-12 border-t-0 border-l-0 border-r-0 border-b-4 border-fotogray w-full pl-3 mb-4 uppercase  text-xl flex flex-row items-center justify-start">
@@ -39,6 +35,10 @@
             @endforeach
         </div>
     </div>
+    <div class="w-full max-width-container py-4 px-8 flex flex-row items-center justify-start">
+        <a href="https://www.facebook.com/FotorexIrodatechnika" target="_blank"><img class="h-8" src="/images/assets/fblogo.png"></a>
+    </div>
+
 </div>
 <div class="w-full bg-fotored px-8 pb-1 pt-4 text-sm text-white h-20 flex items-start justify-center">
     <div class="w-full max-width-container flex flex-col items-start justify-start">

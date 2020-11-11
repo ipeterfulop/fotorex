@@ -1,7 +1,7 @@
 @extends('layouts.tailwind.app')
 @section('content')
     <div class="w-full bg-transparent flex flex-row justify-center">
-        <div class="w-full max-width-container border border-gray-200 bg-white flex flex-col">
+        <div class="w-full max-width-container-bordered bg-white flex flex-col">
 
             @if(session()->has('message'))
                 <div class="row">

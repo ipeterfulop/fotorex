@@ -36,7 +36,7 @@ class HighlightedboxVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setLabel('Alcím (max. 50 karakter)')
             ->setMandatory(true);
         $result['printer_id'] = (new SearchableSelectVueCRUDFormfield())
-            ->setLabel('Nyomtató')
+            ->setLabel('Termék')
             ->setRules(['required_without:article_id'])
             ->setValuesetClass(Printer::class)
             ->setValuesetSortedGetter('getForSearchableSelect');

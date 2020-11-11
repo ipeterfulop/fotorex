@@ -11,9 +11,9 @@ class ArticleDataprovider
 {
     const ITEMS_PER_INDEX_PAGE = 12;
 
-    public static function getPublishedArticles($categorySlug, $page, $sortingOption, $filterText = '')
+    public static function getPublishedArticles(Articlecategory $category, $page, $sortingOption, $filterText = '')
     {
-        $query = self::getPublishedArticlesQuery($categorySlug, $sortingOption, $filterText);
+        $query = self::getPublishedArticlesQuery($category, $sortingOption, $filterText);
         $result = new DataproviderResult();
         $result->totalCount = $query->count();
         $result->results = self::addPaginationToQuery($query, $page)->get();
@@ -21,15 +21,14 @@ class ArticleDataprovider
         $result->currentPage = $page;
         $result->indexRouteName = 'list_articles';
         $result->sortingOption = $sortingOption;
-        $result->routingOptions = ['categorySlug' => $categorySlug];
+        $result->routingOptions = ['categorySlug' => $category->custom_slug_base];
         $result->pages = (int)ceil($result->totalCount / $result->itemsPerPage);
 
         return $result;
     }
 
-    protected static function getPublishedArticlesQuery($categorySlug, $sortingOption, $filterText)
+    protected static function getPublishedArticlesQuery($category, $sortingOption, $filterText)
     {
-        $category = Articlecategory::findBySlug($categorySlug, true);
         return Article::where('published_at', '!=', null)
             ->where('published_at', '<=', now()->format('Y-m-d H:i:s'))
             ->where('articlecategory_id', '=', $category->id)

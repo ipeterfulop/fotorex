@@ -3,6 +3,7 @@
 namespace App;
 
 use Datalytix\KeyValue\canBeTurnedIntoKeyValueCollection;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Articlecategory extends Model
@@ -15,8 +16,36 @@ class Articlecategory extends Model
         'position',
         'show_in_main_menu',
         'custom_slug_base',
-        'icon_url'
+        'icon_url',
+        'photo_id',
+        'articlecategory_id',
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope(
+            'parents',
+            function (Builder $builder) {
+                return $builder->select('articlecategories.*', 'acjoin.parentslug', 'acjoin.parentname', 'acjoin.parentid')
+                ->leftJoin(
+                    \DB::raw(
+                        '(select custom_slug_base as parentslug, name as parentname, id as parentid from articlecategories) acjoin'
+                    ),
+                    'acjoin.parentid',
+                    '=',
+                    'articlecategories.articlecategory_id'
+                );
+            }
+        );
+    }
+
+
+    protected $with = ['subcategories'];
+
+    public function subcategories()
+    {
+        return $this->hasMany(self::class)->orderBy('position', 'asc');
+    }
 
     public static function findBySlug($slug, $abortWith404IfNotFound = true)
     {
@@ -54,5 +83,13 @@ class Articlecategory extends Model
             ->distinct()
             ->get()
             ->pluck('custom_slug_base');
+    }
+
+    public function getUrlAttribute()
+    {
+        if ($this->parentslug != null) {
+            return route('list_articles', ['categorySlug' => $this->parentslug, 'subcategorySlug' => $this->custom_slug_base]);
+        }
+        return route('list_articles', ['categorySlug' => $this->custom_slug_base]);
     }
 }

@@ -70,5 +70,8 @@ Route::get('/termekek/kijelzok/{slug}', 'DisplaysController@details')->name('dis
 
 Route::get('/termekek/{productcategoryId}/kereses', 'PrintersController@productcategoryList')->name('list_products_in_category');
 
-Route::get('/{categorySlug}', 'ArticlesController@articleList')->name('list_articles');
-Route::get('/{categorySlug}/{slug}', 'ArticlesController@show')->name('show_article');
+Route::get('/ajax/cikkek/{categorySlug}', 'ArticlesController@articleListAjax')->name('list_articles_ajax');
+
+Route::get('/{categorySlug}/{subcategorySlug?}', 'ArticlesController@articleList')->name('list_articles');
+//Route::get('/{categorySlug}/{slug}', 'ArticlesController@show')->name('show_article');
+Route::get('/{categorySlug}/{subcategorySlug?}/{slug?}', 'ArticlesController@show')->name('show_article');

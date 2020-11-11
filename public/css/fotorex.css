@@ -18584,6 +18584,14 @@ html {
   max-width: 1260px;
 }
 
+.max-width-container-bordered {
+  max-width: 1260px;
+  border-width: 1px;
+  --border-opacity: 1;
+  border-color: #d3dbdc;
+  border-color: rgba(211, 219, 220, var(--border-opacity));
+}
+
 .hover-red-link {
   cursor: pointer;
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, -webkit-transform;
@@ -18954,6 +18962,7 @@ input {
   flex-wrap: wrap;
   flex-direction: row;
   min-height: 30rem;
+  padding-left: 1rem;
 }
 
 .fotorex-list-container .fotorex-list-item-grid-view {

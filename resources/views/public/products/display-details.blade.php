@@ -2,7 +2,7 @@
 @section('content')
     <div class="w-full bg-transparent flex flex-col justify-center items-center my-8">
         <div class="w-full flex flex-col justify-center items-center my-8">
-            <div class="w-full max-width-container border border-gray-200 bg-white p-4">
+            <div class="w-full max-width-container-bordered bg-white p-4">
                 <div class="flex flex-col lg:flex-row">
                     <div class="w-full lg:w-2/6 flex flex-col items-stretch justify-start h-64">
                         @include('public.partials.imageviewer', ['printerphotos' => $display->getAllPhotoUrls()])
@@ -32,7 +32,7 @@
                     </div>
                 </div>
             </div>
-            <div class="w-full max-width-container border border-gray-200 bg-white p-4 flex flex-col lg:flex-row">
+            <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col lg:flex-row">
                 <div class="w-3/4">
                     <h2 class="text-2xl">Leírás</h2>
                     {!! $display->description !!}
@@ -42,7 +42,7 @@
                     @include('public.partials.printers.similars', ['title' => 'Más látogatók az alábbi termékeket tekintették meg', 'similarPrinters' => $display->printersviewedbyothers])
                 </div>
             </div>
-            <div class="w-full max-width-container border border-gray-200 bg-white p-4 flex flex-col">
+            <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col">
                 <h2 class="text-2xl">Technikai adatok</h2>
                 @foreach ($attributes as $attribute)
                     <div class="w-full md:w-1/2 flex flex-row border-b border-dotted border-fotogray py-1">
@@ -55,11 +55,11 @@
                     </div>
                 @endforeach
             </div>
-            <div class="w-full max-width-container border border-gray-200 bg-white p-4 flex flex-col">
+            <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col">
                 <h2 class="text-2xl">Letöltések</h2>
             </div>
         </div>
-        <div class="w-full max-width-container border border-gray-200 bg-white p-4 flex flex-col hidden transition-visible"  id="contact-form-container">
+        <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col hidden transition-visible"  id="contact-form-container">
             <div class="flex flex-row items-start justify-start py-4 w-full bg-white">
                 @include('public.partials.contactform', [
                     'ajax' => true,
@@ -68,7 +68,7 @@
                 ])
             </div>
         </div>
-        <div class="w-full max-width-container border border-gray-200 bg-white p-4 flex flex-col hidden transition-visible"  id="send-form-container">
+        <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col hidden transition-visible"  id="send-form-container">
             <div class="flex flex-row items-start justify-start py-4 w-full bg-white">
                 <form method="POST" class="w-full flex flex-col items-center justify-start"
                       action="{{ route('send_printer_details_in_email') }}"
