@@ -1,5 +1,5 @@
 <div x-data="{menuOpen:false}">
-    <div class="w-full flex flex-col justify-start items-start  fixed lg:relative z-10 lg:z-0">
+    <div class="w-full flex flex-col justify-start items-start  fixed lg:relative z-50 lg:z-0">
         <div class="w-full flex justify-center bg-fotored">
             <div class="w-full max-width-container h-18  lg:h-10 bg-fotored text-white flex items-center justify-between text-white">
                 <div class="block lg:hidden ml-2">

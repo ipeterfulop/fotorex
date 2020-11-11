@@ -1,18 +1,3 @@
-<style>
-    .printer-detail-box {
-        height: 60px;
-        width:60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: bold;
-        margin-left: .2rem;
-        margin-right: .2rem;
-        word-break: break-all;
-        text-align: center;
-    }
-</style>
 <div class="flex items-center justify-start flex-nowrap flex-row">
     @if($printer->printing >= \App\Helpers\DeviceFunctionality::BW_ID)
         <div class="printer-detail-box" style="background-color: #e30450">PRINT</div>

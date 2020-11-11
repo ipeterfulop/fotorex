@@ -1,4 +1,4 @@
-<div class="px-6 py-5 w-full md:w-1/2 lg:w-1/3 h-56">
+<div class="px-6 py-5 w-full md:w-1/2 lg:w-1/3 h-128 md:h-96 lg:h-72">
     <div class="w-full h-full relative border border-fotogray overflow-y-hidden">
         <a  style="width:350px; height:195px; overflow-y:hidden" href="{{ $highlightedbox->url }}">
             <img class="w-full" src="{{ $highlightedbox->image_url }}">

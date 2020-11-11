@@ -14,7 +14,7 @@
                     <option value="{{ $id }}">{{ $label }}</option>
                 @endforeach
             </select>
-            <label class="ml-4">Megjelenítés:</label>
+            <label class="hidden lg:block ml-4">Megjelenítés:</label>
             <button class="hidden lg:flex flex-row items-center justify-start ml-4 hover-red-link pr-2 focus:outline-none" @click="switchToList()" x-bind:class="{'opacity-25': containerClass != 'fotorex-list-container'}">
                 <span class="h-8 w-8 mr-1">{!! config('heroicons.solid.view-list') !!}</span>Lista
             </button>

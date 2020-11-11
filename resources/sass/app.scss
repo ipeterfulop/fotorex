@@ -127,5 +127,28 @@ input {
     transition: visibility 200ms ease-in-out;
 }
 
+.printer-detail-box {
+    height: 3rem;
+    width:3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    margin-left: .2rem;
+    margin-right: .2rem;
+    word-break: break-all;
+    text-align: center;
+    font-size: .75rem;
+}
+
+@screen md {
+    .printer-detail-box {
+        height: 4.3rem;
+        width: 4.3rem;
+        font-size: 1rem;
+    }
+}
+
 @import 'components/slider';
 @import 'components/ajax-list-or-grid-view';
