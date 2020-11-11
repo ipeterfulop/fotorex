@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Dataproviders\Filters\ProductcategoryVueCRUDIndexFilter;
 use App\Helpers\PriceFormatter;
 use App\Helpers\PrinterAttributeValue;
 use App\Helpers\Productfamily;
@@ -265,6 +266,7 @@ class Printer extends Model
             -1,
             'Összes'
         );
+        $result['productcategory'] = new ProductcategoryVueCRUDIndexFilter('productcategory', 'Kategória', -1, -1);
         $result['is_enabled'] = new SelectVueCRUDIndexfilter('is_enabled', 'Státusz', 1, 1);
         $result['is_enabled']->setValueSet(self::getIsEnabledOptions());
 
