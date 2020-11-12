@@ -14,11 +14,13 @@
     </div>
 </div>
 <div class="fotorex-list-item-grid-view p-2">
-    <div class="w-full relative z-0 h-48" style="background:url('{{ \App\Article::IMAGES_PATH.'/'.$element->index_image }}'); background-size: cover; background-repeat: no-repeat">
-        <div class="w-full bg-gray-500 absolute bottom-0 left-0 h-20 z-10 text-center uppercase text-white py-2 text-sm flex items-center justify-center"
-             style="background-color: rgba(64,64,64,.9)"
-        >
-            <strong><a href="{{ $element->url }}">{{ $element->title }}</a></strong>
+        <div class="w-full h-128 md:h-96 lg:h-72 relative border border-fotogray overflow-y-hidden">
+            <a  style="width:350px; height:195px; overflow-y:hidden" href="{{ $element->url }}">
+                <img class="w-full" src="{{ \App\Article::IMAGES_PATH.'/'.$element->index_image }}">
+                <div class="absolute bottom-0 bg-opacity-75 bg-gray-800 w-full h-24 flex flex-col items-center justify-center">
+                    <h1 class="uppercase w-full text-center font-semibold text-white text-xl">{{ $element->title }}</h1>
+                </div>
+            </a>
         </div>
-    </div>
+
 </div>
