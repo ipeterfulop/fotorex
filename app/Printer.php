@@ -16,6 +16,7 @@ use Datalytix\VueCRUD\Traits\VueCRUDManageable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class Printer extends Model
 {
@@ -207,6 +208,11 @@ class Printer extends Model
 
         return $this->getCustomizedPrinterPhoto($this->printer_photos->first()->id, $role)
                     ->getUrl();
+    }
+
+    public function getMainImageThumbnailUrl()
+    {
+        return $this->getMainImageUrl(PrinterPhotoRole::getByName('thumbnail'));
     }
 
     public function printerpapersizes()
@@ -429,16 +435,6 @@ class Printer extends Model
                     ],
                 ]
             );
-    }
-
-    public function mainPhotoUrl()
-    {
-        return optional(optional($this->printer_photos->first())->original)->public_url;
-    }
-
-    public function mainPhotoThumbnailUrl()
-    {
-        return optional(optional($this->printer_photos->first())->thumbnail)->public_url;
     }
 
     public function scopeWithAttributes(Builder $query)
@@ -752,6 +748,25 @@ class Printer extends Model
     public function scopePrinter($query)
     {
         return $query->where('productfamily', '=', Productfamily::PRINTERS_ID);
+    }
+
+    public function getDetailsUrl()
+    {
+        $slug = Productfamily::getProductfamilySlug($this->productfamily);
+
+        return route($slug.'_details', ['slug' => $this->slug]);
+    }
+
+    public static function generateUniqueSlug($name, $manufacturerName, $modelNumber)
+    {
+        $baseSlug = Str::slug($manufacturerName.' '.$modelNumber.' '.$name);
+        $slug = $baseSlug;
+        $prefix = 1;
+        while (static::findBySlug($slug, false) != null) {
+            $slug = $baseSlug.'-'.$prefix++;
+        }
+
+        return $slug;
     }
 }
 

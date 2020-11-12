@@ -3,12 +3,17 @@
 namespace App;
 
 use Datalytix\KeyValue\canBeTurnedIntoKeyValueCollection;
+use Datalytix\VueCRUD\Traits\VueCRUDManageable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Articlecategory extends Model
 {
-    use canBeTurnedIntoKeyValueCollection;
+    use canBeTurnedIntoKeyValueCollection, VueCRUDManageable;
+    const SUBJECT_SLUG = 'articlecategory';
+    const SUBJECT_NAME = 'Cikk-kategória';
+    const SUBJECT_NAME_PLURAL = 'Cikk-kategóriák';
+    const IMAGES_PATH = '/categories';
 
     protected $fillable = [
         'id',
@@ -41,6 +46,11 @@ class Articlecategory extends Model
 
 
     protected $with = ['subcategories'];
+
+    public function photo()
+    {
+        return $this->belongsTo(Photo::class, 'photo_id');
+    }
 
     public function subcategories()
     {
@@ -91,5 +101,49 @@ class Articlecategory extends Model
             return route('list_articles', ['categorySlug' => $this->parentslug, 'subcategorySlug' => $this->custom_slug_base]);
         }
         return route('list_articles', ['categorySlug' => $this->custom_slug_base]);
+    }
+
+    public static function getVueCRUDIndexColumns()
+    {
+        return [
+            'name' => 'Név',
+            'parentname' => 'Szülőkategória'
+        ];
+    }
+
+    public static function getVueCRUDSortingIndexColumns()
+    {
+        return [];
+    }
+
+    public function getVueCRUDDetailsFields()
+    {
+        return [];
+    }
+
+    public static function getVueCRUDIndexFilters()
+    {
+        return [];
+    }
+
+    public static function modifyModellistButtons($buttons)
+    {
+        unset($buttons['details']);
+        unset($buttons['delete']);
+
+        return $buttons;
+    }
+
+    public static function getVueCRUDAdditionalAjaxFunctions()
+    {
+        return ['storePublicPicture'];
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->photo_id != null) {
+            return url('/storage'.self::IMAGES_PATH.'/'.$this->photo->name);
+        }
+        return null;
     }
 }

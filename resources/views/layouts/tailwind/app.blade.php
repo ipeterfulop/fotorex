@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ isset($pageTitle) ? $pageTitle.' - '  : ''}}{{ config('app.name') }}</title>
+    <meta name="description" content="{{ $pageDescription ?? 'Fotorex' }}">
 <!--
     <script src="{{ asset('js/fa/all.min.js') }}"></script>
     <script src="{{ asset('js/fa/brands.min.js') }}"></script>

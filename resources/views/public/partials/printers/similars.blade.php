@@ -3,9 +3,9 @@
     @forelse($similarPrinters as $similarPrinter)
         <div class="w-full flex flex-row items-stretch justify-between">
             @if($similarPrinter->similar_printer_id != null)
-                <div class="w-1/4"><img src="{{ $similarPrinter->similarprinter->mainPhotoThumbnailUrl() }}" class="w-full"></div>
-                <div class="w-2/4"><a href="{{ route('printer_details', ['slug' => $similarPrinter->similarprinter->slug]) }}">{{ $similarPrinter->similarprinter->name }}</a></div>
-                <div class="w-1/4 text-fotored">{{ $similarPrinter->similarprinter->price }}</div>
+                <div class="w-1/4"><img src="{{ $similarPrinter->similarprinter->getMainImageThumbnailUrl() }}" class="w-full"></div>
+                <div class="w-2/4"><a href="{{ $similarPrinter->similarprinter->getDetailsUrl() }}">{{ $similarPrinter->final_label }}</a></div>
+                <div class="w-1/4 text-fotored text-sm">{!! $similarPrinter->similarprinter->price_label !!} </div>
             @else
                 <div class="w-1/4"></div>
                 <div class="w-3/4"><a href="{{ $similarPrinter->final_url }}">{{ $similarPrinter->final_label }}</a></div>

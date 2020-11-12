@@ -6,6 +6,7 @@ use App\CustomizedPrinterPhoto;
 use App\Formdatabuilders\PrinterVueCRUDFormdatabuilder;
 use App\Helpers\PrinterPhotoManager;
 use App\Helpers\Productfamily;
+use App\Manufacturer;
 use App\Photo;
 use App\Printer;
 use App\PrinterPhoto;
@@ -43,6 +44,11 @@ class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
             $dataset = $this->getDataset();
             if ($subject == null) {
                 $class = Productfamily::getProductfamilyClass(static::PRODUCTFAMILY);
+                $dataset['slug'] = Printer::generateUniqueSlug(
+                    $dataset['name'],
+                    Manufacturer::find($dataset['manufacturer_id']),
+                    $dataset['model_number']
+                );
                 $subject = $class::create($dataset);
             } else {
                 $subject->update($dataset);
@@ -61,7 +67,7 @@ class SavePrinterVueCRUDRequest extends VueCRUDRequestBase
             'manufacturer_id' => $this->input('manufacturer_id'),
             'name' => $this->input('name'),
             'description' => $this->input('description'),
-            'slug' => $this->input('slug'),
+            //'slug' => $this->input('slug'),
             'html_page_title' => $this->input('html_page_title'),
             'html_page_meta_description' => $this->input('html_page_meta_description'),
             'is_enabled' => $this->input('is_enabled'),

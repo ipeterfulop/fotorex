@@ -77,18 +77,18 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setLabel('Leírás')
             ->setProperty('content')
             ->setContainerClass('col-12');
-        $result['slug'] = (new SlugVueCRUDFormfield())->setMandatory(true)
-            ->setLabel('URL')
-            ->setProperty('slug')
-            ->addSourceFieldName('manufacturer_id')
-            ->addSourceFieldName('model_number_displayed')
-            ->addSourceFieldName('name')
-            ->setContainerClass('col-6')
-            ->setRules(['unique:printers', 'regex:/^[A-Za-z0-9\-\_]*$/miu'])
-            ->setMessages([
-                'unique' => 'Ez az URL már foglalt',
-                'regex' => 'Az URL csak ékezet nélküli betűket, számokat, kötőjelet és alávonást tartalmazhat'
-            ]);
+//        $result['slug'] = (new SlugVueCRUDFormfield())->setMandatory(true)
+//            ->setLabel('URL')
+//            ->setProperty('slug')
+//            ->addSourceFieldName('manufacturer_id')
+//            ->addSourceFieldName('model_number_displayed')
+//            ->addSourceFieldName('name')
+//            ->setContainerClass('col-6')
+//            ->setRules(['unique:printers', 'regex:/^[A-Za-z0-9\-\_]*$/miu'])
+//            ->setMessages([
+//                'unique' => 'Ez az URL már foglalt',
+//                'regex' => 'Az URL csak ékezet nélküli betűket, számokat, kötőjelet és alávonást tartalmazhat'
+//            ]);
         $result['html_page_title'] = (new TextVueCRUDFormfield())
             ->setMandatory(true)
             ->setLabel('Oldalcím')

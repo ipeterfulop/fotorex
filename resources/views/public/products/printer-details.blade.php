@@ -1,4 +1,4 @@
-@extends('layouts.tailwind.app')
+@extends('layouts.tailwind.app', ['pageTitle' => $printer->html_page_title, 'pageDescription' => $printer->html_page_meta_description])
 @section('content')
     <div class="w-full bg-transparent flex flex-col justify-center items-center my-8">
         <div class="w-full flex flex-col justify-center items-center my-8">
@@ -10,7 +10,7 @@
                     <div class="w-full lg:w-3/6 flex flex-col items-stretch justify-start h-64">
                         <h2 class="font-bold text-2xl mb-4">{{ $printer->displayname }}</h2>
                         @include('public.partials.printers.detail-boxes', ['printer' => $printer])
-                        <div class="w-full py-4 flex flex-col items-start justify-center">
+                        <div class="w-full py-4 flex flex-col items-start justify-center text-xl">
                             {!! $printer->price_label !!}
                         </div>
                         <div class="w-full py-4 flex flex-col items-start justify-center">
@@ -92,7 +92,7 @@
                     'fieldName' => 'message',
                     'label' => 'Üzenet',
                     'mandatory' => true,
-                    'value' => $printer->displayname.' - Fotorex.hu: '.route('printer_details', ['slug' => $printer->slug])
+                    'value' => $printer->displayname.' - Fotorex.hu: '.$printer->getDetailsUrl()
                 ])
                 <input type="text" id="email_sidenote" value="" name="email_sidenote" style="height: 0px; opacity: 0">
                 <button class="btn bg-fotored hover-gray-link mt-6 p-2 text-white uppercase"

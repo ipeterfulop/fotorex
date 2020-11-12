@@ -25,7 +25,7 @@
                 </div>
                 @foreach($highlightedprinters as $highlightedprinter)
                     <a class="w-full py-1 pl-3 bg-transparent hover-gray-link"
-                       href="{{ route('printer_details',  ['slug' => $highlightedprinter->printer->slug]) }}"
+                       href="{{ $highlightedprinter->printer->getDetailsUrl() }}"
                     >{{ $highlightedprinter->printer->shortdisplayname }}</a>
                 @endforeach
             </div>

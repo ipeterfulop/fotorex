@@ -3,7 +3,9 @@
         <div class="w-full flex justify-center bg-fotored">
             <div class="w-full max-width-container h-18  lg:h-10 bg-fotored text-white flex items-center justify-between text-white">
                 <div class="block lg:hidden ml-2">
-                    <img src="/images/assets/fotorex-logo.jpg" alt="logo" class="h-full">
+                    <a href="/" class="w-full h-full">
+                        <img src="/images/assets/fotorex-logo.jpg" alt="logo" class="h-full">
+                    </a>
                 </div>
                 <div class="hidden lg:flex items-center justify-start flex-row">
                     <span class="flex mr-2 h-8 w-8 flex flex-grow-0">{!! config('heroicons.solid.phone') !!}</span>

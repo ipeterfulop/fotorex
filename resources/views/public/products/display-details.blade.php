@@ -1,4 +1,4 @@
-@extends('layouts.tailwind.app')
+@extends('layouts.tailwind.app', ['pageTitle' => $display->html_page_title, 'pageDescription' => $display->html_page_meta_description])
 @section('content')
     <div class="w-full bg-transparent flex flex-col justify-center items-center my-8">
         <div class="w-full flex flex-col justify-center items-center my-8">
@@ -9,7 +9,7 @@
                     </div>
                     <div class="w-full lg:w-3/6 flex flex-col items-stretch justify-start h-64">
                         <h2 class="font-bold text-2xl mb-4">{{ $display->displayname }}</h2>
-                        <div class="w-full py-4 flex flex-col items-start justify-center">
+                        <div class="w-full py-4 flex flex-col items-start justify-center text-xl">
                             {!! $display->price_label !!}
                         </div>
                         <div class="w-full py-4 flex flex-col items-start justify-center">
@@ -41,19 +41,6 @@
                     @include('public.partials.printers.similars', ['title' => 'Hasonló termékek', 'similarPrinters' => $display->similarprinters])
                     @include('public.partials.printers.similars', ['title' => 'Más látogatók az alábbi termékeket tekintették meg', 'similarPrinters' => $display->printersviewedbyothers])
                 </div>
-            </div>
-            <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col">
-                <h2 class="text-2xl">Technikai adatok</h2>
-                @foreach ($attributes as $attribute)
-                    <div class="w-full md:w-1/2 flex flex-row border-b border-dotted border-fotogray py-1">
-                        <div class="w-full md:w-1/2">
-                            {{ $attribute['n'] }}
-                        </div>
-                        <div class="w-full md:w-1/2 text-right">
-                            {{ $display->{$attribute['v']} }}
-                        </div>
-                    </div>
-                @endforeach
             </div>
             <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col">
                 <h2 class="text-2xl">Letöltések</h2>
@@ -90,7 +77,7 @@
                         'fieldName' => 'message',
                         'label' => 'Üzenet',
                         'mandatory' => true,
-                        'value' => $display->displayname.' - Fotorex.hu: '.route('printer_details', ['slug' => $display->slug])
+                        'value' => $display->displayname.' - Fotorex.hu: '.$display->getDetailsUrl()
                     ])
                     <input type="text" id="email_sidenote" value="" name="email_sidenote" style="height: 0px; opacity: 0">
                     <button class="btn bg-fotored hover-gray-link mt-6 p-2 text-white uppercase"

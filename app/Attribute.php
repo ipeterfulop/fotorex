@@ -101,11 +101,11 @@ class Attribute extends Model
 
     public function scopeForPrinters($query)
     {
-        return $query->whereIn('id', [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]);
+        return $query->where('productfamily', '=', Productfamily::PRINTERS_ID);
     }
 
     public function scopeForDisplays($query)
     {
-        return $query->whereIn('id', [1,2,3]);
+        return $query->where('productfamily', '=', Productfamily::DISPLAYS_ID);
     }
 }

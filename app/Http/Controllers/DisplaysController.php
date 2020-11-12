@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Dataproviders\DisplayDataprovider;
+use App\Dataproviders\ProductAttributeDataprovider;
 use App\Display;
 use App\Helpers\Productcategory;
+use App\Helpers\Productfamily;
 use Illuminate\Http\Request;
 
 class DisplaysController extends ProductController
@@ -32,7 +34,7 @@ class DisplaysController extends ProductController
     public function details($slug)
     {
         $display = Display::findBySlug($slug);
-        $attributes = PrinterComparisonController::getComparableAttributeKeys();
+        $attributes = ProductAttributeDataprovider::getComparableAttributeKeys(Productfamily::DISPLAYS_ID);
         return view('public.products.display-details', [
             'display' => $display,
             'attributes' => $attributes,

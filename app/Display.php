@@ -98,5 +98,4 @@ class Display extends Printer
 
         return $result;
     }
-
 }
