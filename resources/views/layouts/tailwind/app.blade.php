@@ -36,22 +36,30 @@
 
                 </div>
                 <div class="w-full lg:w-1/4 h-full flex flex-row flex-wrap lg:flex-no-wrap lg:flex-col items-center justify-between text-base lg:text-2xl uppercase pl-2 lg:pl-6 pr-2 lg:pr-0 font-semibold mt-4 lg:mt-0">
-                    <div class="p-1 lg:p-0 w-1/2 lg:w-full h-18"><a class="w-full h-full bg-fotomediumgray hover-red-link  flex items-center justify-center lg:justify-start pl-0 lg:pl-4 mr-2 lg:mr-0 lg:flex-grow mb-2" href="/szolgaltatasok">
-                        <span class="hidden md:block mr-2 h-16 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.cog') !!}</span>
-                        Szolgáltatások
-                    </a></div>
-                    <div class="p-1 lg:p-0 w-1/2 lg:w-full  h-18"><a class="w-full h-full bg-fotomediumgray hover-red-link  flex items-center justify-center lg:justify-start pl-0 lg:pl-4 lg:flex-grow mt-0 lg:mt-2 mb-2" href="/megoldasok">
-                        <span class="hidden md:block mr-2 h-16 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.cube') !!}</span>
-                        Megoldások
-                    </a></div>
-                    <div class="p-1 lg:p-0 w-1/2 lg:w-full  h-18"><a class="w-full h-full bg-fotomediumgray hover-red-link  flex items-center justify-center lg:justify-start pl-0 lg:pl-4 mr-2 lg:mr-0 lg:flex-grow mt-0 lg:mt-2 mb-2" href="/hirek">
-                        <span class="hidden md:block mr-2 h-16 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.document-text') !!}</span>
-                        Hírek
-                    </a></div>
-                    <div class="p-1 lg:p-0 w-1/2 lg:w-full  h-18"><a class="w-full h-full bg-fotomediumgray hover-red-link  flex items-center justify-center lg:justify-start pl-0 lg:pl-4 lg:flex-grow mt-0 lg:mt-2" href="#">
-                        <span class="hidden md:block mr-2 h-16 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.menu-alt-2') !!}</span>
-                        Cégünkről
-                    </a></div>
+                    <div class="p-1 lg:p-0 w-1/2 lg:w-full h-18">
+                        <a class="w-full h-full bg-fotomediumgray hover-red-link  flex items-center justify-center lg:justify-start pl-0 lg:pl-4 lg:flex-grow" href="/szolgaltatasok">
+                            <span class="hidden md:block mr-2 h-16 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.cog') !!}</span>
+                            Szolgáltatások
+                        </a>
+                    </div>
+                    <div class="p-1 lg:p-0 w-1/2 lg:w-full h-18">
+                        <a class="w-full h-full bg-fotomediumgray hover-red-link  flex items-center justify-center lg:justify-start pl-0 lg:pl-4 lg:flex-grow" href="/megoldasok">
+                            <span class="hidden md:block mr-2 h-16 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.cube') !!}</span>
+                            Megoldások
+                        </a>
+                    </div>
+                    <div class="p-1 lg:p-0 w-1/2 lg:w-full  h-18">
+                        <a class="w-full h-full bg-fotomediumgray hover-red-link  flex items-center justify-center lg:justify-start pl-0 lg:pl-4 mr-2 lg:mr-0 lg:flex-grow" href="/hirek">
+                            <span class="hidden md:block mr-2 h-16 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.document-text') !!}</span>
+                            Hírek
+                        </a>
+                    </div>
+                    <div class="p-1 lg:p-0 w-1/2 lg:w-full  h-18">
+                        <a class="w-full h-full bg-fotomediumgray hover-red-link  flex items-center justify-center lg:justify-start pl-0 lg:pl-4 lg:flex-grow" href="#">
+                            <span class="hidden md:block mr-2 h-16 text-white main-menu-svg-container text-fotored" style="width: 3.5rem">{!! config('heroicons.solid.menu-alt-2') !!}</span>
+                            Cégünkről
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
