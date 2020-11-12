@@ -22,7 +22,7 @@
             <div class="absolute cursor-pointer text-white font-xl z-10 bottom-0 left-0 w-full hidden lg:flex h-8 items-center justify-center p-1 bg-opacity-25 hover:bg-opacity-100 bg-black select-none" @click="scrollDown">&#x2304;</div>
             <div class="absolute cursor-pointer text-white font-xl z-10 bottom-0 right-0 h-full flex lg:hidden w-8 items-center justify-center p-1 bg-opacity-25 hover:bg-opacity-100 bg-black select-none" @click="scrollRight">&gt;</div>
         </div>
-        <div class="w-full h-full flex flex items-center justify-center z-0">
+        <div class="h-96 lg:h-auto w-auto lg:w-full mt-2 lg:mt-0 flex flex items-center justify-center z-0">
             <img class="w-full h-full object-contain cursor-pointer" x-bind:src="currentImage" @click.stop="imageFullscreen = !imageFullscreen">
         </div>
         <div class="w-full h-full fixed z-20 top-0 left-0 bg-gray-900 bg-opacity-75 p-8"
