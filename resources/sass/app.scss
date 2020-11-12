@@ -9,6 +9,10 @@ html {
     max-width: 1260px;
 }
 
+.max-width-container-bordered {
+    @apply max-width-container border border-fotomediumgray;
+}
+
 .hover-red-link {
     @apply cursor-pointer transition transition-colors ease-in-out duration-200;
 }
@@ -110,10 +114,10 @@ input {
 }
 
 .printer-discounted-price {
-    @apply text-fotored text-xl font-bold;
+    @apply text-fotored font-bold;
 }
 .printer-price {
-    @apply text-gray-900 text-xl font-bold;
+    @apply text-gray-900 font-bold;
 }
 
 .printer-original-price {
@@ -121,6 +125,29 @@ input {
 }
 .transition-visible {
     transition: visibility 200ms ease-in-out;
+}
+
+.printer-detail-box {
+    height: 3rem;
+    width:3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    margin-left: .2rem;
+    margin-right: .2rem;
+    word-break: break-all;
+    text-align: center;
+    font-size: .75rem;
+}
+
+@screen md {
+    .printer-detail-box {
+        height: 4.3rem;
+        width: 4.3rem;
+        font-size: 1rem;
+    }
 }
 
 @import 'components/slider';

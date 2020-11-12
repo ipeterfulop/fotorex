@@ -61,7 +61,7 @@ class Highlightedbox extends Model
     public function getUrlAttribute()
     {
         if ($this->printer_id != null) {
-            return route('printer_details', ['slug' => $this->printer->slug]);
+            return $this->printer->getDetailsUrl();
         }
         if ($this->article_id != null) {
             return $this->article->url;

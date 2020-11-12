@@ -3,9 +3,12 @@
 namespace App;
 
 use App\Helpers\Productfamily;
+use App\Helpers\Productsubfamily;
 use App\Traits\hasFiles;
 use App\Traits\hasIsEnabledProperty;
 use App\Traits\HasSortingOptions;
+use Datalytix\VueCRUD\Indexfilters\SelectVueCRUDIndexfilter;
+use Datalytix\VueCRUD\Indexfilters\TextVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Traits\VueCRUDManageable;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -73,4 +76,26 @@ class Display extends Printer
     }
 
 
+    public static function getVueCRUDIndexFilters()
+    {
+        $result = [];
+        $searchedProperties = ['name', 'model_number', 'model_number_displayed'];
+        $result[TextVueCRUDIndexfilter::buildPropertyName($searchedProperties)] = new TextVueCRUDIndexfilter($searchedProperties, 'Név', '');
+        $result['manufacturer_id'] = new SelectVueCRUDIndexfilter('manufacturer_id', 'Gyártó', -1, -1);
+        $result['manufacturer_id']->setValueSet(
+            Manufacturer::orderBy('name', 'asc')->get()->pluck('name', 'id'),
+            -1,
+            'Összes'
+        );
+        $result['productsubfamily'] = new SelectVueCRUDIndexfilter('productsubfamily', 'Típus', -1, -1);
+        $result['productsubfamily']->setValueSet(
+            Productsubfamily::getKeyValueCollection(),
+            -1,
+            'Összes'
+        );
+        $result['is_enabled'] = new SelectVueCRUDIndexfilter('is_enabled', 'Státusz', 1, 1);
+        $result['is_enabled']->setValueSet(self::getIsEnabledOptions());
+
+        return $result;
+    }
 }

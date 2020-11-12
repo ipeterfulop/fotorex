@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Attribute;
+use App\Dataproviders\ProductAttributeDataprovider;
 use App\Helpers\ComparablePrinter;
+use App\Helpers\Productfamily;
 use App\Printer;
 use App\PrinterPhotoRole;
 use Illuminate\Http\Request;
@@ -15,7 +17,7 @@ class PrinterComparisonController extends Controller
 
     public function index()
     {
-        $comparedAttributes = self::getComparableAttributeKeys();
+        $comparedAttributes = ProductAttributeDataprovider::getComparableAttributeKeys(Productfamily::PRINTERS_ID);
         $printers = request()->has('first') ? [request()->get('first')] : [];
         return view('public.products.compare', [
             'comparedAttributes' => $comparedAttributes,
@@ -28,7 +30,7 @@ class PrinterComparisonController extends Controller
     public function getComparisonData()
     {
         $printer = Printer::findBySlug(request()->get('printer'));
-        $attributes = self::getComparableAttributeKeys();
+        $attributes = ProductAttributeDataprovider::getComparableAttributeKeys(Productfamily::PRINTERS_ID);
         $result = [
             'name' => $printer->name,
             'photo' => $printer->getMainImageUrl(request()->get('printerphotoroles')->get('index'))
@@ -37,22 +39,10 @@ class PrinterComparisonController extends Controller
         foreach ($attributes as $attribute) {
             $result[$attribute['v']] = $printer->{$attribute['v']};
         }
-        $result['link'] = route('printer_details', ['slug' => $printer->slug]);
+        $result['link'] = $printer->getDetailsUrl();
         $result['linkbutton'] = '<a class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-3 flex-grow"'
-            .'href="'.route('printer_details', ['slug' => $printer->slug]).'">Termékoldal</a>';
+            .'href="'.$printer->getDetailsUrl().'">Termékoldal</a>';
 
         return response()->json($result);
-    }
-
-    public static function getComparableAttributeKeys()
-    {
-        $result = [
-            ['v' => 'usergroup_size_label', 'n' => 'Munkakörnyezet'],
-        ];
-        foreach (Attribute::where('position_at_product_comparison', '!=', null)->orderBy('position_at_product_comparison', 'asc')->get() as $attribute) {
-            $result[] = ['v' => $attribute->variable_name.'_label', 'n' => $attribute->name];
-        }
-
-        return collect($result);
     }
 }

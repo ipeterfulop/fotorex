@@ -1,11 +1,12 @@
 @php($componentId = \Str::random(16))
-<div class="flex lg:flex-row w-full h-full justify-start"
+<div class="flex lg:flex-row w-full md:h-auto justify-start"
+     style="min-height: 35rem;"
      x-data="itemSlider_{{ $componentId }}()"
      x-init="() => {initialize()}"
 >
     @if(count($items) > 0)
         <div class="relative w-full flex-shrink-0 overflow-x-hidden lg:overflow-y-hidden flex flex-row flex-no-wrap">
-            <button class="z-10 cursor-pointer text-white font-xl h-full flex flex-col items-center justify-center p-1 select-none item-slider-slide-button px-2 bg-white text-4xl text-fotored font-bold opacity-50 hover:opacity-100 transition-opacity duration-200 ease-in-out"
+            <button class="z-10 cursor-pointer text-white font-xl h-full flex flex-col items-center justify-center p-1 select-none item-slider-slide-button px-2 bg-white text-4xl text-fotored font-bold opacity-100 hover:opacity-75 transition-opacity duration-200 ease-in-out"
                     @click="scrollLeft"
                     style=""
                     x-bind:disabled="scrollPositionX == 0"
@@ -21,7 +22,7 @@
                 @endforeach
                 <div class="h-1 w-full opacity-0" id="{{ $componentId }}-closer"></div>
             </div>
-            <button class="z-10 cursor-pointer text-white font-xl h-full flex flex-col items-center justify-center p-1 select-none item-slider-slide-button px-2 bg-white text-4xl text-fotored font-bold opacity-50 hover:opacity-100 transition-opacity duration-200 ease-in-out"
+            <button class="z-10 cursor-pointer text-white font-xl h-full flex flex-col items-center justify-center p-1 select-none item-slider-slide-button px-2 bg-white text-4xl text-fotored font-bold opacity-100 hover:opacity-75 transition-opacity duration-200 ease-in-out"
                     @click="scrollRight"
                     style=""
                     x-bind:disabled="scrollPositionX >= maxScrollX"
@@ -40,6 +41,10 @@
                 this.$watch('scrollPositionX', (value) => {
                     this.$refs.slider_list_container.style.transform = 'translateX(-'+value.toString()+'px)';
                 });
+                window.addEventListener('resize', () => {
+                    this.calculateMaxScrollX();
+                })
+
             },
             calculateStepX: function() {
                 let computed = window.getComputedStyle(this.$refs.slider_list_container.querySelector('.slider-list-item'));
@@ -49,7 +54,6 @@
             },
             calculateMaxScrollX: function() {
                 let i = Array.from(this.$refs.slider_list_container.querySelectorAll('.slider-list-item'));
-                i.pop();
                 i.pop();
                 if (i.length > 2) {
                     i.pop();

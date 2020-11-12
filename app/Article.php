@@ -43,6 +43,8 @@ class Article extends Model
         'published_at_label'
     ];
 
+    protected $with = ['articlecategory'];
+
     public function articlecategory()
     {
         return $this->belongsTo(Articlecategory::class);
@@ -73,7 +75,9 @@ class Article extends Model
     {
         $slugBase = null;
         if ($this->articlecategory_id != null) {
-            $slugBase = $this->articlecategory->custom_slug_base;
+            $slugBase = $this->articlecategory->parentslug == null
+                ? $this->articlecategory->custom_slug_base
+                : $this->articlecategory->parentslug.'/'.$this->articlecategory->custom_slug_base;
         }
         if ($slugBase == null) {
             $slugBase = self::SLUG_BASE;

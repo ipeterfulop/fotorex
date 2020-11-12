@@ -30,7 +30,7 @@ class SimilarPrinter extends Model
     public function getFinalUrlAttribute()
     {
         if ($this->similar_printer_id != null) {
-            return route('printer_details', ['slug' => $this->similarprinter->slug]);
+            return $this->similarprinter->getDetailsUrl();
         }
 
         return $this->url;

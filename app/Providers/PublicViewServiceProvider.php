@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Articlecategory;
 use App\Highlightedprinter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
@@ -27,8 +28,14 @@ class PublicViewServiceProvider extends ServiceProvider
     {
         View::composer('*', function($view) {
             return $view->with('highlightedprinters', Highlightedprinter::orderBy('position', 'asc')->get())
-                ->with('publicmenuitems', $this->buildPublicMenu());
+                ->with('publicmenuitems', $this->buildPublicMenu())
+                ->with('solutions', $this->getSolutionSubcategories());
         });
+    }
+
+    protected function getSolutionSubcategories()
+    {
+        return Articlecategory::findBySlug('megoldasok')->subcategories;
     }
 
     protected function buildPublicMenu()

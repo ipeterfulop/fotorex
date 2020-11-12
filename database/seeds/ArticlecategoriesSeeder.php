@@ -15,40 +15,65 @@ class ArticlecategoriesSeeder extends Seeder
         $position = 1;
         $dataset = [
             [
-                'id' => $position,
+                'id' => 1,
                 'position' => $position++,
                 'show_in_main_menu' => 1,
                 'name' => 'Hírek',
                 'custom_slug_base' => 'hirek'
             ],
             [
-                'id' => $position,
+                'id' => 2,
                 'position' => $position++,
                 'show_in_main_menu' => 1,
                 'name' => 'Cégünkről',
                 'custom_slug_base' => 'cegunkrol'
             ],
             [
-                'id' => $position,
+                'id' => 3,
                 'position' => $position++,
                 'show_in_main_menu' => 1,
                 'name' => 'Szolgáltatások',
                 'custom_slug_base' => 'szolgaltatasok'
             ],
             [
-                'id' => $position,
+                'id' => 4,
                 'position' => $position++,
                 'show_in_main_menu' => 1,
                 'name' => 'Megoldások',
                 'custom_slug_base' => 'megoldasok'
             ],
             [
-                'id' => $position,
+                'id' => 5,
                 'position' => $position++,
                 'show_in_main_menu' => 0,
                 'name' => 'Szaktanácsadás',
                 'custom_slug_base' => 'szaktanacsadas'
             ],
+            [
+                'id' => 6,
+                'position' => $position++,
+                'show_in_main_menu' => 0,
+                'name' => 'Biztonsági megoldások',
+                'custom_slug_base' => 'biztonsagi-megoldasok',
+                'articlecategory_id' => 4
+            ],
+            [
+                'id' => 7,
+                'position' => $position++,
+                'show_in_main_menu' => 0,
+                'name' => 'Költségszámlálás',
+                'custom_slug_base' => 'koltsegszamlalas',
+                'articlecategory_id' => 4
+            ],
+            [
+                'id' => 8,
+                'position' => $position++,
+                'show_in_main_menu' => 0,
+                'name' => 'Dokumentumkezelés',
+                'custom_slug_base' => 'dokumentumkezeles',
+                'articlecategory_id' => 4
+            ],
+
         ];
         foreach ($dataset as $row) {
             \App\Articlecategory::updateOrCreate(

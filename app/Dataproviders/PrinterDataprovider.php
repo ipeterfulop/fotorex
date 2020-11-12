@@ -22,8 +22,8 @@ class PrinterDataprovider extends ProductDataproviderBase
             ->enabled()
             ->printer()
             ->forSale()
-            ->onlyPrinters()
             ->sorted($sortingOption);
+        $query = self::addBaseScopesToQuery($query);
         foreach ($this->filterbuilderClass::getAllAvailableFilters() as $field) {
             $query = $this->filterbuilderClass::addFilterToQuery(
                 $field,
@@ -33,5 +33,10 @@ class PrinterDataprovider extends ProductDataproviderBase
         }
 
         return $query;
+    }
+
+    public static function addBaseScopesToQuery($query)
+    {
+        return $query->onlyPrinters();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Dataproviders\Filters\ProductcategoryVueCRUDIndexFilter;
 use App\Helpers\PriceFormatter;
 use App\Helpers\PrinterAttributeValue;
 use App\Helpers\Productfamily;
@@ -15,6 +16,7 @@ use Datalytix\VueCRUD\Traits\VueCRUDManageable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class Printer extends Model
 {
@@ -208,6 +210,11 @@ class Printer extends Model
                     ->getUrl();
     }
 
+    public function getMainImageThumbnailUrl()
+    {
+        return $this->getMainImageUrl(PrinterPhotoRole::getByName('thumbnail'));
+    }
+
     public function printerpapersizes()
     {
         return $this->hasMany(PrinterPapersize::class, 'printer_id');
@@ -265,6 +272,7 @@ class Printer extends Model
             -1,
             'Összes'
         );
+        $result['productcategory'] = new ProductcategoryVueCRUDIndexFilter('productcategory', 'Kategória', -1, -1);
         $result['is_enabled'] = new SelectVueCRUDIndexfilter('is_enabled', 'Státusz', 1, 1);
         $result['is_enabled']->setValueSet(self::getIsEnabledOptions());
 
@@ -429,16 +437,6 @@ class Printer extends Model
             );
     }
 
-    public function mainPhotoUrl()
-    {
-        return optional(optional($this->printer_photos->first())->original)->public_url;
-    }
-
-    public function mainPhotoThumbnailUrl()
-    {
-        return optional(optional($this->printer_photos->first())->thumbnail)->public_url;
-    }
-
     public function scopeWithAttributes(Builder $query)
     {
         return $query->withGlobalScope('attr', new PrinterWithAttributesScope);
@@ -447,7 +445,7 @@ class Printer extends Model
     public function getPriceLabelAttribute()
     {
         if ($this->request_for_price == 1) {
-            return '<div class="printer-discounted-price flex flex-row items-center">' . self::CALL_FOR_PRICE_LABEL . '<span class=" h-10 ml-3">'.config('heroicons.solid.phone').'</span></div>';
+            return '<div class="printer-discounted-price flex flex-row items-center">' . self::CALL_FOR_PRICE_LABEL . '<span class=" h-10 ml-3" style="width: 3rem">'.config('heroicons.solid.phone').'</span></div>';
         }
         if ($this->price_discounted) {
             return '<div class="printer-original-price">'
@@ -750,6 +748,25 @@ class Printer extends Model
     public function scopePrinter($query)
     {
         return $query->where('productfamily', '=', Productfamily::PRINTERS_ID);
+    }
+
+    public function getDetailsUrl()
+    {
+        $slug = Productfamily::getProductfamilySlug($this->productfamily);
+
+        return route($slug.'_details', ['slug' => $this->slug]);
+    }
+
+    public static function generateUniqueSlug($name, $manufacturerName, $modelNumber)
+    {
+        $baseSlug = Str::slug($manufacturerName.' '.$modelNumber.' '.$name);
+        $slug = $baseSlug;
+        $prefix = 1;
+        while (static::findBySlug($slug, false) != null) {
+            $slug = $baseSlug.'-'.$prefix++;
+        }
+
+        return $slug;
     }
 }
 

@@ -21,7 +21,7 @@ class HighlightedprinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
         $result = [];
         $result['printer_id'] = (new SearchableSelectVueCRUDFormfield())
             ->setMandatory(true)
-            ->setLabel('Nyomtató')
+            ->setLabel('Termék')
             ->setValuesetClass(Printer::class)
             ->setValuesetSortedGetter('getForSearchableSelect');
 

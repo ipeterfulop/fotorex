@@ -17,9 +17,8 @@ class MFPDataprovider extends ProductDataproviderBase
             ->enabled()
             ->printer()
             ->forSale()
-            ->multifunctionals()
             ->sorted($sortingOption);
-
+        $query = self::addBaseScopesToQuery($query);
         foreach ($this->filterbuilderClass::getAllAvailableFilters() as $field) {
             $query = $this->filterbuilderClass::addFilterToQuery(
                 $field,
@@ -30,4 +29,10 @@ class MFPDataprovider extends ProductDataproviderBase
 
         return $query;
     }
+
+    public static function addBaseScopesToQuery($query)
+    {
+        return $query->multifunctionals();
+    }
+
 }

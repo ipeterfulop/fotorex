@@ -3,11 +3,17 @@
 namespace App;
 
 use Datalytix\KeyValue\canBeTurnedIntoKeyValueCollection;
+use Datalytix\VueCRUD\Traits\VueCRUDManageable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Articlecategory extends Model
 {
-    use canBeTurnedIntoKeyValueCollection;
+    use canBeTurnedIntoKeyValueCollection, VueCRUDManageable;
+    const SUBJECT_SLUG = 'articlecategory';
+    const SUBJECT_NAME = 'Cikk-kategória';
+    const SUBJECT_NAME_PLURAL = 'Cikk-kategóriák';
+    const IMAGES_PATH = '/categories';
 
     protected $fillable = [
         'id',
@@ -15,8 +21,41 @@ class Articlecategory extends Model
         'position',
         'show_in_main_menu',
         'custom_slug_base',
-        'icon_url'
+        'icon_url',
+        'photo_id',
+        'articlecategory_id',
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope(
+            'parents',
+            function (Builder $builder) {
+                return $builder->select('articlecategories.*', 'acjoin.parentslug', 'acjoin.parentname', 'acjoin.parentid')
+                ->leftJoin(
+                    \DB::raw(
+                        '(select custom_slug_base as parentslug, name as parentname, id as parentid from articlecategories) acjoin'
+                    ),
+                    'acjoin.parentid',
+                    '=',
+                    'articlecategories.articlecategory_id'
+                );
+            }
+        );
+    }
+
+
+    protected $with = ['subcategories'];
+
+    public function photo()
+    {
+        return $this->belongsTo(Photo::class, 'photo_id');
+    }
+
+    public function subcategories()
+    {
+        return $this->hasMany(self::class)->orderBy('position', 'asc');
+    }
 
     public static function findBySlug($slug, $abortWith404IfNotFound = true)
     {
@@ -54,5 +93,57 @@ class Articlecategory extends Model
             ->distinct()
             ->get()
             ->pluck('custom_slug_base');
+    }
+
+    public function getUrlAttribute()
+    {
+        if ($this->parentslug != null) {
+            return route('list_articles', ['categorySlug' => $this->parentslug, 'subcategorySlug' => $this->custom_slug_base]);
+        }
+        return route('list_articles', ['categorySlug' => $this->custom_slug_base]);
+    }
+
+    public static function getVueCRUDIndexColumns()
+    {
+        return [
+            'name' => 'Név',
+            'parentname' => 'Szülőkategória'
+        ];
+    }
+
+    public static function getVueCRUDSortingIndexColumns()
+    {
+        return [];
+    }
+
+    public function getVueCRUDDetailsFields()
+    {
+        return [];
+    }
+
+    public static function getVueCRUDIndexFilters()
+    {
+        return [];
+    }
+
+    public static function modifyModellistButtons($buttons)
+    {
+        unset($buttons['details']);
+        unset($buttons['delete']);
+
+        return $buttons;
+    }
+
+    public static function getVueCRUDAdditionalAjaxFunctions()
+    {
+        return ['storePublicPicture'];
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->photo_id != null) {
+            return url('/storage'.self::IMAGES_PATH.'/'.$this->photo->name);
+        }
+        return null;
     }
 }
