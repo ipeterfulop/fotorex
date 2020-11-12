@@ -1,5 +1,11 @@
 @extends('layouts.tailwind.app', ['pageTitle' => $article->title])
 @section('content')
+    <style>
+        .article-container img {
+            float: left !important;
+            margin-right: 1rem;
+        }
+    </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
     <script>
