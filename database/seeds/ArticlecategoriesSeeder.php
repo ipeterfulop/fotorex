@@ -73,6 +73,14 @@ class ArticlecategoriesSeeder extends Seeder
                 'custom_slug_base' => 'dokumentumkezeles',
                 'articlecategory_id' => 4
             ],
+            [
+                'id' => 9,
+                'position' => $position++,
+                'show_in_main_menu' => 0,
+                'name' => 'Cégünkről',
+                'custom_slug_base' => 'cegismerteto',
+                'articlecategory_id' => null
+            ],
 
         ];
         foreach ($dataset as $row) {

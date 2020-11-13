@@ -11,14 +11,37 @@
 |
 */
 
-use App\PrinterPhotoRole;
-
 //Route::get('/image', function() {
 //        echo '<img src="'.\App\Printer::first()->getCustomizedPrinterPhoto(3, PrinterPhotoRole::find(2))->getUrl().'"><hr>';
 //});
 
+use App\Scrapers\NewsScraper;
+
 Route::get('/scrape', function() {
-    dd(\App\Scrapers\SharpScraper::scrapeProductPage('https://www.sharp.hu/cps/rde/xchg/hu/hs.xsl/-/html/product-details-office-print.htm?product=MX6071'));
+    die(htmlentities(NewsScraper::cleanUpHtml('<td valign="top">
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: #ff0000; font-weight: bold; font-size: 10pt;">ÜZEMELTETŐ ADATAI, ELÉRHETŐSÉGEK</span></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;">&nbsp;</p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;">&nbsp;</p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong><span style="color: #1d1d1d;"><span style="font-size: 10pt;">FOTOREX Irodatechnika Kft.</span></span></strong></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: #1d1d1d;"><span style="font-size: 10pt;">H-1148 Budapest, Lengyel u. 16.<br><br> </span></span></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: #000000; font-size: 10pt;">Tel.: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 06-1/470-4020</span></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: #000000; font-size: 10pt;">Fax: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 06-1/470-4021</span></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: #000000; font-size: 10pt;">E-mail: </span><a href="mailto:info@fotorex.hu">info@fotorex.hu</a></span></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;">&nbsp;</p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: #1d1d1d;"><span style="font-size: 10pt;">Adószám:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12190971-2-42</span></span></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: #1d1d1d;"><span style="font-size: 10pt;">Közösségi adószám: HU12190971</span></span></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: #1d1d1d;"><span style="font-size: 10pt;">Cégjegyzékszám: &nbsp; &nbsp; &nbsp;01-09-563487</span></span></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: #000000; font-size: 10pt;">Bejegyezte:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fővárosi Bíróság mint Cégbíróság</span></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: #000000; font-size: 10pt;">Számlavezető:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; K&amp;H Bank Zrt..</span></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: #000000; font-size: 10pt;">Bankszámla:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10409015-90129986-00000000</span></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;">&nbsp;</p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: #000000; font-size: 10pt;">Nyitva tartás:</span></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: #000000; font-size: 10pt;">Hétfőtől - Csütörtökig: 08:00 - 16:00<br>Pénteken:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 08:00 - 15:00 </span></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;">&nbsp;</p>
+<div style="text-align: justify;"><span style="font-size: 10pt; color: #ff0000; font-weight: bold;">Cégünk nem járul hozzá a fenti elérhetőségek telemarketing, direkt marketing, valamint ügynöki, közvéleménykutatási célú felhasználásához!</span></div>
+<p>&nbsp;</p>
+
+</td>')));
 });
 
 Route::view('/', 'welcome');

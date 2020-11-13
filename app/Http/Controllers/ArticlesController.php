@@ -12,19 +12,23 @@ class ArticlesController extends Controller
 {
     public function articleList($categorySlug, $subcategorySlug = null)
     {
-        $category = Articlecategory::findBySlug($categorySlug, true);
+        $mainCategory = Articlecategory::findBySlug($categorySlug, true);
         if ($subcategorySlug == null) {
-            if ($category->subcategories->isEmpty()) {
+            if ($mainCategory->subcategories->isEmpty()) {
                 return view('public.articles.index', ['categorySlug' => $categorySlug]);
             } else {
-                return view('public.articles.categories', ['category' => $category]);
+                return view('public.articles.categories', ['category' => $mainCategory]);
             }
         } else {
-            $article = Article::findBySlug($subcategorySlug, false, false);
-            if ($article == null) {
+            $category = Articlecategory::findBySlug($subcategorySlug, false);
+            if ($category != null) {
+                if ($category->publishedarticles_count == 1) {
+                    return $this->showArticle($category, $category->publishedarticles()->first());
+                }
                 return view('public.articles.index', ['categorySlug' => $subcategorySlug]);
             } else {
-                return $this->showArticle($category, $article);
+                $article = Article::findBySlug($subcategorySlug, true, false);
+                return $this->showArticle($mainCategory, $article);
             }
         }
     }
