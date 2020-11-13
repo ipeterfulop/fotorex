@@ -119,6 +119,11 @@ class Printer extends Model
                     ->orderBy('position', 'asc');
     }
 
+    public function printerrentaloptions()
+    {
+        return $this->hasMany(PrinterRentaloption::class, 'printer_id', 'id');
+    }
+
     public function printer_photos()
     {
         return $this->hasMany(PrinterPhoto::class, 'printer_id', 'id')->orderBy('position', 'asc');
@@ -767,6 +772,11 @@ class Printer extends Model
         }
 
         return $slug;
+    }
+
+    public static function scopeForRent($query)
+    {
+        return $query->whereIn('printers.id', PrinterRentaloption::select('printer_id')->distinct()->get()->pluck('printer_id')->all());
     }
 }
 

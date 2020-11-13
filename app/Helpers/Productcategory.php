@@ -8,6 +8,7 @@ use App\Dataproviders\AllPrintersDataprovider;
 use App\Dataproviders\DisplayDataprovider;
 use App\Dataproviders\MFPDataprovider;
 use App\Dataproviders\PrinterDataprovider;
+use App\Dataproviders\RentalDataprovider;
 use App\Factories\DisplayFilterFactory;
 use App\Factories\PrinterFilterFactory;
 use Datalytix\KeyValue\canBeTurnedIntoKeyValueCollection;
@@ -67,6 +68,16 @@ class Productcategory
                 [],
                 self::DISPLAYS_LABEL,
                 'public.partials.display-summary-block'
+            );
+        }
+        if ($id == self::RENTALS_ID) {
+            return new ProductcategoryConfiguration(
+                $id,
+                RentalDataprovider::class,
+                PrinterFilterFactory::class,
+                [],
+                self::RENTALS_LABEL,
+                'public.partials.rental-summary-block'
             );
         }
         if ($abortWith404OnNotFound) {
