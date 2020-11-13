@@ -20,7 +20,9 @@ class ArticlesController extends Controller
                 return view('public.articles.categories', ['category' => $mainCategory]);
             }
         } else {
-            $category = Articlecategory::findBySlug($subcategorySlug, false);
+            $category = $categorySlug == $subcategorySlug
+                ? null
+                : Articlecategory::findBySlug($subcategorySlug, false);
             if ($category != null) {
                 if ($category->publishedarticles_count == 1) {
                     return $this->showArticle($category, $category->publishedarticles()->first());
