@@ -70,8 +70,12 @@ class PrinterAttributeController extends Controller
             $printer = Printer::findOrFail(request()->get('printerId'));
             $attributes = Attribute::where('is_computed', '=', 0)->get()->keyBy('variable_name');
             $attributeInput = collect(request()->get('attributes'))->keyBy('variable_name');
-            $printer->syncPapersizes($attributeInput->get('papersize')['value']);
-            $printer->update(['usergroup_size_id' => $attributeInput->get('usergroup_size_id')['value']]);
+            if ($attributeInput->has('papersize')) {
+                $printer->syncPapersizes($attributeInput->get('papersize')['value']);
+            }
+            if ($attributeInput->has('usergroup_size_id')) {
+                $printer->update(['usergroup_size_id' => $attributeInput->get('usergroup_size_id')['value']]);
+            }
             foreach ($attributeInput as $attributeInputElement) {
                 if ($attributes->get($attributeInputElement['variable_name']) != null) {
                     $baseDataset = [

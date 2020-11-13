@@ -8,7 +8,7 @@
         </div>
         <div class="w-2/3 pl-4 flex flex-col items-start justify-start">
             <h1 class="text-2xl font-bold mb-4"><a href="{{ route('display_details', ['slug' => $element->slug]) }}">{{ $element->display_name }}</a></h1>
-            <div class="mt-4 flex flex-col md:flex-row text-sm">
+            <div class="mt-4 text-sm">
                 {!! $element->key_features  !!}
             </div>
             <div class="w-full flex items-center justify-end mt-4 pr-2 h-16">
