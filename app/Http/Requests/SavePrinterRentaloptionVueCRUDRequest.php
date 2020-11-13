@@ -44,8 +44,9 @@ class SavePrinterRentaloptionVueCRUDRequest extends VueCRUDRequestBase
     public function getDataset()
     {
         $result = $this->getBaseDatasetFromRequest(PrinterRentaloption::class);
-        $result['extra_page_price'] = str_ireplace(',', '.', $result['extra_page_price']);
-        // this is very basic, and will probably not suffice except for very simple models
+        $result['extra_page_price_bw'] = str_ireplace(',', '.', $result['extra_page_price_bw']);
+        $result['extra_page_price_color'] = str_ireplace(',', '.', $result['extra_page_price_color']);
+
         return $result;
     }
 }

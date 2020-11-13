@@ -63,7 +63,7 @@ class PrinterRentaloption extends Model
     {
         return 'FF: '
             .PriceFormatter::formatToFloat($this->extra_page_price_bw)
-            .', Sz:'
+            .', Sz: '
             .PriceFormatter::formatToFloat($this->extra_page_price_color);
     }
 
