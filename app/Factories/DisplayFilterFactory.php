@@ -13,6 +13,7 @@ class DisplayFilterFactory extends FilterFactory
     {
         return [
             'search',
+            'productsubfamily',
         ];
     }
 

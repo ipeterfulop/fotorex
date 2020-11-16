@@ -38,7 +38,7 @@ class PrinterPickerController extends Controller
         $result = request()->get('allowUndefined', true)
             ? [['id' => -1, 'name' => 'Mind']]
             : [];
-        $printers = Printer::when(request()->get('manufacturer_id') > 0, function($query) {
+        $printers = Printer::printer()->when(request()->get('manufacturer_id') > 0, function($query) {
                 return $query->where('manufacturer_id', '=', request()->get('manufacturer_id'));
             })->orderBy('name', 'asc')->enabled()->get()->transform(function($printer) {
                     return ['id' => $printer->id, 'name' => $printer->shortdisplayname];

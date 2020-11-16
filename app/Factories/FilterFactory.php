@@ -5,6 +5,7 @@ namespace App\Factories;
 
 
 use App\Attribute;
+use App\Helpers\Productsubfamily;
 use App\Papersize;
 use App\PrinterPapersize;
 use App\Searching\CheckboxgroupSearchField;
@@ -56,6 +57,10 @@ abstract class FilterFactory
                 return (new CheckboxgroupSearchField())->setLabel('Munkakörnyezet')
                     ->setField('usergroup')
                     ->setValueset(UsergroupSize::orderBy('position', 'asc')->enabled()->get()->pluck('name', 'id'));
+            case 'productsubfamily':
+                return (new RadiogroupSearchField())->setLabel('Típus')
+                    ->setField('productsubfamily')
+                    ->setValueset(Productsubfamily::getKeyValueCollection());
             case 'printing':
                 return (new RadiogroupSearchField())->setLabel('Színkezelés')
                     ->setField('printing')
@@ -84,6 +89,8 @@ abstract class FilterFactory
         switch ($field) {
             case 'search':
                 return $query->textSearch($value);
+            case 'productsubfamily':
+                return $query->where('productsubfamily','=', $value);
             case 'usergroup':
                 $ids = explode(',', $value);
                 return $query->whereIn('usergroup_size_id', $ids);
@@ -104,6 +111,6 @@ abstract class FilterFactory
     protected static function addAttributeFilterToQuery($field, $value, Builder $query)
     {
         $values = collect(explode(',', $value));
-        return $query->having('networked', '=', $values->max());
+        return $query->having($field, '=', $values->max());
     }
 }
