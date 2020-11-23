@@ -13,7 +13,7 @@
                          data-imageurl="{{ $printerphoto['index'] }}"
                          data-originalimageurl="{{ $printerphoto['original'] }}"
                          src="{{ $printerphoto['thumbnail'] }}"
-                         @click="currentImage = '{{ $printerphoto['index'] }}'">
+                         @click="currentImage = '{{ $printerphoto['index'] }}'; currentOriginalImage = '{{ $printerphoto['original'] }}'">
                 @endforeach
                 <div class="h-1 w-full opacity-0" id="{{ $componentId }}-closer"></div>
             </div>

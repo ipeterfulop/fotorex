@@ -14,7 +14,7 @@
                 <div class="w-full md:w-1/2">
                     <p><strong>Munkakörnyezet</strong>:{{ $element->usergroupsize->name }}</p>
                     <p><strong>Funkciók</strong>: {{ $element->functions_label }}</p>
-                    <p><strong>Színkezelés</strong>: {{ $element->color_management_label }}</p>
+                    <p><strong>Színkezelés</strong>: {!! $element->color_management_label !!}</p>
                     <p><strong>Helyi/Hálózatos</strong>: {{ $element->networked_label }}</p>
                 </div>
                 <div class="w-full md:w-1/2">

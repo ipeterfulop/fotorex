@@ -790,7 +790,13 @@ class Printer extends Model
 
     public static function scopeForRent($query)
     {
-        return $query->whereIn('printers.id', PrinterRentaloption::select('printer_id')->distinct()->get()->pluck('printer_id')->all());
+        //return $query->whereIn('printers.id', PrinterRentaloption::select('printer_id')->distinct()->get()->pluck('printer_id')->all());
+        return $query->join(
+            \DB::raw('(select printer_id as rpid, price as rentalprice from printer_rentaloption) pro'),
+            'pro.rpid',
+            '=',
+            'printers.id'
+        );
     }
 }
 

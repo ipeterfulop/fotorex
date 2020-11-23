@@ -24,8 +24,12 @@ class RentaloptionsSeeder extends Seeder
             'description' => '',
         ];
         $dataset = [
-            100 => ['number_of_pages_included_bw' => '3000', 'number_of_pages_included_color' => '200',  'color_technology' => \App\Helpers\ColorTechnology::COLOR_ID],
-            200 => ['number_of_pages_included_bw' => '3000', 'number_of_pages_included_color' => '1000',  'color_technology' => \App\Helpers\ColorTechnology::COLOR_ID],
+            100 => ['number_of_pages_included_bw' => '2000', 'number_of_pages_included_color' => '200',  'color_technology' => 2],
+            200 => ['number_of_pages_included_bw' => '3000', 'number_of_pages_included_color' => '500',  'color_technology' => 2],
+            300 => ['number_of_pages_included_bw' => '1000', 'number_of_pages_included_color' => '0',  'color_technology' => 1],
+            400 => ['number_of_pages_included_bw' => '3000', 'number_of_pages_included_color' => '0',  'color_technology' => 1],
+            500 => ['number_of_pages_included_bw' => '5000', 'number_of_pages_included_color' => '1000',  'color_technology' => 2],
+            600 => ['number_of_pages_included_bw' => '5000', 'number_of_pages_included_color' => '0',  'color_technology' => 1],
         ];
         foreach ($dataset as $id => $row) {
             $rentaloption = Rentaloption::find($id);
