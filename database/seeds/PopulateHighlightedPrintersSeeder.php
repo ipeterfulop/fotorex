@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\DatabaseSeedingAction;
+use App\Display;
 use App\Printer;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -22,7 +23,7 @@ class PopulateHighlightedPrintersSeeder extends Seeder
 
     private function addOrUpdateRecords(array $dataSet)
     {
-        $table = 'attributes';
+        $table = 'highlightedprinters';
         $fields = [
             'id',
             'printer_id',
