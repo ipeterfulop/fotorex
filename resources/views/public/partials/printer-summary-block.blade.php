@@ -74,15 +74,15 @@
     @endif
 </div>
 <div class="fotorex-list-item-grid-view">
-    <div class="pr-10 h-72 w-72 hover:shadow-md my-4">
-        <a href="{{ $element->getDetailsUrl() }}" class="w-full h-full  flex flex-col items-stretch justify-start p-2 relative">
+    <div class="pr-10 h-100 my-4">
+        <a href="{{ $element->getDetailsUrl() }}" class="hover:shadow-lg  w-full h-full  flex flex-col items-stretch justify-start p-2 relative  border border-fotolightgray">
             <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}" class="object-contain">
-            <div class="absolute bottom-0 w-full mb-2">
+            <div class="mt-auto flex flex-col items-stretch justify-start">
                 <h4 class="text-fotored uppercase text-xl" >
                     {{ $element->displayname }}
                 </h4>
-                <div class="text-sm">{{ $element->highlighted_features }}</div>
-                <div class="text-base font-bold text-xl">{!! $element->price_label !!} </div>
+                <div class="text-sm h-16 overflow-y-hidden">{{ $element->highlighted_features ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris in tempus enim. Etiam quis massa sit amet leo semper tristique nec a dui. Sed non blandit odio.' }}</div>
+                <div class="text-base font-bold text-xl mt-auto">{!! $element->price_label !!} </div>
 
             </div>
         </a>

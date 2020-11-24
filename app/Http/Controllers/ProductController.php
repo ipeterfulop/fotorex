@@ -7,7 +7,7 @@ use App\Http\Requests\SendPrinterInEmailRequest;
 use App\Printer;
 use Illuminate\Http\Request;
 
-abstract class ProductController extends Controller
+class ProductController extends Controller
 {
     public function sendEmail(SendPrinterInEmailRequest $request)
     {

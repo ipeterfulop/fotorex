@@ -56,17 +56,13 @@ Route::get('/osszehasonlitas/nyomtatok/termek', 'PrinterComparisonController@get
 Route::get('/osszehasonlitas/kijelzok', 'DisplayComparisonController@index')->name('compare_displays');
 Route::get('/osszehasonlitas/kijelzok/termek', 'DisplayComparisonController@getComparisonData')->name('display_comparison_data');
 
-Route::get('/termekek/nyomtatok/kereses', 'PrintersController@printerList')->name('list_printers');
-Route::get('/termekek/kijelzok/kereses', 'DisplaysController@displayList')->name('list_displays');
+Route::get('/termekek/{productcategoryId}/kereses', 'ProductController@productcategoryList')->name('list_products_in_category');
 
 Route::get('/termekek/kategoriak/{productcategoryId}', 'PrintersController@category')->name('printer_category_index');
 Route::get('/termekek/nyomtatok/{slug}', 'PrintersController@details')->name('printer_details');
 Route::get('/termekek/kijelzok/{slug}', 'DisplaysController@details')->name('display_details');
 
-Route::get('/termekek/{productcategoryId}/kereses', 'PrintersController@productcategoryList')->name('list_products_in_category');
-
 Route::get('/ajax/cikkek/{categorySlug}', 'ArticlesController@articleListAjax')->name('list_articles_ajax');
 
 Route::get('/{categorySlug}/{subcategorySlug?}', 'ArticlesController@articleList')->name('list_articles');
-//Route::get('/{categorySlug}/{slug}', 'ArticlesController@show')->name('show_article');
 Route::get('/{categorySlug}/{subcategorySlug?}/{slug?}', 'ArticlesController@show')->name('show_article');
