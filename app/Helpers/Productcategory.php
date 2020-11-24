@@ -77,7 +77,7 @@ class Productcategory
                 PrinterFilterFactory::class,
                 [],
                 self::RENTALS_LABEL,
-                'public.partials.rental-summary-block'
+                'public.partials.printer-summary-block'
             );
         }
         if ($abortWith404OnNotFound) {

@@ -24,7 +24,7 @@ class RentalDataprovider extends ProductDataproviderBase
                     'printerrentaloptions'
                 ]
             )
-            ->sorted($sortingOption);
+            ->sortedRental($sortingOption);
         $query = self::addBaseScopesToQuery($query);
         foreach ($this->filterbuilderClass::getAllAvailableFilters() as $field) {
             $query = $this->filterbuilderClass::addFilterToQuery(

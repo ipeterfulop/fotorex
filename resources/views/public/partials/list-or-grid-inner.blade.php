@@ -1,6 +1,10 @@
 @forelse($elements as $element)
     <div class="fotorex-list-item">
-        @include($view, ['element' => $element])
+        @if(isset($configuration))
+            @include($view, ['element' => $element, 'configuration' => $configuration])
+        @else
+            @include($view, ['element' => $element])
+        @endif
     </div>
 @empty
     <div class="w-full text-center mt-16">Nincs találat</div>

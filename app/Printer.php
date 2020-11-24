@@ -121,7 +121,7 @@ class Printer extends Model
 
     public function printerrentaloptions()
     {
-        return $this->hasMany(PrinterRentaloption::class, 'printer_id', 'id');
+        return $this->hasMany(PrinterRentaloption::class, 'printer_id', 'id')->setEagerLoads([])->with(['rentaloption']);
     }
 
     public function printer_photos()
@@ -760,6 +760,21 @@ class Printer extends Model
                 return $query->orderBy('price', 'asc');
             case self::SORTING_OPTION_PRICE_DOWN:
                 return $query->orderBy('price', 'desc');
+        }
+        return $query;
+    }
+
+    public function scopeSortedRental($query, $sortingOption)
+    {
+        switch ($sortingOption) {
+            case self::SORTING_OPTION_POPULARITY_DOWN:
+                return $query->orderBy('popularity_index', 'asc');
+            case self::SORTING_OPTION_POPULARITY_UP:
+                return $query->orderBy('popularity_index', 'desc');
+            case self::SORTING_OPTION_PRICE_UP:
+                return $query->orderBy('rentalprice', 'asc');
+            case self::SORTING_OPTION_PRICE_DOWN:
+                return $query->orderBy('rentalprice', 'desc');
         }
         return $query;
     }

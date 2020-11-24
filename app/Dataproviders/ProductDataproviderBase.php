@@ -30,7 +30,6 @@ abstract class ProductDataproviderBase
     public function getResults($page, $sortingOption)
     {
         $query = $this->getQuery($sortingOption, request());
-
         $result = new DataproviderResult();
         $result->totalCount = (clone $query)->get()->count();
         $result->results = self::addPaginationToQuery($query, $page)->get();
