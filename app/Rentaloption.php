@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\ColorTechnology;
 use App\Helpers\RentalPeriodUnit;
 use App\Traits\hasIsEnabledProperty;
 use Datalytix\KeyValue\canBeTurnedIntoKeyValueCollection;
@@ -16,10 +17,12 @@ class Rentaloption extends Model
     const SUBJECT_NAME_PLURAL = 'Bérleti konstrukciók';
 
     protected $fillable = [
+        'id',
         'full_operation_included',
         'min_number_of_persons',
         'max_number_of_persons',
-        'number_of_pages_included',
+        'number_of_pages_included_bw',
+        'number_of_pages_included_color',
         'rental_period_unit',
         'color_technology',
         'printing_included',
@@ -38,10 +41,13 @@ class Rentaloption extends Model
 
     public function getNameAttribute()
     {
+        $pagesIncluded = $this->color_technology == ColorTechnology::COLOR_ID
+            ? $this->number_of_pages_included_bw.' ff oldal'.', '.$this->number_of_pages_included_color.' színes oldal'
+            : $this->number_of_pages_included_bw.' ff oldal';
         return implode(', ', [
             $this->period_label,
             $this->min_number_of_persons.'-'.$this->max_number_of_persons.' fő',
-            $this->number_of_pages_included.' oldal',
+            $pagesIncluded,
             $this->capabilities_label
         ]);
     }

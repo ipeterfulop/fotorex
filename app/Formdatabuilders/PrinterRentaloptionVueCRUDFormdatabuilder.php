@@ -37,11 +37,17 @@ class PrinterRentaloptionVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setContainerClass('col-12')
             ->setValuesetClass(Rentaloption::class);
         $result['price'] = (new NumberVueCRUDFormfield())
-            ->setContainerClass('col-6')
+            ->setContainerClass('col-4')
             ->setLabel('Ár');
-        $result['extra_page_price'] = (new TextVueCRUDFormfield())
-            ->setLabel('Ft / extra oldal')
-            ->setContainerClass('col-6')
+        $result['extra_page_price_bw'] = (new TextVueCRUDFormfield())
+            ->setLabel('Ft / extra oldal (FF)')
+            ->setContainerClass('col-4')
+            ->setRules([
+                'regex:/^\\d{1,}\,\\d{1,}$/'
+            ])->setMessages(['regex' => 'A formátum nem megfelelő']);
+        $result['extra_page_price_color'] = (new TextVueCRUDFormfield())
+            ->setLabel('Ft / extra oldal (Színes)')
+            ->setContainerClass('col-4')
             ->setRules([
                 'regex:/^\\d{1,}\,\\d{1,}$/'
             ])->setMessages(['regex' => 'A formátum nem megfelelő']);
@@ -66,10 +72,17 @@ class PrinterRentaloptionVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
         $this->defaults = $defaults;
     }
 
-    public function get_extra_page_price_value()
+    public function get_extra_page_price_bw_value()
     {
         return $this->subject === null
             ? '0,0'
-            : PriceFormatter::formatToFloat($this->subject->extra_page_price, '');
+            : PriceFormatter::formatToFloat($this->subject->extra_page_price_bw, '');
+    }
+
+    public function get_extra_page_price_color_value()
+    {
+        return $this->subject === null
+            ? '0,0'
+            : PriceFormatter::formatToFloat($this->subject->extra_page_price_color, '');
     }
 }

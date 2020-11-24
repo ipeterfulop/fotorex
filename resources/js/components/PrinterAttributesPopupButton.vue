@@ -13,7 +13,13 @@
                                      v-html="attribute.name"
                                      v-bind:class="{'text-danger': attribute.value == null || JSON.stringify(attribute.value) == '[]'}"></div>
                                 <div v-if="attribute.attribute_value_set == null" style="width: 39%;">
-                                    <input v-model="attribute.value" type="text" style="width: 100%; text-align: right">
+                                    <input v-if="attribute.is_richtext == 0" v-model="attribute.value" type="text" style="width: 100%; text-align: right">
+                                    <quill-wrapper v-if="attribute.is_richtext == 1"
+                                                   v-model="attribute.value"
+                                                   :custom-id="attribute.variable_name"
+                                                   v-bind:fieldname="attribute.variable_name">
+
+                                    </quill-wrapper>
                                 </div>
                                 <div v-if="attribute.attribute_value_set != null"  style="width: 39%">
                                     <template v-if="attribute.multiselect">

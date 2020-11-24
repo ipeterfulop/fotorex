@@ -20,6 +20,8 @@ class Attribute extends Model
         'position_at_product_comparison',
         'created_at',
         'updated_at',
+        'is_richtext',
+        'productfamily',
     ];
 
 
@@ -35,55 +37,55 @@ class Attribute extends Model
     public static function findByVariableName(string $variablename): ?Attribute
     {
         return Attribute::where('variable_name', $variablename)
-                        ->get()
-                        ->first();
+            ->get()
+            ->first();
     }
 
     public function takesValueFromSet(): bool
     {
-        return !is_null($this->attribute_value_set_id);
+        return ! is_null($this->attribute_value_set_id);
     }
 
     public function hasValueInSet($value): bool
     {
-        if (!$this->takesValueFromSet()) {
+        if (! $this->takesValueFromSet()) {
             return false;
         }
 
-        return !is_null(self::getAttributeValueFromSetByValue($value));
+        return ! is_null(self::getAttributeValueFromSetByValue($value));
     }
 
     public function hasLabelInSet($label): bool
     {
-        if (!$this->takesValueFromSet()) {
+        if (! $this->takesValueFromSet()) {
             return false;
         }
 
-        return !is_null(self::getAttributeValueFromSetByLabel($label));
+        return ! is_null(self::getAttributeValueFromSetByLabel($label));
     }
 
     public function getAttributeValueFromSetByValue($value)
     {
         return AttributeValue::where('attribute_value_set_id', $this->attribute_value_set_id)
-                             ->where('value', $value)
-                             ->get()
-                             ->first();
+            ->where('value', $value)
+            ->get()
+            ->first();
     }
 
     public function getAttributeValueFromSetByLabel($label)
     {
         return AttributeValue::where('attribute_value_set_id', $this->attribute_value_set_id)
-                             ->where('label', $label)
-                             ->get()
-                             ->first();
+            ->where('label', $label)
+            ->get()
+            ->first();
     }
 
     public function getAttributeValuesFromSetWithoutNA()
     {
-        if (!$this->takesValueFromSet()) {
+        if (! $this->takesValueFromSet()) {
             return [];
         }
-        return $this->attribute_value_set->attribute_values->filter(function($item) {
+        return $this->attribute_value_set->attribute_values->filter(function ($item) {
             return $item->value != 0;
         });
     }
@@ -101,11 +103,15 @@ class Attribute extends Model
 
     public function scopeForPrinters($query)
     {
-        return $query->where('productfamily', '=', Productfamily::PRINTERS_ID);
+        return $query->where(function ($query) {
+            return $query->where('productfamily', '=', Productfamily::PRINTERS_ID)->orWhere('productfamily', '=', null);
+        });
     }
 
     public function scopeForDisplays($query)
     {
-        return $query->where('productfamily', '=', Productfamily::DISPLAYS_ID);
+        return $query->where(function ($query) {
+            return $query->where('productfamily', '=', Productfamily::DISPLAYS_ID)->orWhere('productfamily', '=', null);
+        });
     }
 }

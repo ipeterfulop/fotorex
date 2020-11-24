@@ -10,13 +10,13 @@ use DOMXPath;
 
 class NewsScraper
 {
-    public static function scrapeNews($pages = 3)
+    public static function scrapeNews($pages = 3, $urlBase = 'http://www.fotorex.hu/hirek/blog')
     {
         $result = [];
         for ($page = 1; $page <= $pages; $page++) {
             $url = $page == 1
-                ? 'http://www.fotorex.hu/hirek/blog'
-                : 'http://www.fotorex.hu/hirek/blog/oldal-'.$page;
+                ? $urlBase
+                : $urlBase.'/oldal-'.$page;
             $content = file_get_contents($url);
             $dom = new DOMDocument;
             @$dom->loadHTML($content);
@@ -47,13 +47,20 @@ class NewsScraper
                         } else {
                             //article summary
                             $strs = $xpath->query('./tr', $table);
-                            if (count($strs) == 3) {
-                                $article['summary'] = self::cleanUpHtml($dom->saveHTML($strs[1]));
-                                $imgs = $xpath->query('.//img', $strs[1]);
+                            if ((count($strs) == 3) || (count($strs) == 1)) {
+                                $index = count($strs) == 1 ? 0 : 1;
+                                $article['summary'] = self::cleanUpHtml($dom->saveHTML($strs[$index]));
+                                $imgs = $xpath->query('.//img', $strs[$index]);
                                 if (count($imgs) > 0) {
                                     $article['index_image'] = 'http://fotorex.hu'.$imgs[0]->getAttribute('src');
                                 }
-                                $article['summary'] = preg_replace('/<img.*?>/miu', '', $article['summary']);
+                                $article['summary'] = self::cleanUpHtml(preg_replace('/<img.*?>/miu', '', $article['summary']));
+
+                                if ($article['content'] == '') {
+                                    $article['content'] = $article['summary'];
+                                    $pieces = explode('</p>', $article['summary']);
+                                    $article['summary'] = count($pieces) > 1 ? $pieces[0].'</p>' : $pieces[0];
+                                }
                                 $result[] = $article;
                             }
                         }
@@ -77,10 +84,14 @@ class NewsScraper
             'text' => '',
         ];
         foreach ($trs as $index => $tr) {
-            if ($index == 0) {
-                $result['date'] = self::parseDate($tr->textContent);
+            if ((count($trs) > 1) && ($index == 0)) {
+                try {
+                    $result['date'] = self::parseDate($tr->textContent);
+                } catch (\Exception $e) {
+                    $result['date'] = Carbon::createFromFormat('Y-m-d', '1970-01-01');
+                }
             }
-            if ($index > 1) {
+            if ((count($trs) == 1) || ($index > 1)) {
                 $td = $xpath->query('./td', $tr);
                 $nodes = $xpath->query('./*', $td[0]);
                 foreach ($nodes as $node) {
@@ -100,12 +111,19 @@ class NewsScraper
         $html = preg_replace('/<\/{0,1}div.*?>/miu', '', $html);
         $html = preg_replace('/<\/{0,1}td.*?>/miu', '', $html);
         $html = preg_replace('/<\/{0,1}tr.*?>/miu', '', $html);
-        $html = preg_replace('/style=".*?">/miu', '', $html);
+        $html = preg_replace('/style=".*?">/miu', '>', $html);
         $html = preg_replace('/<script[^>]*?">.*?<\/script>/mius', '', $html);
         $html = str_ireplace('&nbsp;', ' ', $html);
         $html = preg_replace('/<p[^>]*?>\s{0,1}<\/p>/mius', '', $html);
         $html = str_ireplace(["\n", "\r"], '', $html);
-
+        $html = preg_replace('/\<strong\s{0,1}\>\s{0,3}\<\/strong\>/miu', '', $html);
+        $html = preg_replace('/\<span\s{0,1}\>\s{0,3}\<\/span\>/miu', '', $html);
+        $html = preg_replace('/\<p\s{0,1}\>\s{0,3}\<\/p\>/miu', '', $html);
+        $html = preg_replace('/\<strong\s{0,1}\>\s{0,3}\<\/strong\>/miu', '', $html);
+        $html = preg_replace('/\<span\s{0,1}\>\s{0,3}\<\/span\>/miu', '', $html);
+        $html = preg_replace('/\<p\s{0,1}\>\s{0,3}\<\/p\>/miu', '', $html);
+        //dump($html);
+        //dd(preg_match('/\<strong\s{0,1}\>\s{0,3}\<\/strong\>/miu', $html));
         return $html;
     }
 

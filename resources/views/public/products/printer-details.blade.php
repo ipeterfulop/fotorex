@@ -4,7 +4,7 @@
         <div class="w-full flex flex-col justify-center items-center my-8">
             <div class="w-full max-width-container-bordered bg-white p-4">
                 <div class="flex flex-col lg:flex-row">
-                    <div class="w-full lg:w-2/6 flex flex-col items-stretch justify-start h-64">
+                    <div class="w-full lg:w-2/6 flex flex-col items-stretch justify-start h-128 lg:h-64">
                         @include('public.partials.imageviewer', ['printerphotos' => $printer->getAllPhotoUrls()])
                     </div>
                     <div class="w-full lg:w-3/6 flex flex-col items-stretch justify-start h-64">

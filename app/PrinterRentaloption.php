@@ -4,6 +4,7 @@ namespace App;
 
 use App\Dataproviders\PrinterPickerVueCRUDIndexfilter;
 use App\Helpers\PriceFormatter;
+use App\Helpers\RentalPeriodUnit;
 use App\Traits\belongsToPrinter;
 use App\Traits\hasIsEnabledProperty;
 use Datalytix\VueCRUD\Indexfilters\SelectVueCRUDIndexfilter;
@@ -23,7 +24,8 @@ class PrinterRentaloption extends Model
         'printer_id',
         'rentaloption_id',
         'price',
-        'extra_page_price',
+        'extra_page_price_bw',
+        'extra_page_price_color',
         'extra_description',
         'is_enabled',
         'popularity_index',
@@ -37,6 +39,7 @@ class PrinterRentaloption extends Model
     protected $appends = [
         'printer_label',
         'rentaloption_label',
+        'rentaloption_price_label',
         'is_enabled_label',
         'extra_page_price_label',
         'price_label',
@@ -53,6 +56,11 @@ class PrinterRentaloption extends Model
         return $this->rentaloption->name;
     }
 
+    public function getRentaloptionPriceLabelAttribute()
+    {
+        return RentalPeriodUnit::formatPriceWithSuffix($this->price, $this->rentaloption->rental_period_unit);
+    }
+
     public function getPriceLabelAttribute()
     {
         return $this->price === null ? 'N/A' : PriceFormatter::formatToInteger($this->price);
@@ -60,7 +68,10 @@ class PrinterRentaloption extends Model
 
     public function getExtraPagePriceLabelAttribute()
     {
-        return PriceFormatter::formatToFloat($this->extra_page_price);
+        return 'FF: '
+            .PriceFormatter::formatToFloat($this->extra_page_price_bw)
+            .', Sz: '
+            .PriceFormatter::formatToFloat($this->extra_page_price_color);
     }
 
     public function rentaloption()

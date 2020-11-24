@@ -2,8 +2,8 @@
     <div class="w-full flex flex-row items-start" >
         <div class="w-1/3 ">
             <a href="{{ $element->getDetailsUrl() }}" class="w-full h-full">
-            <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}"
-                 class="object-contain" style="object-position:left top">
+                <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}"
+                     class="object-contain" style="object-position:left top">
             </a>
         </div>
         <div class="w-2/3 pl-4 flex flex-col items-start justify-start">
@@ -25,13 +25,13 @@
 
                 </div>
             </div>
-            <div class="w-full flex items-center justify-end mt-4 pr-2 h-16">
-                <div class="w-1/2 bg-fotolightgray bg-opacity-50 text-right p-4 flex flex-col items-end justify-center h-full text-xl">
-                    {!! $element->price_label !!}
-                </div>
-            </div>
         </div>
     </div>
+    <div class="w-full flex flex-col items-start justify-start pr-2">
+        <h4 class="text-fotored font-bold my-5 w-full text-center">Bérleti konstrukciók</h4>
+        @include('public.partials.rentaloption-list', ['element' => $element])
+    </div>
+
 </div>
 <div class="fotorex-list-item-grid-view">
     <div class="pr-10 h-72 w-72 hover:shadow-md my-4">

@@ -6105,6 +6105,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_mixins_spinner__WEBPACK_IMPORTED_MODULE_0__["spinner"]],
@@ -64748,37 +64754,65 @@ var render = function() {
                                         "div",
                                         { staticStyle: { width: "39%" } },
                                         [
-                                          _c("input", {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value: attribute.value,
-                                                expression: "attribute.value"
-                                              }
-                                            ],
-                                            staticStyle: {
-                                              width: "100%",
-                                              "text-align": "right"
-                                            },
-                                            attrs: { type: "text" },
-                                            domProps: {
-                                              value: attribute.value
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                if ($event.target.composing) {
-                                                  return
+                                          attribute.is_richtext == 0
+                                            ? _c("input", {
+                                                directives: [
+                                                  {
+                                                    name: "model",
+                                                    rawName: "v-model",
+                                                    value: attribute.value,
+                                                    expression:
+                                                      "attribute.value"
+                                                  }
+                                                ],
+                                                staticStyle: {
+                                                  width: "100%",
+                                                  "text-align": "right"
+                                                },
+                                                attrs: { type: "text" },
+                                                domProps: {
+                                                  value: attribute.value
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    if (
+                                                      $event.target.composing
+                                                    ) {
+                                                      return
+                                                    }
+                                                    _vm.$set(
+                                                      attribute,
+                                                      "value",
+                                                      $event.target.value
+                                                    )
+                                                  }
                                                 }
-                                                _vm.$set(
-                                                  attribute,
-                                                  "value",
-                                                  $event.target.value
-                                                )
-                                              }
-                                            }
-                                          })
-                                        ]
+                                              })
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          attribute.is_richtext == 1
+                                            ? _c("quill-wrapper", {
+                                                attrs: {
+                                                  "custom-id":
+                                                    attribute.variable_name,
+                                                  fieldname:
+                                                    attribute.variable_name
+                                                },
+                                                model: {
+                                                  value: attribute.value,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      attribute,
+                                                      "value",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression: "attribute.value"
+                                                }
+                                              })
+                                            : _vm._e()
+                                        ],
+                                        1
                                       )
                                     : _vm._e(),
                                   _vm._v(" "),

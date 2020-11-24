@@ -11,15 +11,9 @@
 |
 */
 
-use App\PrinterPhotoRole;
-
 //Route::get('/image', function() {
 //        echo '<img src="'.\App\Printer::first()->getCustomizedPrinterPhoto(3, PrinterPhotoRole::find(2))->getUrl().'"><hr>';
 //});
-
-Route::get('/scrape', function() {
-    dd(\App\Scrapers\SharpScraper::scrapeProductPage('https://www.sharp.hu/cps/rde/xchg/hu/hs.xsl/-/html/product-details-office-print.htm?product=MX6071'));
-});
 
 Route::view('/', 'welcome');
 

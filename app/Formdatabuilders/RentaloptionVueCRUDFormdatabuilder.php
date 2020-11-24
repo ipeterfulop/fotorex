@@ -46,8 +46,12 @@ class RentaloptionVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setLabel('Maximum felhasználószám')
             ->setContainerClass('col-6')
             ->setMandatory(true);
-        $result['number_of_pages_included'] = (new NumberVueCRUDFormfield())
-            ->setLabel('Lapok száma')
+        $result['number_of_pages_included_bw'] = (new NumberVueCRUDFormfield())
+            ->setLabel('Lapok száma (FF)')
+            ->setContainerClass('col-6')
+            ->setMandatory(true);
+        $result['number_of_pages_included_color'] = (new NumberVueCRUDFormfield())
+            ->setLabel('Lapok száma (Színes)')
             ->setContainerClass('col-6')
             ->setMandatory(true);
         $result['color_technology'] = (new SelectVueCRUDFormfield())

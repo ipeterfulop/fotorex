@@ -119,6 +119,11 @@ class Printer extends Model
                     ->orderBy('position', 'asc');
     }
 
+    public function printerrentaloptions()
+    {
+        return $this->hasMany(PrinterRentaloption::class, 'printer_id', 'id');
+    }
+
     public function printer_photos()
     {
         return $this->hasMany(PrinterPhoto::class, 'printer_id', 'id')->orderBy('position', 'asc');
@@ -462,7 +467,7 @@ class Printer extends Model
     public function getPrinterAttributeValue($attributeVariableName)
     {
         return optional(
-            $this->printerattributevalues()
+            $this->printerattributevalues
                  ->where('variable_name', '=', $attributeVariableName)
                  ->first()
         )->finalvalue;
@@ -471,7 +476,7 @@ class Printer extends Model
     public function getPrinterAttributeAttributeLabel($attributeVariableName)
     {
         return optional(
-            $this->printerattributevalues()
+            $this->printerattributevalues
                  ->where('variable_name', '=', $attributeVariableName)
                  ->first()
         )->alabel;
@@ -480,7 +485,7 @@ class Printer extends Model
     public function getPrinterAttributeLabel($attributeVariableName)
     {
         return optional(
-            $this->printerattributevalues()
+            $this->printerattributevalues
                  ->where('variable_name', '=', $attributeVariableName)
                  ->first()
         )->label;
@@ -489,7 +494,7 @@ class Printer extends Model
     public function getPrinterAttributeValueLabel($attributeVariableName)
     {
         return optional(
-            $this->printerattributevalues()
+            $this->printerattributevalues
                  ->where('variable_name', '=', $attributeVariableName)
                  ->first()
         )->avlabel;
@@ -506,11 +511,25 @@ class Printer extends Model
 
     public function getColorManagementLabelAttribute()
     {
-        if ($this->printing_label != null) {
-            return $this->printing_label;
+        $data = [];
+        if (($this->printing != null) || ($this->copying != null) || ($this->scanning != null)) {
+            $data = [
+                $this->printing_attribute_label => $this->printing_label,
+                $this->copying_attribute_label => $this->copying_label,
+                $this->scanning_attribute_label => $this->scanning_label
+            ];
+        } else {
+            $data = [
+                $this->getPrinterAttributeAttributeLabel('printing') => $this->getPrinterAttributeValueLabel('printing'),
+                $this->getPrinterAttributeAttributeLabel('copying') => $this->getPrinterAttributeValueLabel('copying'),
+                $this->getPrinterAttributeAttributeLabel('scanning') => $this->getPrinterAttributeValueLabel('scanning'),
+            ];
         }
-
-        return $this->getPrinterAttributeValueLabel('color_management');
+        return collect($data)->map(
+            function ($item, $key) {
+                return $key.': '.$item;
+            }
+        )->implode('<br>');
     }
 
     public function getFunctionsLabelAttribute()
@@ -767,6 +786,17 @@ class Printer extends Model
         }
 
         return $slug;
+    }
+
+    public static function scopeForRent($query)
+    {
+        //return $query->whereIn('printers.id', PrinterRentaloption::select('printer_id')->distinct()->get()->pluck('printer_id')->all());
+        return $query->join(
+            \DB::raw('(select printer_id as rpid, price as rentalprice from printer_rentaloption) pro'),
+            'pro.rpid',
+            '=',
+            'printers.id'
+        );
     }
 }
 

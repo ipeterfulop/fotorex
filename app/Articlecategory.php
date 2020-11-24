@@ -39,7 +39,7 @@ class Articlecategory extends Model
                     'acjoin.parentid',
                     '=',
                     'articlecategories.articlecategory_id'
-                );
+                )->withCount(['publishedarticles']);
             }
         );
     }
@@ -59,7 +59,7 @@ class Articlecategory extends Model
 
     public static function findBySlug($slug, $abortWith404IfNotFound = true)
     {
-        $result = self::where('custom_slug_base', '=', $slug)->first();
+        $result = self::withCount('publishedarticles')->where('custom_slug_base', '=', $slug)->first();
         if (($result === null) && ($abortWith404IfNotFound)) {
             abort(404);
         }
