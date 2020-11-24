@@ -70,6 +70,7 @@ class PopulateDisplayProductsSeeder extends Seeder
                 'description'       => '',
                 'usergroup_size_id' => null,
                 'is_enabled'        => 1,
+                'request_for_price' => 1,
             ],
 
         ];

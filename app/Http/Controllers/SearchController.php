@@ -22,7 +22,8 @@ class SearchController extends Controller
             ]);
         }
         $articles = Article::textSearch(request()->get('search'))->orderBy('published_at', 'desc')->get();
-        $printers = Printer::printer()->withAttributes()->textSearch(request()->get('search'))->sorted(Printer::SORTING_OPTION_POPULARITY_DOWN)->get();
+        $printers = Printer::printer()->forSale()->withAttributes()->textSearch(request()->get('search'))->sorted(Printer::SORTING_OPTION_POPULARITY_DOWN)->get();
+        $rentals = Printer::printer()->forRent()->withAttributes()->textSearch(request()->get('search'))->sorted(Printer::SORTING_OPTION_POPULARITY_DOWN)->get();
         $displays = Display::withAttributes()->textSearch(request()->get('search'))->sorted(Printer::SORTING_OPTION_POPULARITY_DOWN)->get();
         $printerConfiguration = Productcategory::getConfiguration(Productcategory::PRINTERS_ID);
         $displayConfiguration = Productcategory::getConfiguration(Productcategory::DISPLAYS_ID);
@@ -30,6 +31,7 @@ class SearchController extends Controller
             'minLengthReached' => true,
             'articles' => $articles,
             'printers' => $printers,
+            'rentals' => $rentals,
             'displays' => $displays,
             'printerConfiguration' => $printerConfiguration,
             'displayConfiguration' => $displayConfiguration,

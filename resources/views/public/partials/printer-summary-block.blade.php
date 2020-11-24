@@ -76,7 +76,7 @@
 <div class="fotorex-list-item-grid-view">
     <div class="pr-10 h-100 my-4">
         <a href="{{ $element->getDetailsUrl() }}" class="hover:shadow-lg  w-full h-full  flex flex-col items-stretch justify-start p-2 relative  border border-fotolightgray">
-            <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}" class="object-contain" style="height: 50%">
+            <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}" class="object-cover" style="height: 50%">
             <div class="mt-auto flex flex-col items-stretch justify-start">
                 <h4 class="text-fotored uppercase text-xl" >
                     {{ $element->displayname }}
