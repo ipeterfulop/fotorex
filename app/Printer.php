@@ -574,10 +574,10 @@ class Printer extends Model
     public function getIsMultifunctionalAttribute()
     {
         if (($this->printing != null) && ($this->scanning != null)) {
-            return $this->printing > 0 && $this->scanning > 0 ? 1001 : 1002;
+            return $this->printing > 0 && $this->scanning > 0 ? AttributeValue::YES_ID : AttributeValue::NO_ID;
         }
         return $this->getPrinterAttributeValue('printing') > 0
-        && $this->getPrinterAttributeValue('scanning') > 0 ? 1001 : 1002;
+        && $this->getPrinterAttributeValue('scanning') > 0 ? AttributeValue::YES_ID : AttributeValue::NO_ID;
     }
 
     public function getIsMultifunctionalLabelAttribute()
@@ -787,6 +787,9 @@ class Printer extends Model
     public function getDetailsUrl()
     {
         $slug = Productfamily::getProductfamilySlug($this->productfamily);
+        if (($slug == Productfamily::PRINTERS_SLUG) && ($this->is_multifunctional == AttributeValue::YES_ID)) {
+            $slug = Productfamily::MFC_SLUG;
+        }
 
         return route($slug.'_details', ['slug' => $this->slug]);
     }

@@ -9,6 +9,9 @@ class AttributeValue extends Model
 {
     use HasFactory;
 
+    const YES_ID = 1001;
+    const NO_ID = 1002;
+
     protected $table = 'attribute_values';
     protected $fillable = [
         "id",
