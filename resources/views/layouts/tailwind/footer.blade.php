@@ -44,7 +44,7 @@
 </div>
 <div class="w-full bg-fotored px-8 pb-1 pt-4 text-sm text-white h-20 flex items-start justify-center">
     <div class="w-full max-width-container flex flex-col items-start justify-start">
-        <p>© 2009-2020 Fotorex Irodatechnikai Kft.</p>
-        <p>A weboldalon található anyagok kizárólag a Fotorex Irodatechnikai Kft hozzájárulásával és a forrás megjelölésével használhatóak fel.</p>
+        <p>© 2009-2020 {{ config('company.name') }}</p>
+        <p>A weboldalon található anyagok kizárólag a {{ config('company.name') }} hozzájárulásával és a forrás megjelölésével használhatóak fel.</p>
     </div>
 </div>

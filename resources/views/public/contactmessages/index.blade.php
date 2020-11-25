@@ -13,10 +13,10 @@
             <h1 class="text-center font-bolder text-2xl text-fotored  py-8">Kapcsolat</h1>
             <div class="p-4">
                 <ul class="flex flex-col">
-                    <li> <i class="icon-mail text-muted"></i>FOTOREX Irodatechnika Kft.</li>
-                    <li> <i class="icon-mail text-muted"></i>1148 Budapest, Lengyel u. 16.</li>
-                    <li> <i class="icon-mail text-muted"></i><a class="navi-link" href="mailto:{!! 'info@fotorex.hu'  !!}">{!! 'info@fotorex.hu'  !!}</a></li>
-                    <li> <i class="icon-phone text-muted"></i>	+36 (1) 470-4020 / 222-1198</li>
+                    <li> <i class="icon-mail text-muted"></i>{{ config('company.name') }}</li>
+                    <li> <i class="icon-mail text-muted"></i>{{ config('company.address') }}</li>
+                    <li> <i class="icon-mail text-muted"></i><a class="navi-link" href="mailto:{!! config('company.email')  !!}">{!! config('company.email')  !!}</a></li>
+                    <li> <i class="icon-phone text-muted"></i>{{ config('company.phone') }}</li>
                     <li> <i class="icon-clock text-muted"></i>nyitvatartás: hétfő-péntek 8:00-16:00</li>
                 </ul>
                 <p class="text-fotored">

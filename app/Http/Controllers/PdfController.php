@@ -21,8 +21,18 @@ class PdfController extends Controller
             .'</td><td style="width: 50%; text-align: right; border-bottom: 1px solid #ffffff">'
             .$product->shortdisplayname
             .'</td></tr></table>';
+        $footer = '<table border="0" style="width: 100%"><tr><td>'
+            .config('company.name')
+            .'</td></tr></table><table border="0" style="width: 100%"><tr><td>'
+            .config('company.address')
+            .'</td><td>'
+            .config('company.phone')
+            .'</td><td>'
+            .config('company.email')
+            .'</td></tr></table>';
         $pdf = new Mpdf();
         $pdf->SetHTMLHeader($header);
+        $pdf->SetHTMLFooter($footer);
         $pdf->WriteHTML($html);
 
         $name = 'Fotorex.hu - ' . $slug.'.pdf';
