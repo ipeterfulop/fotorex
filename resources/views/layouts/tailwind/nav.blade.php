@@ -9,9 +9,9 @@
                 </div>
                 <div class="hidden lg:flex items-center justify-start flex-row">
                     <span class="flex mr-2 h-8 w-8 flex flex-grow-0">{!! config('heroicons.solid.phone') !!}</span>
-                    +36 (1) 470-4020
+                    {{ config('company.phone') }}
                     <span class="flex ml-2 mr-2 h-8 w-8 flex flex-grow-0">{!! config('heroicons.solid.location-marker') !!}</span>
-                    1148 Budapest, Lengyel u. 16.
+                    {{ config('company.address') }}
                 </div>
                 <div class="hidden lg:flex items-center justify-end flex-row">
                     <a href="{{ route('contactmessage_index') }}">Kapcsolat</a>

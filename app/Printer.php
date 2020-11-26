@@ -121,7 +121,7 @@ class Printer extends Model
 
     public function printerrentaloptions()
     {
-        return $this->hasMany(PrinterRentaloption::class, 'printer_id', 'id');
+        return $this->hasMany(PrinterRentaloption::class, 'printer_id', 'id')->setEagerLoads([])->with(['rentaloption']);
     }
 
     public function printer_photos()
@@ -450,7 +450,7 @@ class Printer extends Model
     public function getPriceLabelAttribute()
     {
         if ($this->request_for_price == 1) {
-            return '<div class="printer-discounted-price flex flex-row items-center">' . self::CALL_FOR_PRICE_LABEL . '<span class=" h-10 ml-3" style="width: 3rem">'.config('heroicons.solid.phone').'</span></div>';
+            return '<div class="printer-discounted-price flex flex-row items-center">' . self::CALL_FOR_PRICE_LABEL . '<span class=" h-6 ml-3" style="width: 3rem">'.config('heroicons.solid.phone').'</span></div>';
         }
         if ($this->price_discounted) {
             return '<div class="printer-original-price">'
@@ -574,10 +574,10 @@ class Printer extends Model
     public function getIsMultifunctionalAttribute()
     {
         if (($this->printing != null) && ($this->scanning != null)) {
-            return $this->printing > 0 && $this->scanning > 0 ? 1001 : 1002;
+            return $this->printing > 0 && $this->scanning > 0 ? AttributeValue::YES_ID : AttributeValue::NO_ID;
         }
         return $this->getPrinterAttributeValue('printing') > 0
-        && $this->getPrinterAttributeValue('scanning') > 0 ? 1001 : 1002;
+        && $this->getPrinterAttributeValue('scanning') > 0 ? AttributeValue::YES_ID : AttributeValue::NO_ID;
     }
 
     public function getIsMultifunctionalLabelAttribute()
@@ -764,6 +764,21 @@ class Printer extends Model
         return $query;
     }
 
+    public function scopeSortedRental($query, $sortingOption)
+    {
+        switch ($sortingOption) {
+            case self::SORTING_OPTION_POPULARITY_DOWN:
+                return $query->orderBy('popularity_index', 'asc');
+            case self::SORTING_OPTION_POPULARITY_UP:
+                return $query->orderBy('popularity_index', 'desc');
+            case self::SORTING_OPTION_PRICE_UP:
+                return $query->orderBy('rentalprice', 'asc');
+            case self::SORTING_OPTION_PRICE_DOWN:
+                return $query->orderBy('rentalprice', 'desc');
+        }
+        return $query;
+    }
+
     public function scopePrinter($query)
     {
         return $query->where('productfamily', '=', Productfamily::PRINTERS_ID);
@@ -772,6 +787,9 @@ class Printer extends Model
     public function getDetailsUrl()
     {
         $slug = Productfamily::getProductfamilySlug($this->productfamily);
+        if (($slug == Productfamily::PRINTERS_SLUG) && ($this->is_multifunctional == AttributeValue::YES_ID)) {
+            $slug = Productfamily::MFC_SLUG;
+        }
 
         return route($slug.'_details', ['slug' => $this->slug]);
     }

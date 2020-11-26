@@ -12,7 +12,7 @@
             <h2 class="text-sm text-gray-600 my-2 pl-2">{{ $element->published_at->format('Y-m-d') }}</h2>
             <div class="pb-4 lg:p-0 overflow-y-hidden relative" style="height: 8rem; max-height: 8rem">
                 {!! $element->summary  !!}
-                <div style="position: absolute; height: 30%; bottom:0%; left: 0px; width: 100%; background: linear-gradient(rgba(0,0,0,0), rgba(255,255,255,1));"></div>
+                <div class="overflow-y-fade"></div>
             </div>
             <a class="w-full lg:w-auto bg-fotored hover-gray-link py-2 px-4 mt-auto text-white text-sm" href="{{ $element->url }}">Bővebben...</a>
         </div>

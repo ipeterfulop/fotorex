@@ -18,6 +18,10 @@ class Productfamily
     const DISPLAYS_LABEL = 'Kijelzők';
     const DISPLAYS_CLASS = Display::class;
     const DISPLAYS_SLUG = 'display';
+    const MFC_ID = 3;
+    const MFC_LABEL = 'Multifunkciós nyomtatók';
+    const MFC_CLASS = Printer::class;
+    const MFC_SLUG = 'mfc';
 
     use canBeTurnedIntoKeyValueCollection;
 

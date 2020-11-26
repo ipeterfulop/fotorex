@@ -22,12 +22,15 @@
 <div class="fotorex-list-item-grid-view">
     <div class="pr-10 h-72 w-72 hover:shadow-md my-4">
         <a href="{{ route('display_details', ['slug' => $element->slug]) }}" class="w-full h-full  flex flex-col items-stretch justify-start p-2 relative">
-            <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}" class="object-contain">
+            <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}" class="object-cover"  style="height: 50%">
             <div class="absolute bottom-0 w-full mb-2">
                 <h4 class="text-fotored uppercase text-xl" >
                     {{ $element->displayname }}
                 </h4>
-                <div class="text-sm">{{ $element->key_features }}</div>
+                <div class="text-sm  h-16 overflow-y-hidden relative">
+                    {!! $element->key_features ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris in tempus enim. Etiam quis massa sit amet leo semper tristique nec a dui. Sed non blandit odio.' !!}
+                    <div class="overflow-y-fade"></div>
+                </div>
                 <div class="text-base font-bold">{!! $element->price_label !!} </div>
 
             </div>

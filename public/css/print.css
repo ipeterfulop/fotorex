@@ -1,0 +1,10 @@
+.printer-original-price {
+    text-decoration: line-through;
+}
+.printer-discounted-price {
+    color: #eb5858;
+    font-weight: bold;
+}
+.printer-price {
+    font-weight: bold;
+}

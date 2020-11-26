@@ -158,7 +158,7 @@ class Article extends Model
             ->where('is_published', '=', 1);
     }
 
-    public function scopeSearchText($query, $searchText)
+    public function scopeTextSearch($query, $searchText)
     {
         if ($searchText == null) {
             return $query;

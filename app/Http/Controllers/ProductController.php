@@ -7,7 +7,7 @@ use App\Http\Requests\SendPrinterInEmailRequest;
 use App\Printer;
 use Illuminate\Http\Request;
 
-abstract class ProductController extends Controller
+class ProductController extends Controller
 {
     public function sendEmail(SendPrinterInEmailRequest $request)
     {
@@ -44,8 +44,10 @@ abstract class ProductController extends Controller
             request()->get('page', 1),
             $sortingOption,
             );
+
         return view('public.partials.list-or-grid-inner', [
             'view' => $configuration->detailsViewName,
+            'configuration' => $configuration,
             'elements' => $dataproviderResult->results,
             'showPagination' => 'true',
             'result' => $dataproviderResult,
