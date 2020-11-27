@@ -77,14 +77,15 @@
     <div class="pr-10 h-100 my-4">
         <a href="{{ $element->getDetailsUrl() }}" class="hover:shadow-lg  w-full h-full  flex flex-col items-stretch justify-start p-2 relative  border border-fotolightgray">
             <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}" class="object-cover" style="height: 50%">
-            <div class="mt-auto flex flex-col items-stretch justify-start">
+            <div class="flex flex-col items-stretch justify-start mt-3">
                 <h4 class="text-fotored uppercase text-xl" >
                     {{ $element->displayname }}
                 </h4>
-                <div class="text-sm h-16 overflow-y-hidden relative">
+                <div class="text-sm overflow-y-hidden relative">
                     {{ $element->highlighted_features ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris in tempus enim. Etiam quis massa sit amet leo semper tristique nec a dui. Sed non blandit odio.' }}
-                    <div class="overflow-y-fade"></div>
                 </div>
+            </div>
+            <div class="mt-auto w-full">
                 <div class="w-full text-left px-0 pt-1 flex flex-col items-start justify-center text-base">
                     @stack('pricelabel-'.$element->id)
                 </div>
