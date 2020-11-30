@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Articlecategory;
+use App\Helpers\Productfamily;
 use App\Highlightedprinter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
@@ -41,10 +42,10 @@ class PublicViewServiceProvider extends ServiceProvider
     protected function buildPublicMenu()
     {
         return [
-            'Nyomtatók' => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::PRINTERS_ID]),
-            'Multifunkciós nyomtatók' => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::MFP_ID]),
+            Productfamily::PRINTERS_LABEL => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::PRINTERS_ID]),
+            Productfamily::MFP_LABEL => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::MFP_ID]),
             'Nyomtatóbérlés' => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::RENTALS_ID]),
-            'Interaktív monitorok' => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::DISPLAYS_ID]),
+            Productfamily::DISPLAYS_LABEL => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::DISPLAYS_ID]),
             'Irodaszerek' => 'https://webaruhaz.fotorex.hu/',
         ];
     }

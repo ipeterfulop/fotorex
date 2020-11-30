@@ -60,9 +60,10 @@ Route::get('/termekek/{productcategoryId}/kereses', 'ProductController@productca
 
 Route::get('/termekek/kategoriak/{productcategoryId}', 'PrintersController@category')->name('printer_category_index');
 
-Route::get('/termekek/multifunkcios-nyomtatok/{slug}', 'PrintersController@details')->name('mfc_details');
-Route::get('/termekek/nyomtatok/{slug}', 'PrintersController@details')->name('printer_details');
-Route::get('/termekek/kijelzok/{slug}', 'DisplaysController@details')->name('display_details');
+//Route::get('/termekek/multifunkcios-nyomtatok/{slug}', 'PrintersController@details')->name('mfc_details');
+//Route::get('/termekek/nyomtatok/{slug}', 'PrintersController@details')->name('printer_details');
+//Route::get('/termekek/kijelzok/{slug}', 'DisplaysController@details')->name('display_details');
+Route::get('/termekek/{familyslug}/{slug}', 'ProductController@categoryDetails')->name('category_details');
 
 Route::post('/ajax/pdf/{slug}', 'PdfController@export')->name('print_to_pdf');
 

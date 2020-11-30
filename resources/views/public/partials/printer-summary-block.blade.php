@@ -26,8 +26,9 @@
                      class="object-contain" style="object-position:left top">
             </a>
         </div>
-        <div class="w-2/3 pl-4 flex flex-col items-start justify-start" data-cm="{{ $element->color_management }}">
+        <div class="w-2/3 pl-4 flex flex-col items-start justify-start">
             <h1 class="text-2xl font-bold mb-4"><a href="{{ $element->getDetailsUrl() }}">{{ $element->display_name }}</a></h1>
+
             <div class="flex items-center justify-start flex-nowrap flex-row">
                 @if($element->printing >= \App\Helpers\DeviceFunctionality::BW_ID)
                     <div class="printer-detail-box" style="background-color: #e30450">PRINT</div>
@@ -81,8 +82,8 @@
                 <h4 class="text-fotored uppercase text-xl" >
                     {{ $element->displayname }}
                 </h4>
-                <div class="text-sm overflow-y-hidden relative">
-                    {{ $element->highlighted_features ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris in tempus enim. Etiam quis massa sit amet leo semper tristique nec a dui. Sed non blandit odio.' }}
+                <div class="text-sm overflow-y-hidden relative" style="max-height: 4rem;">
+                    {{ $element->highlighted_features_label }}
                 </div>
             </div>
             <div class="mt-auto w-full">

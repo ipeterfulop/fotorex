@@ -1,15 +1,15 @@
 <div class="fotorex-list-item-list-view">
     <div class="w-full flex flex-row items-start" >
         <div class="w-1/3 ">
-            <a href="{{ route('display_details', ['slug' => $element->slug]) }}" class="w-full h-full">
+            <a href="{{ $element->getDetailsUrl() }}" class="w-full h-full">
                 <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}"
                      class="object-contain" style="object-position:left top">
             </a>
         </div>
         <div class="w-2/3 pl-4 flex flex-col items-start justify-start">
-            <h1 class="text-2xl font-bold mb-4"><a href="{{ route('display_details', ['slug' => $element->slug]) }}">{{ $element->display_name }}</a></h1>
+            <h1 class="text-2xl font-bold mb-4"><a href="{{ $element->getDetailsUrl() }}">{{ $element->display_name }}</a></h1>
             <div class="mt-4 text-sm">
-                {!! $element->key_features  !!}
+                {!! $element->highlighted_features_label  !!}
             </div>
             <div class="w-full flex items-center justify-end mt-4 pr-2 h-16">
                 <div class="w-1/2 bg-fotolightgray bg-opacity-50 text-right p-4 flex flex-col items-end justify-center h-full text-xl">
@@ -20,18 +20,21 @@
     </div>
 </div>
 <div class="fotorex-list-item-grid-view">
-    <div class="pr-10 h-72 w-72 hover:shadow-md my-4">
-        <a href="{{ route('display_details', ['slug' => $element->slug]) }}" class="w-full h-full  flex flex-col items-stretch justify-start p-2 relative">
-            <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}" class="object-cover"  style="height: 50%">
-            <div class="absolute bottom-0 w-full mb-2">
+    <div class="pr-10 h-100 my-4">
+        <a href="{{ $element->getDetailsUrl() }}" class="hover:shadow-md w-full h-full  flex flex-col items-stretch justify-start p-2 relative border border-fotolightgray">
+            <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}" class="object-cover" style="height: 50%">
+            <div class="flex flex-col items-stretch justify-start mt-3">
                 <h4 class="text-fotored uppercase text-xl" >
                     {{ $element->displayname }}
                 </h4>
-                <div class="text-sm  h-16 overflow-y-hidden relative">
-                    {!! $element->key_features ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris in tempus enim. Etiam quis massa sit amet leo semper tristique nec a dui. Sed non blandit odio.' !!}
-                    <div class="overflow-y-fade"></div>
+                <div class="text-sm overflow-y-hidden relative" style="max-height: 4rem;">
+                    {!! $element->highlighted_features_label !!}
                 </div>
-                <div class="text-base font-bold">{!! $element->price_label !!} </div>
+            </div>
+            <div class="mt-auto w-full">
+                <div class="w-full text-left px-0 pt-1 flex flex-col items-start justify-center text-base">
+                    {!! $element->price_label !!}
+                </div>
 
             </div>
         </a>

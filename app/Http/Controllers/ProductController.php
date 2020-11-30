@@ -3,12 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Productcategory;
+use App\Helpers\Productfamily;
 use App\Http\Requests\SendPrinterInEmailRequest;
 use App\Printer;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+
+    public function categoryDetails($familyslug, $slug)
+    {
+        $class = Productfamily::getProductfamilyControllerClass($familyslug);
+        if ($class == null) {
+            abort(404);
+        }
+        $controller = new $class();
+        return $controller->details($slug);
+    }
+
     public function sendEmail(SendPrinterInEmailRequest $request)
     {
         try {
