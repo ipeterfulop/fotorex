@@ -3,7 +3,7 @@
         <div class="w-full lg:w-1/3 overflow-y-hidden  border border-fotogray" style="max-height: 15rem">
             <a class="h-full w-full" href="{{ $element->url }}">
             @if($element->index_image != null)
-                <img src="{{ \App\Article::IMAGES_PATH.'/'.$element->index_image }}" class="w-full">
+                <img src="{{ \App\Article::IMAGES_PATH.'/'.$element->index_image }}" class="w-full h-full object-cover">
             @endif
             </a>
         </div>
