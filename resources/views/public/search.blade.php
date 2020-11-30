@@ -42,7 +42,7 @@
                     </h1>
                     <div x-show="showDetails" class="mt-4">
                         @forelse($rentals as $rental)
-                            @include('public.partials.printer-summary-block', ['element' => $rental, 'configuration' => $rentalConfiguration])
+                            @include('public.partials.printer-summary-block', ['element' => $rental, 'configuration' => $rentalConfiguration, 'compactPriceView' => true])
                         @empty
                             <h3 class="w-full my-8 text-xl text-center">Nincs találat</h3>
                         @endforelse

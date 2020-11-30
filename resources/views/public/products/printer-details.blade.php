@@ -23,7 +23,7 @@
                                  @else
                                     {!! $printer->highlighted_features_label !!}
                                 @endif
-
+                                
                                 <div class="w-1/2 py-4 flex flex-col items-start justify-center text-xl bg-fotolightgray bg-opacity-50 mt-4 pl-2">
                                     {!! $printer->price_label !!}
                                 </div>
