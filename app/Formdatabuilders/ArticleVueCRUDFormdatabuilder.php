@@ -6,13 +6,16 @@ namespace App\Formdatabuilders;
 
 use App\Article;
 use App\Articlecategory;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\DatepickerVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\DateTimepickerVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\ImagePickerVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichtextTrixVueCRUDFormfield;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichttextQuillVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\SelectVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\SlugVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\TextVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\YesNoSelectVueCRUDFormfield;
+use Datalytix\VueCRUD\Formdatabuilders\Valuesets\YesNoValueset;
 use Datalytix\VueCRUD\Formdatabuilders\VueCRUDFormdatabuilder;
 
 class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
@@ -40,10 +43,10 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
                 'unique' => 'Ez az URL már foglalt',
                 'regex' => 'Az URL csak ékezet nélküli betűket, számokat, kötőjelet és alávonást tartalmazhat'
             ]);
-        $result['published_at'] = (new DateTimepickerVueCRUDFormfield())->setMandatory(true)
-            ->setLabel('Publikálás dátuma')
-            ->setProperty('published_at')
-            ->setContainerClass('col-6');
+//        $result['published_at'] = (new DatepickerVueCRUDFormfield())->setMandatory(true)
+//            ->setLabel('Publikálás dátuma')
+//            ->setProperty('published_at')
+//            ->setContainerClass('col-6');
         $result['title'] = (new TextVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Cím')
             ->setProperty('title')
@@ -54,7 +57,7 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setDefault(0)
             ->setContainerClass('col-2');
 
-        $result['summary'] = (new RichtextTrixVueCRUDFormfield())->setMandatory(true)
+        $result['summary'] = (new RichttextQuillVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Összefoglaló')
             ->setProperty('summary')
             ->setProps([
@@ -62,7 +65,7 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
                 'allowPreview' => 'false',
             ])
             ->setContainerClass('col-12');
-        $result['content'] = (new RichtextTrixVueCRUDFormfield())->setMandatory(true)
+        $result['content'] = (new RichttextQuillVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Tartalom')
             ->setProperty('content')
             ->setProps([
@@ -91,6 +94,15 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             return now();
         } else {
             return $this->subject->published_at->format('Y-m-d H:i:s');
+        }
+    }
+
+    public function get_public_value()
+    {
+        if ($this->subject == null) {
+            return 0;
+        } else {
+            return $this->subject->published_at == null ? 0 : 1;
         }
     }
 

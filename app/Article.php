@@ -116,7 +116,7 @@ class Article extends Model
     {
         $result = [];
         $result[SelectVueCRUDIndexfilter::buildPropertyName('articlecategory_id')] = new SelectVueCRUDIndexfilter('articlecategory_id', 'Kategória', -1, -1);
-        $result[SelectVueCRUDIndexfilter::buildPropertyName('articlecategory_id')]->setValueSet([-1 => 'Mind'] + Articlecategory::getKeyValueCollection()->all());
+        $result[SelectVueCRUDIndexfilter::buildPropertyName('articlecategory_id')]->setValueSet([-1 => 'Mind'] + Articlecategory::getFilterKeyValueCollection()->all());
         $result[TextVueCRUDIndexfilter::buildPropertyName(['title', 'summary', 'content'])] = new TextVueCRUDIndexfilter(['title', 'summary', 'content'], 'Keresés...', '');
 
         return $result;

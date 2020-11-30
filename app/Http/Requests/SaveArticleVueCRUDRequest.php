@@ -43,11 +43,13 @@ class SaveArticleVueCRUDRequest extends VueCRUDRequestBase
             'content' => $this->input('content'),
             'summary' => $this->input('summary'),
             'index_image' => $this->input('index_image'),
-            'published_at' => Carbon::parse($this->input('published_at')),
             'is_published' => $this->input('is_published'),
             'articlecategory_id' => intval($this->input('articlecategory_id')) > 0 ? $this->input('articlecategory_id') : null,
             'slug' => $this->input('slug'),
         ];
+        if ($subject == null) {
+            $result['published_at'] = now();
+        }
         return $this->addPositionToDatasetIfNecessary($subject, Article::class, $result);
     }
 

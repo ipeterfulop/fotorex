@@ -146,4 +146,20 @@ class Articlecategory extends Model
         }
         return null;
     }
+
+    public static function getFilterKeyValueCollection()
+    {
+        $result = [];
+        foreach (self::where('parentid', '=', null)->orderBy('position', 'asc')->get() as $category) {
+            if ($category->subcategories->isEmpty()) {
+                $result[$category->id] = $category->name;
+            } else {
+                foreach ($category->subcategories as $subcategory) {
+                    $result[$subcategory->id] = $category->name.' -> '.$subcategory->name;
+                }
+            }
+        }
+
+        return collect($result);
+    }
 }
