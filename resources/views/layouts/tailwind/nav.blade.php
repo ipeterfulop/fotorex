@@ -42,6 +42,7 @@
             <div class=" w-full justify-start items-center">
                 <form method="get" action="{{ route('search_all') }}" class="flex flex-row">
                     <input type="text" class="flex-grow-1 w-4/5 text-black" placeholder="Keresés mindenben"
+                           value="{{ request()->get('search', '') }}"
                            name="search">
                     <button type="submit"
                             class="hover-red-link px-2 h-12 w-12 text-white">{!! config('heroicons.outline.search')  !!}</button>
@@ -67,6 +68,7 @@
                       class="flex flex-row justify-end items-center w-full">
                     <input type="text"
                            class="flex-grow-1 w-3/5 h-16 bg-white border border-fotogray font-bold text-xl italic"
+                           value="{{ request()->get('search', '') }}"
                            placeholder="Keresés mindenben..." name="search">
                     <button type="submit"
                             class="hover-red-link px-2 h-16 w-16 bg-fotogray border border-fotogray text-white">{!! config('heroicons.solid.search')  !!}</button>

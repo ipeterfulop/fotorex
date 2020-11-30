@@ -1,4 +1,4 @@
-@push('pricelabel-'.$element->id)
+@push('pricelabel-'.$element->id.'-'.$configuration->id)
     @if($configuration->id == \App\Helpers\Productcategory::RENTALS_ID)
         @foreach($element->printerrentaloptions as $option)
             <div><strong class="text-fotored">Bérleti díj: </strong>
@@ -70,7 +70,7 @@
     </div>
     <div class="w-full flex items-center justify-end mt-4 pr-2">
         <div class="w-1/2 bg-fotolightgray bg-opacity-50 text-right p-4 flex flex-col items-end justify-center h-full text-base">
-            @stack('pricelabel-'.$element->id)
+            @stack('pricelabel-'.$element->id.'-'.$configuration->id)
         </div>
     </div>
 </div>
