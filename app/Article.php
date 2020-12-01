@@ -116,7 +116,7 @@ class Article extends Model
     {
         $result = [];
         $result[SelectVueCRUDIndexfilter::buildPropertyName('articlecategory_id')] = new SelectVueCRUDIndexfilter('articlecategory_id', 'Kategória', -1, -1);
-        $result[SelectVueCRUDIndexfilter::buildPropertyName('articlecategory_id')]->setValueSet([-1 => 'Mind'] + Articlecategory::getKeyValueCollection()->all());
+        $result[SelectVueCRUDIndexfilter::buildPropertyName('articlecategory_id')]->setValueSet([-1 => 'Mind'] + Articlecategory::getFilterKeyValueCollection()->all());
         $result[TextVueCRUDIndexfilter::buildPropertyName(['title', 'summary', 'content'])] = new TextVueCRUDIndexfilter(['title', 'summary', 'content'], 'Keresés...', '');
 
         return $result;
@@ -177,4 +177,16 @@ class Article extends Model
         })->values()->all();
     }
 
+    public static function getNewsForSlideSelect()
+    {
+        $articles = self::orderBy('title', 'desc')
+            ->published()
+            ->get();
+        foreach ($articles as $article) {
+            $result[] = ['id' => $article->slug, 'name' => $article->title];
+        }
+
+        return $result;
+
+    }
 }

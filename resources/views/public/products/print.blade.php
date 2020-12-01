@@ -48,11 +48,11 @@
                         {!! \App\Helpers\RentalPeriodUnit::formatPriceWithSuffix($product->rentalprice, $option->rentaloption->rental_period_unit) !!}
                     </div>
                     <div><strong>Havi oldalszám (ff): </strong>
-                        {{ $option->rentaloption->number_of_pages_included_bw }}
+                        {{ \App\Helpers\PriceFormatter::formatToInteger($option->rentaloption->number_of_pages_included_bw, '') }}
                     </div>
                     @if($product->color_management == \App\Helpers\ColorTechnology::COLOR_ID)
                         <div><strong>Havi oldalszám (színes):</strong>
-                            {{ $option->rentaloption->number_of_pages_included_color }}
+                            {{ \App\Helpers\PriceFormatter::formatToInteger($option->rentaloption->number_of_pages_included_color, '') }}
                         </div>
                     @endif
                 @endforeach

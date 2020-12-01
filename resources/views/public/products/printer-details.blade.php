@@ -2,35 +2,62 @@
 @section('content')
     <div class="w-full bg-transparent flex flex-col justify-center items-center my-8">
         <div class="w-full flex flex-col justify-center items-center my-8">
-            <div class="w-full max-width-container-bordered bg-white p-4">
-                <div class="flex flex-col lg:flex-row">
-                    <div class="w-full lg:w-2/6 flex flex-col items-stretch justify-start h-128 lg:h-64">
+            <div class="w-full max-width-container-bordered bg-white pl-3">
+                <div class="w-full">
+                    <div class="my-6 flex flex-row items-center justify-start">
+                        {!! $printer->getBreadcrumbData()->map(function($item) {
+                            return '<a class="text-fotored underline" href="'.$item['url'].'">'.$item['label'].'</a>';
+                        })->implode('&nbsp;&nbsp;&gt;&gt;&nbsp;&nbsp;') !!}
+                    </div>
+                </div>
+                <div class="flex flex-col lg:flex-row  h-128 lg:h-100">
+                    <div class="w-full lg:w-2/6 flex flex-col items-stretch justify-start h-full">
                         @include('public.partials.imageviewer', ['printerphotos' => $printer->getAllPhotoUrls()])
                     </div>
-                    <div class="w-full lg:w-3/6 flex flex-col items-stretch justify-start h-64">
-                        <h2 class="font-bold text-2xl mb-4">{{ $printer->displayname }}</h2>
-                        @include('public.partials.printers.detail-boxes', ['printer' => $printer])
-                        <div class="w-full py-4 flex flex-col items-start justify-center text-xl">
-                            {!! $printer->price_label !!}
+                    <div class="w-full lg:w-4/6 flex flex-col items-stretch justify-start h-full pl-12">
+                        <h2 class="font-bold text-2xl my-4">{{ $printer->displayname }}</h2>
+                        <div class="w-full flex flex-row">
+                            <div class="w-2/3">
+                                @if($printer->productfamily != \App\Helpers\Productfamily::DISPLAYS_ID)
+                                    @include('public.partials.printers.detail-boxes', ['printer' => $printer])
+                                 @else
+                                    {!! $printer->highlighted_features_label !!}
+                                @endif
+                                
+                                <div class="w-1/2 py-4 flex flex-col items-start justify-center text-xl bg-fotolightgray bg-opacity-50 mt-4 pl-2">
+                                    {!! $printer->price_label !!}
+                                </div>
+                                <div class="w-full py-4 flex flex-col items-start justify-center">
+                                    @if($printer->product_url_on_manufacturer_website != null)
+                                        <a target="_blank" class="text-blue-500 hover:underline hover:text-blue-700" href="{{ $printer->product_url_on_manufacturer_website }}">Leírás</a>
+                                    @endif
+                                    @if($printer->specification_sheet != null)
+                                        <a target="_blank" class="text-blue-500 hover:underline hover:text-blue-700" href="{{ $printer->specification_sheet }}">Technikai adatok</a>
+                                    @endif
+                                </div>
+
+                            </div>
+                            <div class="w-1/3 flex flex-col items-stretch justify-center h-full">
+                                @if($printer->productfamily != \App\Helpers\Productfamily::DISPLAYS_ID)
+                                    <a class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2" href="{{ route('compare_products', ['first' => $printer->slug]) }}">
+                                        <span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.document-text') !!}</span>
+                                        Összehasonlítás más termékkel
+                                    </a>
+                                @endif
+                                <button class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2" form="print-to-pdf">
+                                    <span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.document-text') !!}</span>
+                                    PDF nyomtatás</button>
+                                <button class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2"
+                                        onclick="showSendForm()"
+                                ><span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.document-text') !!}</span>
+                                    Küldés e-mailben</button>
+                                <button class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2"
+                                        onclick="showContactForm()"
+                                ><span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.document-text') !!}</span>
+                                    Érdekel az ajánlat</button>
+
+                            </div>
                         </div>
-                        <div class="w-full py-4 flex flex-col items-start justify-center">
-                            @if($printer->product_url_on_manufacturer_website != null)
-                                <a target="_blank" class="text-blue-500 hover:underline hover:text-blue-700" href="{{ $printer->product_url_on_manufacturer_website }}">Leírás</a>
-                            @endif
-                            @if($printer->specification_sheet != null)
-                                <a target="_blank" class="text-blue-500 hover:underline hover:text-blue-700" href="{{ $printer->specification_sheet }}">Technikai adatok</a>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="w-full lg:w-1/6 flex flex-col items-stretch justify-start h-64 text-center">
-                        <a class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1" href="{{ route('compare_products', ['first' => $printer->slug]) }}">Összehasonlítás más termékkel</a>
-                        <button class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1" form="print-to-pdf">PDF nyomtatás</button>
-                        <button class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1"
-                                onclick="showSendForm()"
-                        >Küldés e-mailben</button>
-                        <button class="bg-fotogray hover:bg-fotored hover:text-white w-full flex items-center justify-center font-bold py-3 flex-grow m-1"
-                                onclick="showContactForm()"
-                        >Érdekel az ajánlat</button>
                     </div>
                 </div>
             </div>

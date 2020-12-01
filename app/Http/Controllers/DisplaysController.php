@@ -35,8 +35,8 @@ class DisplaysController extends ProductController
     {
         $display = Display::findBySlug($slug);
         $attributes = ProductAttributeDataprovider::getComparableAttributeKeys(Productfamily::DISPLAYS_ID);
-        return view('public.products.display-details', [
-            'display' => $display,
+        return view('public.products.printer-details', [
+            'printer' => $display,
             'attributes' => $attributes,
         ]);
     }

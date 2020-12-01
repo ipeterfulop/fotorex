@@ -36,9 +36,9 @@ class DisplayComparisonController extends Controller
         foreach ($attributes as $attribute) {
             $result[$attribute['v']] = $printer->{$attribute['v']};
         }
-        $result['link'] = route('display_details', ['slug' => $printer->slug]);
+        $result['link'] = $printer->getDetailsUrl();
         $result['linkbutton'] = '<a class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-3 flex-grow"'
-            .'href="'.route('display_details', ['slug' => $printer->slug]).'">Termékoldal</a>';
+            .'href="'.$result['link'].'">Termékoldal</a>';
 
         return response()->json($result);
     }

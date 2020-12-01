@@ -5,6 +5,7 @@ namespace App;
 use App\Dataproviders\Filters\ProductcategoryVueCRUDIndexFilter;
 use App\Helpers\PriceFormatter;
 use App\Helpers\PrinterAttributeValue;
+use App\Helpers\Productcategory;
 use App\Helpers\Productfamily;
 use App\Scopes\PrinterWithAttributesScope;
 use App\Traits\hasFiles;
@@ -784,14 +785,37 @@ class Printer extends Model
         return $query->where('productfamily', '=', Productfamily::PRINTERS_ID);
     }
 
-    public function getDetailsUrl()
+    public function getProductfamilyData()
     {
-        $slug = Productfamily::getProductfamilySlug($this->productfamily);
-        if (($slug == Productfamily::PRINTERS_SLUG) && ($this->is_multifunctional == AttributeValue::YES_ID)) {
-            $slug = Productfamily::MFC_SLUG;
+        $result = [
+            'slug' => Productfamily::getProductfamilySlug($this->productfamily),
+            'familyslug' => Productfamily::getProductfamilyUrlSlug($this->productfamily),
+            'label' => Productfamily::getProductfamilyLabel($this->productfamily)
+        ];
+        if (($result['slug'] == Productfamily::PRINTERS_SLUG) && ($this->is_multifunctional == AttributeValue::YES_ID)) {
+            $result['slug'] = Productfamily::MFP_SLUG;
+            $result['familyslug'] = Productcategory::MFP_ID;
+            $result['label'] = Productfamily::MFP_LABEL;
         }
 
-        return route($slug.'_details', ['slug' => $this->slug]);
+        return $result;
+    }
+
+    public function getDetailsUrl()
+    {
+        $data = $this->getProductfamilyData();
+
+        return route('category_details', ['slug' => $this->slug, 'familyslug' => $data['familyslug']]);
+    }
+
+    public function getBreadcrumbData()
+    {
+        $data = $this->getProductfamilyData();
+        return collect([
+            ['url' => '/', 'label' => 'Főoldal'],
+            ['url' => route('printer_category_index', ['productcategoryId' => $data['familyslug']]), 'label' => $data['label']],
+            ['url' => route('category_details', $data), 'label' => $this->shortdisplayname],
+        ]);
     }
 
     public static function generateUniqueSlug($name, $manufacturerName, $modelNumber)

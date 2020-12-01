@@ -28,6 +28,15 @@
             width: 100%;
             background: linear-gradient(rgba(0,0,0,0), rgba(255,255,255,1));
         }
+        .overflow-y-fade-top {
+            position: absolute;
+            height: 30%;
+            margin: -30%;
+            top:0px;
+            left: 0px;
+            width: 100%;
+            background: linear-gradient(rgba(0,0,0,0), rgba(255,255,255,1));
+        }
 
     </style>
 </head>

@@ -27,6 +27,7 @@ class SearchController extends Controller
         $displays = Display::withAttributes()->textSearch(request()->get('search'))->sorted(Printer::SORTING_OPTION_POPULARITY_DOWN)->get();
         $printerConfiguration = Productcategory::getConfiguration(Productcategory::PRINTERS_ID);
         $displayConfiguration = Productcategory::getConfiguration(Productcategory::DISPLAYS_ID);
+        $rentalConfiguration = Productcategory::getConfiguration(Productcategory::RENTALS_ID);
         return view('public.search', [
             'minLengthReached' => true,
             'articles' => $articles,
@@ -35,6 +36,7 @@ class SearchController extends Controller
             'displays' => $displays,
             'printerConfiguration' => $printerConfiguration,
             'displayConfiguration' => $displayConfiguration,
+            'rentalConfiguration' => $rentalConfiguration,
         ]);
     }
 }
