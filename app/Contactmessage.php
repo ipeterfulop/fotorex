@@ -18,6 +18,7 @@ class Contactmessage extends Model
         'email',
         'phone',
         'message',
+        'subject',
         'last_action_taken',
         'printername',
         'printerdata',
@@ -40,6 +41,7 @@ class Contactmessage extends Model
         return [
             'created_at_label' => 'Beküldve',
             'contact_details' => 'Kapcsolat',
+            'subject' => 'Tárgy',
             'message' => 'Üzenet',
             'printername' => 'Érintett termék (ha van)',
             'last_action_taken' => 'Állapot',
@@ -60,6 +62,7 @@ class Contactmessage extends Model
             'name' => 'Név',
             'email' => 'E-mail',
             'phone' => 'Telefon',
+            'subject' => 'Tárgy',
             'message' => 'Üzenet',
             'last_action_taken' => 'Állapot',
             'printerdata_label' => 'Érintett termék (ha van)'
@@ -69,7 +72,7 @@ class Contactmessage extends Model
     public static function getVueCRUDIndexFilters()
     {
         $result = [];
-        $searchableFields = ['name', 'email', 'message', 'printername'];
+        $searchableFields = ['name', 'email', 'message', 'printername', 'subject'];
         $result[TextVueCRUDIndexfilter::buildPropertyName($searchableFields)] = new TextVueCRUDIndexfilter($searchableFields, 'Keresés (név, e-mail, érintett termék, üzenet)', '');
 
         return $result;

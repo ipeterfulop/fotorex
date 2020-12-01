@@ -67,13 +67,13 @@
                 </div>
                 @if($compactPriceView)
                     <div class="w-full flex items-center justify-start my-4 pr-2 price-label-container">
-                        <div class="w-1/2 bg-fotolightgray bg-opacity-50 text-left p-4 flex flex-col items-start justify-center h-full text-base">
+                        <div class="w-1/2 bg-fotolightgray bg-opacity-50 text-left p-1 flex flex-col items-start justify-center h-full text-base">
                             @stack('pricelabel-'.$element->id.'-'.$configuration->id)
                         </div>
                     </div>
                 @else
                     <div class="w-full flex items-center justify-end my-4 pr-2 price-label-container">
-                        <div class="w-1/2 bg-fotolightgray bg-opacity-50 text-right p-4 flex flex-col items-end justify-center h-full text-base">
+                        <div class="w-1/2 bg-fotolightgray bg-opacity-50 text-right p-1 flex flex-col items-end justify-center h-full text-base">
                             @stack('pricelabel-'.$element->id.'-'.$configuration->id)
                         </div>
                     </div>

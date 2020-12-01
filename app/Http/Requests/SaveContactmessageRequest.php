@@ -28,6 +28,7 @@ class SaveContactmessageRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required|email',
+            'subject' => 'required',
             'message' => 'required',
             'printer_id' => 'sometimes|exists:printers,id'
         ];
@@ -38,6 +39,7 @@ class SaveContactmessageRequest extends FormRequest
             'name.required' => 'A név nem lehet üres',
             'email.required' => 'Az e-mailcím nem lehet üres',
             'email.email' => 'Az e-mailcím formátuma nem megfelelő',
+            'subject.required' => 'A tárgy nem lehet üres',
             'message.required' => 'Az üzenet nem lehet üres',
         ];
     }
@@ -53,6 +55,7 @@ class SaveContactmessageRequest extends FormRequest
             'name' => $this->input('name'),
             'email' => $this->input('email'),
             'phone' => $this->input('phone', null),
+            'subject' => $this->input('subject'),
             'message' => $this->input('message'),
         ];
         if ($this->has('printer_id')) {

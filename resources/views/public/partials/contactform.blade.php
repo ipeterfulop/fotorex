@@ -3,6 +3,7 @@
       id="contact-form"
 >
     {{ csrf_field() }}
+    @include('public.partials.formelements.honeypot', [])
     @include('public.partials.formelements.text-input', [
         'fieldName' => 'name',
         'label' => 'Név',
@@ -17,6 +18,12 @@
         'fieldName' => 'phone',
         'label' => 'Telefonszám',
         'mandatory' => false,
+    ])
+    @include('public.partials.formelements.text-input', [
+        'fieldName' => 'subject',
+        'label' => 'Tárgy',
+        'mandatory' => true,
+        'value' => $defaultSubject ?? ''
     ])
     @include('public.partials.formelements.textarea-input', [
         'fieldName' => 'message',
@@ -47,7 +54,9 @@
         let formData = {
             'name': formNode.querySelector('#name').value,
             'email': formNode.querySelector('#email').value,
+            'h_email_h': formNode.querySelector('#h_email_h').value,
             'phone': formNode.querySelector('#phone').value,
+            'subject': formNode.querySelector('#subject').value,
             'message': formNode.querySelector('#message').value,
         }
         let printerNode = formNode.querySelector('#printer_id');

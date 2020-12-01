@@ -4,10 +4,8 @@
         <div class="w-full max-width-container-bordered bg-white flex flex-col">
 
             @if(session()->has('message'))
-                <div class="row">
-                    <div class="alert alert-info text-center margin-bottom-2x margin-top-2x col-12">
-                        {!! session()->pull('message') !!}
-                    </div>
+                <div class="w-full text-center col-12 py-8 text-xl text-fotored bg-fotomediumgray">
+                    {!! session()->pull('message') !!}
                 </div>
             @endif
             <h1 class="text-center font-bolder text-2xl text-fotored  py-8">Kapcsolat</h1>

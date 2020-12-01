@@ -23,7 +23,7 @@
                                  @else
                                     {!! $printer->highlighted_features_label !!}
                                 @endif
-                                
+
                                 <div class="w-1/2 py-4 flex flex-col items-start justify-center text-xl bg-fotolightgray bg-opacity-50 mt-4 pl-2">
                                     {!! $printer->price_label !!}
                                 </div>
@@ -93,7 +93,7 @@
                 @include('public.partials.contactform', [
                     'ajax' => true,
                     'action' => route('contactmessage_submit'),
-                    'defaultMessage' => 'Tárgy: kérdés a(z) '.$printer->displayname.' termékkel kapcsolatban'."\n\n"
+                    'defaultSubject' => 'Kérdés a(z) '.$printer->displayname.' termékkel kapcsolatban'."\n\n"
                 ])
             </div>
         </div>
@@ -104,6 +104,7 @@
                       id="send-form"
                 >
                 {{ csrf_field() }}
+                @include('public.partials.formelements.honeypot', [])
                 @include('public.partials.formelements.text-input', [
                     'fieldName' => 'email',
                     'label' => 'E-mailcím',
@@ -150,6 +151,7 @@
             document.getElementById('send-form-submit-button').setAttribute('disabled', true);
             let formNode = document.getElementById('send-form');
             let formData = {
+                'h_email_h': formNode.querySelector('#h_email_h').value,
                 'email': formNode.querySelector('#email').value,
                 'email_sidenote': formNode.querySelector('#email_sidenote').value,
                 'subject': formNode.querySelector('#subject').value,

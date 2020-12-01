@@ -108,14 +108,14 @@ class Printer extends Model
 
     public function similarprinters()
     {
-        return $this->hasMany(SimilarPrinter::class, 'similar_printer_id', 'id')
+        return $this->hasMany(SimilarPrinter::class, 'printer_id', 'id')
                     ->where('relationtype', '=', self::RELATIONTYPE_SIMILAR)
                     ->orderBy('position', 'asc');
     }
 
     public function printersviewedbyothers()
     {
-        return $this->hasMany(SimilarPrinter::class, 'similar_printer_id', 'id')
+        return $this->hasMany(SimilarPrinter::class, 'printer_id', 'id')
                     ->where('relationtype', '=', self::RELATIONTYPE_VIEWED_BY_OTHERS)
                     ->orderBy('position', 'asc');
     }
