@@ -4,6 +4,10 @@
 namespace App\Scrapers;
 
 
+use App\Attribute;
+use App\Dataproviders\ProductAttributeDataprovider;
+use App\Helpers\Productcategory;
+use App\Helpers\Productfamily;
 use DOMDocument;
 use DOMXPath;
 
@@ -102,6 +106,32 @@ class SharpScraper
             $items = $xpath->query('.//li', $list);
             foreach ($items as $item) {
                 $result['keyFeatures'][] = $item->textContent;
+            }
+        }
+
+        return $result;
+    }
+
+    public static function parseScrapedData($data)
+    {
+        $result = [
+            'description' => '<p>'.implode('</p><p>', $data['descriptionParagraphs']).'</p>',
+            'attributes' => [],
+        ];
+
+        $attributes = Attribute::forPrinters()->where('position_at_product_comparison', '!=', null)->orderBy('position_at_product_comparison', 'asc')->get();
+        $lookups = [
+            '/másolási sebesség.*?színes.*?a4/miu' => 'printing_speed_a4_color',
+            '/másolási sebesség.*?színes.*?a3/miu' => 'printing_speed_a3_color',
+        ];
+        //dump($data);
+        //dd($attributes->pluck('name', 'variable_name'));
+        foreach ($data['specificationRows'] as $group => $rows) {
+            foreach ($rows as $desc => $data) {
+                foreach ($lookups as $regex => $variableName)
+                if (preg_match($regex, $desc) === 1) {
+                    $result['attributes'][$variableName] = $data;
+                }
             }
         }
 
