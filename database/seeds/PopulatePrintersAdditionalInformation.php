@@ -6,6 +6,7 @@ use App\Printer;
 use App\PrinterAttribute;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class PopulatePrintersAdditionalInformation extends Seeder
 {
@@ -24,26 +25,36 @@ class PopulatePrintersAdditionalInformation extends Seeder
     {
         foreach ($dataSet as $dataItem) {
             $printerData = [];
-            if (!is_null($dataItem['name'])) {
-                $printerData['name'] = $dataItem['name'];
-            }
-            if (!is_null($dataItem['price'])) {
-                $printerData['price'] = $dataItem['price'];
-                $printerData['request_for_price'] = 0;
-            }
+            $printer = Printer::find($dataItem['id']);
+            if (!is_null($printer)) {
+                if (!is_null($dataItem['name'])) {
+                    $printerData['name'] = Str::lower($dataItem['name']);
+                    $printerData['slug'] = Str::slug(
+                        $printer->manufacturer->name
+                        . '-'
+                        . $printer->model_number
+                        . '-'
+                        . $dataItem['name']
+                    );
+                }
+                if (!is_null($dataItem['price'])) {
+                    $printerData['price'] = $dataItem['price'];
+                    $printerData['request_for_price'] = 0;
+                }
 
-            if (!is_null($dataItem['popularity_index'])) {
-                $printerData['popularity_index'] = $dataItem['popularity_index'];
-            }
+                if (!is_null($dataItem['popularity_index'])) {
+                    $printerData['popularity_index'] = $dataItem['popularity_index'];
+                }
 
-            if (count(array_keys($printerData)) > 0) {
-                DB::table('printers')
-                  ->where('id', $dataItem['id'])
-                  ->update($printerData);
-            }
+                if (count(array_keys($printerData)) > 0) {
+                    DB::table('printers')
+                      ->where('id', $dataItem['id'])
+                      ->update($printerData);
+                }
 
-            if (!is_null($dataItem['key_features'])) {
-                PrinterAttribute::addOrUpdate($dataItem['id'], 'key_features', $dataItem['key_features']);
+                if (!is_null($dataItem['key_features'])) {
+                    PrinterAttribute::addOrUpdate($dataItem['id'], 'key_features', $dataItem['key_features']);
+                }
             }
         }
     }
