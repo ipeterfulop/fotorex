@@ -5,6 +5,13 @@
             float: left !important;
             margin-right: 1rem;
         }
+        @media only screen and (max-width: 600px) {
+            .article-container img {
+                float: initial;
+                width: 100%;
+                margin-right: 0px;
+            }
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
@@ -37,7 +44,7 @@
                 @endif
                 <span class="ml-4">{{ $article->title }}</span>
             </div>
-            <h2 class="w-full uppercase text-xl my-4 py-8 text-white bg-fotored text-center">{!! $article->title !!}</h2>
+            <h2 class="w-full uppercase text-xl my-4 py-8 px-3 text-white bg-fotored text-center">{!! $article->title !!}</h2>
             <div class="w-full flex flex-row items-start justify-center">
                 <div class="w-full max-width-container flex flex-col">
                     <div class="flex flex-col items-start justify-start">

@@ -7,6 +7,7 @@
 
     <title>{{ isset($pageTitle) ? $pageTitle.' - '  : ''}}{{ config('app.name') }}</title>
     <meta name="description" content="{{ $pageDescription ?? 'Fotorex' }}">
+    <meta property="og:title" content="{{ isset($pageTitle) ? $pageTitle.' - '  : ''}}{{ config('app.name') }}">
 <!--
     <script src="{{ asset('js/fa/all.min.js') }}"></script>
     <script src="{{ asset('js/fa/brands.min.js') }}"></script>
@@ -15,6 +16,10 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="{{ asset('css/fotorex.css') }}" rel="stylesheet">
+    @if(isset($canonical))
+        <link rel="canonical" href="{{ $canonicalUrl }}">
+        <meta property="og:url" content="{{ $canonicalUrl }}">
+    @endif
 <!--
     <link href="{{ asset('css/fa/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/fa/brands.min.css') }}" rel="stylesheet">

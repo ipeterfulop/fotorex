@@ -1,31 +1,51 @@
-@extends('layouts.tailwind.app', ['pageTitle' => $printer->html_page_title, 'pageDescription' => $printer->html_page_meta_description])
+@extends('layouts.tailwind.app', [
+    'pageTitle' => $printer->html_page_title,
+    'pageDescription' => $printer->html_page_meta_description,
+    'canonicalUrl' => $printer->getCanonicalUrl(),
+])
 @section('content')
     <div class="w-full bg-transparent flex flex-col justify-center items-center my-8">
         <div class="w-full flex flex-col justify-center items-center my-8">
-            <div class="w-full max-width-container-bordered bg-white pl-3">
+            <div class="w-full max-width-container-bordered bg-white px-5 lg:px-3">
                 <div class="w-full">
                     <div class="my-6 flex flex-row items-center justify-start">
-                        {!! $printer->getBreadcrumbData()->map(function($item) {
+                        {!! $breadcrumbData->map(function($item) {
                             return '<a class="text-fotored underline" href="'.$item['url'].'">'.$item['label'].'</a>';
-                        })->implode('&nbsp;&nbsp;&gt;&gt;&nbsp;&nbsp;') !!}
+                        })->implode('&nbsp;&gt;&gt;&nbsp;') !!}
                     </div>
                 </div>
-                <div class="flex flex-col lg:flex-row  h-128 lg:h-100">
-                    <div class="w-full lg:w-2/6 flex flex-col items-stretch justify-start h-full">
+                <div class="flex flex-col lg:flex-row  h-auto lg:h-100">
+                    <div class="w-full lg:w-2/6 flex flex-col items-stretch justify-start h-128 lg:h-full">
                         @include('public.partials.imageviewer', ['printerphotos' => $printer->getAllPhotoUrls()])
                     </div>
-                    <div class="w-full lg:w-4/6 flex flex-col items-stretch justify-start h-full pl-12">
+                    <div class="w-full lg:w-4/6 flex flex-col items-stretch justify-start h-auto lg:h-full lg:pl-12">
                         <h2 class="font-bold text-2xl my-4">{{ $printer->displayname }}</h2>
-                        <div class="w-full flex flex-row">
-                            <div class="w-2/3">
-                                @if($printer->productfamily != \App\Helpers\Productfamily::DISPLAYS_ID)
+                        <div class="w-full flex flex-col lg:flex-row">
+                            <div class="w-full lg:w-2/3">
+                                @if($configuration->id != \App\Helpers\Productcategory::DISPLAYS_ID)
                                     @include('public.partials.printers.detail-boxes', ['printer' => $printer])
                                  @else
                                     {!! $printer->highlighted_features_label !!}
                                 @endif
-                                
-                                <div class="w-1/2 py-4 flex flex-col items-start justify-center text-xl bg-fotolightgray bg-opacity-50 mt-4 pl-2">
-                                    {!! $printer->price_label !!}
+
+                                <div class="w-full lg:w-1/2 py-4 flex flex-col items-start justify-center bg-fotolightgray bg-opacity-50 mt-4 pl-2">
+                                    @if($configuration->id == \App\Helpers\Productcategory::RENTALS_ID)
+                                        @foreach($printer->printerrentaloptions as $option)
+                                            <div class=""><strong class="text-fotored">Bérleti díj: </strong>
+                                                {!! \App\Helpers\RentalPeriodUnit::formatPriceWithSuffix($printer->rentalprice, $option->rentaloption->rental_period_unit) !!}
+                                            </div>
+                                            <div class=""><strong class="text-fotored">Havi oldalszám (ff): </strong>
+                                                {{ \App\Helpers\PriceFormatter::formatToInteger($option->rentaloption->number_of_pages_included_bw, '') }}
+                                            </div>
+                                            @if($printer->color_management == \App\Helpers\ColorTechnology::COLOR_ID)
+                                                <div class=""><strong class="text-fotored">Havi oldalszám (színes):</strong>
+                                                    {{ \App\Helpers\PriceFormatter::formatToInteger($option->rentaloption->number_of_pages_included_color, '') }}
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <div class="text-xl w-full h-full">{!! $printer->price_label !!}</div>
+                                    @endif
                                 </div>
                                 <div class="w-full py-4 flex flex-col items-start justify-center">
                                     @if($printer->product_url_on_manufacturer_website != null)
@@ -37,21 +57,21 @@
                                 </div>
 
                             </div>
-                            <div class="w-1/3 flex flex-col items-stretch justify-center h-full">
-                                @if($printer->productfamily != \App\Helpers\Productfamily::DISPLAYS_ID)
-                                    <a class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2" href="{{ route('compare_products', ['first' => $printer->slug]) }}">
+                            <div class="w-full lg:w-1/3 flex flex-col items-stretch justify-center h-auto lg:h-full">
+                                @if($configuration->id != \App\Helpers\Productcategory::DISPLAYS_ID)
+                                    <a class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2 pl-4 lg:pl-2" href="{{ route('compare_products', ['first' => $printer->slug]) }}">
                                         <span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.document-text') !!}</span>
                                         Összehasonlítás más termékkel
                                     </a>
                                 @endif
-                                <button class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2" form="print-to-pdf">
+                                <button class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2 pl-4 lg:pl-2" form="print-to-pdf">
                                     <span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.document-text') !!}</span>
                                     PDF nyomtatás</button>
-                                <button class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2"
+                                <button class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2 pl-4 lg:pl-2"
                                         onclick="showSendForm()"
                                 ><span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.document-text') !!}</span>
                                     Küldés e-mailben</button>
-                                <button class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2"
+                                <button class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2 pl-4 lg:pl-2"
                                         onclick="showContactForm()"
                                 ><span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.document-text') !!}</span>
                                     Érdekel az ajánlat</button>
@@ -62,11 +82,12 @@
                 </div>
             </div>
             <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col lg:flex-row">
-                <div class="w-3/4">
+                <div class="w-full lg:w-3/4 mb-8 lg:mb-0">
                     <h2 class="text-2xl">Leírás</h2>
                     {!! $printer->description !!}
                 </div>
-                <div class="w-1/4 flex flex-col">
+                <div class="w-full lg:w-1/4 flex flex-col">
+                    <h2 class="block lg:hidden text-2xl mb-4">Hasonló ajánlatok</h2>
                     @include('public.partials.printers.similars', ['title' => 'Hasonló termékek', 'similarPrinters' => $printer->similarprinters])
                     @include('public.partials.printers.similars', ['title' => 'Más látogatók az alábbi termékeket tekintették meg', 'similarPrinters' => $printer->printersviewedbyothers])
                 </div>
@@ -93,7 +114,7 @@
                 @include('public.partials.contactform', [
                     'ajax' => true,
                     'action' => route('contactmessage_submit'),
-                    'defaultMessage' => 'Tárgy: kérdés a(z) '.$printer->displayname.' termékkel kapcsolatban'."\n\n"
+                    'defaultSubject' => 'Kérdés a(z) '.$printer->displayname.' termékkel kapcsolatban'."\n\n"
                 ])
             </div>
         </div>
@@ -104,6 +125,7 @@
                       id="send-form"
                 >
                 {{ csrf_field() }}
+                @include('public.partials.formelements.honeypot', [])
                 @include('public.partials.formelements.text-input', [
                     'fieldName' => 'email',
                     'label' => 'E-mailcím',
@@ -150,6 +172,7 @@
             document.getElementById('send-form-submit-button').setAttribute('disabled', true);
             let formNode = document.getElementById('send-form');
             let formData = {
+                'h_email_h': formNode.querySelector('#h_email_h').value,
                 'email': formNode.querySelector('#email').value,
                 'email_sidenote': formNode.querySelector('#email_sidenote').value,
                 'subject': formNode.querySelector('#subject').value,

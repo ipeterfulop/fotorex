@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Articlecategory;
+use App\Helpers\Productcategory;
 use App\Helpers\Productfamily;
 use App\Highlightedprinter;
 use Illuminate\Support\ServiceProvider;
@@ -42,10 +43,10 @@ class PublicViewServiceProvider extends ServiceProvider
     protected function buildPublicMenu()
     {
         return [
-            Productfamily::PRINTERS_LABEL => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::PRINTERS_ID]),
-            Productfamily::MFP_LABEL => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::MFP_ID]),
-            'Nyomtatóbérlés' => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::RENTALS_ID]),
-            Productfamily::DISPLAYS_LABEL => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::DISPLAYS_ID]),
+            Productcategory::PRINTERS_LABEL => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::PRINTERS_ID]),
+            Productcategory::MFP_LABEL => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::MFP_ID]),
+            Productcategory::RENTALS_LABEL => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::RENTALS_ID]),
+            Productcategory::DISPLAYS_LABEL => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::DISPLAYS_ID]),
             'Irodaszerek' => 'https://webaruhaz.fotorex.hu/',
         ];
     }

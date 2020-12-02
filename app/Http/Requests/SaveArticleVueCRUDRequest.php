@@ -50,6 +50,9 @@ class SaveArticleVueCRUDRequest extends VueCRUDRequestBase
         if ($subject == null) {
             $result['published_at'] = now();
         }
+        if (($subject != null) && ($subject->published_at->format('Y-m-d') != $this->input('published_at'))) {
+            $result['published_at'] = Carbon::parse($this->input('published_at'));
+        }
         return $this->addPositionToDatasetIfNecessary($subject, Article::class, $result);
     }
 

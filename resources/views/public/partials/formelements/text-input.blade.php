@@ -1,11 +1,11 @@
 @php($value = $value ?? '')
 <div class="form-group w-full lg:w-8/12 flex flex-col my-2" data-fieldname="{{ $fieldName }}">
-    <div class="w-full flex flex-row items-center justify-center">
-        <label class="w-1/2 form-label text-right pr-2" for="text-input">
+    <div class="w-full flex flex-col lg:flex-row lg:items-center lg:justify-center">
+        <label class="w-full lg:w-1/2 form-label text-left lg:text-right pr-2" for="text-input">
             {!! $label !!}
             @if($mandatory)<sup>*</sup>@endif
         </label>
-        <div class="w-1/2">
+        <div class="w-full lg:w-1/2">
             <input class="form-control flex-grow w-full"
                    type="text"
                    name="{{ $fieldName }}"

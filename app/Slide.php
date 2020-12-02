@@ -23,7 +23,8 @@ class Slide extends Model
         'url',
         'image',
         'open_in',
-        'position'
+        'position',
+        'article_id',
     ];
 
     protected $appends = [
