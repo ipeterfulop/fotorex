@@ -18,7 +18,7 @@
 
                         >&#9660;</span>
                     </h1>
-                    <div x-show="showDetails" class="mt-4">
+                    <div x-show="showDetails" class="mt-4 px-2 lg:px-0">
                         @forelse($printers as $printer)
                             @include('public.partials.printer-summary-block', ['element' => $printer, 'configuration' => $printerConfiguration])
                         @empty
@@ -40,7 +40,7 @@
 
                         >&#9660;</span>
                     </h1>
-                    <div x-show="showDetails" class="mt-4">
+                    <div x-show="showDetails" class="mt-4 px-2 lg:px-0">
                         @forelse($rentals as $rental)
                             @include('public.partials.printer-summary-block', ['element' => $rental, 'configuration' => $rentalConfiguration, 'compactPriceView' => true])
                         @empty
@@ -62,7 +62,7 @@
                               @click="showDetails = !showDetails"
                         >&#9660;</span>
                     </h1>
-                    <div x-show="showDetails" class="mt-4">
+                    <div x-show="showDetails" class="mt-4 px-2 lg:px-0">
                         @forelse($displays as $display)
                             @include('public.partials.display-summary-block', ['element' => $display, 'configuration' => $displayConfiguration])
                         @empty
@@ -84,7 +84,7 @@
 
                         >&#9660;</span>
                     </h1>
-                    <div x-show="showDetails" class="mt-4">
+                    <div x-show="showDetails" class="mt-4 px-2 lg:px-0">
                         @forelse($articles as $article)
                             @include('public.partials.article-summary-block', ['element' => $article])
                         @empty

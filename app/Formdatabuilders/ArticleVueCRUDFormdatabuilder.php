@@ -43,10 +43,6 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
                 'unique' => 'Ez az URL már foglalt',
                 'regex' => 'Az URL csak ékezet nélküli betűket, számokat, kötőjelet és alávonást tartalmazhat'
             ]);
-//        $result['published_at'] = (new DatepickerVueCRUDFormfield())->setMandatory(true)
-//            ->setLabel('Publikálás dátuma')
-//            ->setProperty('published_at')
-//            ->setContainerClass('col-6');
         $result['title'] = (new TextVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Cím')
             ->setProperty('title')
@@ -77,6 +73,10 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setLabel('Indexkép')
             ->setProperty('index_image')
             ->setContainerClass('col-12');
+        $result['published_at'] = (new DatepickerVueCRUDFormfield())->setMandatory(true)
+            ->setLabel('Publikálás dátuma')
+            ->setProperty('published_at')
+            ->setContainerClass('col-6');
 
         return collect($result);
     }

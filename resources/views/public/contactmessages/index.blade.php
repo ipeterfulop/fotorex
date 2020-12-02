@@ -8,8 +8,8 @@
                     {!! session()->pull('message') !!}
                 </div>
             @endif
-            <h1 class="text-center font-bolder text-2xl text-fotored  py-8">Kapcsolat</h1>
-            <div class="p-4">
+            <h2 class="w-full uppercase text-xl my-4 py-8 text-white bg-fotored text-center">Kapcsolat</h2>
+            <div class="p-4 text-xl">
                 <ul class="flex flex-col">
                     <li> <i class="icon-mail text-muted"></i>{{ config('company.name') }}</li>
                     <li> <i class="icon-mail text-muted"></i>{{ config('company.address') }}</li>
@@ -20,7 +20,9 @@
                 <p class="text-fotored">
                     Cégünk nem járul hozzá az alábbi elérhetőségek telemarketing, direct marketing, valamint ügynöki, közvéleménykutatási célú felhasználásához!
                 </p>
-                <h3 class="text-center font-bolder text-xl text-fotored  py-8">Írjon nekünk</h3>
+            </div>
+            <h2 class="w-full uppercase text-xl my-4 py-8 text-white bg-fotored text-center">Írjon nekünk</h2>
+            <div class="p-4">
                 @include('public.partials.contactform', ['ajax' => false])
             </div>
         </div>

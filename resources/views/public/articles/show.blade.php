@@ -5,6 +5,13 @@
             float: left !important;
             margin-right: 1rem;
         }
+        @media only screen and (max-width: 600px) {
+            .article-container img {
+                float: initial;
+                width: 100%;
+                margin-right: 0px;
+            }
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>

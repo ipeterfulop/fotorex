@@ -53,6 +53,7 @@
             @foreach($publicmenuitems as $label => $link)
                 <a class="py-1 w-full hover-red-link" href="{{ $link }}">{{ $label }}</a>
             @endforeach
+            <a class="py-1 w-full hover-red-link" href="{{ route('contactmessage_index') }}">Kapcsolat</a>
         </div>
     </div>
     <!--desktop menu-->

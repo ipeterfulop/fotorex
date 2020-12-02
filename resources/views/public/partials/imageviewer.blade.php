@@ -6,13 +6,13 @@
     @if(count($printerphotos) > 0)
         <div class="relative w-full lg:w-1/5 h-16 lg:h-full flex-shrink-0 mt-2 lg:mt-0 flex flex-row lg:flex-col">
             <div class="cursor-pointer text-white font-xl w-full hidden lg:flex h-1/6 items-center justify-center p-1 bg-fotomediumgray hover:bg-fotored transition transition-colors ease-in-out duration-200 select-none" @click="scrollUp">&#x2303;</div>
-            <div class="cursor-pointer text-white font-xl h-full flex lg:hidden w-8 items-center justify-center p-1 bg-fotomediumgray hover:bg-fotored transition transition-colors ease-in-out duration-200 select-none" @click="scrollLeft">&lt;</div>
+            <div class="cursor-pointer text-white font-xl h-full flex lg:hidden w-32 items-center justify-center p-1 bg-fotomediumgray hover:bg-fotored transition transition-colors ease-in-out duration-200 select-none" @click="scrollLeft">&lt;</div>
             <div class="w-auto lg:w-full h-4/6 lg:h-auto overflow-x-hidden lg:overflow-y-hidden">
                 <div class="h-full max-h-full flex flex-row lg:flex-col justify-start items-center imageviewer-thumbnails-container"
                      style="transform: translateY(0) translateX(0); transition: transform 200ms ease-in-out"
                      x-ref="imageviewer_thumbnails_container">
                     @foreach ($printerphotos as $printerphoto)
-                        <img class="w-24 lg:h-1/4 opacity-75 hover:opacity-100 imageviewer-thumbnail cursor-pointer mx-8 object-contain border-2 border-gray-200"
+                        <img class="w-24 lg:h-1/4 opacity-75 hover:opacity-100 imageviewer-thumbnail cursor-pointer mx-4 object-contain border-2 border-gray-200"
                              data-imageurl="{{ $printerphoto['index'] }}"
                              data-originalimageurl="{{ $printerphoto['original'] }}"
                              src="{{ $printerphoto['thumbnail'] }}"
@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="cursor-pointer text-white font-xl w-full hidden lg:flex h-1/6 items-center justify-center p-1 bg-fotomediumgray hover:bg-fotored transition transition-colors ease-in-out duration-200 select-none" @click="scrollDown">&#x2304;</div>
-            <div class="cursor-pointer text-white font-xl h-full flex lg:hidden w-8 items-center justify-center p-1 bg-fotomediumgray hover:bg-fotored transition transition-colors ease-in-out duration-200 select-none" @click="scrollRight">&gt;</div>
+            <div class="cursor-pointer text-white font-xl h-full flex lg:hidden w-32 items-center justify-center p-1 bg-fotomediumgray hover:bg-fotored transition transition-colors ease-in-out duration-200 select-none" @click="scrollRight">&gt;</div>
         </div>
         <div class="h-96 lg:h-auto w-auto lg:w-full mt-2 lg:mt-0 flex flex items-center justify-center z-0">
             <img class="w-full h-full object-contain cursor-pointer" x-bind:src="currentImage" @click.stop="imageFullscreen = !imageFullscreen">
@@ -60,7 +60,10 @@
                 this.stepY = this.$refs.imageviewer_thumbnails_container.querySelector('img').getBoundingClientRect().height;
             },
             calculateStepX: function() {
-                this.stepX = this.$refs.imageviewer_thumbnails_container.querySelector('img').getBoundingClientRect().width;
+                let i = this.$refs.imageviewer_thumbnails_container.querySelector('img');
+                this.stepX = i.getBoundingClientRect().width
+                    + parseInt(window.getComputedStyle(i).marginLeft)
+                    + parseInt(window.getComputedStyle(i).marginRight);
             },
             calculateMaxScrollY: function() {
                 let i = Array.from(this.$refs.imageviewer_thumbnails_container.querySelectorAll('img'));

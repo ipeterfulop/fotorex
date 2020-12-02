@@ -27,8 +27,8 @@
                       style="padding: .5rem; font-size: 3rem; color: #333745; transition: opacity 200ms ease-in-out; cursor:pointer ">●</span>
             @endpush
         @endforeach
-        <button class="slider-page-button focus:outline-none text-white px-6 text-xl" style="left:0px;" onclick="slider{{ $slider->id }}.prevSlide()"><span class="h-12" style="width: 2rem">{!! config('heroicons.solid.arrow-circle-left') !!}</span></button>
-            <button class="slider-page-button focus:outline-none text-white px-6 text-xl" style="right:0px;" onclick="slider{{ $slider->id }}.nextSlide()"><span class="h-12" style="width: 2rem">{!! config('heroicons.solid.arrow-circle-right') !!}</span></button>
+        <button class="slider-page-button focus:outline-none text-white px-6 text-xl z-20" style="left:0px;" onclick="slider{{ $slider->id }}.prevSlide()"><span class="h-12" style="width: 2rem">{!! config('heroicons.solid.arrow-circle-left') !!}</span></button>
+            <button class="slider-page-button focus:outline-none text-white px-6 text-xl z-20" style="right:0px;" onclick="slider{{ $slider->id }}.nextSlide()"><span class="h-12" style="width: 2rem">{!! config('heroicons.solid.arrow-circle-right') !!}</span></button>
     </div>
     @if(false)
         @if($slider->slides->count() > 1)

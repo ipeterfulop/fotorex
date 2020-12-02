@@ -7,7 +7,7 @@
         </div>
     @endif
     <div class="flex flex-col w-full @if(count($filters) > 0) md:w-2/3 @endif">
-        <div class="h-12 flex flex-start flex-no-wrap flex-row p-4 lg:p-0 lg:pl-2 mb-0 items-center justify-start bg-fotomediumgray" id="top-{{ $componentId }}">
+        <div class="h-auto lg:h-12 flex flex-start flex-wrap lg:flex-no-wrap flex-row p-4 lg:p-0 lg:pl-2 mb-0 items-center justify-start bg-fotomediumgray" id="top-{{ $componentId }}">
             <label class="mr-2">Rendezés:</label>
             <select x-model="sortingOption">
                 @foreach($sortingOptions as $id => $label)
