@@ -44,7 +44,7 @@
                 @endif
                 <span class="ml-4">{{ $article->title }}</span>
             </div>
-            <h2 class="w-full uppercase text-xl my-4 py-8 text-white bg-fotored text-center">{!! $article->title !!}</h2>
+            <h2 class="w-full uppercase text-xl my-4 py-8 px-3 text-white bg-fotored text-center">{!! $article->title !!}</h2>
             <div class="w-full flex flex-row items-start justify-center">
                 <div class="w-full max-width-container flex flex-col">
                     <div class="flex flex-col items-start justify-start">
