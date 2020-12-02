@@ -22,13 +22,13 @@
 <div class="fotorex-list-item-list-view">
     <div class="w-full flex flex-row items-start" >
         <div class="w-1/3 ">
-            <a href="{{ $element->getDetailsUrl() }}" class="w-full h-full">
+            <a href="{{ $element->getDetailsUrl($configuration->id) }}" class="w-full h-full">
                 <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}"
                      class="object-contain" style="object-position:left top">
             </a>
         </div>
         <div class="w-2/3 pl-4 flex flex-col items-start justify-start">
-            <h1 class="text-2xl font-bold mb-4"><a href="{{ $element->getDetailsUrl() }}">{{ $element->display_name }}</a></h1>
+            <h1 class="text-2xl font-bold mb-4"><a href="{{ $element->getDetailsUrl($configuration->id) }}">{{ $element->display_name }}</a></h1>
 
             <div class="flex items-center justify-start flex-nowrap flex-row mb-4">
                 @if($element->printing >= \App\Helpers\DeviceFunctionality::BW_ID)
@@ -84,7 +84,7 @@
 </div>
 <div class="fotorex-list-item-grid-view">
     <div class="pr-10 h-100 my-4">
-        <a href="{{ $element->getDetailsUrl() }}" class="hover:shadow-lg  w-full h-full  flex flex-col items-stretch justify-start p-2 relative  border border-fotolightgray">
+        <a href="{{ $element->getDetailsUrl($configuration->id) }}" class="hover:shadow-lg  w-full h-full  flex flex-col items-stretch justify-start p-2 relative  border border-fotolightgray">
             <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}" class="object-cover" style="height: 50%">
             <div class="flex flex-col items-stretch justify-start mt-3">
                 <h4 class="text-fotored uppercase text-xl" >

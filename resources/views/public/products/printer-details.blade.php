@@ -1,11 +1,15 @@
-@extends('layouts.tailwind.app', ['pageTitle' => $printer->html_page_title, 'pageDescription' => $printer->html_page_meta_description])
+@extends('layouts.tailwind.app', [
+    'pageTitle' => $printer->html_page_title,
+    'pageDescription' => $printer->html_page_meta_description,
+    'canonicalUrl' => $printer->getCanonicalUrl(),
+])
 @section('content')
     <div class="w-full bg-transparent flex flex-col justify-center items-center my-8">
         <div class="w-full flex flex-col justify-center items-center my-8">
             <div class="w-full max-width-container-bordered bg-white pl-3">
                 <div class="w-full">
                     <div class="my-6 flex flex-row items-center justify-start">
-                        {!! $printer->getBreadcrumbData()->map(function($item) {
+                        {!! $breadcrumbData->map(function($item) {
                             return '<a class="text-fotored underline" href="'.$item['url'].'">'.$item['label'].'</a>';
                         })->implode('&nbsp;&nbsp;&gt;&gt;&nbsp;&nbsp;') !!}
                     </div>
@@ -18,14 +22,30 @@
                         <h2 class="font-bold text-2xl my-4">{{ $printer->displayname }}</h2>
                         <div class="w-full flex flex-row">
                             <div class="w-2/3">
-                                @if($printer->productfamily != \App\Helpers\Productfamily::DISPLAYS_ID)
+                                @if($configuration->id != \App\Helpers\Productcategory::DISPLAYS_ID)
                                     @include('public.partials.printers.detail-boxes', ['printer' => $printer])
                                  @else
                                     {!! $printer->highlighted_features_label !!}
                                 @endif
 
-                                <div class="w-1/2 py-4 flex flex-col items-start justify-center text-xl bg-fotolightgray bg-opacity-50 mt-4 pl-2">
-                                    {!! $printer->price_label !!}
+                                <div class="w-1/2 py-4 flex flex-col items-start justify-center bg-fotolightgray bg-opacity-50 mt-4 pl-2">
+                                    @if($configuration->id == \App\Helpers\Productcategory::RENTALS_ID)
+                                        @foreach($printer->printerrentaloptions as $option)
+                                            <div class=""><strong class="text-fotored">Bérleti díj: </strong>
+                                                {!! \App\Helpers\RentalPeriodUnit::formatPriceWithSuffix($printer->rentalprice, $option->rentaloption->rental_period_unit) !!}
+                                            </div>
+                                            <div class=""><strong class="text-fotored">Havi oldalszám (ff): </strong>
+                                                {{ \App\Helpers\PriceFormatter::formatToInteger($option->rentaloption->number_of_pages_included_bw, '') }}
+                                            </div>
+                                            @if($printer->color_management == \App\Helpers\ColorTechnology::COLOR_ID)
+                                                <div class=""><strong class="text-fotored">Havi oldalszám (színes):</strong>
+                                                    {{ \App\Helpers\PriceFormatter::formatToInteger($option->rentaloption->number_of_pages_included_color, '') }}
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <div class="text-xl w-full h-full">{!! $printer->price_label !!}</div>
+                                    @endif
                                 </div>
                                 <div class="w-full py-4 flex flex-col items-start justify-center">
                                     @if($printer->product_url_on_manufacturer_website != null)
@@ -38,7 +58,7 @@
 
                             </div>
                             <div class="w-1/3 flex flex-col items-stretch justify-center h-full">
-                                @if($printer->productfamily != \App\Helpers\Productfamily::DISPLAYS_ID)
+                                @if($configuration->id != \App\Helpers\Productcategory::DISPLAYS_ID)
                                     <a class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2" href="{{ route('compare_products', ['first' => $printer->slug]) }}">
                                         <span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.document-text') !!}</span>
                                         Összehasonlítás más termékkel

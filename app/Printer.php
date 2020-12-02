@@ -795,22 +795,31 @@ class Printer extends Model
         if (($result['slug'] == Productfamily::PRINTERS_SLUG) && ($this->is_multifunctional == AttributeValue::YES_ID)) {
             $result['slug'] = Productfamily::MFP_SLUG;
             $result['familyslug'] = Productcategory::MFP_ID;
-            $result['label'] = Productfamily::MFP_LABEL;
+            $result['label'] = Productcategory::MFP_LABEL;
         }
 
         return $result;
     }
 
-    public function getDetailsUrl()
+    public function getDetailsUrl($familyslug = null)
     {
-        $data = $this->getProductfamilyData();
+        $familyslug = $familyslug === null
+            ? $this->getProductfamilyData()['familyslug']
+            : $familyslug;
 
-        return route('category_details', ['slug' => $this->slug, 'familyslug' => $data['familyslug']]);
+        return route('category_details', ['slug' => $this->slug, 'familyslug' => $familyslug]);
     }
 
-    public function getBreadcrumbData()
+    public function getBreadcrumbData($familyslug = null, $label = null)
     {
         $data = $this->getProductfamilyData();
+        if ($familyslug != null) {
+            $data['familyslug'] = $familyslug;
+        }
+        if ($label != null) {
+            $data['label'] = $label;
+        }
+
         return collect([
             ['url' => '/', 'label' => 'Főoldal'],
             ['url' => route('printer_category_index', ['productcategoryId' => $data['familyslug']]), 'label' => $data['label']],
@@ -839,6 +848,11 @@ class Printer extends Model
             '=',
             'printers.id'
         );
+    }
+
+    public function getCanonicalUrl()
+    {
+        return $this->getDetailsUrl();
     }
 }
 
