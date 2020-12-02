@@ -77,9 +77,9 @@ class SlideVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
 
     public function get_article_slug_value()
     {
-        return ($this->subject == null) || ($this->subject->article_slug == null)
+        return ($this->subject == null) || ($this->subject->article_id == null)
             ? -1
-            : $this->subject->article_slug;
+            : Article::find($this->subject->article_id)->slug;
     }
 
 }

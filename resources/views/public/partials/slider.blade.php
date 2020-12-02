@@ -57,8 +57,10 @@
             }
             if (previousSlide != null) {
                 previousSlide.style.opacity = 0;
+                previousSlide.style.zIndex = 0;
             }
             currentSlide.style.opacity = 1;
+            currentSlide.style.zIndex = 10;
             Array.from(this.sliderNode.querySelectorAll('.slider-button')).forEach((button) => {
                 if (button.getAttribute('data-index') == position) {
                     button.style.opacity = 1;

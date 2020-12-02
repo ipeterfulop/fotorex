@@ -59,9 +59,13 @@ class SaveSlideVueCRUDRequest extends VueCRUDRequestBase
             'slider_id' => $this->input('slider_id'),
             'url' => $this->input('url'),
             'open_in' => $this->input('open_in'),
-            'articlecategory_url_prefix' => Articlecategory::where('tag', '=', 'news')->first()->url_prefix,
-            'article_slug' => $this->input('article_slug'),
+            'url' => $this->input('url'),
         ];
+        $article = Article::findBySlug($this->input('article_slug'), false);
+        if ($article != null) {
+            $result['url'] = $article->url;
+            $result['article_id'] = $article->id;
+        }
 
         return $result;
     }
