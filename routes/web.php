@@ -26,6 +26,9 @@ Route::get('/scrape', function() {
 });
 Route::view('/', 'welcome');
 
+Route::view('/migration', 'OldDataMigrationController@index');
+
+
 Auth::routes();
 
 Route::prefix('admin')->middleware('auth')->group(function() {
