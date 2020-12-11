@@ -15,7 +15,14 @@
 //        echo '<img src="'.\App\Printer::first()->getCustomizedPrinterPhoto(3, PrinterPhotoRole::find(2))->getUrl().'"><hr>';
 //});
 Route::get('/scrape', function() {
-    dd(\App\Scrapers\SharpScraper::parseScrapedData(\App\Scrapers\SharpScraper::scrapeProductPage('https://www.sharp.hu/cps/rde/xchg/hu/hs.xsl/-/html/product-details-office-print.htm?product=MX6071')));
+    if (file_exists(storage_path('app/scrape.ser'))) {
+        $data = unserialize(file_get_contents(storage_path('app/scrape.ser')));
+    } else {
+        $data = \App\Scrapers\SharpScraper::scrapeProductPage('https://www.sharp.hu/cps/rde/xchg/hu/hs.xsl/-/html/product-details-office-print.htm?product=MX6071');
+        file_put_contents(storage_path('app/scrape.ser'), serialize($data));
+    }
+    dump($data);
+    dd(\App\Scrapers\SharpScraper::parseScrapedData($data));
 });
 Route::view('/', 'welcome');
 
