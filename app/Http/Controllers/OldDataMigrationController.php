@@ -20,10 +20,21 @@ class OldDataMigrationController extends Controller
             $scraper = new SharpScraper();
             $data = $scraper->scrapeProductPage($url);
             $res = SharpScraper::parseScrapedData($data);
-
             //$codestr .= "\n" . "[ \n'modelnumber' => '" . $printer->model_number . "',\n 'description'=>'" . $res['description'] . "',\n ], ";
 
-            foreach (array_keys($res['attributes']) as $attribute) {
+            $attributesToCheck = [
+                // 'printing_speed_a3_color'
+                // 'printing_speed_a4_color'
+                "printing_speed_a4_bw",
+                "printing_speed_a3_bw",
+                "paper_feed_capacity" ,
+                "memory"              ,
+                "builtin_hard_drive"  ,
+                "duplex"              ,
+                "sorting"             ,
+
+            ];
+            foreach ($attributesToCheck as $attribute) {
                 $codeString .= "\n" . "[ \n"
                     . "'model_number' => '" . $printer->model_number . "',\n "
                     . "'attribute_name'=>'" . $attribute . "',\n"
