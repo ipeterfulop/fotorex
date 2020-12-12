@@ -119,13 +119,35 @@ class SharpScraper
             'attributes' => [],
         ];
 
-        $attributes = Attribute::forPrinters()->where('position_at_product_comparison', '!=', null)->orderBy('position_at_product_comparison', 'asc')->get();
+        $attributes = Attribute::forPrinters()
+            ->where('position_at_product_comparison', '!=', null)
+            ->orderBy('position_at_product_comparison', 'asc')
+            ->with(['attribute_value_set'])
+            ->get();
+        dump($attributes->pluck('name', 'variable_name'));
         $lookups = [
             '/másolási sebesség.*?színes.*?a4/miu' => 'printing_speed_a4_color',
             '/másolási sebesség.*?színes.*?a3/miu' => 'printing_speed_a3_color',
+            '/másolási sebesség.*?ff\s.*?a4/miu' => 'printing_speed_a4_bw',
+            '/másolási sebesség.*?ff\s.*?a3/miu' => 'printing_speed_a3_bw',
+            '/papír kapacit.*?standard/miu' => 'paper_feed_capacity',
+            '/hálózati nyom/miu' => 'networked',
+            '/duplex/miu' => 'duplex',
+            '/felbontás\(dpi\)/miu' => 'printing_resolution',
+            '/memória.*?gb/miu' => 'memory',
+            '/interfész alap\//miu' => 'connectors',
+            '/merevlemez/miu' => 'builtin_hard_drive',
+            '/szortírozás/miu' => 'sorting',
+            '/pdl/miu' => 'descriptive_language',
         ];
         //dump($data);
         //dd($attributes->pluck('name', 'variable_name'));
+        //nincs meg: technology, color_management,
+        $customData = [
+            'finisher_functions' => isset($data['specificationRows']['Finishing']),
+            'automatic_document_feeder' => isset($data['specificationRows']['Lapadagoló']),
+        ];
+
         foreach ($data['specificationRows'] as $group => $rows) {
             foreach ($rows as $desc => $data) {
                 foreach ($lookups as $regex => $variableName)
@@ -136,5 +158,17 @@ class SharpScraper
         }
 
         return $result;
+    }
+
+    protected static function translateScrapedValue($value, $attributeValueSet)
+    {
+        //these have to be hardcoded here, sadly
+        if ($attributeValueSet->id == 1) {
+            //yes: 1001/no: 1002
+            return $value == null ? 1001 : 1002;
+        }
+        if ($attributeValueSet->id == 3) {
+            //option available,
+        }
     }
 }
