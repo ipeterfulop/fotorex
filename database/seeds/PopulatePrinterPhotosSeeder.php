@@ -45,6 +45,7 @@ class PopulatePrinterPhotosSeeder extends Seeder
             $imageURLs = array_unique(@($scraper->scrapeProductPage($url)['images']));
 
             foreach ($imageURLs as $remoteImage) {
+                $remoteImage = ltrim($remoteImage, '\//');
                 $remoteImage = ($printer->manufacturer_id == 1)
                     ? "http:" . $remoteImage
                     : $remoteImage;
