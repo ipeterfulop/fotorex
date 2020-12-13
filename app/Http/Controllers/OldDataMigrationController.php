@@ -130,6 +130,7 @@ class OldDataMigrationController extends Controller
     public function processProductImages(string $sourceFolder = null)
     {
         $maxNumberOfImages = 15;
+        $extensionsToCheck = ['jpg', 'png', 'gif', 'jpeg'];
         if (is_null($sourceFolder)) {
             $sourceFolder = storage_path() . self::DEFAULT_PRODUCTIMAGES_FOLDER;
         }
@@ -142,7 +143,13 @@ class OldDataMigrationController extends Controller
             for ($imageIndex = 1; $imageIndex <= $maxNumberOfImages; $imageIndex++) {
                 $filename = $printer->getBasePhotoFilename()
                     . str_pad($imageIndex, 2, '0', STR_PAD_LEFT)
-                    . '.jpg';
+                    . '.';
+                foreach ($extensionsToCheck as $extension) {
+                    if (file_exists($filename . $extension)) {
+                        $filename = $filename . $extension;
+                    }
+                }
+
                 if (file_exists($sourceFolder . $filename)) {
                     $file = File::where('original_url', $filename)
                                 ->get()
