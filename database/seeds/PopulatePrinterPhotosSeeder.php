@@ -47,7 +47,7 @@ class PopulatePrinterPhotosSeeder extends Seeder
             foreach ($imageURLs as $remoteImage) {
                 $remoteImage = ltrim($remoteImage, '\//');
                 $remoteImage = ($printer->manufacturer_id == 1)
-                    ? "http:" . $remoteImage
+                    ? "http://" . $remoteImage
                     : $remoteImage;
                 print "\n Processing: " . $remoteImage;
                 $file = File::where('original_url', $remoteImage)

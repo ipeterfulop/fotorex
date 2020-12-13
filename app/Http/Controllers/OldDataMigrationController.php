@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Attribute;
+use App\Display;
 use App\File;
 use App\Helpers\PrinterPhotoManager;
 use App\Printer;
@@ -14,6 +15,8 @@ use Illuminate\Http\Request;
 
 class OldDataMigrationController extends Controller
 {
+    const DEFAULT_PRODUCTIMAGES_FOLDER = '/app/productimages/';
+
     public function index()
     {
         $printers = Printer::all();
@@ -51,10 +54,17 @@ class OldDataMigrationController extends Controller
         fclose($myfile);
     }
 
+    public function downloadAllProductImages(string $targetDir = null)
+    {
+        if (is_null($targetDir)) {
+            $targetDir = storage_path() . self::DEFAULT_PRODUCTIMAGES_FOLDER;
+        }
+    }
+
     public function downloadGivenPrinterImages(Printer $printer, string $targetDir = null)
     {
         if (is_null($targetDir)) {
-            $targetDir = storage_path() . '/app/productimages/';
+            $targetDir = storage_path() . self::DEFAULT_PRODUCTIMAGES_FOLDER;
         }
 
         $imageIndex = 1;
@@ -67,28 +77,41 @@ class OldDataMigrationController extends Controller
 
         foreach ($imageURLs as $remoteImage) {
             $remoteImage = ltrim($remoteImage, "//");
-            print "Processing " . $remoteImage;
 
             $remoteImage = ($printer->manufacturer_id == 1)
-                ? "http:" . $remoteImage
+                ? "http://" . $remoteImage
                 : $remoteImage;
             $file = File::where('original_url', $remoteImage)
                         ->get()
                         ->first();
+            $filename = $printer->getBasePhotoFilename()
+                . str_pad(($imageIndex++), 2, '0', STR_PAD_LEFT)
+                . '.' . pathinfo($remoteImage, PATHINFO_EXTENSION);
 
-            if (is_null($file)) {
-                $filename = $printer->getBasePhotoFilename()
-                    . str_pad(($imageIndex++), 2, '0', STR_PAD_LEFT)
-                    . '.' . pathinfo($remoteImage, PATHINFO_EXTENSION);
+            $filenameWithFullPath = $targetDir . $filename;
+            $this->downloadRemoteImage($remoteImage, $filenameWithFullPath);
+            sleep(1);
+        }
+    }
 
-                $filenameWithFullPath = $targetDir . $filename;
-                $this->downloadRemoteImage($remoteImage, $filenameWithFullPath);
-            }
+    public function downloadProductImages(string $targetDir = null)
+    {
+        if (is_null($targetDir)) {
+            $targetDir = storage_path() . self::DEFAULT_PRODUCTIMAGES_FOLDER;
+        }
+        $printers = Printer::all();
+        foreach ($printers as $printer) {
+            $this->downloadGivenPrinterImages($printer, $targetDir);
+        }
+        $displays = Display::all();
+        foreach ($displays as $printer) {
+            $this->downloadGivenPrinterImages($printer, $targetDir);
         }
     }
 
     public function downloadRemoteImage(string $remoteImage, string $targetImage)
     {
+        print ("\n Dowloading \n <" . $remoteImage . "> \n as <" . $targetImage . ">");
         $fp = fopen($targetImage, 'w+');
 
         $ch = curl_init();
@@ -104,21 +127,40 @@ class OldDataMigrationController extends Controller
         fclose($fp);
     }
 
-    public function processProductImages()
+    public function processProductImages(string $sourceFolder = null)
     {
-        $printerphoto = (filesize($imageFullPath) > 0)
-            ? PrinterPhotoManager::createPrinterPhotoWithCustomizationsFromFile(
-                $printer,
-                $imageFullPath
-            )
-            : null;
+        $maxNumberOfImages = 15;
+        if (is_null($sourceFolder)) {
+            $sourceFolder = storage_path() . self::DEFAULT_PRODUCTIMAGES_FOLDER;
+        }
 
-        if (is_object($printerphoto)) {
-            $printerphoto->customized_printer_photos
-                ->first()
-                ->photo
-                ->file
-                ->update(['original_url' => $remoteImage]);
+        $printers = Printer::all();
+        $displays = Display::all();
+        $printers->merge($displays);
+
+        foreach ($printers as $printer) {
+            for ($imageIndex = 1; $imageIndex <= $maxNumberOfImages; $imageIndex++) {
+                $filename = $printer->getBasePhotoFilename()
+                    . str_pad($imageIndex, 2, '0', STR_PAD_LEFT)
+                    . '.jpg';
+                if (file_exists($sourceFolder . $filename)) {
+                    $file = File::where('original_url', $filename)
+                                ->get()
+                                ->first();
+                    if (is_null($file)) {
+                        $printerphoto = PrinterPhotoManager::createPrinterPhotoWithCustomizationsFromFile(
+                            $printer,
+                            $sourceFolder . $filename
+                        );
+                        $printerphoto->customized_printer_photos
+                            ->first()
+                            ->photo
+                            ->file
+                            ->update(['original_url' => $filename]);
+                    } else {
+                    }
+                }
+            }
         }
     }
 }
