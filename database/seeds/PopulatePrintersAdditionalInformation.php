@@ -657,7 +657,7 @@ class PopulatePrintersAdditionalInformation extends Seeder
                     'name'             => (strlen($dataRow['name']) > 0) ? $dataRow['name'] : null,
                     'price'            => (strlen($dataRow['price']) > 0) ? (int)$dataRow['price'] : null,
                     'popularity_index' => (strlen($dataRow['popularity_index']) > 0)
-                        ? (float)$dataRow['popularity_index']
+                        ? (float)(str_replace(',', '.', $dataRow['popularity_index']))
                         : null,
                     'key_features'     => (strlen($dataRow['key_features']) > 0)
                         ? $dataRow['key_features']
