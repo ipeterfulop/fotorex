@@ -82,7 +82,7 @@
                 </div>
             </div>
             <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col lg:flex-row">
-                <div class="w-full lg:w-3/4 mb-8 lg:mb-0">
+                <div class="w-full lg:w-3/4 mb-8 lg:mb-0 product-description-container">
                     <h2 class="text-2xl">Leírás</h2>
                     {!! $printer->description !!}
                 </div>

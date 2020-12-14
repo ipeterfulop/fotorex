@@ -18695,7 +18695,7 @@ input {
 }
 
 .article-container p {
-  text-align: justify;
+  text-align: left;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   padding-top: 0.5rem;
@@ -18713,6 +18713,7 @@ input {
   .article-container p {
     padding-left: 0;
     padding-right: 0;
+    text-align: justify;
   }
 }
 
@@ -18867,6 +18868,45 @@ input {
     height: 4.3rem;
     width: 4.3rem;
     font-size: 1rem;
+  }
+}
+
+.overflow-y-fade {
+  position: absolute;
+  height: 30%;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0), white);
+}
+
+.overflow-y-fade-top {
+  position: absolute;
+  height: 30%;
+  margin: -30%;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0), white);
+}
+
+.product-description-container p {
+  margin-bottom: 1rem;
+  padding-right: 2rem;
+  text-align: justify;
+}
+
+.article-container img {
+  float: left !important;
+  margin-right: 1rem;
+  max-width: 95%;
+}
+
+@media only screen and (max-width: 600px) {
+  .article-container img {
+    float: initial;
+    width: 95%;
+    margin-right: 0px;
   }
 }
 

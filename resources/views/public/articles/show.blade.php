@@ -1,38 +1,5 @@
 @extends('layouts.tailwind.app', ['pageTitle' => $article->title])
 @section('content')
-    <style>
-        .article-container img {
-            float: left !important;
-            margin-right: 1rem;
-        }
-        @media only screen and (max-width: 600px) {
-            .article-container img {
-                float: initial;
-                width: 100%;
-                margin-right: 0px;
-            }
-        }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
-    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
-    <script>
-        function articleToPdf() {
-            let c = new jsPDF();
-            let baseContent = document.querySelector('.article-container');
-            if (baseContent == null) {
-                return;
-            }
-            let content = baseContent.cloneNode(true);
-            Array.from(content.querySelectorAll('a')).forEach((link) => {
-                link.remove();
-            });
-
-            c.addHTML(content, () => {
-                c.save('cikk.pdf');
-            });
-        }
-
-    </script>
     <div class="w-full bg-transparent flex justify-center my-8">
         <div class="w-full max-width-container-bordered bg-white p-4 flex flex-wrap flex-row items-center justify-between">
             <div class="my-4">

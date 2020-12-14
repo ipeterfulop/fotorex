@@ -22,9 +22,16 @@
                 </p>
             </div>
             <h2 class="w-full uppercase text-xl my-4 py-8 text-white bg-fotored text-center">Írjon nekünk</h2>
-            <div class="p-4">
+            <div class="p-4" id="contact-form-container">
                 @include('public.partials.contactform', ['ajax' => false])
             </div>
         </div>
     </div>
+    @if(isset($defaultSubject))
+        @push('customscripts')
+            <script>
+                document.getElementById('contact-form-container').scrollIntoView();
+            </script>
+        @endpush
+    @endif
 @endsection
