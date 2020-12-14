@@ -3,7 +3,7 @@
         <img src="{{ $item->printer->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}" class="object-cover" style="height: 50%">
         <div class="flex flex-col items-stretch justify-start mt-3">
             <h4 class="text-fotored uppercase text-xl" >
-                {{ $item->printer->displayname }}
+                {{ $item->printer->shortdisplayname }}<span class="italic font-normal ml-2">{{ $item->name }}</span>
             </h4>
             <div class="text-sm overflow-y-hidden relative" style="max-height: 3rem;">
                 {{ $item->printer->highlighted_features ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris in tempus enim. Etiam quis massa sit amet leo semper tristique nec a dui. Sed non blandit odio.' }}

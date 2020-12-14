@@ -22,6 +22,7 @@ class PrinterAttribute extends Model
         'attribute_value_id',
         'customvalue',
         'created_at',
+        'customunit',
     ];
 
 //    protected static function booted()

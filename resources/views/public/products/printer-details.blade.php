@@ -19,7 +19,7 @@
                         @include('public.partials.imageviewer', ['printerphotos' => $printer->getAllPhotoUrls()])
                     </div>
                     <div class="w-full lg:w-4/6 flex flex-col items-stretch justify-start h-auto lg:h-full lg:pl-12">
-                        <h2 class="font-bold text-2xl my-4">{{ $printer->displayname }}</h2>
+                        <h2 class="font-bold text-2xl my-4">{{ $printer->shortdisplayname }}<span class="italic font-normal ml-2">{{ $printer->name }}</span></h2>
                         <div class="w-full flex flex-col lg:flex-row">
                             <div class="w-full lg:w-2/3">
                                 @if($configuration->id != \App\Helpers\Productcategory::DISPLAYS_ID)
@@ -114,7 +114,7 @@
                 @include('public.partials.contactform', [
                     'ajax' => true,
                     'action' => route('contactmessage_submit'),
-                    'defaultSubject' => 'Kérdés a(z) '.$printer->displayname.' termékkel kapcsolatban'."\n\n"
+                    'defaultSubject' => 'Kérdés a(z) '.$printer->shortdisplayname.' termékkel kapcsolatban'."\n\n"
                 ])
             </div>
         </div>
@@ -135,13 +135,13 @@
                     'fieldName' => 'subject',
                     'label' => 'Tárgy',
                     'mandatory' => false,
-                    'value' => $printer->displayname.' - Fotorex.hu'
+                    'value' => $printer->shortdisplayname.' - Fotorex.hu'
                 ])
                 @include('public.partials.formelements.textarea-input', [
                     'fieldName' => 'message',
                     'label' => 'Üzenet',
                     'mandatory' => true,
-                    'value' => $printer->displayname.' - Fotorex.hu: '.$printer->getDetailsUrl()
+                    'value' => $printer->shortdisplayname.' - Fotorex.hu: '.$printer->getDetailsUrl()
                 ])
                 <input type="text" id="email_sidenote" value="" name="email_sidenote" style="height: 0px; opacity: 0">
                 <button class="btn bg-fotored hover-gray-link mt-6 p-2 text-white uppercase"
