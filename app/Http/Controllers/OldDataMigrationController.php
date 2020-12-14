@@ -144,27 +144,36 @@ class OldDataMigrationController extends Controller
                 $filename = $printer->getBasePhotoFilename()
                     . str_pad($imageIndex, 2, '0', STR_PAD_LEFT)
                     . '.';
+
                 foreach ($extensionsToCheck as $extension) {
-                    if (file_exists($filename . $extension)) {
+                    $fileInSourceDir = $sourceFolder . $filename . $extension;
+                    if (file_exists($fileInSourceDir)) {
                         $filename = $filename . $extension;
+                        break;
                     }
+                    $fileInSourceDir = null;
                 }
 
-                if (file_exists($sourceFolder . $filename)) {
+                // if file located in the source directory found then add it to database and create customized versions
+                if (!is_null($fileInSourceDir)) {
+                    print "\nProcessing file {$fileInSourceDir}";
                     $file = File::where('original_url', $filename)
                                 ->get()
                                 ->first();
                     if (is_null($file)) {
                         $printerphoto = PrinterPhotoManager::createPrinterPhotoWithCustomizationsFromFile(
                             $printer,
-                            $sourceFolder . $filename
+                            $fileInSourceDir
                         );
-                        $printerphoto->customized_printer_photos
-                            ->first()
-                            ->photo
-                            ->file
-                            ->update(['original_url' => $filename]);
+                        if (!is_null($printerphoto)) {
+                            $printerphoto->customized_printer_photos
+                                ->first()
+                                ->photo
+                                ->file
+                                ->update(['original_url' => $filename]);
+                        }
                     } else {
+                        //replace photos if file exists
                     }
                 }
             }
