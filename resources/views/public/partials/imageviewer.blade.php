@@ -11,7 +11,7 @@
                 <div class="h-full max-h-full flex flex-row lg:flex-col justify-start items-center imageviewer-thumbnails-container"
                      style="transform: translateY(0) translateX(0); transition: transform 200ms ease-in-out"
                      x-ref="imageviewer_thumbnails_container">
-                    @foreach ($printerphotos as $index => $printerphoto)
+                    @foreach (array_values($printerphotos) as $index => $printerphoto)
                         <img class="w-24 lg:h-1/4 opacity-75 hover:opacity-100 imageviewer-thumbnail cursor-pointer mx-4 object-contain border-2 border-gray-200"
                              data-imageurl="{{ $printerphoto['index'] }}"
                              data-imageindex="{{ $index }}"
