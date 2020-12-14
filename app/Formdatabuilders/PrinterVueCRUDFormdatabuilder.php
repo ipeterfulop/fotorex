@@ -35,8 +35,8 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
     {
         $result = [];
         $result['name'] = (new TextVueCRUDFormfield())
-            ->setMandatory(true)
-            ->setLabel('Név')
+            //->setMandatory(true)
+            ->setLabel('Beszédes név')
             ->setContainerClass('col-6');
         $result['manufacturer_id'] = (new SelectVueCRUDFormfield())
             ->setMandatory(true)

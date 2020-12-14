@@ -6,7 +6,7 @@
 @section('content')
     <div class="w-full bg-transparent flex flex-col justify-center items-center my-8">
         <div class="w-full flex flex-col justify-center items-center my-8">
-            <div class="w-full max-width-container-bordered bg-white px-5 lg:px-3">
+            <div class="w-full max-width-container-bordered bg-white px-5 lg:px-3" style="border-bottom: 0px">
                 <div class="w-full">
                     <div class="my-6 flex flex-row items-center justify-start">
                         {!! $breadcrumbData->map(function($item) {
@@ -48,11 +48,13 @@
                                     @endif
                                 </div>
                                 <div class="w-full py-4 flex flex-col items-start justify-center">
-                                    @if($printer->product_url_on_manufacturer_website != null)
-                                        <a target="_blank" class="text-blue-500 hover:underline hover:text-blue-700" href="{{ $printer->product_url_on_manufacturer_website }}">Leírás</a>
-                                    @endif
+                                    <a class="text-blue-500 hover:underline hover:text-blue-700" href="#leiras">Leírás</a>
+                                    <a class="text-blue-500 hover:underline hover:text-blue-700" href="#technikaiadatok">Technikai adatok</a>
                                     @if($printer->specification_sheet != null)
-                                        <a target="_blank" class="text-blue-500 hover:underline hover:text-blue-700" href="{{ $printer->specification_sheet }}">Technikai adatok</a>
+                                        <a class="text-blue-500 hover:underline hover:text-blue-700" href="#letoltesek">Letöltések</a>
+                                    @endif
+                                    @if($printer->product_url_on_manufacturer_website != null)
+                                        <a target="_blank" class="text-blue-500 hover:underline hover:text-blue-700" href="{{ $printer->product_url_on_manufacturer_website }}">Gyártói oldal</a>
                                     @endif
                                 </div>
 
@@ -81,9 +83,10 @@
                     </div>
                 </div>
             </div>
-            <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col lg:flex-row">
+            <div class="w-full max-width-container-bordered bg-white py-4 px-8"  style="border-bottom: 0px; border-top: 0px"><hr class="border-fotomediumgray"></div>
+            <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col lg:flex-row" style="border-bottom: 0px; border-top: 0px">
                 <div class="w-full lg:w-3/4 mb-8 lg:mb-0 product-description-container">
-                    <h2 class="text-2xl">Leírás</h2>
+                    <h2 class="text-2xl font-bold my-4"><a name="leiras">Leírás</a></h2>
                     {!! $printer->description !!}
                 </div>
                 <div class="w-full lg:w-1/4 flex flex-col">
@@ -92,8 +95,9 @@
                     @include('public.partials.printers.similars', ['title' => 'Más látogatók az alábbi termékeket tekintették meg', 'similarPrinters' => $printer->printersviewedbyothers])
                 </div>
             </div>
-            <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col">
-                <h2 class="text-2xl">Technikai adatok</h2>
+            <div class="w-full max-width-container-bordered bg-white py-4 px-8"  style="border-bottom: 0px; border-top: 0px"><hr class="border-fotomediumgray"></div>
+            <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col"  style="border-bottom: 0px; border-top: 0px">
+                <h2 class="text-2xl font-bold my-4"><a name="technikaiadatok">Technikai adatok</a></h2>
                 @foreach ($attributes as $attribute)
                     <div class="w-full md:w-1/2 flex flex-row border-b border-dotted border-fotogray py-1">
                         <div class="w-full md:w-1/2">
@@ -105,8 +109,10 @@
                     </div>
                 @endforeach
             </div>
-            <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col">
-                <h2 class="text-2xl">Letöltések</h2>
+            <div class="w-full max-width-container-bordered bg-white py-4 px-8"  style="border-bottom: 0px; border-top: 0px"><hr class="border-fotomediumgray"></div>
+            <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col"  style="border-top: 0px">
+                <h2 class="text-2xl font-bold my-4"><a name="letoltesek">Letöltések</a></h2>
+                <a target="_blank" class="text-blue-500 hover:underline hover:text-blue-700" href="{{ $printer->specification_sheet }}">Specifikáció</a>
             </div>
         </div>
         <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col hidden transition-visible"  id="contact-form-container">
