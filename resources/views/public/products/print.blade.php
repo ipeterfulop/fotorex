@@ -24,7 +24,7 @@
     </tr>
     <tr>
         <td colspan="2">
-            <p>{{ $product->description }}</p>
+            <p>{!! $product->description  !!}</p>
         </td>
     </tr>
 </table>
