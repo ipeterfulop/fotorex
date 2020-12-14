@@ -12,7 +12,7 @@ class ContactmessagesController extends Controller
     {
         $viewData = [];
         if (request()->has('subject')) {
-            $viewData['defaultMessage'] = 'Tárgy: '.request()->get('subject');
+            $viewData['defaultSubject'] = 'Tárgy: '.request()->get('subject');
         }
 
         return view('public.contactmessages.index', $viewData);

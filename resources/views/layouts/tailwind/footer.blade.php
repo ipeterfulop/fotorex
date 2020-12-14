@@ -31,13 +31,15 @@
             </div>
             <div class="w-full lg:w-1/4 mt-8 lg:mt-0  flex flex-col items-start text-white text-base mr-2">
                 <div class="h-10 w-full pl-3 mb-0 uppercase  text-xl flex flex-row items-center justify-start"></div>
-                @foreach($publicmenuitems as $label => $link)
-                    <a class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-1 mt-1 h-12" href="{{ $link }}">{{ $label }}</a>
+                @foreach($publicmenuitems as $label => $data)
+                    <a class="bg-fotogray hover-red-link w-full flex items-center justify-center font-bold py-1 mt-1 h-12" target="{{ $data['target'] }}" href="{{ $data['url'] }}">{{ $label }}</a>
                 @endforeach
             </div>
         </div>
         <div class="w-full max-width-container py-0 pl-3 pt-4 flex flex-row items-center justify-start">
             <a href="https://www.facebook.com/FotorexIrodatechnika" target="_blank"><img class="h-8" src="/images/assets/fblogo.png"></a>
+            <span class="mx-4 text-white text-xl">|</span>
+            <a class="text-white" href="{{ $privacyArticleUrl }}">Adatvédelem</a>
         </div>
     </div>
 

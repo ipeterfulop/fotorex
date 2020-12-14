@@ -50,8 +50,8 @@
 
             </div>
             <div class="h-2 bg-white w-full my-2"></div>
-            @foreach($publicmenuitems as $label => $link)
-                <a class="py-1 w-full hover-red-link" href="{{ $link }}">{{ $label }}</a>
+            @foreach($publicmenuitems as $label => $data)
+                <a class="py-1 w-full hover-red-link" target="{{ $data['target'] }}" href="{{ $data['url'] }}">{{ $label }}</a>
             @endforeach
             <a class="py-1 w-full hover-red-link" href="{{ route('contactmessage_index') }}">Kapcsolat</a>
         </div>
@@ -82,8 +82,8 @@
             <a href="/" class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem flex-grow-0" style="width: 4rem">
                 {!! config('heroicons.solid.home') !!}
             </a>
-            @foreach($publicmenuitems as $label => $link)
-                <a class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem" href="{{ $link }}">{{ $label }}</a>
+            @foreach($publicmenuitems as $label => $data)
+                <a class="flex items-center flex-row justify-center px-4 h-full hover-red-link  desktop-nav-menuitem" target="{{ $data['target'] }}" href="{{ $data['url'] }}">{{ $label }}</a>
             @endforeach
             <a class="ml-auto" href="https://www.facebook.com/FotorexIrodatechnika" target="_blank"><img class="h-8"
                                                                                          src="/images/assets/fblogo.png"></a>

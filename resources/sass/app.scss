@@ -150,6 +150,40 @@ input {
         font-size: 1rem;
     }
 }
+.overflow-y-fade {
+    position: absolute;
+    height: 30%;
+    bottom:0px;
+    left: 0px;
+    width: 100%;
+    background: linear-gradient(rgba(0,0,0,0), rgba(255,255,255,1));
+}
+.overflow-y-fade-top {
+    position: absolute;
+    height: 30%;
+    margin: -30%;
+    top:0px;
+    left: 0px;
+    width: 100%;
+    background: linear-gradient(rgba(0,0,0,0), rgba(255,255,255,1));
+}
+.product-description-container p {
+    margin-bottom: 1rem;
+    padding-right: 2rem;
+    text-align: justify;
+}
+.article-container img {
+    float: left !important;
+    margin-right: 1rem;
+    max-width: 95%;
+}
+@media only screen and (max-width: 600px) {
+    .article-container img {
+        float: initial;
+        width: 95%;
+        margin-right: 0px;
+    }
+}
 
 @import 'components/slider';
 @import 'components/ajax-list-or-grid-view';

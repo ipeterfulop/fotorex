@@ -81,6 +81,14 @@ class ArticlecategoriesSeeder extends Seeder
                 'custom_slug_base' => 'cegismerteto',
                 'articlecategory_id' => null
             ],
+            [
+                'id' => 10,
+                'position' => $position++,
+                'show_in_main_menu' => 0,
+                'name' => 'Adatvédelem és jog',
+                'custom_slug_base' => 'adatvedelem-es-jog',
+                'articlecategory_id' => null
+            ],
 
         ];
         foreach ($dataset as $row) {
