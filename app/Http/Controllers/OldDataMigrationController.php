@@ -165,6 +165,7 @@ class OldDataMigrationController extends Controller
                             $printer,
                             $fileInSourceDir
                         );
+
                         if (!is_null($printerphoto)) {
                             $printerphoto->customized_printer_photos
                                 ->first()
