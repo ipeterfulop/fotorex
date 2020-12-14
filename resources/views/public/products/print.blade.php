@@ -4,6 +4,7 @@
     <tr>
         <td style="width: 50%" valign="top">
             <p style="font-weight: bold; font-size: 20px;">{{ $product->shortdisplayname }}</p>
+            <p style="font-weight: bold; font-size: 16px;">{{ $product->name }}</p>
             <hr>
             <table border="1">
                 @foreach ($attributes as $attribute)

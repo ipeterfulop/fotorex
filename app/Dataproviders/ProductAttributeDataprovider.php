@@ -15,20 +15,25 @@ class ProductAttributeDataprovider
             $result = [
                 ['v' => 'usergroup_size_label', 'n' => 'Munkakörnyezet'],
             ];
-            foreach (Attribute::forPrinters()->where('position_at_product_comparison', '!=', null)->orderBy('position_at_product_comparison', 'asc')->get() as $attribute) {
-                $result[] = ['v' => $attribute->variable_name.'_label', 'n' => $attribute->name];
-            }
 
-            return collect($result);
+            return static::buildList(Attribute::forPrinters()->where('position_at_product_comparison', '!=', null)->orderBy('position_at_product_comparison', 'asc')->get(), $result);
         }
         if ($productfamily == Productfamily::DISPLAYS_ID) {
-            $result = [];
-            foreach (Attribute::forDisplays()->where('position_at_product_comparison', '!=', null)->orderBy('position_at_product_comparison', 'asc')->get() as $attribute) {
-                $result[] = ['v' => $attribute->variable_name.'_label', 'n' => $attribute->name];
-            }
-
-            return collect($result);
+            return static::buildList(Attribute::forDisplays()->where('position_at_product_comparison', '!=', null)->orderBy('position_at_product_comparison', 'asc')->get());
         }
         throw new \Exception('No valid product family provided');
+    }
+
+    protected static function buildList($attributes, $default = [])
+    {
+        $result = $default;
+        foreach ($attributes as $attribute) {
+            $result[] = [
+                'v' => $attribute->variable_name.'_label',
+                'n' => $attribute->name
+            ];
+        }
+
+        return collect($result);
     }
 }

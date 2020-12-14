@@ -7,7 +7,7 @@
             </a>
         </div>
         <div class="w-2/3 pl-4 flex-col items-start justify-start">
-            <h1 class="text-2xl font-bold mb-4"><a href="{{ $element->getDetailsUrl() }}">{{ $element->display_name }}</a></h1>
+            <h1 class="text-2xl font-bold mb-4"><a href="{{ $element->getDetailsUrl() }}">{{ $element->shortdisplayname }}<span class="ml-2 italic font-normal">{{ $element->name }}</span></a></h1>
             <div class="hidden lg:flex w-full flex flex-col items-stretch">
                 <div class="mt-4 text-sm">
                     {!! $element->highlighted_features_label  !!}
@@ -38,7 +38,7 @@
             <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}" class="object-cover" style="height: 50%">
             <div class="flex flex-col items-stretch justify-start mt-3">
                 <h4 class="text-fotored uppercase text-xl" >
-                    {{ $element->displayname }}
+                    {{ $element->shortdisplayname }}<span class="ml-2 italic font-normal">{{ $element->name }}</span>
                 </h4>
                 <div class="text-sm overflow-y-hidden relative" style="max-height: 4rem;">
                     {!! $element->highlighted_features_label !!}

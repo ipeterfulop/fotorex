@@ -22,6 +22,7 @@ class Attribute extends Model
         'updated_at',
         'is_richtext',
         'productfamily',
+        'unit',
     ];
 
 

@@ -15,7 +15,7 @@ class PrinterAttributeValue extends PrinterAttribute
     {
         static::addGlobalScope('values', function(Builder $builder) {
             $builder->joinSub(
-                Attribute::select(\DB::raw('id as aid'), 'name', \DB::raw('label as alabel'), 'variable_name'),
+                Attribute::select(\DB::raw('id as aid'), 'name', \DB::raw('label as alabel'), 'variable_name', \DB::raw('unit as aunit')),
                 'a',
                 'a.aid',
                 '=',
@@ -32,8 +32,10 @@ class PrinterAttributeValue extends PrinterAttribute
                 'a.variable_name',
                 'attribute_value_id',
                 \DB::raw('ifnull(attribute_value_id, (case when attribute_value_id is null then customvalue else value end)) finalvalue_or_id'),
-                \DB::raw('case when attribute_value_id is null then customvalue else value end finalvalue'),
-                \DB::raw('case when av.avlabel is not null then av.avlabel else (case when attribute_value_id is null then customvalue else value end) end avlabel')
+                \DB::raw('ifnull(customunit, a.aunit) unit'),
+                \DB::raw('case when attribute_value_id is null then concat_ws(" ", customvalue, ifnull(ifnull(customunit, a.aunit), a.aunit)) else concat_ws(" ", value, ifnull(ifnull(customunit, a.aunit), a.aunit)) end finalvalue'),
+                //\DB::raw('case when attribute_value_id is null then customvalue else value end finalvalue'),
+                \DB::raw('case when av.avlabel is not null then av.avlabel else (case when attribute_value_id is null then concat_ws(" ", customvalue, ifnull(ifnull(customunit, a.aunit), a.aunit)) else concat_ws(" ", value, ifnull(ifnull(customunit, a.aunit), a.aunit)) end) end avlabel')
             );
         });
     }

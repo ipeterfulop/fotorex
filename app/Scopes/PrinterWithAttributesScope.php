@@ -39,7 +39,7 @@ class PrinterWithAttributesScope implements Scope
             ->leftJoinSub(PrinterRentaloption::select('printer_id', 'price as rentalprice', 'extra_page_price_bw', 'extra_page_price_color'), 'pr', 'printers.id', '=', 'pr.printer_id')
             ->leftJoinSub(Manufacturer::select('id', 'name as mname'), 'm', 'printers.manufacturer_id', '=', 'm.id')
             ->leftJoinSub(
-                PrinterAttributeValue::select('finalvalue', 'finalvalue_or_id', 'alabel')->groupBy(['printer_id', 'variable_name', 'finalvalue', 'avlabel', 'alabel', 'attribute_value_id', 'customvalue', 'finalvalue_or_id']),
+                PrinterAttributeValue::select('finalvalue', 'finalvalue_or_id', 'alabel', 'unit',)->groupBy(['printer_id', 'variable_name', 'finalvalue', 'avlabel', 'alabel', 'attribute_value_id', 'customvalue', 'finalvalue_or_id', 'unit', 'customunit', 'a.aunit']),
                 'attr',
                 'attr.printer_id',
                 '=',
