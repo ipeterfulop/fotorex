@@ -21,11 +21,17 @@ class UserVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
         $result['name'] = (new TextVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Név')
             ->setProperty('name')
-            ->setContainerClass('col-6');
+            ->setContainerClass('col-12');
         $result['email'] = (new TextVueCRUDFormfield())->setMandatory(true)
             ->setLabel('E-mail')
             ->setProperty('email')
-            ->setContainerClass('col-6');
+            ->setContainerClass('col-12');
+        $result['password'] = (new TextVueCRUDFormfield())
+            ->setMandatory(true)
+            ->setOnlyWhenCreating(true)
+            ->setLabel('Jelszó')
+            ->setProperty('password')
+            ->setContainerClass('col-12');
 
         return collect($result);
     }

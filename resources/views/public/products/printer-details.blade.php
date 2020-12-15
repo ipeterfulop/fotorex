@@ -1,5 +1,5 @@
 @extends('layouts.tailwind.app', [
-    'pageTitle' => $printer->html_page_title,
+    'pageTitle' => $printer->html_page_title . ' - ' .$printer->name,
     'pageDescription' => $printer->html_page_meta_description,
     'canonicalUrl' => $printer->getCanonicalUrl(),
 ])

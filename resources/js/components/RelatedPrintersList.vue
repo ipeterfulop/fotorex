@@ -16,7 +16,7 @@
                      class="related-printers-row">
                     <span v-if="item.custom_id.toString().substr(0,1) == 'x'">
                         <input placeholder="Megjelenítendő felirat" v-model="item.final_label">
-                        <input placeholder="URL" v-model="item.url" style="margin-left: 1rem">
+                        <input placeholder="URL" v-model="item.final_url" style="margin-left: 1rem">
                     </span>
                     <span v-if="item.custom_id.toString().substr(0,1) != 'x'">
                         <span v-html="item.final_label"></span>

@@ -65726,19 +65726,23 @@ var render = function() {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: item.url,
-                                  expression: "item.url"
+                                  value: item.final_url,
+                                  expression: "item.final_url"
                                 }
                               ],
                               staticStyle: { "margin-left": "1rem" },
                               attrs: { placeholder: "URL" },
-                              domProps: { value: item.url },
+                              domProps: { value: item.final_url },
                               on: {
                                 input: function($event) {
                                   if ($event.target.composing) {
                                     return
                                   }
-                                  _vm.$set(item, "url", $event.target.value)
+                                  _vm.$set(
+                                    item,
+                                    "final_url",
+                                    $event.target.value
+                                  )
                                 }
                               }
                             })

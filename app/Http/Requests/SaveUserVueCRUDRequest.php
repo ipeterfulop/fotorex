@@ -35,8 +35,14 @@ class SaveUserVueCRUDRequest extends VueCRUDRequestBase
 
     public function getDataset()
     {
-        $result = $this->getBaseDatasetFromRequest(User::class);
-        // this is very basic, and will probably not suffice except for very simple models
+        $result = [
+            'name' => $this->input('name'),
+            'email' => $this->input('email'),
+        ];
+        if ($this->has('password')) {
+            $result['password'] = \Hash::make($this->input('password'));
+        }
+
         return $result;
     }
 }
