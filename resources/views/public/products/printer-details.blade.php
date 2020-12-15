@@ -19,7 +19,7 @@
                         @include('public.partials.imageviewer', ['printerphotos' => $printer->getAllPhotoUrls()])
                     </div>
                     <div class="w-full lg:w-4/6 flex flex-col items-stretch justify-start h-auto lg:h-full lg:pl-12">
-                        <h2 class="font-bold text-2xl my-4">{{ $printer->shortdisplayname }}<span class="italic font-normal ml-2">{{ $printer->name }}</span></h2>
+                        <h2 class="font-bold text-2xl mb-4">{{ $printer->shortdisplayname }}<span class="italic font-normal ml-2">{{ $printer->name }}</span></h2>
                         <div class="w-full flex flex-col lg:flex-row">
                             <div class="w-full lg:w-2/3">
                                 @if($configuration->id != \App\Helpers\Productcategory::DISPLAYS_ID)

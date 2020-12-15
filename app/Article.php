@@ -40,7 +40,8 @@ class Article extends Model
 
     protected $appends = [
         'url',
-        'published_at_label'
+        'published_at_label',
+        'image_url'
     ];
 
     protected $with = ['articlecategory'];
@@ -189,4 +190,13 @@ class Article extends Model
         return $result;
 
     }
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->index_image != null) {
+            return url(self::IMAGES_PATH.'/'.$this->index_image);
+        }
+        return url('/images/assets/fotorex_default_image.jpg');
+    }
+
 }

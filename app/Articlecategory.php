@@ -144,7 +144,7 @@ class Articlecategory extends Model
         if ($this->photo_id != null) {
             return url('/storage'.self::IMAGES_PATH.'/'.$this->photo->name);
         }
-        return null;
+        return url('/images/assets/fotorex_default_image.jpg');
     }
 
     public static function getFilterKeyValueCollection()
