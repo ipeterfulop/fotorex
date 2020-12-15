@@ -89,7 +89,7 @@
     </div>
 </div>
 <div class="fotorex-list-item-grid-view">
-    <div class="pr-10 h-100 my-4">
+    <div class="pr-10 h-160 my-4">
         <a href="{{ $element->getDetailsUrl($configuration->id) }}" class="hover:shadow-lg  w-full h-full  flex flex-col items-stretch justify-start p-2 relative  border border-fotolightgray">
             <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}" class="object-cover" style="height: 50%">
             <div class="flex flex-col items-stretch justify-start mt-3">
@@ -97,7 +97,7 @@
                     {{ $element->shortdisplayname }}<span class="italic font-normal ml-2">{{ $element->name }}</span>
                 </h4>
                 <div class="text-sm overflow-y-hidden relative" style="max-height: 4rem;">
-                    {{ $element->highlighted_features_label }}
+                    {{ $element->key_features_label }}
                 </div>
             </div>
             <div class="mt-auto w-full">
