@@ -3,7 +3,7 @@
         <div class="w-full flex justify-center bg-fotored">
             <div class="w-full max-width-container h-18  lg:h-10 bg-fotored text-white flex items-center justify-between text-white">
                 <div class="block lg:hidden ml-2">
-                    <a href="/" class="w-full h-full">
+                    <a href="/" style="height: 34px">
                         <img src="/images/assets/fotorex-logo.jpg" alt="logo" class="h-full">
                     </a>
                 </div>
@@ -59,9 +59,9 @@
     <!--desktop menu-->
     <div class="w-full justify-center hidden lg:flex h-36">
         <div class="w-full max-width-container py-4 flex items-center justify-between">
-            <div class="w-2/5 h-24">
-                <a class="w-full h-full" href="/">
-                    <img src="/images/assets/fotorex-logo.jpg" alt="logo" class="h-full">
+            <div class="w-2/5 h-24 flex items-center justify-start">
+                <a class="h-16" href="/" style="">
+                    <img src="/images/assets/fotorex-logo.jpg" alt="logo" class="h-16">
                 </a>
             </div>
             <div class="w-3/5 flex flex-row h-full items-center h-16 justify-end">

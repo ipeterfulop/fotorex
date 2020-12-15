@@ -62,21 +62,25 @@
                             <div class="w-full lg:w-1/3 flex flex-col items-stretch justify-center h-auto lg:h-full">
                                 @if($configuration->id != \App\Helpers\Productcategory::DISPLAYS_ID)
                                     <a class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2 pl-4 lg:pl-2" href="{{ route('compare_products', ['first' => $printer->slug]) }}">
-                                        <span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.document-text') !!}</span>
+                                        <span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.arrows-expand') !!}</span>
                                         Összehasonlítás más termékkel
                                     </a>
                                 @endif
                                 <button class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2 pl-4 lg:pl-2" form="print-to-pdf">
-                                    <span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.document-text') !!}</span>
+                                    <span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.printer') !!}</span>
                                     PDF nyomtatás</button>
                                 <button class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2 pl-4 lg:pl-2"
                                         onclick="showSendForm()"
-                                ><span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.document-text') !!}</span>
+                                ><span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.mail') !!}</span>
                                     Küldés e-mailben</button>
                                 <button class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2 pl-4 lg:pl-2"
                                         onclick="showContactForm()"
-                                ><span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.document-text') !!}</span>
+                                ><span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.cursor-click') !!}</span>
                                     Érdekel az ajánlat</button>
+                                <a class="bg-fotomediumgray hover:bg-fotored hover:text-white w-full flex items-center justify-start font-bold h-14 flex-grow mb-2 pl-4 lg:pl-2"
+                                   href="{{ $printer->specification_sheet }}"
+                                ><span class="hidden md:block mr-2 h-full w-12 text-white main-menu-svg-container text-fotored">{!! config('heroicons.solid.document-text') !!}</span>
+                                    Adatlap</a>
 
                             </div>
                         </div>
@@ -112,7 +116,6 @@
             <div class="w-full max-width-container-bordered bg-white py-4 px-8"  style="border-bottom: 0px; border-top: 0px"><hr class="border-fotomediumgray"></div>
             <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col"  style="border-top: 0px">
                 <h2 class="text-2xl font-bold my-4"><a name="letoltesek">Letöltések</a></h2>
-                <a target="_blank" class="text-blue-500 hover:underline hover:text-blue-700" href="{{ $printer->specification_sheet }}">Specifikáció</a>
             </div>
         </div>
         <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col hidden transition-visible"  id="contact-form-container">
