@@ -13,6 +13,6 @@ trait belongsToPrinter
 
     public function printer()
     {
-        return $this->belongsTo(Printer::class);
+        return $this->belongsTo(Printer::class)->withAttributes();
     }
 }
