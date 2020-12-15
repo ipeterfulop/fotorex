@@ -5,7 +5,7 @@
                 <div class="h-12 border-t-0 border-l-0 border-r-0 border-b-4 border-fotogray w-full pl-0 lg:pl-3 mb-4 uppercase  text-xl flex flex-row items-center justify-start">
                     Megoldások
                 </div>
-                @foreach($solutions as $solution)
+                @foreach(\App\Articlecategory::findBySlug('megoldasok')->subcategories as $solution)
                     <a class="w-full py-1 pl-3 bg-transparent hover-gray-link" href="{{ $solution->url }}">{{ $solution->name }}</a>
                 @endforeach
             </div>
@@ -23,7 +23,7 @@
                 <div class="h-12 border-t-0 border-l-0 border-r-0 border-b-4 border-fotogray w-full pl-0 lg:pl-3 mb-4 uppercase  text-xl flex flex-row items-center justify-start">
                     Akciós ajánlatok
                 </div>
-                @foreach($highlightedprinters as $highlightedprinter)
+                @foreach(\App\Highlightedprinter::orderBy('position', 'asc')->get() as $highlightedprinter)
                     <a class="w-full py-1 pl-3 bg-transparent hover-gray-link"
                        href="{{ $highlightedprinter->printer->getDetailsUrl() }}"
                     >{{ $highlightedprinter->printer->shortdisplayname }}</a>
@@ -39,7 +39,7 @@
         <div class="w-full max-width-container py-0 pl-3 pt-4 flex flex-row items-center justify-start">
             <a href="https://www.facebook.com/FotorexIrodatechnika" target="_blank"><img class="h-8" src="/images/assets/fblogo.png"></a>
             <span class="mx-4 text-white text-xl">|</span>
-            <a class="text-white" href="{{ $privacyArticleUrl }}">Adatvédelem</a>
+            <a class="text-white" href="{{ optional(\App\Article::findBySlug('adatvedelem-es-jog', false))->url }}">Adatvédelem</a>
         </div>
     </div>
 

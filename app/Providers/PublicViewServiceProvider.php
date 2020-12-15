@@ -29,12 +29,6 @@ class PublicViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer('*', function($view) {
-            return $view->with('highlightedprinters', Highlightedprinter::orderBy('position', 'asc')->get())
-                ->with('publicmenuitems', $this->buildPublicMenu())
-                ->with('privacyArticleUrl', $this->getPrivacyArticleUrl())
-                ->with('solutions', $this->getSolutionSubcategories());
-        });
     }
 
     protected function getPrivacyArticleUrl()
@@ -47,7 +41,7 @@ class PublicViewServiceProvider extends ServiceProvider
         return Articlecategory::findBySlug('megoldasok')->subcategories;
     }
 
-    protected function buildPublicMenu()
+    public static function buildPublicMenu()
     {
         return [
             Productcategory::PRINTERS_LABEL => ['target' => '_self', 'url' => route('printer_category_index', ['productcategoryId' => \App\Helpers\Productcategory::PRINTERS_ID])],

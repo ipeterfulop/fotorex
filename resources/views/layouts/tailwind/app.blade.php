@@ -1,3 +1,4 @@
+@php($publicmenuitems = \App\Providers\PublicViewServiceProvider::buildPublicMenu())
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -110,7 +111,7 @@
         "message":"@lang('A jobb böngészési élmény érdekében weboldalunk sütiket használ.')",
         "dismiss":"@lang('Elfogadom')",
         "learnMore":"Adatvédelmi és jogi nyilatkozat",
-        "link":"{{ $privacyArticleUrl }}",
+        "link":"{{ optional(\App\Article::findBySlug('adatvedelem-es-jog', false))->url }}",
         "theme":"light-bottom"
     };
 </script>

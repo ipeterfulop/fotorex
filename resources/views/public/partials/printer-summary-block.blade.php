@@ -94,7 +94,7 @@
             <img src="{{ $element->getMainImageUrl(request()->get('printerphotoroles')->get('index')) }}" class="object-cover" style="height: 35%">
             <div class="flex flex-col items-stretch justify-start mt-3">
                 <h4 class="text-fotored uppercase text-xl" >
-                    {{ $element->shortdisplayname }}<span class="italic font-normal ml-2 text-sm">{{ $element->name }}</span>
+                    <span class="whitespace-no-wrap">{{ $element->shortdisplayname }}</span><span class="italic font-normal ml-2 text-sm">{{ $element->name }}</span>
                 </h4>
                 <div class="text-sm overflow-y-hidden relative mt-4" style="max-height: 4rem;">
                     {{ $element->key_features_label }}

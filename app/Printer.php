@@ -78,9 +78,9 @@ class Printer extends Model
 
     protected $with = [
         'manufacturer',
-        'printer_photos',
+        //'printer_photos',
         'usergroupsize',
-        'printerattributevalues',
+        //'printerattributevalues',
         'papersizes',
     ];
 
