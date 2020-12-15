@@ -6,7 +6,7 @@
                 {{ $item->printer->shortdisplayname }}<span class="italic font-normal ml-2 text-sm">{{ $item->printer->name }}</span>
             </h4>
             <div class="text-sm overflow-y-hidden relative" style="max-height: 3rem;">
-                {{ $item->printer->key_features }}
+                {{ $item->printer->key_features_label }}
             </div>
         </div>
         <div class="mt-auto w-full">
