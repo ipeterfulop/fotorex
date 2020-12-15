@@ -18,6 +18,7 @@ class PopulateHighlightedPrintersSeeder extends Seeder
     public function run()
     {
         $dataSet = $this->getRawDataSet();
+        //dd($dataSet);
         $this->addOrUpdateRecords($dataSet);
     }
 
@@ -36,13 +37,12 @@ class PopulateHighlightedPrintersSeeder extends Seeder
     private function getRawDataSet()
     {
         $modelnumbers = [
-            'MX5051',
-            'MX4051',
-            'CX622ade',
-            'MX2614N',
-            'MXB450W',
+            'MS521dn',
             'MX521de',
-            'PN85TH1',
+            'CX622ade',
+            'MXB350W',
+            'MXM266NV',
+            'MX2651',
         ];
 
         $dataSet = [];
@@ -50,7 +50,7 @@ class PopulateHighlightedPrintersSeeder extends Seeder
         foreach ($modelnumbers as $modelnumber) {
             $printer = Printer::findByModelNumber($modelnumber);
             if (!is_null($printer)) {
-                $dataset[] = [
+                $dataSet[] = [
                     'id'         => $printer->id,
                     'printer_id' => $printer->id,
                     'position'   => (++$position),
@@ -59,7 +59,7 @@ class PopulateHighlightedPrintersSeeder extends Seeder
             } else {
                 $display = Display::findByModelNumber($modelnumber);
                 if (!is_null($display)) {
-                    $dataset[] = [
+                    $dataSet[] = [
                         'id'         => $display->id,
                         'printer_id' => $display->id,
                         'position'   => (++$position),
