@@ -125,6 +125,9 @@ class SharpScraper
             ->with(['attribute_value_set'])
             ->get();
         dump($attributes->pluck('name', 'variable_name'));
+        $tspAttributes = Attribute::where('variable_name', 'like', 'tsp_%')->get();
+        $tspAttributesData = $tspAttributes->pluck('name', 'variable_name');
+        dump($tspAttributesData);
         $lookups = [
             '/másolási sebesség.*?színes.*?a4/miu' => 'printing_speed_a4_color',
             '/másolási sebesség.*?színes.*?a3/miu' => 'printing_speed_a3_color',
@@ -150,13 +153,23 @@ class SharpScraper
 
         foreach ($data['specificationRows'] as $group => $rows) {
             foreach ($rows as $desc => $data) {
-                foreach ($lookups as $regex => $variableName)
-                if (preg_match($regex, $desc) === 1) {
-                    $result['attributes'][$variableName] = $data;
+                foreach ($lookups as $regex => $variableName) {
+                    if (preg_match($regex, $desc) === 1) {
+                        $result['attributes'][$variableName] = $data;
+                    }
                 }
             }
-        }
+            foreach ($tspAttributesData as $variableName => $name) {
+                if (\Str::slug(str_ireplace(' ', '', $name)) == \Str::slug(str_ireplace(' ', '', $group))) {
+                    $html = [];
+                    foreach ($rows as $desc => $data) {
+                        $html[] = '<dt>'.$desc.'</dt><dl>'.$data.'</dl>';
+                    }
+                    $result['attributes'][$variableName] = htmlspecialchars('<dl>'.implode("\n", $html).'</dl>');
+                }
+            }
 
+        }
         return $result;
     }
 
