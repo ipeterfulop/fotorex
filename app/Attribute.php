@@ -115,4 +115,9 @@ class Attribute extends Model
             return $query->where('productfamily', '=', Productfamily::DISPLAYS_ID)->orWhere('productfamily', '=', null);
         });
     }
+
+    public static function getTechnicalSpecificationAttributes()
+    {
+        return self::where('variable_name', 'like', 'tsp_%')->get();
+    }
 }

@@ -22,7 +22,13 @@ Route::get('/scrape', function() {
         file_put_contents(storage_path('app/scrape.ser'), serialize($data));
     }
     dump($data);
-    dd(\App\Scrapers\SharpScraper::parseScrapedData($data));
+    $sdata = \App\Scrapers\SharpScraper::parseScrapedData($data);
+    \App\PrinterAttribute::updateOrCreate([
+        'printer_id' => 66,
+        'attribute_id' => 26,
+        ], ['customvalue' => $sdata['attributes']['tsp_general']]
+    );
+    dd($sdata);
 });
 Route::view('/', 'welcome');
 

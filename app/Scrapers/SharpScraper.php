@@ -163,9 +163,9 @@ class SharpScraper
                 if (\Str::slug(str_ireplace(' ', '', $name)) == \Str::slug(str_ireplace(' ', '', $group))) {
                     $html = [];
                     foreach ($rows as $desc => $data) {
-                        $html[] = '<dt>'.$desc.'</dt><dl>'.$data.'</dl>';
+                        $html[] = '<div class="dt">'.$desc.'</div><div class="dd">'.$data.'</div>';
                     }
-                    $result['attributes'][$variableName] = htmlspecialchars('<dl>'.implode("\n", $html).'</dl>');
+                    $result['attributes'][$variableName] = ('<div class="dl">'.implode("\n", $html).'</div>');
                 }
             }
 

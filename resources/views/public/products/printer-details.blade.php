@@ -100,8 +100,13 @@
                 </div>
             </div>
             <div class="w-full max-width-container-bordered bg-white py-4 px-8"  style="border-bottom: 0px; border-top: 0px"><hr class="border-fotomediumgray"></div>
-            <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col"  style="border-bottom: 0px; border-top: 0px">
+            <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col technical-specifications-container"  style="border-bottom: 0px; border-top: 0px">
                 <h2 class="text-2xl font-bold my-4"><a name="technikaiadatok">Technikai adatok</a></h2>
+                @foreach(\App\Attribute::getTechnicalSpecificationAttributes() as $attribute)
+                    <h3 class="text-xl font-bold my-2">{{ $attribute->name }}</h3>
+                    {!! $printer->{$attribute->variable_name} !!}
+                @endforeach
+                @if(false)
                 @foreach ($attributes as $attribute)
                     <div class="w-full md:w-1/2 flex flex-row border-b border-dotted border-fotogray py-1">
                         <div class="w-full md:w-1/2">
@@ -112,6 +117,7 @@
                         </div>
                     </div>
                 @endforeach
+                @endif
             </div>
             <div class="w-full max-width-container-bordered bg-white py-4 px-8"  style="border-bottom: 0px; border-top: 0px"><hr class="border-fotomediumgray"></div>
             <div class="w-full max-width-container-bordered bg-white p-4 flex flex-col"  style="border-top: 0px">

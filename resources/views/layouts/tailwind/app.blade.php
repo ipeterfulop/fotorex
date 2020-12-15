@@ -25,6 +25,24 @@
     <link href="{{ asset('css/fa/brands.min.css') }}" rel="stylesheet">
 -->
     <style>
+        .technical-specifications-container .dl {
+            margin-left: 2rem;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+        .technical-specifications-container .dt {
+            width: 75%;
+            text-align: left;
+            font-weight: bold;
+            border-bottom: 1px dotted lightgray;
+        }
+        .technical-specifications-container .dd {
+            width: 25%;
+            text-align: right;
+            border-bottom: 1px dotted lightgray;
+        }
+
     </style>
 </head>
 <body class="w-full font-body" style="background-color: #f4f4f4; font-size: 14px">

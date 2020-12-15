@@ -1,3 +1,4 @@
+@if(count($similarPrinters) > 0)
 <div class="flex flex-col w-full items-stretch justify-start mb-4  p-2 bg-fotoverylightred border border-red-200">
     <h4 class="font-bold text-sm pb-1 mb-1 border-b border-gray-400">{{ $title }}</h4>
     @forelse($similarPrinters as $similarPrinter)
@@ -15,3 +16,4 @@
         <div class="mt-8">Nincs megjeleníthető termék</div>
     @endforelse
 </div>
+@endif
