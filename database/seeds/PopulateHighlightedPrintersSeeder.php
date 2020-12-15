@@ -36,13 +36,12 @@ class PopulateHighlightedPrintersSeeder extends Seeder
     private function getRawDataSet()
     {
         $modelnumbers = [
-            'MX5051',
-            'MX4051',
-            'CX622ade',
-            'MX2614N',
-            'MXB450W',
+            'MS521dn',
             'MX521de',
-            'PN85TH1',
+            'CX622ade',
+            'MXB350W',
+            'MXM266NV',
+            'MX2651',
         ];
 
         $dataSet = [];
