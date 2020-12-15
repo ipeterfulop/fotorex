@@ -4,6 +4,8 @@ namespace App;
 
 use App\Dataproviders\PrinterPickerVueCRUDIndexfilter;
 use App\Helpers\PriceFormatter;
+use App\Helpers\Productcategory;
+use App\Helpers\Productfamily;
 use App\Helpers\RentalPeriodUnit;
 use App\Traits\belongsToPrinter;
 use App\Traits\hasIsEnabledProperty;
@@ -44,6 +46,8 @@ class PrinterRentaloption extends Model
         'extra_page_price_label',
         'price_label',
         'popularity_index_label',
+        'combined_name',
+        'url',
     ];
 
     public function getPrinterLabelAttribute()
@@ -54,6 +58,11 @@ class PrinterRentaloption extends Model
     public function getRentaloptionLabelAttribute()
     {
         return $this->rentaloption->name;
+    }
+
+    public function getCombinedNameAttribute()
+    {
+        return $this->printer_label.' ('.$this->rentaloption_label.')';
     }
 
     public function getRentaloptionPriceLabelAttribute()
@@ -139,6 +148,20 @@ class PrinterRentaloption extends Model
                     ],
                 ]
             );
+    }
+
+    public static function getForSearchableSelect()
+    {
+        return self::enabled()->get()->sortBy('combined_name')->map(
+            function ($item) {
+                return ['id' => $item->id, 'name' => $item->combined_name];
+            }
+        )->values()->all();
+    }
+
+    public function getUrlAttribute()
+    {
+        return $this->printer->getDetailsUrl(Productcategory::RENTALS_ID);
     }
 
 }

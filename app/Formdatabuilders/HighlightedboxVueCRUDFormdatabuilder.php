@@ -7,6 +7,8 @@ namespace App\Formdatabuilders;
 use App\Article;
 use App\Highlightedbox;
 use App\Printer;
+use App\PrinterRentaloption;
+use App\Rules\HighlightedboxHasLink;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\ImageLibraryVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\ImagePickerVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\SearchableSelectVueCRUDFormfield;
@@ -31,19 +33,30 @@ class HighlightedboxVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setMandatory(true);
         $result['subtitle'] = (new TextVueCRUDFormfield())
             ->setContainerClass('col-12')
-            ->setRules(['max:50'])
-            ->setMessages(['max' => 'Nem lehet 50 karakternél hosszabb'])
+            ->setRules(['max:100'])
+            ->setMessages(['max' => 'Nem lehet 100 karakternél hosszabb'])
             ->setLabel('Alcím (max. 50 karakter)')
-            ->setMandatory(true);
+            ->setMandatory(false);
         $result['printer_id'] = (new SearchableSelectVueCRUDFormfield())
             ->setLabel('Termék')
-            ->setRules(['required_without:article_id'])
+            ->setProps(['undefinedLabel' => 'Nem adott', 'undefinedValue' => -1])
+            ->setRules([new HighlightedboxHasLink()])
             ->setValuesetClass(Printer::class)
+            ->setContainerClass('col-12')
+            ->setValuesetSortedGetter('getForSearchableSelect');
+        $result['printer_rentaloption_id'] = (new SearchableSelectVueCRUDFormfield())
+            ->setLabel('Bérelhető nyomtató')
+            ->setProps(['undefinedLabel' => 'Nem adott', 'undefinedValue' => -1])
+            ->setRules([new HighlightedboxHasLink()])
+            ->setValuesetClass(PrinterRentaloption::class)
+            ->setContainerClass('col-12')
             ->setValuesetSortedGetter('getForSearchableSelect');
         $result['article_id'] = (new SearchableSelectVueCRUDFormfield())
             ->setLabel('Cikk')
-            ->setRules(['required_without:printer_id'])
+            ->setProps(['undefinedLabel' => 'Nem adott', 'undefinedValue' => -1])
+            ->setRules([new HighlightedboxHasLink()])
             ->setValuesetClass(Article::class)
+            ->setContainerClass('col-12')
             ->setValuesetSortedGetter('getForSearchableSelect');
         $result['photo'] = (new ImageLibraryVueCRUDFormfield())
             ->setLabel('Kép')
@@ -60,6 +73,29 @@ class HighlightedboxVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
         $this->defaults = $defaults;
     }
 
+    public function get_printer_id_value()
+    {
+        if ($this->subject == null) {
+            return -1;
+        }
+        return $this->subject->printer_id ?? -1;
+    }
+
+    public function get_printer_rentaloption_id_value()
+    {
+        if ($this->subject == null) {
+            return -1;
+        }
+        return $this->subject->printer_rentaloption_id ?? -1;
+    }
+
+    public function get_article_id_value()
+    {
+        if ($this->subject == null) {
+            return -1;
+        }
+        return $this->subject->article_id ?? -1;
+    }
 
     public function get_photo_value()
     {

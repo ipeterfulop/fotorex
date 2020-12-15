@@ -23,6 +23,7 @@ class Highlightedbox extends Model
         'subtitle',
         'article_id',
         'printer_id',
+        'printer_rentaloption_id',
         'photo_id',
         'custom_photo_id',
         'position'
@@ -34,7 +35,7 @@ class Highlightedbox extends Model
         'url'
     ];
 
-    protected $with = ['article', 'printer'];
+    protected $with = ['article', 'printer', 'printerrentaloption'];
 
     public function originalphoto()
     {
@@ -46,6 +47,11 @@ class Highlightedbox extends Model
         return $this->belongsTo(Photo::class, 'custom_photo_id');
     }
 
+    public function printerrentaloption()
+    {
+        return $this->belongsTo(PrinterRentaloption::class, 'printer_rentaloption_id');
+    }
+
     public function getTargetnameAttribute()
     {
         if ($this->printer_id != null) {
@@ -53,6 +59,9 @@ class Highlightedbox extends Model
         }
         if ($this->article_id != null) {
             return 'Cikk: '.$this->article->title;
+        }
+        if ($this->printer_rentaloption_id != null) {
+            return 'Bérlet: '.$this->printerrentaloption->combined_name;
         }
 
         return null;
@@ -65,6 +74,9 @@ class Highlightedbox extends Model
         }
         if ($this->article_id != null) {
             return $this->article->url;
+        }
+        if ($this->printer_rentaloption_id != null) {
+            return $this->printerrentaloption->url;
         }
 
         return '#';
