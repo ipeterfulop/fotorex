@@ -102,7 +102,7 @@
             </div>
             <div class="mt-auto w-full">
                 <div class="w-full text-left px-0 pt-1 flex flex-col items-start justify-center text-base">
-                    @stack('pricelabel-'.$element->id)
+                    @stack('pricelabel-'.$element->id.'-'.$configuration->id)
                 </div>
 
             </div>
