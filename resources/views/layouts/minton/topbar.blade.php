@@ -2,9 +2,9 @@
     <!-- LOGO -->
     <div class="topbar-left">
         <div class="text-center">
-            @if(file_exists(public_path('img/logo.png')))
-                <a href="/" class="logo">
-                    <img src="/img/logo.png" style="height:45px">
+            @if(file_exists(public_path('images/assets/fotorex-logo.jpg')))
+                <a href="/" class="logo" style="width: 100%; height: 100%; padding-left: 10px; padding-right: 10px">
+                    <img src="/images/assets/fotorex-logo.jpg" style="object-contain: cover; width: 90%;">
                 </a>
             @endif
         </div>

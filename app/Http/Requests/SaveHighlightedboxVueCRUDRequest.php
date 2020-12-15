@@ -61,8 +61,9 @@ class SaveHighlightedboxVueCRUDRequest extends VueCRUDRequestBase
         $result = [
             'title' => $this->input('title'),
             'subtitle' => $this->input('subtitle'),
-            'printer_id' => $this->input('printer_id'),
-            'article_id' => $this->input('article_id'),
+            'printer_id' => intval($this->input('printer_id')) > 0 ? $this->input('printer_id') : null,
+            'article_id' => intval($this->input('article_id')) > 0 ? $this->input('article_id') : null,
+            'printer_rentaloption_id' => intval($this->input('printer_rentaloption_id')) > 0 ? $this->input('printer_rentaloption_id') : null,
         ];
 
         return $result;
