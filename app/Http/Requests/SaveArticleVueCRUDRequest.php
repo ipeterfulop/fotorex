@@ -42,7 +42,7 @@ class SaveArticleVueCRUDRequest extends VueCRUDRequestBase
             'title' => $this->input('title'),
             'content' => $this->input('content'),
             'summary' => $this->input('summary'),
-            'index_image' => $this->input('index_image'),
+            'index_image' => basename($this->input('index_image')),
             'is_published' => $this->input('is_published'),
             'articlecategory_id' => intval($this->input('articlecategory_id')) > 0 ? $this->input('articlecategory_id') : null,
             'slug' => $this->input('slug'),

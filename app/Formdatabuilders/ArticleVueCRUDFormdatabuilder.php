@@ -61,7 +61,7 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
                 'allowPreview' => 'false',
             ])
             ->setContainerClass('col-12');
-        $result['content'] = (new RichttextQuillVueCRUDFormfield())->setMandatory(true)
+        $result['content'] = (new RichtextTrixVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Tartalom')
             ->setProperty('content')
             ->setProps([
@@ -71,7 +71,6 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setContainerClass('col-12');
         $result['index_image'] = (new ImagePickerVueCRUDFormfield())
             ->setLabel('Indexkép')
-            ->setProperty('index_image')
             ->setContainerClass('col-12');
         $result['published_at'] = (new DatepickerVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Publikálás dátuma')
@@ -104,6 +103,16 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
         } else {
             return $this->subject->published_at == null ? 0 : 1;
         }
+    }
+
+    public function get_index_image_value()
+    {
+        if ($this->subject == null) {
+            return null;
+        }
+        return $this->subject->index_image == null
+            ? null
+            : Article::FILE_PUBLIC_PATH.'/'.$this->subject->index_image;
     }
 
 }

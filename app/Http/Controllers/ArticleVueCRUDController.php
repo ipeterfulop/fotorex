@@ -8,6 +8,7 @@ use App\Dataproviders\ArticleVueCRUDDataprovider;
 use Datalytix\VueCRUD\Interfaces\ICRUDController;
 use App\Article;
 use Datalytix\VueCRUD\Controllers\VueCRUDControllerBase;
+use Illuminate\Support\Str;
 
 class ArticleVueCRUDController extends VueCRUDControllerBase implements ICRUDController
 {
@@ -50,5 +51,19 @@ class ArticleVueCRUDController extends VueCRUDControllerBase implements ICRUDCon
         $article->content = request()->get('content');
 
         return view('public.articles.show', ['article' => $article, 'backUrl' => '#']);
+    }
+
+    public function storePublicPicture()
+    {
+        file_put_contents(
+            public_path(Article::FILE_PUBLIC_PATH).DIRECTORY_SEPARATOR.request()->get('fileName'),
+            base64_decode(Str::after(request()->get('fileData'), ';base64,'))
+        );
+        return response()->json(['url' => Article::FILE_PUBLIC_PATH.DIRECTORY_SEPARATOR.request()->get('fileName')]);
+    }
+
+    public function removePublicPicture()
+    {
+        return response('OK');
     }
 }

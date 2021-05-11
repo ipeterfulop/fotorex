@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\hasFiles;
 use App\Traits\HasSortingOptions;
 use Datalytix\VueCRUD\Indexfilters\SelectVueCRUDIndexfilter;
 use Datalytix\VueCRUD\Indexfilters\TextVueCRUDIndexfilter;
@@ -19,6 +20,7 @@ class Article extends Model
     const SORTING_OPTION_LATEST = 'friss';
     const SORTING_OPTION_POPULAR = 'nepszeru';
     const IMAGES_PATH = '/images/articles';
+    const FILE_PUBLIC_PATH = '/images/articles';
 
     protected $fillable = [
         'slug',
@@ -197,6 +199,15 @@ class Article extends Model
             return url(self::IMAGES_PATH.'/'.$this->index_image);
         }
         return url('/images/assets/fotorex_default_image.jpg');
+    }
+
+    public static function getVueCRUDAdditionalAjaxFunctions()
+    {
+        return [
+            'storePublicPicture',
+            'removePublicPicture',
+
+        ];
     }
 
 }

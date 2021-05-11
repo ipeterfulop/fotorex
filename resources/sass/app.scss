@@ -187,3 +187,8 @@ input {
 
 @import 'components/slider';
 @import 'components/ajax-list-or-grid-view';
+
+.article-container ul {
+    list-style-type: disc;
+    padding-left: 2rem;
+}
