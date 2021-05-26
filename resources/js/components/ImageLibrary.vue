@@ -1,23 +1,19 @@
 <template>
     <div class="image-library-container">
-        <template v-for="image in images">
+        <template v-for="imageUrl in imageUrls">
             <div draggable="true"
-                 :data-imageurl="objectMode ? image.url : image"
-                 :data-imageid="objectMode ? image.id : image"
+                 :data-imageurl="imageUrl"
                  v-on:dragover="$event.preventDefault()"
                  v-on:dragstart="startMoving"
                  v-on:dragend="endMoving"
-                 v-on:dragenter="showDragOverEffect($event, objectMode ? image.url : image)"
-                 v-on:dragleave="hideDragOverEffect($event, objectMode ? image.url : image)"
-                 v-on:drop="moveToBefore($event, objectMode ? image.url : image)"
-                 :ref="objectMode ? 'image-'+image.url : 'image-'+image"
+                 v-on:dragenter="showDragOverEffect($event, imageUrl)"
+                 v-on:dragleave="hideDragOverEffect($event, imageUrl)"
+                 v-on:drop="moveToBefore($event, imageUrl)"
+                 :ref="'image-'+imageUrl"
                  class="image-library-thumbnail">
-                <img style="max-height: 100%; max-width: 100%"
-                     :src="objectMode ? image.url : image" :label="objectMode ? image.url : image"
-                     v-on:click.self="previewUrl = objectMode ? image.url : image"
-                >
+                <img style="width: 100%" :src="imageUrl" :label="imageUrl">
                 <div class="image-library-thumbnail-button"
-                     v-on:click="removeImage(objectMode ? image.url : image)"
+                     v-on:click="removeImage(imageUrl)"
                      v-show="moving === false"
                 >-
                 </div>
@@ -42,13 +38,6 @@
                 <span class="image-library-add-button">+</span>
             </label>
         </div>
-        <popup :visible="previewUrl != ''" v-on:close="previewUrl = ''">
-            <div style="display: flex; align-items: center; justify-content: center">
-                <img :src="previewUrl" style="max-height: 70vh; max-width: 70vw"
-                     v-on:click.self="previewUrl = ''"
-                >
-            </div>
-        </popup>
     </div>
 </template>
 
@@ -65,18 +54,16 @@
             formElementLabel: {type: String, default: ''},
             limit: {default: null},
             accept: {default: false},
-            objectMode: {type: Boolean, default: true},
         },
         data: function () {
             return {
                 adding: false,
-                images: [],
+                imageUrls: [],
                 selectedFileLabel: '',
                 selectedFile: '',
                 allowedFileTypes: [],
                 defaultValue: null,
                 moving: false,
-                previewUrl: '',
             }
         },
         created() {
@@ -89,14 +76,11 @@
             }
         },
         mounted() {
-            this.images = this.value;
-            if (this.objectMode) {
-                this.emitValue();
-            }
+            this.imageUrls = this.value;
         },
         methods: {
             emitValue: function() {
-                this.$emit('input', this.formData);
+                this.$emit('input', this.imageUrls);
             },
             showDragOverEffect: function(event, url) {
                 event.preventDefault();
@@ -111,11 +95,7 @@
                 target.classList.remove('image-library-thumbnail-dropping');
             },
             removeImage: function (url) {
-                if (this.objectMode) {
-                    this.images = this.images.filter(item => item.url != url);
-                } else {
-                    this.images = this.images.filter(item => item != url);
-                }
+                this.imageUrls = this.imageUrls.filter(item => item != url);
                 this.emitValue();
             },
             startMoving: function(event) {
@@ -124,7 +104,6 @@
                     target = target.parentNode;
                 }
                 event.dataTransfer.setData('url', target.getAttribute('data-imageurl'));
-                event.dataTransfer.setData('id', target.getAttribute('data-imageid'));
                 window.setTimeout(() => {
                     Array.from(document.querySelectorAll('.image-library-thumbnail img')).forEach((t) => {
                         t.classList.add('pointer-events-none');
@@ -156,26 +135,14 @@
                         newOrder.push(item);
                     }
                 });
-                if (this.objectMode) {
-                    let newImages = [];
-                    newOrder.forEach((image) => {
-                        newImages.push(this.images.find(element => element.url == image));
-                    })
-                    this.images = newImages;
-                } else {
-                    this.images = newOrder;
-                }
+                this.imageUrls = newOrder;
                 this.emitValue();
             },
             moveToEnd: function(event) {
                 event.stopPropagation();
                 event.preventDefault();
                 this.removeImage(decodeURI(event.dataTransfer.getData('url')));
-                if (this.objectMode) {
-                    this.images.push({id: event.dataTransfer.getData('id'), url: decodeURI(event.dataTransfer.getData('url'))});
-                } else {
-                    this.images.push(decodeURI(event.dataTransfer.getData('url')));
-                }
+                this.imageUrls.push(decodeURI(event.dataTransfer.getData('url')));
                 this.emitValue();
             },
             fileSelected: function (event) {
@@ -196,35 +163,11 @@
                     'storePublicPicture'
                 ).then((response) => {
                     this.adding = false;
-                    if (this.objectMode) {
-                        this.images.push(response.data.image);
-                    } else {
-                        this.images.push(response.data.url);
-                    }
+                    this.imageUrls.push(response.data.url);
                     this.emitValue();
                 }).catch((error) => {
                     console.log(error);
                 })
-            },
-        },
-        computed: {
-            imageUrls: function() {
-                if (this.objectMode) {
-                    return this.images.map((imageData) => {
-                        return imageData.url;
-                    });
-                } else {
-                    return this.images;
-                }
-            },
-            formData: function() {
-                if (this.objectMode) {
-                    return this.images.map((imageData) => {
-                        return imageData.id;
-                    });
-                } else {
-                    return this.images;
-                }
             }
         }
     }

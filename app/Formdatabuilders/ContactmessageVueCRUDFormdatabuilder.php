@@ -5,7 +5,7 @@ namespace App\Formdatabuilders;
 
 
 use App\Contactmessage;
-use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichtextTrixVueCRUDFormfield;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichttextTinyMCEVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\TextVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\VueCRUDFormdatabuilder;
 
@@ -27,7 +27,7 @@ class ContactmessageVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setLabel('Üzenet tárgya')
             ->setMandatory(true)
             ->setContainerClass('col-12');
-        $result['response'] = (new RichtextTrixVueCRUDFormfield())
+        $result['response'] = (new RichttextTinyMCEVueCRUDFormfield())
             ->setLabel('Üzenet')
             ->setMandatory(true)
             ->setContainerClass('col-12');

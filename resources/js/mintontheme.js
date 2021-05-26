@@ -1,6 +1,15 @@
 
 window._ = require('lodash');
-window.Quill = require('quill');
+//window.Quill = require('quill');
+require('tinymce');
+require('tinymce/plugins/link')
+require('tinymce/plugins/lists')
+require('tinymce/plugins/advlist')
+require('tinymce/plugins/table')
+require('tinymce/plugins/code')
+require('tinymce/plugins/image')
+require('tinymce/themes/silver')
+require('tinymce/icons/default')
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support

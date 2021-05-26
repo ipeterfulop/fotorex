@@ -15,8 +15,7 @@ use App\PrinterTechnicalSpecificationCategory;
 use App\TechnicalSpecificationCategory;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\FileCollectorVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\ImageLibraryVueCRUDFormfield;
-use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichtextTrixVueCRUDFormfield;
-use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichttextQuillVueCRUDFormfield;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichttextTinyMCEVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\SelectVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\SlugVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\TextareaVueCRUDFormfield;
@@ -73,7 +72,7 @@ class PrinterVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setContainerClass('col-4')
             ->setLabel('Népszerűségi index')
             ->setRules(['numeric']);
-        $result['description'] = (new RichttextQuillVueCRUDFormfield())->setMandatory(true)
+        $result['description'] = (new RichttextTinyMCEVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Leírás')
             ->setProperty('content')
             ->setContainerClass('col-12');

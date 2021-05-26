@@ -9,8 +9,7 @@ use App\Articlecategory;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\DatepickerVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\DateTimepickerVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\ImagePickerVueCRUDFormfield;
-use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichtextTrixVueCRUDFormfield;
-use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichttextQuillVueCRUDFormfield;
+use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\RichttextTinyMCEVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\SelectVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\SlugVueCRUDFormfield;
 use Datalytix\VueCRUD\Formdatabuilders\Formfieldtypes\TextVueCRUDFormfield;
@@ -53,15 +52,11 @@ class ArticleVueCRUDFormdatabuilder extends VueCRUDFormdatabuilder
             ->setDefault(0)
             ->setContainerClass('col-2');
 
-        $result['summary'] = (new RichttextQuillVueCRUDFormfield())->setMandatory(true)
+        $result['summary'] = (new RichttextTinyMCEVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Összefoglaló')
             ->setProperty('summary')
-            ->setProps([
-                'allowTableOperations' => 'false',
-                'allowPreview' => 'false',
-            ])
             ->setContainerClass('col-12');
-        $result['content'] = (new RichtextTrixVueCRUDFormfield())->setMandatory(true)
+        $result['content'] = (new RichttextTinyMCEVueCRUDFormfield())->setMandatory(true)
             ->setLabel('Tartalom')
             ->setProperty('content')
             ->setProps([

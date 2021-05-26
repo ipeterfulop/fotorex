@@ -25,7 +25,6 @@
                                   v-model="table[rowIndex][columnIndex]"
                                   v-show="currentRow == rowIndex && currentColumn == columnIndex"
                                   allow-table-operations="false"
-                                  :key="rowIndex+'-'+columnIndex"
                                   allow-preview="false"
                     ></trix-wrapper>
                     <!--
@@ -49,10 +48,8 @@
                 currentColumn: 0,
             }
         },
-        created() {
-            this.table = this.value;
-        },
         mounted() {
+            this.table = this.value;
         },
         methods: {
             convertTableToTrixAttachment: function() {
