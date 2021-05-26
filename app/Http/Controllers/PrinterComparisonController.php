@@ -19,6 +19,7 @@ class PrinterComparisonController extends Controller
     {
         $comparedAttributes = ProductAttributeDataprovider::getComparableAttributeKeys(Productfamily::PRINTERS_ID);
         $printers = request()->has('first') ? [request()->get('first')] : [];
+
         return view('public.products.compare', [
             'comparedAttributes' => $comparedAttributes,
             'printers' => $printers,

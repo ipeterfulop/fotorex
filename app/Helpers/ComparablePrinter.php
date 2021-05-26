@@ -14,12 +14,12 @@ class ComparablePrinter extends Printer
 
     protected $appends = [];
 
-    protected $with = [];
+    protected $with = ['manufacturer'];
 
     protected static function booted()
     {
         static::addGlobalScope('manufacturerName', function(Builder $builder) {
-            $builder->select('printers.name', 'printers.model_number_displayed', 'printers.slug', 'manuf.mname as mfname')
+            $builder->select('printers.name', 'printers.model_number_displayed', 'printers.slug', 'manuf.mname as mfname', 'manufacturer_id')
                 ->join(
                     \DB::raw('(select name as mname, id as mid from manufacturers) manuf'),
                 'manuf.mid',
